@@ -8,7 +8,13 @@ import { Button } from '@/components/ui/Button';
 import { useEffect, useState } from 'react';
 import { BellIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
 
-export default function Header() {
+// Add isScrolled prop to expected props
+interface HeaderProps {
+  isScrolled?: boolean;
+}
+
+// Accept isScrolled prop, provide default value
+export default function Header({ isScrolled = false }: HeaderProps) {
   const { user, profile, loading, session } = useAuth();
   const router = useRouter();
   const [isSigningOut, setIsSigningOut] = useState(false);
@@ -36,7 +42,12 @@ export default function Header() {
   const showLoggedOut = !loading && !user && optimisticIsLoggedIn !== true;
 
   return (
-    <header className="sticky top-0 z-10 border-b border-accent-primary/10 bg-white/80 backdrop-blur-sm">
+    // Add transition class and conditional shadow class
+    <header
+      className={`sticky top-0 z-10 border-b border-accent-primary/10 bg-white backdrop-blur-sm transition-shadow duration-200 ${
+        isScrolled ? 'shadow-md' : 'shadow-none' // Apply shadow conditionally
+      }`}
+    >
       <div className="container flex h-16 items-center justify-between px-4 py-2 md:px-6">
         <div className="flex items-center gap-4">
           <Link href="/dashboard" className="flex items-center gap-2 transition-colors">
