@@ -7,7 +7,7 @@ import Link from 'next/link';
 import DocumentsFilters from '@/components/dashboard/DocumentsFilters';
 import DocumentList from '@/components/dashboard/DocumentList';
 import { Database } from '@/types/supabase';
-import { Document } from '@/types/document';
+import { Document, DocumentCategory } from '@/types/document';
 import { useAuth } from '@/contexts/AuthContext';
 // Import our consistent browser client creator
 import { createClient } from '@/lib/supabase/browser-client';
@@ -18,6 +18,7 @@ export default function DashboardPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [categoryCounts, setCategoryCounts] = useState<Record<DocumentCategory, number>>({} as Record<DocumentCategory, number>);
   const [filters, setFilters] = useState({
     category: '',
     region: '',
@@ -71,7 +72,7 @@ export default function DashboardPage() {
 
         // Apply filters (copied from previous successful edit)
         if (filters.category) {
-          query = query.eq('category', filters.category);
+          query = query.eq('category', filters.category as DocumentCategory);
         }
         if (filters.region) {
           query = query.eq('region', filters.region);
@@ -125,6 +126,30 @@ export default function DashboardPage() {
   // Depend on filters and authLoading state
   }, [filters, authLoading]);
 
+  // Effect to fetch category counts via RPC
+  useEffect(() => {
+    const fetchCategoryCounts = async () => {
+      const supabase = createClient<Database>();
+      // Call the RPC function
+      const { data, error: rpcError } = await supabase.rpc('get_category_counts');
+
+      if (rpcError) {
+        console.error("DashboardPage: Error fetching category counts via RPC:", rpcError);
+        setCategoryCounts({} as Record<DocumentCategory, number>); // Fixed state setter
+      } else {
+        // Type the parameters in reduce
+        const counts = data?.reduce((acc: Record<DocumentCategory, number>, item: { category: DocumentCategory; count: number | bigint }) => {
+          acc[item.category] = Number(item.count); // Ensure count is number
+          return acc;
+        }, {} as Record<DocumentCategory, number>) || {} as Record<DocumentCategory, number>;
+        console.log("DashboardPage: Category counts fetched:", counts);
+        setCategoryCounts(counts);
+      }
+    };
+
+    fetchCategoryCounts();
+  }, []); // Run once on mount
+
   const handleFilterChange = (newFilters: Partial<typeof filters>) => {
     setFilters(prevFilters => ({ ...prevFilters, ...newFilters }));
   };
@@ -157,7 +182,7 @@ export default function DashboardPage() {
         </div>
       )}
 
-      <DocumentsFilters filters={filters} onFilterChange={handleFilterChange} />
+      <DocumentsFilters filters={filters} onFilterChange={handleFilterChange} categoryCounts={categoryCounts} />
 
       <DocumentList
         documents={documents}

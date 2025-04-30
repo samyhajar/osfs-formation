@@ -79,16 +79,16 @@ export default function Header() {
                 </p>
               </div>
               {/* Sign Out Button */}
-              <Button
+                <Button
                 variant="primary" // Changed to primary for blue background
                 size="sm" // Consistent size
                 className="ml-2" // Spacing
-                onClick={handleSignOut}
-                disabled={isSigningOut}
-                loading={isSigningOut}
-              >
-                {isSigningOut ? 'Signing out...' : 'Sign out'}
-              </Button>
+                  onClick={handleSignOut}
+                  disabled={isSigningOut}
+                  loading={isSigningOut}
+                >
+                  {isSigningOut ? 'Signing out...' : 'Sign out'}
+                </Button>
             </div>
           ) : (
             // User is not authenticated

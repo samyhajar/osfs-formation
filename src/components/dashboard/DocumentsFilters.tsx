@@ -14,9 +14,11 @@ interface DocumentsFiltersProps {
     purpose: string[];
   };
   onFilterChange: (filters: any) => void;
+  /** Object mapping category names to their document counts */
+  categoryCounts: Record<DocumentCategory, number>;
 }
 
-export default function DocumentsFilters({ filters, onFilterChange }: DocumentsFiltersProps) {
+export default function DocumentsFilters({ filters, onFilterChange, categoryCounts }: DocumentsFiltersProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const categories: DocumentCategory[] = [
@@ -134,7 +136,7 @@ export default function DocumentsFilters({ filters, onFilterChange }: DocumentsF
             <option value="" className="text-gray-900">All Categories</option>
             {categories.map((category) => (
               <option key={category} value={category} className="text-gray-900">
-                {category}
+                {category} ({categoryCounts?.[category] ?? 0})
               </option>
             ))}
           </select>
