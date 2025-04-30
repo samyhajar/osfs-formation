@@ -161,8 +161,8 @@ export default function UploadForm() {
       console.log("[UploadForm] Database insert successful");
 
       // Invalidate cache or redirect
-      console.log("[UploadForm] Upload complete. Redirecting...");
-      router.push('/dashboard');
+      console.log("[UploadForm] Upload complete. Redirecting to admin dashboard...");
+      router.push('/dashboard/admin');
       router.refresh();
 
     } catch (err: any) {

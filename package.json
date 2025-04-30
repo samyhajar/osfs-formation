@@ -14,11 +14,13 @@
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
     "@types/js-cookie": "^3.0.6",
+    "@types/react-select": "^5.0.0",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.503.0",
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-select": "^5.10.1",
     "zod": "^3.24.3"
   },
   "devDependencies": {

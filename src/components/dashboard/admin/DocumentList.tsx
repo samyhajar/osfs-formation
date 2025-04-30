@@ -109,7 +109,7 @@ export default function DocumentList({
         <h3 className="text-lg font-medium text-black mb-1">No documents found</h3>
         <p className="text-gray-500 mb-4">Try adjusting your search filters.</p>
         <Link
-          href="/dashboard/documents/new"
+          href="/dashboard/admin/documents/new"
           className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-accent-primary hover:bg-accent-primary/90"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
