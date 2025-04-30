@@ -83,10 +83,22 @@ export default function Header({ isScrolled = false }: HeaderProps) {
               {/* Name and Role */}
               <div className="flex items-center gap-2">
                 <p className="text-sm font-medium text-black"> {/* Name black */}
-                  {profile?.name || user?.email || 'User authenticated'}
+                  {/* Show user email or skeleton if profile name isn't loaded yet */}
+                  {loading && !profile?.name ? (
+                      <span className="inline-block h-4 w-20 animate-pulse rounded bg-gray-200"></span>
+                    ) : (
+                      profile?.name || user?.email || 'User'
+                    )}
                 </p>
                 <p className="text-xs text-text-muted">
-                  ({profile?.role || 'Not fetched'}) {/* Role next to name */}
+                  {/* Show loading indicator for role specifically */}
+                  (
+                    {loading ? (
+                      <span className="inline-block h-3 w-12 animate-pulse rounded bg-gray-200"></span>
+                    ) : (
+                      profile?.role || 'Role unavailable'
+                    )}
+                  )
                 </p>
               </div>
               {/* Sign Out Button */}
