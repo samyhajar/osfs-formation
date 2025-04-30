@@ -129,11 +129,11 @@ export default function DocumentsFilters({ filters, onFilterChange }: DocumentsF
             name="category"
             value={filters.category}
             onChange={handleInputChange}
-            className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-text-primary"
+            className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-gray-900"
           >
-            <option value="" className="text-text-primary">All Categories</option>
+            <option value="" className="text-gray-900">All Categories</option>
             {categories.map((category) => (
-              <option key={category} value={category} className="text-text-primary">
+              <option key={category} value={category} className="text-gray-900">
                 {category}
               </option>
             ))}
