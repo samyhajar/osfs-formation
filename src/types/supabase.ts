@@ -7,6 +7,31 @@ export type Json =
   | Json[]
 
 export type Database = {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          operationName?: string
+          query?: string
+          variables?: Json
+          extensions?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       documents: {
@@ -128,7 +153,7 @@ export type Database = {
         | "Postulancy"
         | "Scholasticate"
         | "Ongoing Formation"
-      user_role: "admin" | "formant" | "formator"
+      user_role: "admin" | "formator" | "formee"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -242,6 +267,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       document_category: [
@@ -260,7 +288,7 @@ export const Constants = {
         "Scholasticate",
         "Ongoing Formation",
       ],
-      user_role: ["admin", "formant", "formator"],
+      user_role: ["admin", "formator", "formee"],
     },
   },
 } as const
