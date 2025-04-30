@@ -1,16 +1,20 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+// Remove the auth-helpers import
+// import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
 import DocumentsFilters from '@/components/dashboard/DocumentsFilters';
 import DocumentList from '@/components/dashboard/DocumentList';
 import { Database } from '@/types/supabase';
 import { Document } from '@/types/document';
 import { useAuth } from '@/contexts/AuthContext';
+// Import our consistent browser client creator
+import { createClient } from '@/lib/supabase/browser-client';
 
 export default function DashboardPage() {
-  const { user } = useAuth();
+  // Use authLoading from context
+  const { user, loading: authLoading } = useAuth();
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,16 +29,47 @@ export default function DashboardPage() {
   });
 
   useEffect(() => {
+    // Check auth loading state from context
+    if (authLoading) {
+      // Keep showing loading spinner if auth is loading
+      setLoading(true);
+      return;
+    }
+
     const fetchDocuments = async () => {
+      console.log("DashboardPage: Fetching documents...");
       try {
         setLoading(true);
         setError(null);
 
-        // Use the recommended client for Next.js
-        const supabase = createClientComponentClient<Database>();
+        // Use the consistent browser client
+        const supabase = createClient<Database>();
 
-        let query = supabase.from('documents').select('*');
+        // Use explicit column selection (copied from previous successful edit)
+        let query = supabase
+          .from('documents')
+          .select(`
+            id,
+            title,
+            description,
+            content_url,
+            file_type,
+            file_size,
+            category,
+            author_id,
+            author_name,
+            created_at,
+            updated_at,
+            region,
+            language,
+            topics,
+            purpose,
+            keywords,
+            is_public
+          `)
+          .order('created_at', { ascending: false });
 
+        // Apply filters (copied from previous successful edit)
         if (filters.category) {
           query = query.eq('category', filters.category);
         }
@@ -48,7 +83,7 @@ export default function DashboardPage() {
           query = query.ilike('author_name', `%${filters.author}%`);
         }
         if (filters.keywords) {
-          query = query.textSearch('keywords', filters.keywords);
+          query = query.or(`title.ilike.%${filters.keywords}%,description.ilike.%${filters.keywords}%`);
         }
         if (filters.topics.length > 0) {
           query = query.overlaps('topics', filters.topics);
@@ -57,26 +92,38 @@ export default function DashboardPage() {
           query = query.overlaps('purpose', filters.purpose);
         }
 
-        const { data, error } = await query;
+        console.log("DashboardPage: Executing Supabase query...");
+        const { data, error: fetchError } = await query;
 
-        if (error) {
-          setError(`Failed to fetch documents: ${error.message}`);
+        if (fetchError) {
+          console.error("DashboardPage: Fetch error:", fetchError);
+          setError(`Failed to fetch documents: ${fetchError.message}`);
           setDocuments([]);
         } else {
-          setDocuments(data as Document[] || []);
+          console.log("DashboardPage: Documents fetched successfully:", data?.length || 0);
+          if (!data || !Array.isArray(data)) {
+            console.error("DashboardPage: Invalid data returned:", data);
+            setError("Invalid data format returned from the server");
+            setDocuments([]);
+          } else {
+            setDocuments(data as Document[]);
+          }
         }
       } catch (err: any) {
+        console.error("DashboardPage: Unexpected error:", err);
         setError(`Unexpected error: ${err.message}`);
         setDocuments([]);
       } finally {
         setLoading(false);
+        console.log("DashboardPage: fetchDocuments finished. Loading:", false);
       }
     };
 
-    if (user) {
-      fetchDocuments();
-    }
-  }, [filters, user]);
+    // Fetch documents regardless of user state, RLS handles permissions
+    fetchDocuments();
+
+  // Depend on filters and authLoading state
+  }, [filters, authLoading]);
 
   const handleFilterChange = (newFilters: Partial<typeof filters>) => {
     setFilters(prevFilters => ({ ...prevFilters, ...newFilters }));
@@ -95,7 +142,7 @@ export default function DashboardPage() {
         </div>
         <Link
           href="/dashboard/documents/new"
-          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-md"
+          className="flex items-center gap-2 bg-accent-primary hover:bg-accent-primary/90 text-white font-medium py-2 px-4 rounded-md"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
@@ -114,6 +161,7 @@ export default function DashboardPage() {
 
       <DocumentList
         documents={documents}
+        // Use the local loading state which depends on authLoading
         isLoading={loading}
         onDelete={handleDeleteDocument}
       />

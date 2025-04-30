@@ -77,6 +77,9 @@ export default function Header() {
                 <p className="text-sm font-medium text-text-primary">
                   {profile?.name || user?.email || 'User authenticated'}
                 </p>
+                <p className="text-xs text-text-muted">
+                  Role: {profile?.role || 'Not fetched'}
+                </p>
                 <Button
                   variant="ghost"
                   className="h-auto px-2 py-1 text-xs text-text-secondary hover:text-accent-primary"

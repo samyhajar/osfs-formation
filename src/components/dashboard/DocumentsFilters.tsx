@@ -99,29 +99,29 @@ export default function DocumentsFilters({ filters, onFilterChange }: DocumentsF
   };
 
   return (
-    <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-4">
-      <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold">Filters</h2>
+    <div className="bg-white shadow-sm border border-gray-100 rounded-lg p-4">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="text-gray-600 hover:text-gray-900"
+          className="text-text-secondary hover:text-text-primary p-1 rounded-full hover:bg-gray-50"
         >
           {isExpanded ? (
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              <path fillRule="evenodd" d="M14.707 9.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L10 12.586l3.293-3.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
           ) : (
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
+              <path fillRule="evenodd" d="M5.293 10.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L10 7.414l-3.293 3.293a1 1 0 01-1.414 0z" clipRule="evenodd" />
             </svg>
           )}
         </button>
       </div>
 
       {/* Basic filters always visible */}
-      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <div>
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="category" className="block text-sm font-medium text-gray-900 mb-1">
             Category
           </label>
           <select
@@ -129,11 +129,11 @@ export default function DocumentsFilters({ filters, onFilterChange }: DocumentsF
             name="category"
             value={filters.category}
             onChange={handleInputChange}
-            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+            className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-text-primary"
           >
-            <option value="">All Categories</option>
+            <option value="" className="text-text-primary">All Categories</option>
             {categories.map((category) => (
-              <option key={category} value={category}>
+              <option key={category} value={category} className="text-text-primary">
                 {category}
               </option>
             ))}
@@ -141,7 +141,7 @@ export default function DocumentsFilters({ filters, onFilterChange }: DocumentsF
         </div>
 
         <div>
-          <label htmlFor="keywords" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="keywords" className="block text-sm font-medium text-gray-900 mb-1">
             Keywords
           </label>
           <input
@@ -151,12 +151,12 @@ export default function DocumentsFilters({ filters, onFilterChange }: DocumentsF
             value={filters.keywords}
             onChange={handleInputChange}
             placeholder="Search by keywords"
-            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+            className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-text-primary placeholder:text-text-muted"
           />
         </div>
 
         <div>
-          <label htmlFor="author" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="author" className="block text-sm font-medium text-gray-900 mb-1">
             Author
           </label>
           <input
@@ -166,19 +166,19 @@ export default function DocumentsFilters({ filters, onFilterChange }: DocumentsF
             value={filters.author}
             onChange={handleInputChange}
             placeholder="Filter by author"
-            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+            className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-text-primary placeholder:text-text-muted"
           />
         </div>
       </div>
 
       {/* Advanced filters that expand/collapse */}
       {isExpanded && (
-        <div className="mt-4 pt-4 border-t border-gray-200">
-          <h3 className="font-medium text-gray-700 mb-3">Advanced Filters</h3>
+        <div className="mt-6 pt-4 border-t border-gray-100">
+          <h3 className="text-base font-medium text-gray-900 mb-3">Advanced Filters</h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
             <div>
-              <label htmlFor="region" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="region" className="block text-sm font-medium text-gray-900 mb-1">
                 Region
               </label>
               <select
@@ -186,11 +186,11 @@ export default function DocumentsFilters({ filters, onFilterChange }: DocumentsF
                 name="region"
                 value={filters.region}
                 onChange={handleInputChange}
-                className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-text-primary"
               >
-                <option value="">All Regions</option>
+                <option value="" className="text-text-primary">All Regions</option>
                 {regions.map((region) => (
-                  <option key={region} value={region}>
+                  <option key={region} value={region} className="text-text-primary">
                     {region}
                   </option>
                 ))}
@@ -198,7 +198,7 @@ export default function DocumentsFilters({ filters, onFilterChange }: DocumentsF
             </div>
 
             <div>
-              <label htmlFor="language" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="language" className="block text-sm font-medium text-gray-900 mb-1">
                 Language
               </label>
               <select
@@ -206,11 +206,11 @@ export default function DocumentsFilters({ filters, onFilterChange }: DocumentsF
                 name="language"
                 value={filters.language}
                 onChange={handleInputChange}
-                className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-text-primary"
               >
-                <option value="">All Languages</option>
+                <option value="" className="text-text-primary">All Languages</option>
                 {languages.map((language) => (
-                  <option key={language} value={language}>
+                  <option key={language} value={language} className="text-text-primary">
                     {language}
                   </option>
                 ))}
@@ -219,16 +219,16 @@ export default function DocumentsFilters({ filters, onFilterChange }: DocumentsF
           </div>
 
           <div className="mb-4">
-            <h4 className="text-sm font-medium text-gray-700 mb-2">Topics</h4>
+            <h4 className="text-sm font-medium text-gray-900 mb-2">Topics</h4>
             <div className="flex flex-wrap gap-2">
               {topics.map((topic) => (
                 <button
                   key={topic}
                   onClick={() => handleTopicChange(topic)}
-                  className={`px-3 py-1 rounded-full text-sm ${
+                  className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                     filters.topics.includes(topic)
-                      ? 'bg-purple-100 text-purple-800 border border-purple-300'
-                      : 'bg-gray-100 text-gray-800 border border-gray-200 hover:bg-gray-200'
+                      ? 'bg-accent-primary/10 text-accent-primary border border-accent-primary/30'
+                      : 'bg-gray-100 text-text-secondary border border-gray-200 hover:bg-gray-200 hover:text-text-primary'
                   }`}
                 >
                   {topic}
@@ -238,16 +238,16 @@ export default function DocumentsFilters({ filters, onFilterChange }: DocumentsF
           </div>
 
           <div>
-            <h4 className="text-sm font-medium text-gray-700 mb-2">Purpose</h4>
+            <h4 className="text-sm font-medium text-gray-900 mb-2">Purpose</h4>
             <div className="flex flex-wrap gap-2">
               {purposes.map((purpose) => (
                 <button
                   key={purpose}
                   onClick={() => handlePurposeChange(purpose)}
-                  className={`px-3 py-1 rounded-full text-sm ${
+                  className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                     filters.purpose.includes(purpose)
-                      ? 'bg-purple-100 text-purple-800 border border-purple-300'
-                      : 'bg-gray-100 text-gray-800 border border-gray-200 hover:bg-gray-200'
+                      ? 'bg-accent-primary/10 text-accent-primary border border-accent-primary/30'
+                      : 'bg-gray-100 text-text-secondary border border-gray-200 hover:bg-gray-200 hover:text-text-primary'
                   }`}
                 >
                   {purpose}
@@ -258,19 +258,29 @@ export default function DocumentsFilters({ filters, onFilterChange }: DocumentsF
         </div>
       )}
 
-      {/* Filter actions */}
-      <div className={`flex justify-end pt-4 ${isExpanded ? 'border-t border-gray-200 mt-4' : 'mt-4'}`}>
+      {/* Action buttons */}
+      <div className="mt-6 pt-4 border-t border-gray-100 flex justify-end gap-3">
         <button
           onClick={handleReset}
-          className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 mr-2"
+          className="px-4 py-2 text-sm font-medium text-text-secondary bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-primary/50 transition-colors"
         >
           Reset Filters
         </button>
         <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700"
+          onClick={() => {
+            if (isExpanded) {
+              // Add logic here to apply filters if needed
+              console.log("Applying filters:", filters);
+            }
+            setIsExpanded(!isExpanded);
+          }}
+          className={`px-4 py-2 text-sm font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors ${
+            isExpanded
+              ? 'bg-accent-primary text-white hover:bg-accent-primary/90 focus:ring-accent-primary'
+              : 'bg-white text-text-secondary border border-gray-300 hover:bg-gray-50 focus:ring-accent-primary/50'
+          }`}
         >
-          {isExpanded ? 'Apply Filters' : 'More Filters'}
+          {isExpanded ? 'Apply Filters' : 'Advanced Filters'}
         </button>
       </div>
     </div>
