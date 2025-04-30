@@ -120,7 +120,7 @@ export default function DashboardPage() {
     };
 
     // Fetch documents regardless of user state, RLS handles permissions
-    fetchDocuments();
+      fetchDocuments();
 
   // Depend on filters and authLoading state
   }, [filters, authLoading]);
