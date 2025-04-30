@@ -35,10 +35,10 @@ export default function Header() {
   const showLoggedOut = !loading && !user && optimisticIsLoggedIn !== true;
 
   return (
-    <header className="border-b bg-white">
+    <header className="border-b border-slate-200 bg-white shadow-sm">
       <div className="container flex h-16 items-center justify-between py-4">
         <div className="flex items-center gap-4">
-          <Link href="/dashboard" className="flex items-center gap-2">
+          <Link href="/dashboard" className="flex items-center gap-2 transition-opacity hover:opacity-90">
             <Image
               src="/oblate-logo.svg"
               alt="Oblate Logo"
@@ -47,7 +47,7 @@ export default function Header() {
               className="h-8 w-auto"
               priority
             />
-            <span className="hidden font-bold sm:inline-block">
+            <span className="hidden font-bold text-slate-800 sm:inline-block">
               Oblate Formation
             </span>
           </Link>
@@ -56,19 +56,19 @@ export default function Header() {
         <div className="flex items-center gap-4">
           {showLoadingState ? (
             // Show loading state
-            <div className="w-24 h-8">
-              <p className="text-xs text-gray-400">Loading...</p>
+            <div className="h-8 w-24">
+              <p className="text-xs text-slate-400">Loading...</p>
             </div>
           ) : showLoggedIn ? (
             // User is authenticated
             <div className="flex items-center gap-4">
               <div className="text-right">
-                <p className="text-sm font-medium">
+                <p className="text-sm font-medium text-slate-700">
                   {profile?.name || user?.email || 'User authenticated'}
                 </p>
                 <Button
-                  variant="default"
-                  className="h-auto px-2 py-1 text-xs bg-yellow-400 hover:bg-yellow-500 text-black"
+                  variant="ghost"
+                  className="h-auto px-2 py-1 text-xs text-slate-600 hover:text-slate-900"
                   onClick={handleSignOut}
                   disabled={isSigningOut}
                   loading={isSigningOut}
@@ -80,9 +80,9 @@ export default function Header() {
           ) : (
             // User is not authenticated
             <div>
-              <p className="text-xs text-red-500 mb-1">Not logged in</p>
+              <p className="mb-1 text-xs text-slate-500">Not logged in</p>
               <Link href="/">
-                <Button variant="primary">Login</Button>
+                <Button variant="primary" size="sm" className="shadow-sm">Login</Button>
               </Link>
             </div>
           )}
