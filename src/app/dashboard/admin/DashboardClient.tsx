@@ -39,7 +39,7 @@ export default function DashboardClient({ children }: { children: ReactNode }) {
         className="flex-1 flex flex-col relative h-screen overflow-y-auto"
       >
         <Header isScrolled={isScrolled} />
-        <main className="p-6 bg-gray-100">
+        <main className="flex-1 p-6 bg-gray-100">
           {children}
         </main>
       </div>
