@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { useEffect, useState } from 'react';
+import { BellIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
 
 export default function Header() {
   const { user, profile, loading, session } = useAuth();
@@ -35,40 +36,50 @@ export default function Header() {
   const showLoggedOut = !loading && !user && optimisticIsLoggedIn !== true;
 
   return (
-    <header className="border-b border-slate-200 bg-white shadow-sm">
-      <div className="container flex h-16 items-center justify-between py-4">
+    <header className="sticky top-0 z-10 border-b border-accent-primary/10 bg-white/80 backdrop-blur-sm">
+      <div className="container flex h-16 items-center justify-between px-4 py-2 md:px-6">
         <div className="flex items-center gap-4">
-          <Link href="/dashboard" className="flex items-center gap-2 transition-opacity hover:opacity-90">
+          <Link href="/dashboard" className="flex items-center gap-2 transition-colors">
             <Image
               src="/oblate-logo.svg"
               alt="Oblate Logo"
               width={40}
               height={40}
-              className="h-8 w-auto"
+              className="h-9 w-auto"
               priority
             />
-            <span className="hidden font-bold text-slate-800 sm:inline-block">
+            <span className="hidden font-bold text-accent-primary sm:inline-block">
               Oblate Formation
             </span>
           </Link>
         </div>
 
         <div className="flex items-center gap-4">
+          {/* Notification icons */}
+          <div className="hidden md:flex items-center gap-1">
+            <button className="p-2 rounded-full text-text-secondary hover:bg-accent-primary/5 hover:text-accent-primary transition-colors">
+              <BellIcon className="h-5 w-5" />
+            </button>
+            <button className="p-2 rounded-full text-text-secondary hover:bg-accent-primary/5 hover:text-accent-primary transition-colors">
+              <EnvelopeIcon className="h-5 w-5" />
+            </button>
+          </div>
+
           {showLoadingState ? (
             // Show loading state
-            <div className="h-8 w-24">
-              <p className="text-xs text-slate-400">Loading...</p>
+            <div className="h-8 w-24 flex items-center justify-end">
+              <span className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-solid border-accent-primary border-t-transparent"></span>
             </div>
           ) : showLoggedIn ? (
             // User is authenticated
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <div className="text-right">
-                <p className="text-sm font-medium text-slate-700">
+                <p className="text-sm font-medium text-text-primary">
                   {profile?.name || user?.email || 'User authenticated'}
                 </p>
                 <Button
                   variant="ghost"
-                  className="h-auto px-2 py-1 text-xs text-slate-600 hover:text-slate-900"
+                  className="h-auto px-2 py-1 text-xs text-text-secondary hover:text-accent-primary"
                   onClick={handleSignOut}
                   disabled={isSigningOut}
                   loading={isSigningOut}
@@ -76,11 +87,13 @@ export default function Header() {
                   {isSigningOut ? 'Signing out...' : 'Sign out'}
                 </Button>
               </div>
+              <div className="h-9 w-9 rounded-full bg-accent-primary/10 flex items-center justify-center text-accent-primary font-medium">
+                {profile?.name ? profile.name.charAt(0).toUpperCase() : 'U'}
+              </div>
             </div>
           ) : (
             // User is not authenticated
             <div>
-              <p className="mb-1 text-xs text-slate-500">Not logged in</p>
               <Link href="/">
                 <Button variant="primary" size="sm" className="shadow-sm">Login</Button>
               </Link>

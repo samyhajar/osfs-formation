@@ -1,46 +1,65 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { HomeIcon, MagnifyingGlassIcon, ClockIcon, DocumentTextIcon, AcademicCapIcon, UserGroupIcon, CogIcon } from '@heroicons/react/24/outline';
 
 export default function Sidebar() {
   const pathname = usePathname();
 
   const navItems = [
-    { name: 'Dashboard', path: '/dashboard' },
-    { name: 'Search Documents', path: '/dashboard/documents/search' },
-    { name: 'Recently uploaded', path: '/dashboard/documents/recent' },
-    { name: 'Common Syllabus', path: '/dashboard/documents/syllabus' },
-    { name: 'Workshops', path: '/dashboard/workshops' },
-    { name: 'Formation Personnel', path: '/dashboard/personnel' },
-    { name: 'Administration', path: '/dashboard/admin' },
+    { name: 'Dashboard', path: '/dashboard', icon: HomeIcon },
+    { name: 'Search Documents', path: '/dashboard/documents/search', icon: MagnifyingGlassIcon },
+    { name: 'Recently uploaded', path: '/dashboard/documents/recent', icon: ClockIcon },
+    { name: 'Common Syllabus', path: '/dashboard/documents/syllabus', icon: DocumentTextIcon },
+    { name: 'Workshops', path: '/dashboard/workshops', icon: AcademicCapIcon },
+    { name: 'Formation Personnel', path: '/dashboard/personnel', icon: UserGroupIcon },
+    { name: 'Administration', path: '/dashboard/admin', icon: CogIcon },
   ];
 
   return (
-    <div className="bg-white w-64 h-full min-h-screen border-r border-gray-200">
-      <div className="p-4 border-b border-gray-200">
-        <h2 className="text-xl font-bold text-black">Resources</h2>
+    <div className="h-full min-h-screen bg-white shadow-sm border-r border-gray-100 flex flex-col">
+      <div className="p-6">
+        <h2 className="text-xl font-bold text-accent-primary">Resources</h2>
       </div>
-      <nav className="p-2">
-        <ul className="space-y-1">
+
+      <nav className="flex-1 px-3 pb-6">
+        <ul className="space-y-1.5">
           {navItems.map((item) => {
             const isActive = pathname === item.path;
+            const Icon = item.icon;
 
             return (
               <li key={item.path}>
                 <Link
                   href={item.path}
-                  className={`block px-4 py-2 rounded-md text-sm ${
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all duration-200 ${
                     isActive
-                      ? 'bg-gray-100 text-black font-medium'
-                      : 'text-gray-700 hover:bg-gray-100 hover:text-black'
+                      ? 'bg-accent-primary/10 text-accent-primary font-medium'
+                      : 'text-text-secondary hover:bg-gray-50 hover:text-text-primary'
                   }`}
                 >
-                  {item.name}
+                  <Icon className={`h-5 w-5 ${isActive ? 'text-accent-primary' : 'text-text-muted'}`} />
+                  <span>{item.name}</span>
+                  {isActive && (
+                    <span className="ml-auto w-1.5 h-1.5 rounded-full bg-accent-primary" aria-hidden="true" />
+                  )}
                 </Link>
               </li>
             );
           })}
         </ul>
       </nav>
+
+      <div className="mt-auto p-4 mx-3 mb-6 rounded-xl bg-accent-secondary/5 border border-accent-secondary/10">
+        <div className="flex flex-col space-y-2">
+          <p className="text-xs font-medium text-text-secondary">Need help?</p>
+          <Link
+            href="/dashboard/help"
+            className="text-sm font-medium text-accent-primary hover:text-accent-secondary transition-colors"
+          >
+            Visit our help center
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
