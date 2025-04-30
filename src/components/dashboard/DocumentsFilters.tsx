@@ -188,11 +188,11 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
                 name="region"
                 value={filters.region}
                 onChange={handleInputChange}
-                className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-text-primary"
+                className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-black"
               >
-                <option value="" className="text-text-primary">All Regions</option>
+                <option value="" className="text-black">All Regions</option>
                 {regions.map((region) => (
-                  <option key={region} value={region} className="text-text-primary">
+                  <option key={region} value={region} className="text-black">
                     {region}
                   </option>
                 ))}
@@ -208,11 +208,11 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
                 name="language"
                 value={filters.language}
                 onChange={handleInputChange}
-                className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-text-primary"
+                className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-black"
               >
-                <option value="" className="text-text-primary">All Languages</option>
+                <option value="" className="text-black">All Languages</option>
                 {languages.map((language) => (
-                  <option key={language} value={language} className="text-text-primary">
+                  <option key={language} value={language} className="text-black">
                     {language}
                   </option>
                 ))}

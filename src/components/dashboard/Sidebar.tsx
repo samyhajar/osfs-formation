@@ -7,7 +7,6 @@ export default function Sidebar() {
 
   const navItems = [
     { name: 'Dashboard', path: '/dashboard', icon: HomeIcon },
-    { name: 'Search Documents', path: '/dashboard/documents/search', icon: MagnifyingGlassIcon },
     { name: 'Recently uploaded', path: '/dashboard/documents/recent', icon: ClockIcon },
     { name: 'Common Syllabus', path: '/dashboard/documents/syllabus', icon: DocumentTextIcon },
     { name: 'Workshops', path: '/dashboard/workshops', icon: AcademicCapIcon },
@@ -34,10 +33,10 @@ export default function Sidebar() {
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all duration-200 ${
                     isActive
                       ? 'bg-accent-primary/10 text-accent-primary font-medium'
-                      : 'text-text-secondary hover:bg-gray-50 hover:text-text-primary'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                   }`}
                 >
-                  <Icon className={`h-5 w-5 ${isActive ? 'text-accent-primary' : 'text-text-muted'}`} />
+                  <Icon className={`h-5 w-5 ${isActive ? 'text-accent-primary' : 'text-gray-700'}`} />
                   <span>{item.name}</span>
                   {isActive && (
                     <span className="ml-auto w-1.5 h-1.5 rounded-full bg-accent-primary" aria-hidden="true" />
