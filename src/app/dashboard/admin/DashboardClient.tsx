@@ -1,8 +1,8 @@
 'use client';
 
 import { ReactNode } from 'react';
-import Sidebar from '@/components/dashboard/Sidebar';
-import Header from '@/components/dashboard/Header';
+import Sidebar from '@/components/dashboard/admin/Sidebar';
+import Header from '@/components/dashboard/admin/Header';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function DashboardClient({ children }: { children: ReactNode }) {

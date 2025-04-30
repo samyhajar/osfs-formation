@@ -1,6 +1,6 @@
 'use client';
 
-import UploadForm from '@/components/dashboard/documents/UploadForm';
+import UploadForm from '@/components/dashboard/admin/documents/UploadForm';
 
 export default function NewDocumentPage() {
   return (

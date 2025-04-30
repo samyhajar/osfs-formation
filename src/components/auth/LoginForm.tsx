@@ -33,10 +33,10 @@ export default function LoginForm() {
         throw new Error('Login failed - no session returned');
       }
 
-      console.log('Login successful, redirecting to dashboard');
+      console.log('Login successful, redirecting to admin dashboard');
 
-      // Force a hard refresh to reset all state
-      window.location.href = '/dashboard';
+      // Force a hard refresh to reset all state and redirect to admin dashboard
+      window.location.href = '/dashboard/admin';
 
     } catch (err: any) {
       console.error('Login error:', err.message);
