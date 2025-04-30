@@ -55,15 +55,7 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-4">
-          {/* Notification icons */}
-          <div className="hidden md:flex items-center gap-1">
-            <button className="p-2 rounded-full text-text-secondary hover:bg-accent-primary/5 hover:text-accent-primary transition-colors">
-              <BellIcon className="h-5 w-5" />
-            </button>
-            <button className="p-2 rounded-full text-text-secondary hover:bg-accent-primary/5 hover:text-accent-primary transition-colors">
-              <EnvelopeIcon className="h-5 w-5" />
-            </button>
-          </div>
+          {/* Notification icons removed */}
 
           {showLoadingState ? (
             // Show loading state
@@ -71,28 +63,32 @@ export default function Header() {
               <span className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-solid border-accent-primary border-t-transparent"></span>
             </div>
           ) : showLoggedIn ? (
-            // User is authenticated
+            // User is authenticated - Restructured
             <div className="flex items-center gap-3">
-              <div className="text-right">
-                <p className="text-sm font-medium text-text-primary">
+              {/* Avatar */}
+              <div className="h-9 w-9 rounded-full bg-accent-primary/10 flex items-center justify-center text-accent-primary font-medium shrink-0">
+                {profile?.name ? profile.name.charAt(0).toUpperCase() : 'U'}
+              </div>
+              {/* Name and Role */}
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-medium text-black"> {/* Name black */}
                   {profile?.name || user?.email || 'User authenticated'}
                 </p>
                 <p className="text-xs text-text-muted">
-                  Role: {profile?.role || 'Not fetched'}
+                  ({profile?.role || 'Not fetched'}) {/* Role next to name */}
                 </p>
-                <Button
-                  variant="ghost"
-                  className="h-auto px-2 py-1 text-xs text-text-secondary hover:text-accent-primary"
-                  onClick={handleSignOut}
-                  disabled={isSigningOut}
-                  loading={isSigningOut}
-                >
-                  {isSigningOut ? 'Signing out...' : 'Sign out'}
-                </Button>
               </div>
-              <div className="h-9 w-9 rounded-full bg-accent-primary/10 flex items-center justify-center text-accent-primary font-medium">
-                {profile?.name ? profile.name.charAt(0).toUpperCase() : 'U'}
-              </div>
+              {/* Sign Out Button */}
+              <Button
+                variant="primary" // Changed to primary for blue background
+                size="sm" // Consistent size
+                className="ml-2" // Spacing
+                onClick={handleSignOut}
+                disabled={isSigningOut}
+                loading={isSigningOut}
+              >
+                {isSigningOut ? 'Signing out...' : 'Sign out'}
+              </Button>
             </div>
           ) : (
             // User is not authenticated
