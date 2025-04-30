@@ -71,7 +71,7 @@ export default function DocumentCard({ document }: DocumentCardProps) {
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
     >
-      {getFileIcon(document.file_type)}
+      {getFileIcon(document.file_type ?? null)}
 
       <div className="ml-4 flex-1">
         <Link href={`/dashboard/documents/${document.id}`}>
