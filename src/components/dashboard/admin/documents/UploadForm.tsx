@@ -166,7 +166,7 @@ export default function UploadForm() {
         label="Topics (comma-separated)"
         value={topics.join(', ')}
         onChange={(value) => setTopics(value.split(',').map(t => t.trim()).filter(t => t))}
-        placeholder="Add topics..."
+        placeholder="e.g., Theology, Spirituality, History"
         disabled={loading} // Use loading state from hook
       />
 
@@ -175,7 +175,7 @@ export default function UploadForm() {
         label="Keywords (comma-separated)"
         value={keywords.join(', ')}
         onChange={(value) => setKeywords(value.split(',').map(k => k.trim()).filter(k => k))}
-        placeholder="Add keywords..."
+        placeholder="e.g., Vocation, Formation, Prayer"
         disabled={loading} // Use loading state from hook
       />
 

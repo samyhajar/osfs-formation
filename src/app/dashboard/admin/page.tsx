@@ -46,8 +46,9 @@ export default function DashboardPage() {
   });
 
   // --- Sorting State ---
-  const [sortKey, setSortKey] = useState<SortKey>(null);
-  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
+  // Initialize state to sort by newest created_at by default
+  const [sortKey, setSortKey] = useState<SortKey>('created_at');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
   useEffect(() => {
     if (authLoading) {

@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
 import { DocumentCategory, DocumentPurpose } from '@/types/document';
 import { useAuth } from '@/contexts/AuthContext';
+import toast from 'react-hot-toast';
 
 // Define the structure for document insertion from the DB types
 type DocumentInsert = Database['public']['Tables']['documents']['Insert'];
@@ -48,7 +49,13 @@ export function useDocumentUpload(): UseDocumentUploadResult {
     setError(null);
     setUploadProgress(0);
     const supabase = createClient<Database>();
-    const filePath = `${user.id}/${Date.now()}-${data.file.name.replace(
+
+    // Sanitize category name for use in path
+    const sanitizedCategory = data.category
+      .replace(/\s+/g, '_')
+      .replace(/[^a-zA-Z0-9_-]/g, '');
+    // Construct path with category folder
+    const filePath = `${sanitizedCategory}/${Date.now()}-${data.file.name.replace(
       /[^a-zA-Z0-9_.-]/g,
       '_',
     )}`;
@@ -57,7 +64,7 @@ export function useDocumentUpload(): UseDocumentUploadResult {
     try {
       console.log(`Uploading file to path: ${filePath}`);
       const { error: uploadError } = await supabase.storage
-        .from('media')
+        .from('documents')
         .upload(filePath, data.file, {
           cacheControl: '3600',
           upsert: false,
@@ -72,7 +79,7 @@ export function useDocumentUpload(): UseDocumentUploadResult {
       setUploadProgress(50); // Halfway point
 
       const { data: urlData } = supabase.storage
-        .from('media')
+        .from('documents')
         .getPublicUrl(filePath);
       if (!urlData?.publicUrl) {
         throw new Error('Could not get public URL after upload.');
@@ -106,7 +113,7 @@ export function useDocumentUpload(): UseDocumentUploadResult {
         console.error('Database Insert Error:', insertError);
         console.log(`Attempting to remove orphaned file: ${filePath}`);
         const { error: removeError } = await supabase.storage
-          .from('media')
+          .from('documents')
           .remove([filePath]);
         if (removeError) {
           console.error('Failed to remove orphaned file:', removeError);
@@ -116,11 +123,18 @@ export function useDocumentUpload(): UseDocumentUploadResult {
 
       console.log('Document metadata inserted successfully.');
       setUploadProgress(100);
-      // Success handling (e.g., navigation) should ideally be managed by the component calling the hook
-      // But can provide feedback here
-      alert('Upload successful!');
-      router.push('/dashboard/admin'); // Or redirect as needed
-      router.refresh();
+
+      // Show success toast
+      toast.success(`Successfully uploaded: ${data.file.name}`);
+
+      // Redirect after a short delay to allow toast visibility (optional, but good UX)
+      // router.push('/dashboard/admin');
+      // router.refresh();
+      // Using setTimeout for redirection allows the toast to be seen
+      setTimeout(() => {
+        router.push('/dashboard/admin');
+        router.refresh();
+      }, 1500); // Delay in ms (adjust as needed)
     } catch (err: unknown) {
       console.error('Upload process failed:', err);
       const message =

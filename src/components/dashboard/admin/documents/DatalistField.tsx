@@ -44,8 +44,8 @@ export function DatalistField({
         onChange={handleChange}
         required={required}
         disabled={disabled}
-        placeholder={placeholder}
-        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-black"
+        placeholder={placeholder || `Select or enter ${label.toLowerCase()}...`}
+        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-black placeholder:text-gray-400"
       />
       <datalist id={listId}>
         {suggestions.map(suggestion => (

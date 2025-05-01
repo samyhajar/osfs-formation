@@ -28,10 +28,10 @@ export function MultiSelectButtons<T extends string>({
             type="button" // Ensure it doesn't submit the form
             onClick={() => onChange(option)}
             disabled={disabled}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${
               selectedOptions.includes(option)
-                ? 'bg-indigo-600 text-white' // Style for selected
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200' // Style for unselected
+                ? 'border-blue-500 bg-blue-100 text-blue-700' // Style to match Topics: border, light bg, dark text
+                : 'border-transparent bg-gray-100 text-gray-700 hover:bg-gray-200' // Add transparent border for unselected
             }`}
           >
             {option}
