@@ -7,10 +7,21 @@ import Link from 'next/link';
 import DocumentsFilters from '@/components/dashboard/admin/DocumentsFilters';
 import DocumentList from '@/components/dashboard/admin/DocumentList';
 import { Database } from '@/types/supabase';
-import { Document, DocumentCategory } from '@/types/document';
+import { Document, DocumentCategory, DocumentPurpose } from '@/types/document';
 import { useAuth } from '@/contexts/AuthContext';
 // Import our consistent browser client creator
 import { createClient } from '@/lib/supabase/browser-client';
+
+// Define the filter state type matching the component's expected props
+interface PageFilterState {
+  category: DocumentCategory | ''; // Match the expected type
+  region: string;
+  language: string;
+  author: string;
+  keywords: string;
+  topics: string[];
+  purpose: DocumentPurpose[]; // Match the expected type
+}
 
 export default function DashboardPage() {
   // Remove unused 'user'
@@ -19,14 +30,15 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [categoryCounts, setCategoryCounts] = useState<Record<DocumentCategory, number>>({} as Record<DocumentCategory, number>);
-  const [filters, setFilters] = useState({
-    category: '',
+  // Apply the PageFilterState type to useState
+  const [filters, setFilters] = useState<PageFilterState>({
+    category: '', // Ensure initial value matches type
     region: '',
     language: '',
     author: '',
     keywords: '',
-    topics: [] as string[],
-    purpose: [] as string[]
+    topics: [],
+    purpose: [] // Ensure initial value matches type
   });
 
   useEffect(() => {
@@ -66,7 +78,7 @@ export default function DashboardPage() {
           .order('created_at', { ascending: false });
 
         // Apply filters
-        if (filters.category) query = query.eq('category', filters.category as DocumentCategory);
+        if (filters.category) query = query.eq('category', filters.category);
         if (filters.region) query = query.eq('region', filters.region);
         if (filters.language) query = query.eq('language', filters.language);
         if (filters.author) query = query.ilike('author_name', `%${filters.author}%`);

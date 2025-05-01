@@ -11,6 +11,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMemo } from 'react';
+import Image from 'next/image';
 
 // Simple Skeleton component for loading state
 const NavItemSkeleton = () => (
@@ -47,8 +48,19 @@ export default function Sidebar() {
 
   return (
     <div className="h-full min-h-screen bg-white shadow-sm border-r border-gray-100 flex flex-col">
-      <div className="p-6">
-        <h2 className="text-xl font-bold text-accent-primary">Resources</h2>
+      <div className="px-6 py-4">
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/oblate-logo.svg"
+            alt="Oblate Logo"
+            width={28}
+            height={28}
+            className="h-7 w-auto"
+          />
+          <span className="text-lg font-bold text-gray-900">
+            Formation desalesoblates
+          </span>
+        </Link>
       </div>
 
       <nav className="flex-1 px-3 pb-6">

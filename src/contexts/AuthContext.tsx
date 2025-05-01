@@ -16,7 +16,7 @@ import { Database } from '@/types/supabase';
 type UserProfile = Database['public']['Tables']['profiles']['Row'];
 
 interface AuthContextType {
-  supabase: SupabaseClient<Database>; // Expose the client
+  supabase: SupabaseClient<Database>;
   user: User | null;
   profile: UserProfile | null;
   session: Session | null;
@@ -32,15 +32,12 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  // Create Supabase client instance once using useMemo
   const supabase = useMemo(() => createClient(), []);
-
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // --- Helper function to fetch profile ---
   const fetchProfile = useCallback(async (userId: string): Promise<UserProfile | null> => {
     console.log(`[AuthContext] fetchProfile called for user: ${userId}`);
     try {
@@ -51,112 +48,114 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         .single();
 
       if (error) {
-        console.error(`[AuthContext] Error fetching profile for ${userId}:`, error);
+        console.error(`[AuthContext] Supabase error fetching profile for ${userId}:`, error);
         return null;
       }
       console.log(`[AuthContext] Profile fetched for ${userId}:`, data);
       return data;
     } catch (err) {
-      console.error(`[AuthContext] CAUGHT error fetching profile for ${userId}:`, err);
+      console.error(`[AuthContext] CAUGHT generic error fetching profile for ${userId}:`, err);
       return null;
     }
-  }, [supabase]); // Depend only on the stable supabase client instance
+  }, [supabase]);
 
-  // --- Function to refresh all user data ---
-  const refreshUserData = useCallback(async () => {
-    console.log('[AuthContext] refreshUserData called');
+  const refreshSessionAndUser = useCallback(async () => {
+    console.log('[AuthContext] refreshSessionAndUser called');
     setLoading(true);
     try {
       const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
       if (sessionError) throw sessionError;
       setSession(currentSession);
-
-      const currentUser = currentSession?.user ?? null;
-      setUser(currentUser);
-
-      if (currentUser) {
-        const fetchedProfile = await fetchProfile(currentUser.id);
-        setProfile(fetchedProfile);
-      } else {
-        setProfile(null);
-      }
+      setUser(currentSession?.user ?? null);
+      console.log('[AuthContext] Session/User refreshed. User:', !!(currentSession?.user));
     } catch (error) {
-      console.error("[AuthContext] Error in refreshUserData:", error);
+      console.error("[AuthContext] Error in refreshSessionAndUser:", error);
       setSession(null);
       setUser(null);
       setProfile(null);
     } finally {
       setLoading(false);
-      console.log('[AuthContext] refreshUserData finished. Loading:', false);
+      console.log('[AuthContext] refreshSessionAndUser finished. Loading:', false);
     }
-  }, [supabase, fetchProfile]); // Add fetchProfile dependency
+  }, [supabase]);
 
-  // --- Initialize and set up auth state change listener ---
   useEffect(() => {
-    console.log('[AuthContext] useEffect setup starting.');
-    // Initial data fetch - wrap with void
-    void refreshUserData();
-
-    // Auth listener
+    console.log('[AuthContext] Subscribing to onAuthStateChange.');
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (event, newSession) => {
-        console.log(`[AuthContext] onAuthStateChange event: ${event}`, newSession);
+      (event, newSession) => {
+        console.log(`[AuthContext] onAuthStateChange event: ${event}. Session exists:`, !!newSession);
         setSession(newSession);
-        const changedUser = newSession?.user ?? null;
-        setUser(changedUser);
-
-        if (changedUser) {
-          const fetchedProfile = await fetchProfile(changedUser.id);
-          setProfile(fetchedProfile);
-        } else {
+        setUser(newSession?.user ?? null);
+        if (event === 'SIGNED_OUT') {
           setProfile(null);
+          setLoading(false);
         }
-        // Loading state is managed by refreshUserData or initial load
-        // Don't set loading here to avoid potential loops
       }
     );
 
-    console.log('[AuthContext] Auth listener subscribed.');
+    void refreshSessionAndUser();
 
-    // Cleanup
     return () => {
       console.log('[AuthContext] Unsubscribing auth listener.');
       authListener?.subscription.unsubscribe();
     };
-  }, [supabase, refreshUserData, fetchProfile]);
+  }, [supabase, refreshSessionAndUser]);
 
+  useEffect(() => {
+    const currentUserId = user?.id;
+    if (currentUserId) {
+      console.log(`[AuthContext] User detected (ID: ${currentUserId}), attempting profile fetch.`);
+      setLoading(true);
+      fetchProfile(currentUserId)
+        .then((fetchedProfile) => {
+          console.log(`[AuthContext] Profile fetch completed for ${currentUserId}. Profile found:`, !!fetchedProfile);
+          setProfile(fetchedProfile);
+        })
+        .catch((error) => {
+          console.error(`[AuthContext] Error in profile fetching effect for ${currentUserId}:`, error);
+          setProfile(null);
+        })
+        .finally(() => {
+          console.log(`[AuthContext] Profile fetch attempt finished for ${currentUserId}. Setting loading false.`);
+          setLoading(false);
+        });
+    } else {
+      console.log('[AuthContext] No user detected, ensuring profile is null.');
+      setProfile(null);
+    }
+  }, [user?.id, fetchProfile]);
 
   const signOut = async () => {
-    setLoading(true);
+    console.log('[AuthContext] signOut function called.');
     try {
       const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      // State updates will be handled by onAuthStateChange
+      if (error) {
+        console.error("[AuthContext] Error during supabase.auth.signOut:", error);
+        throw error;
+      }
+      console.log('[AuthContext] supabase.auth.signOut successful. State update delegated to listener.');
       return true;
     } catch (error) {
-      console.error("Error signing out:", error);
-      setLoading(false);
+      console.error("[AuthContext] Error caught in signOut function:", error);
       return false;
     }
   };
 
   const value = {
-    supabase, // Provide the client instance
+    supabase,
     session,
     user,
     profile,
     loading,
     signOut,
-    refresh: refreshUserData,
+    refresh: refreshSessionAndUser,
   };
 
-  // Add a log to see when provider renders
   console.log('[AuthContext] Rendering Provider. Loading:', loading, 'User:', !!user, 'Profile:', !!profile);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-// Custom hook to use the AuthContext
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {

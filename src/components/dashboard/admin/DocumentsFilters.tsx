@@ -154,13 +154,56 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
 
       {/* Advanced filters that expand/collapse - Use the new component */}
       {isExpanded && (
-        <AdminAdvancedFilters
-          filters={filters} // Pass the relevant subset or full filters
-          onInputChange={handleInputChange}
-          onTopicChange={handleTopicChange}
-          onPurposeChange={handlePurposeChange}
-          onReset={handleReset}
-        />
+        // Wrap AdminAdvancedFilters and the new buttons in a fragment or div if needed
+        <>
+          <AdminAdvancedFilters
+            filters={filters} // Pass the relevant subset or full filters
+            onInputChange={handleInputChange}
+            onTopicChange={handleTopicChange}
+            onPurposeChange={handlePurposeChange}
+            // Remove onReset prop as it's no longer accepted
+          />
+          {/* Buttons visible when expanded */}
+          <div className="mt-4 pt-4 border-t border-gray-100 flex justify-end gap-2">
+            {/* Hide Advanced Filters Button (Now on the left) */}
+            <button
+              onClick={() => setIsExpanded(false)}
+              className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-sky-100 text-sky-700 hover:bg-sky-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+            >
+              Hide Advanced Filters
+            </button>
+            {/* Reset Filters Button (Now on the right) */}
+            <button
+              type="button"
+              onClick={handleReset}
+              className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+              Reset Filters
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* Container for bottom buttons (visible when collapsed) */}
+      {!isExpanded && (
+        // Use Flexbox to position buttons side-by-side at the end
+        <div className="mt-4 pt-4 flex justify-end gap-2">
+          {/* Show Advanced Filters Button */}
+          <button
+            onClick={() => setIsExpanded(true)}
+            className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-sky-100 text-sky-700 hover:bg-sky-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+          >
+            Show Advanced Filters
+          </button>
+          {/* Reset Filters Button (visible when collapsed) */}
+          <button
+            type="button" // Add type="button"
+            onClick={handleReset} // Use existing handler
+            className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          >
+            Reset Filters
+          </button>
+        </div>
       )}
     </div>
   );

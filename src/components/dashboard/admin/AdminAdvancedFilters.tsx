@@ -1,6 +1,7 @@
 'use client';
 
 import { DocumentPurpose } from '@/types/document';
+import React from 'react';
 
 // Constants for options used only here
 const regions = [
@@ -10,7 +11,19 @@ const languages = [
     'English', 'French', 'German', 'Spanish', 'Italian', 'Portuguese'
 ];
 const topics = [
-    'Formation', 'Spirituality', 'Community Life', 'Mission', 'Vocation', 'Prayer', 'Scripture'
+    'Community',
+    'Constitutions',
+    'Directory',
+    'Evaluation',
+    'History',
+    'Ministry',
+    'Origins: Formation Coordinator',
+    'Other',
+    'Prayer',
+    'Psychology',
+    'Salesian',
+    'Spirituality',
+    'Vows'
 ];
 const purposes: DocumentPurpose[] = [
     'General', 'Novitiate', 'Postulancy', 'Scholasticate', 'Ongoing Formation'
@@ -30,7 +43,6 @@ interface AdminAdvancedFiltersProps {
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onTopicChange: (topic: string) => void;
   onPurposeChange: (purpose: DocumentPurpose) => void;
-  onReset: () => void;
 }
 
 export function AdminAdvancedFilters({
@@ -38,7 +50,6 @@ export function AdminAdvancedFilters({
   onInputChange,
   onTopicChange,
   onPurposeChange,
-  onReset,
 }: AdminAdvancedFiltersProps) {
   return (
     <div className="mt-6 pt-4 border-t border-gray-100">
@@ -90,17 +101,19 @@ export function AdminAdvancedFilters({
         <h4 className="text-sm font-medium text-gray-900 mb-2">Topics</h4>
         <div className="flex flex-wrap gap-2">
           {topics.map((topic) => (
-            <button
-              key={topic}
-              onClick={() => onTopicChange(topic)} // Use the passed handler
-              className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                filters.topics.includes(topic)
-                  ? 'bg-accent-primary/10 text-accent-primary border border-accent-primary/30'
-                  : 'bg-gray-100 text-text-secondary border border-gray-200 hover:bg-accent-primary/10 hover:text-accent-primary hover:border-accent-primary/30'
-              }`}
-            >
-              {topic}
-            </button>
+            <React.Fragment key={topic}>
+              <button
+                onClick={() => onTopicChange(topic)} // Use the passed handler
+                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                  filters.topics.includes(topic)
+                    ? 'bg-accent-primary/10 text-accent-primary border border-accent-primary/30'
+                    : 'bg-gray-100 text-text-secondary border border-gray-200 hover:bg-accent-primary/10 hover:text-accent-primary hover:border-accent-primary/30'
+                }`}
+              >
+                {topic}
+              </button>
+              {topic === 'Ministry' && <div className="basis-full h-0"></div>}
+            </React.Fragment>
           ))}
         </div>
       </div>
@@ -122,16 +135,6 @@ export function AdminAdvancedFilters({
             </button>
           ))}
         </div>
-      </div>
-
-      {/* Reset Button */}
-      <div className="mt-6 text-right">
-        <button
-          onClick={onReset} // Use the passed handler
-          className="text-sm font-medium text-accent-secondary hover:text-accent-primary transition-colors"
-        >
-          Reset All Filters
-        </button>
       </div>
     </div>
   );
