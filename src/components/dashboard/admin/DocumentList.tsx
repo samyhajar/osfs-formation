@@ -6,6 +6,7 @@ import { Document } from '@/types/document';
 import { useAuth } from '@/contexts/AuthContext';
 import { DocumentRow } from './DocumentRow';
 import { PaginationControls } from './PaginationControls';
+import { SortableHeader } from './SortableHeader';
 
 // Icons
 import {
@@ -13,10 +14,17 @@ import {
   ArrowPathIcon,
 } from '@heroicons/react/24/outline';
 
+// Define sort types locally (or import from page if shared type exists)
+type SortKey = 'title' | 'file_type' | 'category' | 'created_at' | null;
+type SortDirection = 'asc' | 'desc' | null;
+
 interface DocumentListProps {
   documents: Document[];
   isLoading: boolean;
   onDelete?: (id: string) => void;
+  sortKey: SortKey;
+  sortDirection: SortDirection;
+  onSort: (key: SortKey) => void;
 }
 
 // Number of items to display per page
@@ -35,7 +43,10 @@ const formatDate = (dateString: string) => {
 export default function DocumentList({
   documents,
   isLoading,
-  onDelete
+  onDelete,
+  sortKey,
+  sortDirection,
+  onSort
 }: DocumentListProps) {
   const { supabase } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
@@ -67,7 +78,7 @@ export default function DocumentList({
     try {
       const filePath = doc.content_url;
       const { data, error } = await supabase.storage
-        .from('documents') // Ensure this matches your bucket name
+        .from('media') // Adjusted bucket name
         .createSignedUrl(filePath, 60 * 5); // 5-minute expiry
 
       if (error) {
@@ -131,18 +142,10 @@ export default function DocumentList({
         <table className="min-w-full divide-y divide-gray-100">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Name
-              </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Type
-              </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Category
-              </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Created
-              </th>
+              <SortableHeader label="Name" columnKey="title" {...{ sortKey, sortDirection, onSort }} />
+              <SortableHeader label="Type" columnKey="file_type" {...{ sortKey, sortDirection, onSort }} />
+              <SortableHeader label="Category" columnKey="category" {...{ sortKey, sortDirection, onSort }} />
+              <SortableHeader label="Created" columnKey="created_at" {...{ sortKey, sortDirection, onSort }} />
               <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Actions
               </th>

@@ -30,11 +30,11 @@ export default function Sidebar() {
   // Define base nav items - adjust role names if different
   const allNavItems = useMemo(() => [
     { name: 'Dashboard', path: '/dashboard/admin', icon: HomeIcon, roles: ['admin', 'user'] }, // Example: visible to all logged-in roles
+    { name: 'Users', path: '/dashboard/admin/users', icon: UsersIcon, roles: ['admin'] }, // Admin only
     { name: 'Recently uploaded', path: '/dashboard/admin/documents/recent', icon: ClockIcon, roles: ['admin', 'user'] },
     { name: 'Common Syllabus', path: '/dashboard/admin/documents/syllabus', icon: DocumentTextIcon, roles: ['admin', 'user'] },
     { name: 'Workshops', path: '/dashboard/admin/workshops', icon: AcademicCapIcon, roles: ['admin', 'user'] },
     { name: 'Formation Personnel', path: '/dashboard/admin/personnel', icon: UserGroupIcon, roles: ['admin', 'user'] },
-    { name: 'Users', path: '/dashboard/admin/users', icon: UsersIcon, roles: ['admin'] }, // Admin only
     { name: 'Administration', path: '/dashboard/admin/admin', icon: Cog6ToothIcon, roles: ['admin'] }, // Admin only
   ], []);
 
@@ -49,21 +49,21 @@ export default function Sidebar() {
   return (
     <div className="h-full min-h-screen bg-white shadow-sm border-r border-gray-100 flex flex-col">
       <div className="px-6 py-4">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-3">
           <Image
             src="/oblate-logo.svg"
             alt="Oblate Logo"
-            width={28}
-            height={28}
-            className="h-7 w-auto"
+            width={48}
+            height={48}
+            className="h-12 w-auto"
           />
-          <span className="text-lg font-bold text-gray-900">
+          <span className="text-base font-bold text-gray-900">
             Formation desalesoblates
           </span>
         </Link>
       </div>
 
-      <nav className="flex-1 px-3 pb-6">
+      <nav className="flex-1 px-3 pb-6 mt-6">
         <ul className="space-y-1.5">
           {loading ? (
             // Show skeletons while loading
@@ -84,7 +84,7 @@ export default function Sidebar() {
                 <li key={item.path}>
                   <Link
                     href={item.path}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all duration-200 ${
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-base transition-all duration-200 ${
                       isActive
                         ? 'bg-accent-primary/10 text-accent-primary font-medium'
                         : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'

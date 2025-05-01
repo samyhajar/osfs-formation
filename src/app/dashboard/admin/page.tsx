@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 // Remove the auth-helpers import
 // import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
@@ -23,6 +23,10 @@ interface PageFilterState {
   purpose: DocumentPurpose[]; // Match the expected type
 }
 
+// Type for sorting state
+type SortKey = 'title' | 'file_type' | 'category' | 'created_at' | null;
+type SortDirection = 'asc' | 'desc' | null;
+
 export default function DashboardPage() {
   // Remove unused 'user'
   const { loading: authLoading } = useAuth();
@@ -40,6 +44,10 @@ export default function DashboardPage() {
     topics: [],
     purpose: [] // Ensure initial value matches type
   });
+
+  // --- Sorting State ---
+  const [sortKey, setSortKey] = useState<SortKey>(null);
+  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
 
   useEffect(() => {
     if (authLoading) {
@@ -74,8 +82,8 @@ export default function DashboardPage() {
             purpose,
             keywords,
             is_public
-          `)
-          .order('created_at', { ascending: false });
+          `); // Remove default order, sorting will be handled client-side
+          // .order('created_at', { ascending: false });
 
         // Apply filters
         if (filters.category) query = query.eq('category', filters.category);
@@ -100,6 +108,7 @@ export default function DashboardPage() {
             setError("Invalid data format returned from the server");
             setDocuments([]);
           } else {
+            // Set the raw, unsorted documents
             setDocuments(data as Document[]);
           }
         }
@@ -143,6 +152,50 @@ export default function DashboardPage() {
     setFilters(prevFilters => ({ ...prevFilters, ...newFilters }));
   };
 
+  // --- Sort Handler ---
+  const handleSort = (key: SortKey) => {
+    if (key === null) {
+      // Clear sorting
+      setSortKey(null);
+      setSortDirection(null);
+    } else if (sortKey === key) {
+      // Toggle direction
+      setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      // New key, set default direction (e.g., 'asc' for text, 'desc' for date)
+      setSortKey(key);
+      setSortDirection(key === 'created_at' ? 'desc' : 'asc');
+    }
+  };
+
+  // --- Memoized Sorted Documents ---
+  const sortedDocuments = useMemo(() => {
+    if (!sortKey || !sortDirection) {
+      return documents; // Return original order if no sorting applied
+    }
+
+    return [...documents].sort((a, b) => {
+      const valA = a[sortKey];
+      const valB = b[sortKey];
+
+      // Handle null/undefined (optional, depends on data)
+      if (valA == null || valB == null) return 0; // Or specific logic
+
+      let comparison = 0;
+      if (sortKey === 'created_at') {
+        comparison = new Date(valA).getTime() - new Date(valB).getTime();
+      } else if (typeof valA === 'string' && typeof valB === 'string') {
+        comparison = valA.localeCompare(valB);
+      } else {
+        // Basic comparison for other types (e.g., file_size if needed)
+        if (valA < valB) comparison = -1;
+        if (valA > valB) comparison = 1;
+      }
+
+      return sortDirection === 'desc' ? comparison * -1 : comparison;
+    });
+  }, [documents, sortKey, sortDirection]);
+
   // Prefix unused id with underscore, remove async as it does nothing yet
   const handleDeleteDocument = (_id: string) => {
     console.log('Delete action triggered for document:', _id);
@@ -177,9 +230,12 @@ export default function DashboardPage() {
       <DocumentsFilters filters={filters} onFilterChange={handleFilterChange} categoryCounts={categoryCounts} />
 
       <DocumentList
-        documents={documents}
+        documents={sortedDocuments}
         isLoading={loading}
-        onDelete={handleDeleteDocument} // Pass the non-async function
+        onDelete={handleDeleteDocument}
+        sortKey={sortKey}
+        sortDirection={sortDirection}
+        onSort={handleSort}
       />
     </div>
   );
