@@ -13,6 +13,18 @@ export type DocumentPurpose =
   | 'Scholasticate'
   | 'Ongoing Formation';
 
+// Add Sorting Types Here
+export type SortKey =
+  | 'title'
+  | 'file_type'
+  | 'category'
+  | 'created_at'
+  | 'language'
+  | 'region'
+  | null;
+
+export type SortDirection = 'asc' | 'desc' | null;
+
 export interface Document {
   id: string;
   title: string;

@@ -6,18 +6,19 @@ import {
   ArrowDownIcon,
   XMarkIcon
 } from '@heroicons/react/24/outline';
+import { SortKey, SortDirection } from '@/types/document'; // Import shared types
 
-// Re-define sort types or import from a shared location
-type SortKey = 'title' | 'file_type' | 'category' | 'created_at' | null;
-type SortDirection = 'asc' | 'desc' | null;
+// Removed local type definitions
+// type SortKey = ...
+// type SortDirection = ...
 
 // Props for the component
 interface SortableHeaderProps {
   label: string;
-  sortKey: SortKey;
-  sortDirection: SortDirection;
-  columnKey: NonNullable<SortKey>; // The key this header represents
-  onSort: (key: SortKey) => void;
+  sortKey: SortKey; // Use imported type
+  sortDirection: SortDirection; // Use imported type
+  columnKey: NonNullable<SortKey>; // Use imported type - Ensure NonNullable works correctly
+  onSort: (key: SortKey) => void; // Use imported type
 }
 
 export const SortableHeader = ({

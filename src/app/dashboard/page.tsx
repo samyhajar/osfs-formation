@@ -7,7 +7,7 @@ import Link from 'next/link';
 import DocumentsFilters from '@/components/dashboard/DocumentsFilters';
 import DocumentList from '@/components/dashboard/admin/DocumentList';
 import { Database } from '@/types/supabase';
-import { Document, DocumentCategory, DocumentPurpose } from '@/types/document';
+import { Document, DocumentCategory, DocumentPurpose, SortKey, SortDirection } from '@/types/document';
 import { useAuth } from '@/contexts/AuthContext';
 // Import our consistent browser client creator
 import { createClient } from '@/lib/supabase/browser-client';
@@ -22,10 +22,6 @@ interface PageFilterState {
   topics: string[];
   purpose: DocumentPurpose[]; // Use DocumentPurpose if needed
 }
-
-// Type for sorting state
-type SortKey = 'title' | 'file_type' | 'category' | 'created_at' | null;
-type SortDirection = 'asc' | 'desc' | null;
 
 export default function DashboardPage() {
   // Remove unused 'user'

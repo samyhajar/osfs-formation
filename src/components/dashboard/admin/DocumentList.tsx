@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { Document } from '@/types/document';
+import { Document, SortKey, SortDirection } from '@/types/document';
 import { useAuth } from '@/contexts/AuthContext';
 import { DocumentRow } from './DocumentRow';
 import { PaginationControls } from './PaginationControls';
@@ -13,10 +13,10 @@ import {
   MagnifyingGlassIcon,
   ArrowPathIcon,
 } from '@heroicons/react/24/outline';
+// Removed react-icons imports
 
-// Define sort types locally (or import from page if shared type exists)
-type SortKey = 'title' | 'file_type' | 'category' | 'created_at' | null;
-type SortDirection = 'asc' | 'desc' | null;
+// Assume SortKey and SortDirection types are passed via props from DashboardPage
+// Need to import them if defined in a shared types file instead
 
 interface DocumentListProps {
   documents: Document[];
@@ -38,6 +38,19 @@ const formatDate = (dateString: string) => {
     month: 'short',
     day: 'numeric'
   }).format(date);
+};
+
+// Re-added Helper for Language Abbreviations
+const getLanguageCode = (language: string | null | undefined): string => {
+  if (!language) return '--';
+  const lowerLang = language.toLowerCase().trim();
+  if (lowerLang.startsWith('en') || lowerLang === 'english') return 'EN';
+  if (lowerLang.startsWith('fr') || lowerLang === 'french') return 'FR';
+  if (lowerLang.startsWith('es') || lowerLang === 'spanish') return 'ES';
+  if (lowerLang.startsWith('de') || lowerLang === 'german') return 'DE';
+  if (lowerLang.startsWith('it') || lowerLang === 'italian') return 'IT';
+  if (lowerLang.startsWith('pt') || lowerLang === 'portuguese') return 'PT';
+  return language.substring(0, 2).toUpperCase();
 };
 
 export default function DocumentList({
@@ -144,10 +157,12 @@ export default function DocumentList({
             <tr>
               <SortableHeader label="Name" columnKey="title" {...{ sortKey, sortDirection, onSort }} />
               <SortableHeader label="Type" columnKey="file_type" {...{ sortKey, sortDirection, onSort }} />
+              <SortableHeader label="Lang" columnKey="language" {...{ sortKey, sortDirection, onSort }} />
+              <SortableHeader label="Region" columnKey="region" {...{ sortKey, sortDirection, onSort }} />
               <SortableHeader label="Category" columnKey="category" {...{ sortKey, sortDirection, onSort }} />
               <SortableHeader label="Created" columnKey="created_at" {...{ sortKey, sortDirection, onSort }} />
-              <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
+              <th scope="col" className="relative px-6 py-3">
+                <span className="sr-only">Actions</span>
               </th>
             </tr>
           </thead>
@@ -156,6 +171,8 @@ export default function DocumentList({
               <DocumentRow
                 key={doc.id}
                 doc={doc}
+                languageCode={getLanguageCode(doc.language)} // Pass language code
+                region={doc.region}
                 formattedDate={formatDate(doc.created_at)}
                 activeDropdown={activeDropdown}
                 generatingUrl={generatingUrl}

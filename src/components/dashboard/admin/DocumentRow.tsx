@@ -13,6 +13,8 @@ import {
 
 interface DocumentRowProps {
   doc: Document;
+  languageCode: string;
+  region: string | null | undefined;
   formattedDate: string;
   activeDropdown: string | null;
   generatingUrl: string | null;
@@ -23,6 +25,8 @@ interface DocumentRowProps {
 
 export function DocumentRow({
   doc,
+  languageCode,
+  region,
   formattedDate,
   activeDropdown,
   generatingUrl,
@@ -68,9 +72,15 @@ export function DocumentRow({
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
-        <span className="text-xs text-gray-700">
+        <span className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-0.5 rounded-md">
           {doc.file_type ? doc.file_type.toUpperCase() : '-'}
         </span>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+        {languageCode}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+        {region || '--'}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
         {doc.category || '-'}

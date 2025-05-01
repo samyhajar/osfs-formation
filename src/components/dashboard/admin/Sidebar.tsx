@@ -3,7 +3,6 @@ import { usePathname } from 'next/navigation';
 import {
   HomeIcon,
   UsersIcon,
-  ClockIcon,
   DocumentTextIcon,
   AcademicCapIcon,
   UserGroupIcon,
@@ -31,7 +30,6 @@ export default function Sidebar() {
   const allNavItems = useMemo(() => [
     { name: 'Dashboard', path: '/dashboard/admin', icon: HomeIcon, roles: ['admin', 'user'] }, // Example: visible to all logged-in roles
     { name: 'Users', path: '/dashboard/admin/users', icon: UsersIcon, roles: ['admin'] }, // Admin only
-    { name: 'Recently uploaded', path: '/dashboard/admin/documents/recent', icon: ClockIcon, roles: ['admin', 'user'] },
     { name: 'Common Syllabus', path: '/dashboard/admin/documents/syllabus', icon: DocumentTextIcon, roles: ['admin', 'user'] },
     { name: 'Workshops', path: '/dashboard/admin/workshops', icon: AcademicCapIcon, roles: ['admin', 'user'] },
     { name: 'Formation Personnel', path: '/dashboard/admin/personnel', icon: UserGroupIcon, roles: ['admin', 'user'] },

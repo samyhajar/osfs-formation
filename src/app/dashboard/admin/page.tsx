@@ -7,7 +7,7 @@ import Link from 'next/link';
 import DocumentsFilters from '@/components/dashboard/admin/DocumentsFilters';
 import DocumentList from '@/components/dashboard/admin/DocumentList';
 import { Database } from '@/types/supabase';
-import { Document, DocumentCategory, DocumentPurpose } from '@/types/document';
+import { Document, DocumentCategory, DocumentPurpose, SortKey, SortDirection } from '@/types/document';
 import { useAuth } from '@/contexts/AuthContext';
 // Import our consistent browser client creator
 import { createClient } from '@/lib/supabase/browser-client';
@@ -22,10 +22,6 @@ interface PageFilterState {
   topics: string[];
   purpose: DocumentPurpose[]; // Match the expected type
 }
-
-// Type for sorting state
-type SortKey = 'title' | 'file_type' | 'category' | 'created_at' | null;
-type SortDirection = 'asc' | 'desc' | null;
 
 export default function DashboardPage() {
   // Remove unused 'user'
@@ -46,7 +42,6 @@ export default function DashboardPage() {
   });
 
   // --- Sorting State ---
-  // Initialize state to sort by newest created_at by default
   const [sortKey, setSortKey] = useState<SortKey>('created_at');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
@@ -176,21 +171,27 @@ export default function DashboardPage() {
     }
 
     return [...documents].sort((a, b) => {
-      const valA = a[sortKey];
-      const valB = b[sortKey];
+      const sortKeyAsserted = sortKey as keyof Document; // Assert non-null key here
+      const valA = a[sortKeyAsserted];
+      const valB = b[sortKeyAsserted];
 
-      // Handle null/undefined (optional, depends on data)
-      if (valA == null || valB == null) return 0; // Or specific logic
+      // Handle null/undefined - Treat nulls/undefined as "lesser"
+      if (valA == null && valB != null) return sortDirection === 'asc' ? -1 : 1;
+      if (valA != null && valB == null) return sortDirection === 'asc' ? 1 : -1;
+      if (valA == null && valB == null) return 0;
 
+      // At this point, valA and valB are guaranteed to be non-null
       let comparison = 0;
-      if (sortKey === 'created_at') {
+      if (sortKey === 'created_at' && typeof valA === 'string' && typeof valB === 'string') {
         comparison = new Date(valA).getTime() - new Date(valB).getTime();
-      } else if (typeof valA === 'string' && typeof valB === 'string') {
+      } else if ((sortKey === 'language' || sortKey === 'region' || sortKey === 'title' || sortKey === 'file_type' || sortKey === 'category') && typeof valA === 'string' && typeof valB === 'string') {
         comparison = valA.localeCompare(valB);
       } else {
-        // Basic comparison for other types (e.g., file_size if needed)
-        if (valA < valB) comparison = -1;
-        if (valA > valB) comparison = 1;
+        // Fallback for other types or if types don't match expectations
+        // This might need adjustment if sorting by non-string/non-date fields is added
+        const strA = String(valA);
+        const strB = String(valB);
+        comparison = strA.localeCompare(strB);
       }
 
       return sortDirection === 'desc' ? comparison * -1 : comparison;
