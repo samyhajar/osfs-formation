@@ -8,11 +8,11 @@ import { AdminAdvancedFilters } from './AdminAdvancedFilters';
 // Define the filter state type
 interface FilterState {
   category: DocumentCategory | ''; // Allow empty string for 'All'
-  region: string;
-  language: string;
-  author: string;
-  keywords: string;
-  topics: string[];
+    region: string;
+    language: string;
+    author: string;
+    keywords: string;
+    topics: string[];
   purpose: DocumentPurpose[]; // Use DocumentPurpose
 }
 
@@ -45,7 +45,7 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
     // Ensure name is a key of FilterState and cast value appropriately if needed
     // Simple case for string values:
     if (name === 'category' || name === 'region' || name === 'language' || name === 'author' || name === 'keywords') {
-      onFilterChange({ [name]: value });
+    onFilterChange({ [name]: value });
     }
   };
 
@@ -166,20 +166,20 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
           {/* Buttons visible when expanded */}
           <div className="mt-4 pt-4 border-t border-gray-100 flex justify-end gap-2">
             {/* Hide Advanced Filters Button (Now on the left) */}
-            <button
+                <button
               onClick={() => setIsExpanded(false)}
               className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-sky-100 text-sky-700 hover:bg-sky-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
             >
               Hide Advanced Filters
-            </button>
+                </button>
             {/* Reset Filters Button (Now on the right) */}
-            <button
+                <button
               type="button"
               onClick={handleReset}
               className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
             >
               Reset Filters
-            </button>
+                </button>
           </div>
         </>
       )}
@@ -196,14 +196,14 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
             Show Advanced Filters
           </button>
           {/* Reset Filters Button (visible when collapsed) */}
-          <button
+        <button
             type="button" // Add type="button"
             onClick={handleReset} // Use existing handler
             className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-          >
-            Reset Filters
-          </button>
-        </div>
+        >
+          Reset Filters
+        </button>
+      </div>
       )}
     </div>
   );

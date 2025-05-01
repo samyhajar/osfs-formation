@@ -75,10 +75,10 @@ export default function UploadForm() {
 
     // Call the hook's upload function
     void uploadDocument({
-      title,
+          title,
       description,
       file,
-      category,
+          category,
       region,
       language,
       topics,
