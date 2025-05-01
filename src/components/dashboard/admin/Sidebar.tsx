@@ -57,10 +57,14 @@ export default function Sidebar() {
             height={48}
             className="h-12 w-auto"
           />
-          <span className="text-base font-bold text-gray-900">
+          <span className="text-base font-medium text-gray-700">
             Formation desalesoblates
           </span>
         </Link>
+      </div>
+      {/* Separator - Remove padding from container */}
+      <div>
+         <div className="h-px w-full bg-gray-100"></div>
       </div>
 
       <nav className="flex-1 px-3 pb-6 mt-6">

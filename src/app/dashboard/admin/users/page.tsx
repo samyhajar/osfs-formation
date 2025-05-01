@@ -50,8 +50,11 @@ export default async function AdminUsersPage() {
 
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-semibold text-gray-900">User Management</h1>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-black">User Management</h1>
+        <p className="text-gray-500 mt-1">Manage formator and formee user accounts.</p>
+      </div>
 
       {/* Formator Users Card */}
       <FormatorUserTable users={formatorUsers} />
