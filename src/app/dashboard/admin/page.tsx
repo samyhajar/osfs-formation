@@ -13,8 +13,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { createClient } from '@/lib/supabase/browser-client';
 
 export default function DashboardPage() {
-  // Use authLoading from context
-  const { user, loading: authLoading } = useAuth();
+  // Remove unused 'user'
+  const { loading: authLoading } = useAuth();
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,23 +30,18 @@ export default function DashboardPage() {
   });
 
   useEffect(() => {
-    // Check auth loading state from context
     if (authLoading) {
-      // Keep showing loading spinner if auth is loading
       setLoading(true);
       return;
     }
 
+    // Wrap async logic in IIFE
     const fetchDocuments = async () => {
       console.log("DashboardPage: Fetching documents...");
       try {
         setLoading(true);
         setError(null);
-
-        // Use the consistent browser client
         const supabase = createClient<Database>();
-
-        // Use explicit column selection (copied from previous successful edit)
         let query = supabase
           .from('documents')
           .select(`
@@ -70,28 +65,14 @@ export default function DashboardPage() {
           `)
           .order('created_at', { ascending: false });
 
-        // Apply filters (copied from previous successful edit)
-        if (filters.category) {
-          query = query.eq('category', filters.category as DocumentCategory);
-        }
-        if (filters.region) {
-          query = query.eq('region', filters.region);
-        }
-        if (filters.language) {
-          query = query.eq('language', filters.language);
-        }
-        if (filters.author) {
-          query = query.ilike('author_name', `%${filters.author}%`);
-        }
-        if (filters.keywords) {
-          query = query.or(`title.ilike.%${filters.keywords}%,description.ilike.%${filters.keywords}%`);
-        }
-        if (filters.topics.length > 0) {
-          query = query.overlaps('topics', filters.topics);
-        }
-        if (filters.purpose.length > 0) {
-          query = query.overlaps('purpose', filters.purpose);
-        }
+        // Apply filters
+        if (filters.category) query = query.eq('category', filters.category as DocumentCategory);
+        if (filters.region) query = query.eq('region', filters.region);
+        if (filters.language) query = query.eq('language', filters.language);
+        if (filters.author) query = query.ilike('author_name', `%${filters.author}%`);
+        if (filters.keywords) query = query.or(`title.ilike.%${filters.keywords}%,description.ilike.%${filters.keywords}%`);
+        if (filters.topics.length > 0) query = query.overlaps('topics', filters.topics);
+        if (filters.purpose.length > 0) query = query.overlaps('purpose', filters.purpose);
 
         console.log("DashboardPage: Executing Supabase query...");
         const { data, error: fetchError } = await query;
@@ -110,9 +91,10 @@ export default function DashboardPage() {
             setDocuments(data as Document[]);
           }
         }
-      } catch (err: any) {
+      } catch (err: unknown) { // Use unknown
         console.error("DashboardPage: Unexpected error:", err);
-        setError(`Unexpected error: ${err.message}`);
+        // Type guard for Error object
+        setError(`Unexpected error: ${err instanceof Error ? err.message : String(err)}`);
         setDocuments([]);
       } finally {
         setLoading(false);
@@ -120,42 +102,40 @@ export default function DashboardPage() {
       }
     };
 
-    // Fetch documents regardless of user state, RLS handles permissions
-      fetchDocuments();
+    void fetchDocuments(); // Call async function correctly
 
-  // Depend on filters and authLoading state
   }, [filters, authLoading]);
 
-  // Effect to fetch category counts via RPC
   useEffect(() => {
+    // Wrap async logic in IIFE
     const fetchCategoryCounts = async () => {
       const supabase = createClient<Database>();
-      // Call the RPC function
       const { data, error: rpcError } = await supabase.rpc('get_category_counts');
 
       if (rpcError) {
         console.error("DashboardPage: Error fetching category counts via RPC:", rpcError);
-        setCategoryCounts({} as Record<DocumentCategory, number>); // Fixed state setter
+        setCategoryCounts({} as Record<DocumentCategory, number>);
       } else {
-        // Type the parameters in reduce
         const counts = data?.reduce((acc: Record<DocumentCategory, number>, item: { category: DocumentCategory; count: number | bigint }) => {
-          acc[item.category] = Number(item.count); // Ensure count is number
+          acc[item.category] = Number(item.count);
           return acc;
         }, {} as Record<DocumentCategory, number>) || {} as Record<DocumentCategory, number>;
         console.log("DashboardPage: Category counts fetched:", counts);
         setCategoryCounts(counts);
       }
     };
-
-    fetchCategoryCounts();
-  }, []); // Run once on mount
+    void fetchCategoryCounts(); // Call async function correctly
+  }, []);
 
   const handleFilterChange = (newFilters: Partial<typeof filters>) => {
     setFilters(prevFilters => ({ ...prevFilters, ...newFilters }));
   };
 
-  const handleDeleteDocument = async (id: string) => {
+  // Prefix unused id with underscore, remove async as it does nothing yet
+  const handleDeleteDocument = (_id: string) => {
+    console.log('Delete action triggered for document:', _id);
     // Document deletion logic will go here
+    // Needs proper implementation (e.g., call API, update state)
   };
 
   return (
@@ -186,9 +166,8 @@ export default function DashboardPage() {
 
       <DocumentList
         documents={documents}
-        // Use the local loading state which depends on authLoading
         isLoading={loading}
-        onDelete={handleDeleteDocument}
+        onDelete={handleDeleteDocument} // Pass the non-async function
       />
     </div>
   );

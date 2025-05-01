@@ -3,34 +3,57 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
+// Define a type for the API response
+interface ApiResponse {
+  success?: boolean;
+  message?: string;
+  error?: string;
+  // Add other potential fields if the API returns more structured errors
+  errors?: { message: string }[];
+}
+
 export default function SetupPage() {
   const [email, setEmail] = useState('samy.hajar@gmail.com');
   const [password, setPassword] = useState('samyto2508C/');
   const [name, setName] = useState('Samy Hajar');
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<{ success?: boolean; message?: string; error?: string } | null>(null);
+  const [result, setResult] = useState<ApiResponse | null>(null);
 
-  const handleSetupAdmin = async (e: React.FormEvent) => {
+  const handleSetupAdmin = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setResult(null);
 
-    try {
-      const response = await fetch('/api/create-admin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password, name }),
-      });
+    // Wrap async logic to satisfy no-misused-promises
+    void (async () => {
+      setLoading(true);
+      setResult(null);
+      try {
+        const response = await fetch('/api/create-admin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password, name }),
+        });
 
-      const data = await response.json();
-      setResult(data);
-    } catch (error: any) {
-      setResult({ error: error.message || 'An error occurred' });
-    } finally {
-      setLoading(false);
-    }
+        // Type the response data
+        const data: unknown = await response.json();
+
+        if (!response.ok) {
+          // Attempt to parse error structure from API response
+          const errorData = data as ApiResponse;
+          throw new Error(errorData?.error || `HTTP error! status: ${response.status}`);
+        }
+
+        setResult(data as ApiResponse); // Assert type after checking response.ok
+
+      } catch (error: unknown) { // Use unknown
+        // Type guard and set error message
+        const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+        setResult({ error: errorMessage });
+      } finally {
+        setLoading(false);
+      }
+    })();
   };
 
   return (

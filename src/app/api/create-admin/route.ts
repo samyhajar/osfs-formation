@@ -1,18 +1,21 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { Database } from '@/types/supabase';
+import { z } from 'zod';
+import { AuthError } from '@supabase/supabase-js';
+
+// Define schema for request validation
+const createAdminSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+});
 
 // Admin API should only be used in secure environments
 export async function POST(request: Request) {
   try {
-    const { email, password, name } = await request.json();
-
-    if (!email || !password || !name) {
-      return NextResponse.json(
-        { error: 'Email, password and name are required' },
-        { status: 400 },
-      );
-    }
+    const requestData: unknown = await request.json();
+    const { email, password, name } = createAdminSchema.parse(requestData);
 
     // Create admin Supabase client with service role key
     const supabaseAdmin = createClient<Database>(
@@ -60,9 +63,8 @@ export async function POST(request: Request) {
     if (createError) {
       console.error('Error creating auth user:', createError);
       if (
-        createError.message.includes(
-          'duplicate key value violates unique constraint "users_email_key"',
-        )
+        createError instanceof AuthError &&
+        createError.message.includes('duplicate key')
       ) {
         return NextResponse.json(
           { error: 'User with this email already exists' },
@@ -83,12 +85,15 @@ export async function POST(request: Request) {
       );
     }
 
+    const userName =
+      (userData.user.user_metadata as { name?: string })?.name ?? name;
+
     // Update the profile to add the name and set the role to admin
     // The profile should already exist due to the on_auth_user_created trigger
     const { error: updateError } = await supabaseAdmin
       .from('profiles')
       .update({
-        name: userData.user.user_metadata?.name || name,
+        name: userName,
         role: 'admin',
       })
       .eq('id', userData.user.id);
@@ -115,11 +120,14 @@ export async function POST(request: Request) {
         email: userData.user.email,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Unhandled error in create-admin route:', error);
-    return NextResponse.json(
-      { error: error.message || 'Unknown server error occurred' },
-      { status: 500 },
-    );
+    let errorMessage = 'Unknown server error occurred';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: error.errors }, { status: 400 });
+    }
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

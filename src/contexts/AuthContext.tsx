@@ -94,8 +94,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   // --- Initialize and set up auth state change listener ---
   useEffect(() => {
     console.log('[AuthContext] useEffect setup starting.');
-    // Initial data fetch
-    refreshUserData();
+    // Initial data fetch - wrap with void
+    void refreshUserData();
 
     // Auth listener
     const { data: authListener } = supabase.auth.onAuthStateChange(

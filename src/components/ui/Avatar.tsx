@@ -35,6 +35,7 @@ export function Avatar({ src, name = 'User', size = 'md', className = '' }: Avat
           className="object-cover"
           fill
           sizes={`(max-width: 768px) ${size === 'sm' ? '2rem' : size === 'md' ? '2.5rem' : '3.5rem'}, ${size === 'sm' ? '2rem' : size === 'md' ? '2.5rem' : '3.5rem'}`}
+           
           onError={() => setImageError(true)}
         />
       </div>

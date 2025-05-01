@@ -1,6 +1,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { HomeIcon, MagnifyingGlassIcon, ClockIcon, DocumentTextIcon, AcademicCapIcon, UserGroupIcon, CogIcon } from '@heroicons/react/24/outline';
+import {
+  HomeIcon,
+  ClockIcon,
+  DocumentTextIcon,
+  AcademicCapIcon,
+  UserGroupIcon,
+  Cog6ToothIcon,
+} from '@heroicons/react/24/outline';
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -11,7 +18,7 @@ export default function Sidebar() {
     { name: 'Common Syllabus', path: '/dashboard/documents/syllabus', icon: DocumentTextIcon },
     { name: 'Workshops', path: '/dashboard/workshops', icon: AcademicCapIcon },
     { name: 'Formation Personnel', path: '/dashboard/personnel', icon: UserGroupIcon },
-    { name: 'Administration', path: '/dashboard/admin', icon: CogIcon },
+    { name: 'Administration', path: '/dashboard/admin', icon: Cog6ToothIcon },
   ];
 
   return (

@@ -1,16 +1,9 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-import { Database } from '@/types/supabase';
-import { cookies } from 'next/headers';
+import { createClient } from '@/lib/supabase/server-client';
 
 export async function GET() {
-  const cookieStore = cookies();
-
-  // Create a Supabase client (without the ssr features to avoid typing issues)
-  const supabase = createClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  );
+  // Add await for the server client
+  const supabase = await createClient();
 
   // Sign out the user (this will automatically clear cookies)
   await supabase.auth.signOut();

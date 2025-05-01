@@ -3,19 +3,14 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Document } from '@/types/document';
-import { FileIcon } from '@/components/ui/FileIcon';
 import { useAuth } from '@/contexts/AuthContext';
+import { DocumentRow } from './DocumentRow';
+import { PaginationControls } from './PaginationControls';
 
 // Icons
 import {
   MagnifyingGlassIcon,
   ArrowPathIcon,
-  ChevronRightIcon,
-  ChevronLeftIcon,
-  EllipsisHorizontalIcon,
-  PencilIcon,
-  TrashIcon,
-  ArrowDownTrayIcon
 } from '@heroicons/react/24/outline';
 
 interface DocumentListProps {
@@ -24,6 +19,19 @@ interface DocumentListProps {
   onDelete?: (id: string) => void;
 }
 
+// Number of items to display per page
+const ITEMS_PER_PAGE = 10;
+
+// Helper function to format dates (consider moving to a utils file)
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  }).format(date);
+};
+
 export default function DocumentList({
   documents,
   isLoading,
@@ -31,27 +39,18 @@ export default function DocumentList({
 }: DocumentListProps) {
   const { supabase } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [generatingUrl, setGeneratingUrl] = useState<string | null>(null);
 
-  // Pagination
-  const totalPages = Math.ceil(documents.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedDocuments = documents.slice(startIndex, startIndex + itemsPerPage);
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    }).format(date);
-  };
+  // Pagination calculations
+  const totalPages = Math.ceil(documents.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedDocuments = documents.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const handlePageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
+    setActiveDropdown(null); // Close dropdown when changing page
   };
 
   const toggleDropdown = (docId: string) => {
@@ -60,15 +59,16 @@ export default function DocumentList({
 
   const handleDownload = async (doc: Document) => {
     if (!doc.content_url) {
-      console.error('No file path found for this document.');
+      console.error('No file path found for this document.', doc.id);
+      alert('Download failed: No file path available.');
       return;
     }
     setGeneratingUrl(doc.id);
     try {
       const filePath = doc.content_url;
       const { data, error } = await supabase.storage
-        .from('documents')
-        .createSignedUrl(filePath, 60 * 5);
+        .from('documents') // Ensure this matches your bucket name
+        .createSignedUrl(filePath, 60 * 5); // 5-minute expiry
 
       if (error) {
         console.error('Error creating signed URL:', error);
@@ -76,21 +76,23 @@ export default function DocumentList({
       }
 
       if (data?.signedUrl) {
-        console.log('Generated Signed URL:', data.signedUrl);
-        window.location.href = data.signedUrl;
+        console.log('Generated Signed URL for doc:', doc.id);
+        // Use window.open for better compatibility, especially on mobile
+        window.open(data.signedUrl, '_blank');
       } else {
-          throw new Error("Failed to generate signed URL.")
+          throw new Error("Failed to generate signed URL.");
       }
 
     } catch (err) {
-      console.error('Download failed:', err);
+      console.error('Download failed for doc:', doc.id, err);
       alert(`Failed to download file: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
       setGeneratingUrl(null);
-      setActiveDropdown(null);
+      setActiveDropdown(null); // Close dropdown after download attempt
     }
   };
 
+  // --- Render Loading State ---
   if (isLoading) {
     return (
       <div className="p-8 text-center text-gray-500">
@@ -100,6 +102,7 @@ export default function DocumentList({
     );
   }
 
+  // --- Render Empty State ---
   if (documents.length === 0) {
     return (
       <div className="border border-gray-200 rounded-lg p-8 text-center">
@@ -121,14 +124,7 @@ export default function DocumentList({
     );
   }
 
-  console.log("Rendering documents:", documents.map(doc => ({
-    id: doc.id,
-    title: doc.title,
-    type: doc.file_type,
-    category: doc.category,
-    content_url: doc.content_url
-  })));
-
+  // --- Render Document Table and Pagination ---
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
       <div className="overflow-x-auto">
@@ -153,197 +149,28 @@ export default function DocumentList({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {paginatedDocuments.map((doc) => {
-              return (
-                <tr key={doc.id} className="hover:bg-gray-50/50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10 rounded-lg flex items-center justify-center mr-4">
-                         <FileIcon fileType={doc.file_type ?? undefined} size={20} />
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">
-                          <Link href={`/dashboard/documents/${doc.id}`} className="hover:text-accent-primary transition-colors">
-                            {doc.title}
-                          </Link>
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          By {doc.author_name || 'Unknown Author'}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-xs text-gray-700">
-                      {doc.file_type ? doc.file_type.toUpperCase() : '-'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                    {doc.category || '-'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                    {formatDate(doc.created_at)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium relative">
-                    <button
-                      onClick={() => toggleDropdown(doc.id)}
-                      className="text-gray-500 hover:text-gray-700 focus:outline-none p-1 rounded-md hover:bg-gray-100"
-                    >
-                      <EllipsisHorizontalIcon className="h-5 w-5" />
-                    </button>
-
-                    {activeDropdown === doc.id && (
-                      <div
-                        className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20"
-                        style={{ top: '100%' }}
-                        onMouseLeave={() => setActiveDropdown(null)}
-                      >
-                        <div className="py-1" role="menu" aria-orientation="vertical">
-                          <Link
-                            href={`/dashboard/documents/${doc.id}`}
-                            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                            role="menuitem"
-                          >
-                            <MagnifyingGlassIcon className="mr-3 h-4 w-4 text-gray-400" />
-                            View Details
-                          </Link>
-                          <Link
-                            href={`/dashboard/documents/${doc.id}/edit`}
-                            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                            role="menuitem"
-                          >
-                            <PencilIcon className="mr-3 h-4 w-4 text-gray-400" />
-                            Edit Document
-                          </Link>
-                          <button
-                             onClick={() => handleDownload(doc)}
-                             disabled={!doc.content_url || !!generatingUrl}
-                             className={`flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 ${
-                               !doc.content_url || generatingUrl === doc.id ? 'opacity-50 cursor-not-allowed' : ''
-                             }`}
-                             role="menuitem"
-                          >
-                            {generatingUrl === doc.id ? (
-                               <ArrowPathIcon className="mr-3 h-4 w-4 text-gray-400 animate-spin" />
-                            ) : (
-                               <ArrowDownTrayIcon className="mr-3 h-4 w-4 text-gray-400" />
-                            )}
-                            {generatingUrl === doc.id ? 'Generating...' : 'Download'}
-                          </button>
-                          {onDelete && (
-                            <button
-                              onClick={() => {
-                                setActiveDropdown(null);
-                                if (confirm('Are you sure you want to delete this document? THIS ACTION CANNOT BE UNDONE.')) {
-                                  onDelete(doc.id);
-                                }
-                              }}
-                              className="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-800"
-                              role="menuitem"
-                            >
-                              <TrashIcon className="mr-3 h-4 w-4 text-red-400" />
-                              Delete
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
+            {paginatedDocuments.map((doc) => (
+              <DocumentRow
+                key={doc.id}
+                doc={doc}
+                formattedDate={formatDate(doc.created_at)}
+                activeDropdown={activeDropdown}
+                generatingUrl={generatingUrl}
+                toggleDropdown={toggleDropdown}
+                handleDownload={handleDownload}
+                onDelete={onDelete}
+              />
+            ))}
           </tbody>
         </table>
       </div>
 
-      {totalPages > 1 && (
-        <div className="px-6 py-3 border-t border-gray-200 flex items-center justify-between bg-white">
-          <div className="flex-1 flex justify-between sm:hidden">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 disabled:opacity-50`}
-            >
-              Previous
-            </button>
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className={`relative ml-3 inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 disabled:opacity-50`}
-            >
-              Next
-            </button>
-          </div>
-          <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-            <div>
-              <p className="text-sm text-gray-700">
-                Showing <span className="font-medium">{startIndex + 1}</span> to{' '}
-                <span className="font-medium">
-                  {Math.min(startIndex + itemsPerPage, documents.length)}
-                </span>{' '}
-                of <span className="font-medium">{documents.length}</span> documents
-              </p>
-            </div>
-            <div>
-              <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50`}
-                >
-                  <span className="sr-only">Previous</span>
-                  <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-                </button>
-
-                {[...Array(totalPages)].map((_, i) => {
-                  const page = i + 1;
-                  if (
-                    page === 1 ||
-                    page === totalPages ||
-                    (page >= currentPage - 1 && page <= currentPage + 1)
-                  ) {
-                    return (
-                      <button
-                        key={page}
-                        onClick={() => handlePageChange(page)}
-                        className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                          currentPage === page
-                            ? 'z-10 border-accent-primary text-accent-primary bg-accent-primary/10'
-                            : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    );
-                  } else if (
-                    (page === currentPage - 2 && currentPage > 3) ||
-                    (page === currentPage + 2 && currentPage < totalPages - 2)
-                  ) {
-                    return (
-                      <span
-                        key={page}
-                        className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium text-gray-700"
-                      >
-                        ...
-                      </span>
-                    );
-                  }
-                  return null;
-                })}
-
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50`}
-                >
-                  <span className="sr-only">Next</span>
-                  <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-                </button>
-              </nav>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Render Pagination Controls */}
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 }

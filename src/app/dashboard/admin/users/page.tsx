@@ -1,13 +1,11 @@
 import { createClient } from '@/lib/supabase/server-client';
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import FormatorUserTable from '@/components/dashboard/admin/users/FormatorUserTable';
 import FormeeUserTable from '@/components/dashboard/admin/users/FormeeUserTable';
 import { Database } from '@/types/supabase'; // Assuming you have this generated type
 
 export default async function AdminUsersPage() {
-  // const cookieStore = cookies(); // No longer needed for createClient
-  const supabase = await createClient<Database>(); // Await the async function and remove argument
+  const supabase = await createClient<Database>();
 
   // 1. Check if user is logged in and is an admin
   const { data: { user } } = await supabase.auth.getUser();

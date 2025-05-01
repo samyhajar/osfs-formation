@@ -12,7 +12,7 @@ const signupSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const requestData = await request.json();
+    const requestData: unknown = await request.json();
 
     // Validate the request data
     const validatedData = signupSchema.parse(requestData);

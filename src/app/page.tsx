@@ -1,20 +1,18 @@
-import Link from 'next/link'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server-client'
 import LoginForm from '@/components/auth/LoginForm'
+import Link from 'next/link'
 
 export default async function Home() {
   try {
     const supabase = await createClient()
-    const { data: { session } } = await supabase.auth.getSession()
+    const { data: { session: _session } } = await supabase.auth.getSession()
 
     return (
       <div className="min-h-screen flex flex-col bg-white">
         <main className="flex-grow flex items-center justify-center py-12 px-2 md:px-4">
           <div className="max-w-7xl w-full">
-            {/* Two column layout with divider */}
             <div className="flex flex-col lg:flex-row w-full">
-              {/* Left Column - Logo */}
               <div className="w-full lg:w-1/2 flex flex-col items-center justify-center py-12 px-4">
                 <h2 className="text-3xl font-bold text-slate-800 mb-10 text-center">Formation desalesoblates</h2>
                 <Image
@@ -27,10 +25,8 @@ export default async function Home() {
                 />
               </div>
 
-              {/* Center Divider - Only visible on desktop */}
               <div className="hidden lg:block w-px bg-slate-200 mx-2 self-stretch"></div>
 
-              {/* Right Column - Login Form */}
               <div className="w-full lg:w-1/2 flex items-center justify-center py-12 px-4">
                 <div className="w-full max-w-lg">
                   <h3 className="text-2xl font-medium text-slate-800 mb-10 text-center">Sign In</h3>
@@ -39,7 +35,6 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* General Coordinator information */}
             <div className="w-full text-center mt-16 mb-10">
               <p className="text-slate-700 text-lg font-medium">General Coordinator:<br />
               Francis W. Danella, OSFS</p>
@@ -47,7 +42,6 @@ export default async function Home() {
           </div>
         </main>
 
-        {/* Minimal Footer */}
         <footer className="w-full py-6 px-4 border-t border-slate-200">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-slate-500">OSFS Formation Office | Tenui Nec Dimittam</p>
@@ -62,7 +56,7 @@ export default async function Home() {
       </div>
     )
   } catch (error) {
-    console.error('Error in Home component:', error);
+    console.error('Error in Home component:', error)
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
         <h1 className="text-2xl font-bold text-slate-800 mb-4">OSFS Formation</h1>
@@ -74,6 +68,6 @@ export default async function Home() {
           Refresh
         </Link>
       </div>
-    );
+    )
   }
 }

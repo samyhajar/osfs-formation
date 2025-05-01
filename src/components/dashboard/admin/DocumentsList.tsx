@@ -1,7 +1,9 @@
 'use client';
 
+import { Document } from '@/types/document';
+
 interface DocumentsListProps {
-  documents: any[];
+  documents: Document[];
   loading: boolean;
 }
 
@@ -10,7 +12,7 @@ export default function DocumentsList({ documents, loading }: DocumentsListProps
     return (
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="animate-pulse space-y-4">
-          {[...Array(5)].map((_, i) => (
+          {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="flex items-center space-x-4">
               <div className="h-10 w-10 bg-blue-200 rounded"></div>
               <div className="flex-1 space-y-2">
@@ -24,7 +26,7 @@ export default function DocumentsList({ documents, loading }: DocumentsListProps
     );
   }
 
-  if (documents.length === 0) {
+  if (!Array.isArray(documents) || documents.length === 0) {
     return (
       <div className="bg-white p-6 rounded-lg shadow-md text-center">
         <p className="text-gray-500">No documents found matching your criteria.</p>
@@ -58,7 +60,7 @@ export default function DocumentsList({ documents, loading }: DocumentsListProps
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {documents.map((doc) => (
+          {documents.map((doc: Document) => (
             <tr key={doc.id} className="hover:bg-gray-50">
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm font-medium text-blue-600 hover:underline">
@@ -70,14 +72,14 @@ export default function DocumentsList({ documents, loading }: DocumentsListProps
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                  {doc.type}
+                  {doc.file_type || 'N/A'}
                 </span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {doc.author}
+                {doc.author_name || 'Unknown'}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {new Date(doc.created_at).toLocaleDateString()}
+                {doc.created_at ? new Date(doc.created_at).toLocaleDateString() : 'N/A'}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <button className="text-blue-600 hover:text-blue-900 mr-3">

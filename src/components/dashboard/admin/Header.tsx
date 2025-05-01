@@ -1,12 +1,11 @@
 'use client';
 
-import Image from 'next/image';
+// import Image from 'next/image'; // Removed unused import
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation'; // Removed unused import
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { useEffect, useState } from 'react';
-import { BellIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
 
 // Add isScrolled prop to expected props
 interface HeaderProps {
@@ -15,8 +14,7 @@ interface HeaderProps {
 
 // Accept isScrolled prop, provide default value
 export default function Header({ isScrolled = false }: HeaderProps) {
-  const { user, profile, loading, session } = useAuth();
-  const router = useRouter();
+  const { user, profile, loading } = useAuth();
   const [isSigningOut, setIsSigningOut] = useState(false);
   // Initial state from server auth status, if available
   const [optimisticIsLoggedIn, setOptimisticIsLoggedIn] = useState<boolean | null>(null);
@@ -39,7 +37,6 @@ export default function Header({ isScrolled = false }: HeaderProps) {
   // Determine what to display based on auth state
   const showLoadingState = loading && optimisticIsLoggedIn === null;
   const showLoggedIn = user || (!loading && optimisticIsLoggedIn === true);
-  const showLoggedOut = !loading && !user && optimisticIsLoggedIn !== true;
 
   return (
     // Add transition class and conditional shadow class
@@ -48,25 +45,13 @@ export default function Header({ isScrolled = false }: HeaderProps) {
         isScrolled ? 'shadow-md' : 'shadow-none' // Apply shadow conditionally
       }`}
     >
-      <div className="container flex h-16 items-center justify-between px-4 py-2 md:px-6">
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard" className="flex items-center gap-2 transition-colors">
-            <Image
-              src="/oblate-logo.svg"
-              alt="Oblate Logo"
-              width={40}
-              height={40}
-              className="h-9 w-auto"
-              priority
-            />
-            <span className="hidden font-bold text-accent-primary sm:inline-block">
-              Oblate Formation
-            </span>
-          </Link>
-        </div>
+      <div className="container flex h-16 items-center justify-end px-4 py-2 md:px-6">
+        {/* Removed Logo and Title Block */}
+        {/* <div className="flex items-center"> ... logo code removed ... </div> */}
 
         <div className="flex items-center gap-4">
-          {/* Notification icons removed */}
+          {/* Removed Notification Icons Block */}
+          {/* {showLoggedIn && ( ... icon buttons removed ... )} */}
 
           {showLoadingState ? (
             // Show loading state

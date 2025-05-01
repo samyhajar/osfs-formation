@@ -1,12 +1,10 @@
 'use client';
 
-import { ReactNode, useState, useRef, useEffect } from 'react';
+import { ReactNode, useRef, useState, useEffect } from 'react';
 import Sidebar from '@/components/dashboard/admin/Sidebar';
 import Header from '@/components/dashboard/admin/Header';
-import { useAuth } from '@/contexts/AuthContext';
 
 export default function DashboardClient({ children }: { children: ReactNode }) {
-  const { user, loading } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 

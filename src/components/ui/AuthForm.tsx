@@ -44,7 +44,7 @@ export default function AuthForm() {
     <div className="w-full max-w-md p-6 rounded-lg bg-background shadow-md">
       <h2 className="text-2xl font-bold mb-6 text-center">Sign In</h2>
 
-      <form onSubmit={handleSignIn} className="space-y-4">
+      <form onSubmit={(e) => { void handleSignIn(e); }} className="space-y-4">
         <div>
           <label htmlFor="email" className="block mb-1 text-sm font-medium">
             Email

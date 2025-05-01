@@ -1,6 +1,14 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { HomeIcon, MagnifyingGlassIcon, ClockIcon, DocumentTextIcon, AcademicCapIcon, UserGroupIcon, CogIcon, UsersIcon } from '@heroicons/react/24/outline';
+import {
+  HomeIcon,
+  UsersIcon,
+  ClockIcon,
+  DocumentTextIcon,
+  AcademicCapIcon,
+  UserGroupIcon,
+  Cog6ToothIcon,
+} from '@heroicons/react/24/outline';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMemo } from 'react';
 
@@ -26,7 +34,7 @@ export default function Sidebar() {
     { name: 'Workshops', path: '/dashboard/admin/workshops', icon: AcademicCapIcon, roles: ['admin', 'user'] },
     { name: 'Formation Personnel', path: '/dashboard/admin/personnel', icon: UserGroupIcon, roles: ['admin', 'user'] },
     { name: 'Users', path: '/dashboard/admin/users', icon: UsersIcon, roles: ['admin'] }, // Admin only
-    { name: 'Administration', path: '/dashboard/admin/admin', icon: CogIcon, roles: ['admin'] }, // Admin only
+    { name: 'Administration', path: '/dashboard/admin/admin', icon: Cog6ToothIcon, roles: ['admin'] }, // Admin only
   ], []);
 
   // Filter nav items based on role AFTER loading is complete and profile exists

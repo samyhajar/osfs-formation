@@ -41,6 +41,8 @@ const eslintConfig = [
   {
     // Base configuration for all files
     files: ['**/*.{js,jsx,ts,tsx}'],
+    // Ignore .d.ts files in the base config too
+    ignores: ['**/*.d.ts'],
     plugins: {
       'jsx-a11y': jsxA11y,
       '@typescript-eslint': typescriptEslint,

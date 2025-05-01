@@ -1,52 +1,59 @@
 'use client';
 
 import { useState } from 'react';
-import { createClient } from '@/lib/supabase/browser-client';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { supabase, refresh } = useAuth(); // Get supabase client and refresh function
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setIsLoading(true);
 
-    try {
-      // Create the Supabase client using our browser client
-      const supabase = createClient();
+    // Wrap async logic
+    void (async () => {
+      setError(null);
+      setLoading(true);
 
-      console.log('Attempting to sign in...');
+      try {
+        // Use the supabase client from context
+        const { error: loginError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-      const { error, data } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+        if (loginError) {
+          throw loginError; // Throw the error to be caught below
+        }
 
-      if (error) {
-        throw new Error(error.message);
+        // Refresh auth state after successful login
+        await refresh();
+
+        // Navigate to the ADMIN dashboard after successful login & state refresh
+        router.push('/dashboard/admin');
+        router.refresh(); // Ensure layout re-renders with new auth state
+
+      } catch (err: unknown) { // Use unknown
+        console.error('Login failed:', err);
+        // Type guard for Supabase AuthError or generic Error
+        let message = 'Login failed. Please check your credentials.';
+        if (err && typeof err === 'object' && 'message' in err) {
+          message = String((err as { message: string }).message);
+        }
+        setError(message);
+      } finally {
+        setLoading(false);
       }
-
-      if (!data.session) {
-        throw new Error('Login failed - no session returned');
-      }
-
-      console.log('Login successful, redirecting to admin dashboard');
-
-      // Force a hard refresh to reset all state and redirect to admin dashboard
-      window.location.href = '/dashboard/admin';
-
-    } catch (err: any) {
-      console.error('Login error:', err.message);
-      setError(err.message || 'Failed to sign in');
-      setIsLoading(false);
-    }
+    })();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleLogin} className="space-y-6">
       {error && (
         <div className="p-4 bg-red-100 border border-red-200 text-red-700 rounded-md text-base mb-6">
           {error}
@@ -87,10 +94,10 @@ export default function LoginForm() {
 
       <button
         type="submit"
-        disabled={isLoading}
-        className={`w-full py-4 px-6 text-base bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition duration-300 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+        disabled={loading}
+        className={`w-full py-4 px-6 text-base bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition duration-300 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
       >
-        {isLoading ? 'Signing In...' : 'Sign In'}
+        {loading ? 'Signing In...' : 'Sign In'}
       </button>
     </form>
   );

@@ -2,18 +2,24 @@
 
 import { useState } from 'react';
 import { DocumentCategory, DocumentPurpose } from '@/types/document';
+// Import the extracted component
+import { AdminAdvancedFilters } from './AdminAdvancedFilters';
+
+// Define the filter state type
+interface FilterState {
+  category: DocumentCategory | ''; // Allow empty string for 'All'
+  region: string;
+  language: string;
+  author: string;
+  keywords: string;
+  topics: string[];
+  purpose: DocumentPurpose[]; // Use DocumentPurpose
+}
 
 interface DocumentsFiltersProps {
-  filters: {
-    category: string;
-    region: string;
-    language: string;
-    author: string;
-    keywords: string;
-    topics: string[];
-    purpose: string[];
-  };
-  onFilterChange: (filters: any) => void;
+  filters: FilterState;
+  // Use the defined FilterState for the callback parameter, allow partial updates
+  onFilterChange: (newFilters: Partial<FilterState>) => void;
   /** Object mapping category names to their document counts */
   categoryCounts: Record<DocumentCategory, number>;
 }
@@ -21,6 +27,7 @@ interface DocumentsFiltersProps {
 export default function DocumentsFilters({ filters, onFilterChange, categoryCounts }: DocumentsFiltersProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  // Keep only categories here
   const categories: DocumentCategory[] = [
     'Articles',
     'Source materials',
@@ -31,64 +38,35 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
     'Reflections 4 Dimensions'
   ];
 
-  const regions = [
-    'Africa',
-    'Asia',
-    'Europe',
-    'North America',
-    'South America',
-    'Australia'
-  ];
-
-  const languages = [
-    'English',
-    'French',
-    'German',
-    'Spanish',
-    'Italian',
-    'Portuguese'
-  ];
-
-  const topics = [
-    'Formation',
-    'Spirituality',
-    'Community Life',
-    'Mission',
-    'Vocation',
-    'Prayer',
-    'Scripture'
-  ];
-
-  const purposes: DocumentPurpose[] = [
-    'General',
-    'Novitiate',
-    'Postulancy',
-    'Scholasticate',
-    'Ongoing Formation'
-  ];
+  // Remove constants for regions, languages, topics, purposes - moved to AdminAdvancedFilters
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    onFilterChange({ [name]: value });
+    // Ensure name is a key of FilterState and cast value appropriately if needed
+    // Simple case for string values:
+    if (name === 'category' || name === 'region' || name === 'language' || name === 'author' || name === 'keywords') {
+      onFilterChange({ [name]: value });
+    }
   };
 
   const handleTopicChange = (topic: string) => {
     const newTopics = filters.topics.includes(topic)
       ? filters.topics.filter(t => t !== topic)
       : [...filters.topics, topic];
-
+    // Provide partial update
     onFilterChange({ topics: newTopics });
   };
 
-  const handlePurposeChange = (purpose: string) => {
+  const handlePurposeChange = (purpose: DocumentPurpose) => { // Use DocumentPurpose type
     const newPurposes = filters.purpose.includes(purpose)
       ? filters.purpose.filter(p => p !== purpose)
       : [...filters.purpose, purpose];
-
+    // Provide partial update
     onFilterChange({ purpose: newPurposes });
   };
 
   const handleReset = () => {
+    // Use the full FilterState structure for reset
     onFilterChange({
       category: '',
       region: '',
@@ -135,6 +113,7 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
           >
             <option value="" className="text-gray-900">All Categories</option>
             {categories.map((category) => (
+              // Ensure value type matches FilterState.category
               <option key={category} value={category} className="text-gray-900">
                 {category} ({categoryCounts?.[category] ?? 0})
               </option>
@@ -173,118 +152,16 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
         </div>
       </div>
 
-      {/* Advanced filters that expand/collapse */}
+      {/* Advanced filters that expand/collapse - Use the new component */}
       {isExpanded && (
-        <div className="mt-6 pt-4 border-t border-gray-100">
-          <h3 className="text-base font-medium text-gray-900 mb-3">Advanced Filters</h3>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-            <div>
-              <label htmlFor="region" className="block text-sm font-medium text-gray-900 mb-1">
-                Region
-              </label>
-              <select
-                id="region"
-                name="region"
-                value={filters.region}
-                onChange={handleInputChange}
-                className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-black"
-              >
-                <option value="" className="text-black">All Regions</option>
-                {regions.map((region) => (
-                  <option key={region} value={region} className="text-black">
-                    {region}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="language" className="block text-sm font-medium text-gray-900 mb-1">
-                Language
-              </label>
-              <select
-                id="language"
-                name="language"
-                value={filters.language}
-                onChange={handleInputChange}
-                className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-black"
-              >
-                <option value="" className="text-black">All Languages</option>
-                {languages.map((language) => (
-                  <option key={language} value={language} className="text-black">
-                    {language}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="mb-4">
-            <h4 className="text-sm font-medium text-gray-900 mb-2">Topics</h4>
-            <div className="flex flex-wrap gap-2">
-              {topics.map((topic) => (
-                <button
-                  key={topic}
-                  onClick={() => handleTopicChange(topic)}
-                  className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                    filters.topics.includes(topic)
-                      ? 'bg-accent-primary/10 text-accent-primary border border-accent-primary/30'
-                      : 'bg-gray-100 text-text-secondary border border-gray-200 hover:bg-accent-primary/10 hover:text-accent-primary hover:border-accent-primary/30'
-                  }`}
-                >
-                  {topic}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-medium text-gray-900 mb-2">Purpose</h4>
-            <div className="flex flex-wrap gap-2">
-              {purposes.map((purpose) => (
-                <button
-                  key={purpose}
-                  onClick={() => handlePurposeChange(purpose)}
-                  className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                    filters.purpose.includes(purpose)
-                      ? 'bg-accent-primary/10 text-accent-primary border border-accent-primary/30'
-                      : 'bg-gray-100 text-text-secondary border border-gray-200 hover:bg-accent-primary/10 hover:text-accent-primary hover:border-accent-primary/30'
-                  }`}
-                >
-                  {purpose}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
+        <AdminAdvancedFilters
+          filters={filters} // Pass the relevant subset or full filters
+          onInputChange={handleInputChange}
+          onTopicChange={handleTopicChange}
+          onPurposeChange={handlePurposeChange}
+          onReset={handleReset}
+        />
       )}
-
-      {/* Action buttons */}
-      <div className="mt-6 pt-4 border-t border-gray-100 flex justify-end gap-3">
-        <button
-          onClick={handleReset}
-          className="px-4 py-2 text-sm font-medium text-text-secondary bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-primary/50 transition-colors"
-        >
-          Reset Filters
-        </button>
-        <button
-          onClick={() => {
-            if (isExpanded) {
-              // Add logic here to apply filters if needed
-              console.log("Applying filters:", filters);
-            }
-            setIsExpanded(!isExpanded);
-          }}
-          className={`px-4 py-2 text-sm font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors ${
-            isExpanded
-              ? 'bg-accent-primary text-white hover:bg-accent-primary/90 focus:ring-accent-primary'
-              : 'bg-white text-text-secondary border border-gray-300 hover:bg-gray-50 focus:ring-accent-primary/50'
-          }`}
-        >
-          {isExpanded ? 'Apply Filters' : 'Advanced Filters'}
-        </button>
-      </div>
     </div>
   );
 }
