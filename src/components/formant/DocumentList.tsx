@@ -41,7 +41,7 @@ const formatDate = (dateString: string) => {
 };
 
 // Re-added Helper for Language Abbreviations
-const getLanguageCode = (language: string | null | undefined): string => {
+const _getLanguageCode = (language: string | null | undefined): string => {
   if (!language) return '--';
   const lowerLang = language.toLowerCase().trim();
   if (lowerLang.startsWith('en') || lowerLang === 'english') return 'EN';
@@ -171,7 +171,6 @@ export default function DocumentList({
               <DocumentRow
                 key={doc.id}
                 doc={doc}
-                languageCode={getLanguageCode(doc.language)} // Pass language code
                 region={doc.region}
                 formattedDate={formatDate(doc.created_at)}
                 activeDropdown={activeDropdown}
