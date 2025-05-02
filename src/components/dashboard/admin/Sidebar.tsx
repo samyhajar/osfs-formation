@@ -26,15 +26,34 @@ export default function Sidebar() {
   const pathname = usePathname();
   const { profile, loading } = useAuth();
 
-  // Define base nav items - adjust role names if different
+  // Dynamically determine the base path prefix based on the user's role
+  const basePath = useMemo(() => {
+    if (!profile?.role) return '/dashboard'; // Default or loading state
+    switch (profile.role) {
+      case 'admin':
+        return '/dashboard/admin';
+      case 'formator':
+        return '/dashboard/formant'; // Use 'formant' path for 'formator' role
+      case 'formee':
+        return '/dashboard/formee';
+      default:
+        return '/dashboard'; // Fallback
+    }
+  }, [profile?.role]);
+
+  // Define base nav items - Updated roles and dynamic paths
   const allNavItems = useMemo(() => [
-    { name: 'Dashboard', path: '/dashboard/admin', icon: HomeIcon, roles: ['admin', 'user'] }, // Example: visible to all logged-in roles
-    { name: 'Users', path: '/dashboard/admin/users', icon: UsersIcon, roles: ['admin'] }, // Admin only
-    { name: 'Common Syllabus', path: '/dashboard/admin/documents/syllabus', icon: DocumentTextIcon, roles: ['admin', 'user'] },
-    { name: 'Workshops', path: '/dashboard/admin/workshops', icon: AcademicCapIcon, roles: ['admin', 'user'] },
-    { name: 'Formation Personnel', path: '/dashboard/admin/personnel', icon: UserGroupIcon, roles: ['admin', 'user'] },
-    { name: 'Administration', path: '/dashboard/admin/admin', icon: Cog6ToothIcon, roles: ['admin'] }, // Admin only
-  ], []);
+    // Items visible to all roles (adjust paths)
+    { name: 'Dashboard', path: `${basePath}`, icon: HomeIcon, roles: ['admin', 'formator', 'formee'] },
+    { name: 'Common Syllabus', path: `${basePath}/documents/syllabus`, icon: DocumentTextIcon, roles: ['admin', 'formator', 'formee'] },
+    { name: 'Workshops', path: `${basePath}/workshops`, icon: AcademicCapIcon, roles: ['admin', 'formator', 'formee'] },
+    { name: 'Formation Personnel', path: `${basePath}/personnel`, icon: UserGroupIcon, roles: ['admin', 'formator', 'formee'] },
+
+    // Items visible only to admin and formator
+    { name: 'Users', path: `${basePath}/users`, icon: UsersIcon, roles: ['admin', 'formator'] },
+    { name: 'Administration', path: `${basePath}/admin`, icon: Cog6ToothIcon, roles: ['admin', 'formator'] },
+
+  ], [basePath]); // Depend on basePath
 
   // Filter nav items based on role AFTER loading is complete and profile exists
   const navItems = useMemo(() => {

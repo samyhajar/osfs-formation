@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { createMiddlewareClient } from '@/lib/supabase/middleware-client';
 import { isPublicRoute } from '@/lib/utils/routes';
+// Import Database type if needed for RPC response typing
+// import { Database } from '@/types/supabase';
 
 export async function middleware(request: NextRequest) {
   console.log('🛡️ Middleware running for:', request.nextUrl.pathname);
@@ -24,7 +26,14 @@ export async function middleware(request: NextRequest) {
     // For protected routes, check authentication
     const {
       data: { session },
+      error: sessionError,
     } = await supabase.auth.getSession();
+
+    if (sessionError) {
+      console.error('🛡️ Error fetching session:', sessionError);
+      // Handle appropriately, maybe redirect home
+      return NextResponse.redirect(new URL('/', request.url));
+    }
 
     console.log(
       '🛡️ Auth check:',
@@ -38,6 +47,29 @@ export async function middleware(request: NextRequest) {
       url.pathname = '/'; // Redirect to home page where login form is
       url.searchParams.set('redirectTo', pathname);
       return NextResponse.redirect(url);
+    }
+
+    // --- Role Check for Admin Routes ---
+    if (pathname.startsWith('/dashboard/admin')) {
+      console.log('🛡️ Accessing admin route, checking role...');
+      // Call the is_admin function we created earlier
+      // Ensure the is_admin function exists and is accessible
+      const { data: isAdmin, error: rpcError } = await supabase.rpc('is_admin');
+
+      if (rpcError) {
+        console.error('🛡️ Error calling is_admin RPC:', rpcError);
+        // Redirect to general dashboard on RPC error
+        return NextResponse.redirect(new URL('/dashboard', request.url));
+      }
+
+      console.log(`🛡️ User is admin? ${isAdmin ? 'Yes' : 'No'}`);
+      if (!isAdmin) {
+        console.log('🛡️ User is not admin, redirecting to general dashboard');
+        // Redirect non-admins away from /dashboard/admin to the main dashboard
+        // Note: Later, the login callback should redirect them to their specific dashboard (/formant or /formee)
+        return NextResponse.redirect(new URL('/dashboard', request.url));
+      }
+      console.log('🛡️ User is admin, allowing access to admin route');
     }
 
     // User is authenticated and can access the route
