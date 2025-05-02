@@ -1,6 +1,25 @@
 'use client';
 
+import React, { Suspense } from 'react';
 import { Document } from '@/types/document';
+
+// Helper component to render flags dynamically
+const LanguageFlag = ({ code }: { code: string | null }) => {
+  if (!code || code.length !== 2) {
+    return <span className="text-gray-500 text-xs">{code || 'N/A'}</span>; // Fallback for invalid/missing codes
+  }
+
+  const FlagComponent = React.lazy(() =>
+    import(`country-flag-icons/react/3x2/${code.toUpperCase()}`)
+      .catch(() => ({ default: () => <span className="text-gray-500 text-xs">{code}</span> })) // Fallback if import fails
+  );
+
+  return (
+    <Suspense fallback={<div className="h-4 w-6 bg-gray-200 rounded-sm animate-pulse"></div>}> {/* Loading state */}
+      <FlagComponent title={code.toUpperCase()} className="h-4 w-6 rounded-sm shadow-sm" />
+    </Suspense>
+  );
+};
 
 interface DocumentsListProps {
   documents: Document[];
@@ -52,6 +71,9 @@ export default function DocumentsList({ documents, loading }: DocumentsListProps
               Author
             </th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Language
+            </th>
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Date
             </th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -77,6 +99,9 @@ export default function DocumentsList({ documents, loading }: DocumentsListProps
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {doc.author_name || 'Unknown'}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <LanguageFlag code={doc.language ?? null} />
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {doc.created_at ? new Date(doc.created_at).toLocaleDateString() : 'N/A'}

@@ -3,22 +3,11 @@ import { redirect } from 'next/navigation';
 import UserManagementClient from '@/components/formee/users/UserManagementClient';
 import { Database } from '@/types/supabase';
 
-// Mark the page as dynamic because it uses searchParams
-export const dynamic = 'force-dynamic';
-
 // Define default pagination parameters
 const DEFAULT_PAGE = 1;
-const DEFAULT_LIMIT = 20; // Fetch 20 users per page
+const DEFAULT_LIMIT = 20;
 
-type FormeeUsersPageProps = {
-  searchParams: {
-    formatorPage?: string;
-    formeePage?: string;
-    limit?: string;
-  };
-};
-
-export default async function FormeeUsersPage({ searchParams }: FormeeUsersPageProps) {
+export default async function FormeeUsersPage() {
   const supabase = await createClient<Database>();
 
   // 1. Check if user is logged in and is a formee
@@ -40,10 +29,10 @@ export default async function FormeeUsersPage({ searchParams }: FormeeUsersPageP
     redirect('/dashboard');
   }
 
-  // Parse pagination parameters from URL, with defaults
-  const limit = parseInt(searchParams.limit || '', 10) || DEFAULT_LIMIT;
-  const formatorPage = parseInt(searchParams.formatorPage || '', 10) || DEFAULT_PAGE;
-  const formeePage = parseInt(searchParams.formeePage || '', 10) || DEFAULT_PAGE;
+  // Hardcode fetching first page
+  const limit = DEFAULT_LIMIT;
+  const formatorPage = DEFAULT_PAGE;
+  const formeePage = DEFAULT_PAGE;
 
   const formatorFrom = (formatorPage - 1) * limit;
   const formatorTo = formatorFrom + limit - 1;

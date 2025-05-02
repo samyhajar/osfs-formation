@@ -3,22 +3,17 @@ import { redirect } from 'next/navigation';
 import UserManagementClient from '@/components/admin/users/UserManagementClient';
 import { Database } from '@/types/supabase';
 
-// Mark the page as dynamic because it uses searchParams
-export const dynamic = 'force-dynamic';
+// Removed dynamic export
+// export const dynamic = 'force-dynamic';
 
-// Define default pagination parameters
+// Define default pagination parameters (still used for fetching first page)
 const DEFAULT_PAGE = 1;
-const DEFAULT_LIMIT = 20; // Fetch 20 users per page
+const DEFAULT_LIMIT = 20;
 
-type AdminUsersPageProps = {
-  searchParams: {
-    formatorPage?: string;
-    formeePage?: string;
-    limit?: string;
-  };
-};
+// Removed PageProps type definition and helpers
 
-export default async function AdminUsersPage({ searchParams }: AdminUsersPageProps) {
+// Revert function signature to not destructure props (as they are not used for now)
+export default async function AdminUsersPage() {
   const supabase = await createClient<Database>();
 
   // 1. Check if user is logged in and is an admin
@@ -39,10 +34,10 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
     redirect('/dashboard');
   }
 
-  // Parse pagination parameters from URL, with defaults
-  const limit = parseInt(searchParams.limit || '', 10) || DEFAULT_LIMIT;
-  const formatorPage = parseInt(searchParams.formatorPage || '', 10) || DEFAULT_PAGE;
-  const formeePage = parseInt(searchParams.formeePage || '', 10) || DEFAULT_PAGE;
+  // Hardcode fetching first page (limit 20)
+  const limit = DEFAULT_LIMIT;
+  const formatorPage = DEFAULT_PAGE;
+  const formeePage = DEFAULT_PAGE;
 
   const formatorFrom = (formatorPage - 1) * limit;
   const formatorTo = formatorFrom + limit - 1;
@@ -50,26 +45,28 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
   const formeeFrom = (formeePage - 1) * limit;
   const formeeTo = formeeFrom + limit - 1;
 
-  // 2. Fetch Formators (paginated) and total count
+  // Fetch data without using searchParams
+  // (Rest of the data fetching logic remains the same, just uses hardcoded page/limit)
+  // ... (fetch formators) ...
   const { data: formators, error: formatorsError } = await supabase
     .from('profiles')
     .select('id, name, email, role, created_at, avatar_url')
     .eq('role', 'formator')
     .range(formatorFrom, formatorTo)
-    .order('created_at', { ascending: false }); // Example ordering
+    .order('created_at', { ascending: false });
 
   const { count: formatorCount, error: formatorCountError } = await supabase
     .from('profiles')
     .select('id', { count: 'exact', head: true })
     .eq('role', 'formator');
 
-  // 3. Fetch Formees (paginated) and total count
+  // ... (fetch formees) ...
   const { data: formees, error: formeesError } = await supabase
     .from('profiles')
     .select('id, name, email, role, created_at, avatar_url')
     .eq('role', 'formee')
     .range(formeeFrom, formeeTo)
-    .order('created_at', { ascending: false }); // Example ordering
+    .order('created_at', { ascending: false });
 
   const { count: formeeCount, error: formeeCountError } = await supabase
     .from('profiles')
@@ -78,6 +75,7 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
 
 
   if (formatorsError || formeesError || formatorCountError || formeeCountError) {
+    // ... (error handling) ...
     console.error(
       'Error fetching users or counts:',
       formatorsError,
@@ -88,10 +86,10 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
     return <div className="p-6">Error loading user data. Please try again later.</div>;
   }
 
-  // Ensure data is not null, default to empty array if null
   const formatorUsers = formators ?? [];
   const formeeUsers = formees ?? [];
 
+  // Pass hardcoded page/limit values to client component
   return (
     <UserManagementClient
       initialFormatorUsers={formatorUsers}

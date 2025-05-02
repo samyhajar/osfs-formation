@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import React, { Suspense } from 'react';
 import { Document } from '@/types/document';
 import { FileIcon } from '@/components/ui/FileIcon';
 import {
@@ -11,21 +12,70 @@ import {
   ArrowPathIcon,
 } from '@heroicons/react/24/outline';
 
+// Statically import required flags
+import FR from 'country-flag-icons/react/3x2/FR';
+import ES from 'country-flag-icons/react/3x2/ES';
+import DE from 'country-flag-icons/react/3x2/DE';
+import GB from 'country-flag-icons/react/3x2/GB';
+import IT from 'country-flag-icons/react/3x2/IT';
+import PT from 'country-flag-icons/react/3x2/PT';
+
+// Map country codes to components - use basic object type
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const flagComponents: { [key: string]: any } = {
+  FR,
+  ES,
+  DE,
+  GB,
+  IT,
+  PT,
+};
+
+// Map full language names (lowercase) to country codes
+const languageNameToCodeMap: { [key: string]: string } = {
+  english: 'GB',
+  french: 'FR',
+  spanish: 'ES',
+  german: 'DE',
+  italian: 'IT',
+  portuguese: 'PT',
+};
+
+// Updated LanguageFlag component
+const LanguageFlag = ({ languageName }: { languageName: string | null }) => {
+  if (!languageName) {
+    return <span className="text-gray-500 text-xs">N/A</span>;
+  }
+  const lowerLanguageName = languageName.toLowerCase();
+  const countryCode = languageNameToCodeMap[lowerLanguageName];
+  if (!countryCode) {
+    return <span className="text-gray-500 text-xs">{languageName}</span>;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const FlagComponent = flagComponents[countryCode];
+  if (!FlagComponent) {
+    return <span className="text-gray-500 text-xs">{countryCode}</span>;
+  }
+  return (
+    <Suspense fallback={<div className="h-4 w-6 bg-gray-200 rounded-sm animate-pulse"></div>}>
+      <FlagComponent title={languageName} className="h-4 w-6 rounded-sm shadow-sm" />
+    </Suspense>
+  );
+};
+
 interface DocumentRowProps {
   doc: Document;
-  languageCode: string;
   region: string | null | undefined;
   formattedDate: string;
   activeDropdown: string | null;
   generatingUrl: string | null;
   toggleDropdown: (id: string) => void;
-  handleDownload: (doc: Document) => Promise<void>; // Ensure this is async
-  onDelete?: (id: string) => void; // Optional delete handler
+  handleDownload: (doc: Document) => Promise<void>;
+  onDelete?: (id: string) => void;
 }
 
 export function DocumentRow({
   doc,
-  languageCode,
   region,
   formattedDate,
   activeDropdown,
@@ -39,17 +89,15 @@ export function DocumentRow({
 
   const handleDeleteClick = () => {
     if (onDelete) {
-      // Confirm before deleting (optional but recommended)
       if (window.confirm(`Are you sure you want to delete "${doc.title}"?`)) {
         onDelete(doc.id);
       }
-      toggleDropdown(doc.id); // Close dropdown after action
+      toggleDropdown(doc.id);
     }
   };
 
   const handleDownloadClick = () => {
-    void handleDownload(doc); // Correctly call async function
-    // Keep dropdown open during download generation
+    void handleDownload(doc);
   };
 
   return (
@@ -77,7 +125,7 @@ export function DocumentRow({
         </span>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-        {languageCode}
+        <LanguageFlag languageName={doc.language ?? null} />
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
         {region || '--'}
@@ -101,15 +149,15 @@ export function DocumentRow({
         {isDropdownOpen && (
           <div
             className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20"
-            style={{ top: '100%' }} // Position dropdown below button
-            onMouseLeave={() => toggleDropdown(doc.id)} // Close on mouse leave
+            style={{ top: '100%' }}
+            onMouseLeave={() => toggleDropdown(doc.id)}
           >
             <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
               <Link
                 href={`/dashboard/admin/documents/${doc.id}/edit`}
                 className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
                 role="menuitem"
-                onClick={() => toggleDropdown(doc.id)} // Close dropdown on click
+                onClick={() => toggleDropdown(doc.id)}
               >
                 <PencilIcon className="h-4 w-4" />
                 Edit

@@ -1,6 +1,6 @@
 'use client';
 
-import UploadForm from '@/components/dashboard/admin/documents/UploadForm';
+import UploadForm from '@/components/formant/documents/UploadForm';
 
 export default function NewDocumentPage() {
   return (

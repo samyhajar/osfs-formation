@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import React, { Suspense } from 'react';
 import { Document } from '@/types/document';
 import { FileIcon } from '@/components/ui/FileIcon';
 import {
@@ -11,9 +12,59 @@ import {
   ArrowPathIcon,
 } from '@heroicons/react/24/outline';
 
+// Statically import required flags
+import FR from 'country-flag-icons/react/3x2/FR';
+import ES from 'country-flag-icons/react/3x2/ES';
+import DE from 'country-flag-icons/react/3x2/DE';
+import GB from 'country-flag-icons/react/3x2/GB'; // Use GB for English/UK flag
+import IT from 'country-flag-icons/react/3x2/IT'; // Add Italian flag
+import PT from 'country-flag-icons/react/3x2/PT'; // Add Portuguese flag
+
+// Map country codes to components - use basic object type
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const flagComponents: { [key: string]: any } = {
+  FR,
+  ES,
+  DE,
+  GB,
+  IT,
+  PT,
+};
+
+// Map full language names (lowercase) to country codes
+const languageNameToCodeMap: { [key: string]: string } = {
+  english: 'GB',
+  french: 'FR',
+  spanish: 'ES',
+  german: 'DE',
+  italian: 'IT',
+  portuguese: 'PT',
+};
+
+// Updated LanguageFlag component
+const LanguageFlag = ({ languageName }: { languageName: string | null }) => {
+  if (!languageName) {
+    return <span className="text-gray-500 text-xs">N/A</span>;
+  }
+  const lowerLanguageName = languageName.toLowerCase();
+  const countryCode = languageNameToCodeMap[lowerLanguageName];
+  if (!countryCode) {
+    return <span className="text-gray-500 text-xs">{languageName}</span>;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const FlagComponent = flagComponents[countryCode];
+  if (!FlagComponent) {
+    return <span className="text-gray-500 text-xs">{countryCode}</span>;
+  }
+  return (
+    <Suspense fallback={<div className="h-4 w-6 bg-gray-200 rounded-sm animate-pulse"></div>}>
+      <FlagComponent title={languageName} className="h-4 w-6 rounded-sm shadow-sm" />
+    </Suspense>
+  );
+};
+
 interface DocumentRowProps {
   doc: Document;
-  languageCode: string;
   region: string | null | undefined;
   formattedDate: string;
   activeDropdown: string | null;
@@ -25,7 +76,6 @@ interface DocumentRowProps {
 
 export function DocumentRow({
   doc,
-  languageCode,
   region,
   formattedDate,
   activeDropdown,
@@ -77,7 +127,7 @@ export function DocumentRow({
         </span>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-        {languageCode}
+        <LanguageFlag languageName={doc.language ?? null} />
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
         {region || '--'}
