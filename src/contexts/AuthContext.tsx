@@ -144,7 +144,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     }
     // Only depend on the user ID changing to trigger profile fetch
-  }, [user?.id, fetchProfile, refreshSessionAndUser]);
+  }, [user?.id, fetchProfile, refreshSessionAndUser, loading, profile]);
 
   const signOut = async () => {
     console.log('[AuthContext] signOut function called.');

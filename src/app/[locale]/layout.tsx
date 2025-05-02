@@ -26,24 +26,25 @@ export const metadata: Metadata = {
 };
 
 // Generate static params for all supported locales
-export function generateStaticParams() {
+export function generateStaticParams(): Array<{ locale: string }> {
   return routing.locales.map((locale) => ({ locale }));
 }
 
+// Restore async and original props destructuring
 export default async function LocaleLayout({
   children,
-  params: { locale },
+  params: { locale }, // Restore destructuring
 }: {
   children: ReactNode;
-  params: { locale: string };
+  params: { locale: string }; // Use inline type again
 }) {
-  // Use routing.locales here
+
   if (!routing.locales.includes(locale as (typeof routing.locales)[number])) notFound();
 
-  // Enable static rendering
+  // Restore setRequestLocale
   setRequestLocale(locale);
 
-  // Get messages for the locale directly in the server component
+  // Restore getMessages
   let messages;
   try {
     messages = await getMessages({ locale });
@@ -57,6 +58,7 @@ export default async function LocaleLayout({
     <html lang={locale} className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
       <body>
         <AuthProvider>
+          {/* Restore messages variable */}
           <NextIntlClientProvider locale={locale} messages={messages}>
             {children}
             {/* <Analytics /> */}
