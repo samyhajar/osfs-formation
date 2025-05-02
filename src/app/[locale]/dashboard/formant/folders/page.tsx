@@ -38,6 +38,7 @@ export default function FoldersPage() {
                 key={category}
                 basePath={basePath} // Pass the base path
                 categoryName={category}
+                categoryTranslationNamespace="documents.categories" // Add the missing prop
               />
             ))}
           </div>
