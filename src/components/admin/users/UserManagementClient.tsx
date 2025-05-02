@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import FormatorUserTable from '@/components/dashboard/admin/users/FormatorUserTable';
-import FormeeUserTable from '@/components/dashboard/admin/users/FormeeUserTable';
+import FormatorUserTable from '@/components/admin/users/FormatorUserTable';
+import FormeeUserTable from '@/components/admin/users/FormeeUserTable';
 import AddUserModal from './AddUserModal';
 import { Button } from '@/components/ui/Button';
 import { Database } from '@/types/supabase';

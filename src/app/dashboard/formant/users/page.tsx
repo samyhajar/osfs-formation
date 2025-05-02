@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server-client';
 import { redirect } from 'next/navigation';
-import UserManagementClient from '@/components/dashboard/admin/users/UserManagementClient';
+import UserManagementClient from '@/components/formant/users/UserManagementClient';
 import { Database } from '@/types/supabase';
 
 export default async function AdminUsersPage() {

@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { DocumentCategory, DocumentPurpose } from '@/types/document';
-import { FormField } from '@/components/dashboard/admin/documents/FormField';
-import { SelectField } from '@/components/dashboard/admin/documents/SelectField';
+import { FormField } from '@/components/admin/documents/FormField';
+import { SelectField } from '@/components/admin/documents/SelectField';
 // Import the new AdvancedFilters component
 import { AdvancedFilters } from './AdvancedFilters';
 

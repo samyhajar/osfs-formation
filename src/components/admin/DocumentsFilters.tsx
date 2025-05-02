@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { DocumentCategory, DocumentPurpose } from '@/types/document';
-// Import the extracted component
-import { AdminAdvancedFilters } from './AdminAdvancedFilters';
+// Import the extracted component from shared location
+import { AdvancedFilters } from '@/components/shared/AdvancedFilters';
 
 // Define the filter state type
 interface FilterState {
@@ -154,14 +154,14 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
 
       {/* Advanced filters that expand/collapse - Use the new component */}
       {isExpanded && (
-        // Wrap AdminAdvancedFilters and the new buttons in a fragment or div if needed
+        // Use the imported AdvancedFilters component
         <>
-          <AdminAdvancedFilters
+          <AdvancedFilters
             filters={filters} // Pass the relevant subset or full filters
-            onInputChange={handleInputChange}
+            onFilterChange={onFilterChange} // Pass the correct prop
             onTopicChange={handleTopicChange}
             onPurposeChange={handlePurposeChange}
-            // Remove onReset prop as it's no longer accepted
+            onReset={handleReset} // Pass the onReset prop
           />
           {/* Buttons visible when expanded */}
           <div className="mt-4 pt-4 border-t border-gray-100 flex justify-end gap-2">

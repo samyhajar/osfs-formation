@@ -1,8 +1,8 @@
 'use client';
 
 import { ReactNode, useRef, useState, useEffect } from 'react';
-import Sidebar from '@/components/dashboard/admin/Sidebar';
-import Header from '@/components/dashboard/admin/Header';
+import Sidebar from '@/components/admin/Sidebar';
+import Header from '@/components/admin/Header';
 
 export default function DashboardClient({ children }: { children: ReactNode }) {
   const [isScrolled, setIsScrolled] = useState(false);

@@ -4,8 +4,8 @@ import { useState, useEffect, useMemo } from 'react';
 // Remove the auth-helpers import
 // import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
-import DocumentsFilters from '@/components/dashboard/DocumentsFilters';
-import DocumentList from '@/components/dashboard/admin/DocumentList';
+import DocumentsFilters from '@/components/shared/DocumentsFilters';
+import DocumentList from '@/components/admin/DocumentList';
 import { Database } from '@/types/supabase';
 import { Document, DocumentCategory, DocumentPurpose, SortKey, SortDirection } from '@/types/document';
 import { useAuth } from '@/contexts/AuthContext';

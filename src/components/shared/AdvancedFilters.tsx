@@ -2,7 +2,7 @@
 
 import { DocumentPurpose } from '@/types/document';
 // Assuming these components are moved to a shared location or duplicated
-import { SelectField } from '@/components/dashboard/admin/documents/SelectField';
+import { SelectField } from '@/components/admin/documents/SelectField';
 import { FilterMultiSelect } from './FilterMultiSelect';
 
 // Constants for options - Could be passed as props or defined here if only used here
