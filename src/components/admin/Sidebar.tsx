@@ -7,6 +7,7 @@ import {
   AcademicCapIcon,
   UserGroupIcon,
   Cog6ToothIcon,
+  FolderIcon,
 } from '@heroicons/react/24/outline';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMemo } from 'react';
@@ -45,6 +46,7 @@ export default function Sidebar() {
   const allNavItems = useMemo(() => [
     // Items visible to all roles (adjust paths)
     { name: 'Dashboard', path: `${basePath}`, icon: HomeIcon, roles: ['admin', 'formator', 'formee'] },
+    { name: 'Folders', path: `${basePath}/folders`, icon: FolderIcon, roles: ['admin', 'formator', 'formee'] },
     { name: 'Common Syllabus', path: `${basePath}/documents/syllabus`, icon: DocumentTextIcon, roles: ['admin', 'formator', 'formee'] },
     { name: 'Workshops', path: `${basePath}/workshops`, icon: AcademicCapIcon, roles: ['admin', 'formator', 'formee'] },
     { name: 'Formation Personnel', path: `${basePath}/personnel`, icon: UserGroupIcon, roles: ['admin', 'formator', 'formee'] },

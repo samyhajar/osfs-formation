@@ -213,7 +213,7 @@ export default function DashboardPage() {
            <p className="text-gray-500 mt-1">Browse and manage all documents.</p>
         </div>
         <Link
-          href="/dashboard/admin/documents/new"
+          href="/dashboard/formant/documents/new"
           className="flex items-center gap-2 bg-accent-primary hover:bg-accent-primary/90 text-white font-medium py-2 px-4 rounded-md"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

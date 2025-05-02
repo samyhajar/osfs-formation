@@ -33,15 +33,15 @@ interface UseDocumentUploadResult {
 }
 
 export function useDocumentUpload(): UseDocumentUploadResult {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const uploadDocument = async (data: UploadData): Promise<void> => {
-    if (!user) {
-      setError('User not authenticated.');
+    if (!user || !profile) {
+      setError('User profile not available.');
       return;
     }
 
@@ -78,14 +78,6 @@ export function useDocumentUpload(): UseDocumentUploadResult {
       console.log('File uploaded to storage.');
       setUploadProgress(50); // Halfway point
 
-      const { data: urlData } = supabase.storage
-        .from('documents')
-        .getPublicUrl(filePath);
-      if (!urlData?.publicUrl) {
-        throw new Error('Could not get public URL after upload.');
-      }
-      console.log(`Public URL obtained: ${urlData.publicUrl}`);
-
       const documentData: DocumentInsert = {
         title: data.title,
         description: data.description || null,
@@ -94,8 +86,7 @@ export function useDocumentUpload(): UseDocumentUploadResult {
         file_size: data.file.size,
         category: data.category,
         author_id: user.id,
-        author_name:
-          (user.user_metadata?.name as string) || user.email || 'Unknown User',
+        author_name: (profile.name as string) || user.email || 'Unknown User',
         region: data.region || null,
         language: data.language || null,
         topics: data.topics.length > 0 ? data.topics : null,
@@ -127,14 +118,19 @@ export function useDocumentUpload(): UseDocumentUploadResult {
       // Show success toast
       toast.success(`Successfully uploaded: ${data.file.name}`);
 
-      // Redirect after a short delay to allow toast visibility (optional, but good UX)
-      // router.push('/dashboard/admin');
-      // router.refresh();
-      // Using setTimeout for redirection allows the toast to be seen
+      // Determine redirect path based on role
+      let finalRedirectPath = '/dashboard'; // Default fallback
+      if (profile.role === 'admin') {
+        finalRedirectPath = '/dashboard/admin';
+      } else if (profile.role === 'formator') {
+        finalRedirectPath = '/dashboard/formant'; // Redirect formant here
+      } // Formee likely won't call this hook, but could add a case if needed
+
+      // Redirect after a short delay
       setTimeout(() => {
-        router.push('/dashboard/admin');
+        router.push(finalRedirectPath); // Use dynamic path
         router.refresh();
-      }, 1500); // Delay in ms (adjust as needed)
+      }, 1500);
     } catch (err: unknown) {
       console.error('Upload process failed:', err);
       const message =

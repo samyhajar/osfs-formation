@@ -125,9 +125,28 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
           onFilterChange={onFilterChange} // Pass the general handler
           onTopicChange={handleTopicChange} // Pass specific handlers
           onPurposeChange={handlePurposeChange}
-          _onReset={handleReset}
+          _onReset={handleReset} // Pass renamed prop
         />
       )}
+
+      {/* Container for bottom buttons - Always visible, content changes */}
+      <div className="mt-4 pt-4 border-t border-gray-100 flex justify-end gap-2">
+        {/* Show/Hide Button */}
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-sky-100 text-sky-700 hover:bg-sky-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+        >
+          {isExpanded ? 'Hide Advanced Filters' : 'Show Advanced Filters'}
+        </button>
+        {/* Reset Filters Button - Always visible */}
+        <button
+          type="button"
+          onClick={handleReset}
+          className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+        >
+          Reset Filters
+        </button>
+      </div>
     </div>
   );
 }
