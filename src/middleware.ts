@@ -134,8 +134,10 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Match all pathnames except for
-  // - … if they start with `/api`, `/trpc`, `/_next` or `/_vercel`
-  // - … the ones containing a dot (e.g. `favicon.ico`)
-  matcher: ['/((?!api|trpc|_next|_vercel|.*\\..*).*)', '/'],
+  matcher: [
+    // Match all paths except for internal Next.js paths, API routes, and static files.
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    // Explicitly include the root path if it wasn't caught by the above
+    '/',
+  ],
 };
