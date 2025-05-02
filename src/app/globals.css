@@ -1,6 +1,9 @@
-@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
+/* Define theme variables using standard CSS custom properties for compatibility */
+:root {
   /* Design tokens */
   --color-brand-primary: #3b82f5;
   --color-brand-secondary: #1e40af;
@@ -39,7 +42,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  @theme {
+  :root {
     --color-background: #0a0a0a;
     --color-foreground: #ededed;
     --color-text-primary: #ededed;
