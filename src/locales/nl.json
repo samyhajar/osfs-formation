@@ -1,0 +1,192 @@
+{
+  "HomePage": {
+    "title": "OSFS Vormingsbronnen",
+    "dashboard": "Ga naar Dashboard"
+  },
+  "AdminHeader": {
+    "dashboard": "Dashboard",
+    "documents": "Documenten",
+    "users": "Gebruikers",
+    "formationPersonnel": "Vormingspersoneel",
+    "settings": "Instellingen",
+    "logout": "Uitloggen",
+    "language": "Taal"
+  },
+  "LanguageSwitcher": {
+    "changeLanguage": "Taal wijzigen",
+    "en": "Engels",
+    "fr": "Frans",
+    "de": "Duits",
+    "it": "Italiaans",
+    "nl": "Nederlands",
+    "pt": "Portugees",
+    "es": "Spaans"
+  },
+  "Sidebar": {
+    "dashboard": "Dashboard",
+    "folders": "Mappen",
+    "commonSyllabus": "Gemeenschappelijke Syllabus",
+    "workshops": "Workshops",
+    "formationPersonnel": "Vormingspersoneel",
+    "users": "Gebruikers",
+    "administration": "Administratie",
+    "noSections": "Geen secties beschikbaar voor uw rol.",
+    "profileLoadError": "Kon gebruikersprofiel niet laden.",
+    "needHelp": "Hulp nodig?",
+    "helpCenterLink": "Bezoek ons helpcentrum"
+  },
+  "DocumentFilters": {
+    "title": "Filters",
+    "categoryLabel": "Categorie",
+    "allCategoriesOption": "Alle categorieën",
+    "keywordsLabel": "Trefwoorden",
+    "keywordsPlaceholder": "Zoeken op trefwoorden",
+    "authorLabel": "Auteur",
+    "authorPlaceholder": "Filteren op auteur",
+    "hideAdvancedFilters": "Geavanceerde filters verbergen",
+    "showAdvancedFilters": "Geavanceerde filters tonen",
+    "resetFilters": "Filters resetten",
+    "categories": {
+      "articles": "Artikelen",
+      "sourceMaterials": "Bronmaterialen",
+      "presentations": "Presentaties",
+      "formationPrograms": "Vormingsprogramma's",
+      "miscellaneous": "Diversen",
+      "videos": "Video's",
+      "reflections4Dimensions": "Reflecties 4 Dimensies"
+    }
+  },
+  "AdvancedFilters": {
+    "title": "Geavanceerde filters",
+    "regionLabel": "Regio",
+    "allRegionsOption": "Alle regio's",
+    "languageLabel": "Taal",
+    "allLanguagesOption": "Alle talen",
+    "topicsLabel": "Onderwerpen",
+    "purposeLabel": "Doel",
+    "regions": {
+      "africa": "Afrika",
+      "asia": "Azië",
+      "europe": "Europa",
+      "northamerica": "Noord-Amerika",
+      "southamerica": "Zuid-Amerika",
+      "australia": "Australië"
+    },
+    "languages": {
+      "english": "Engels",
+      "french": "Frans",
+      "german": "Duits",
+      "spanish": "Spaans",
+      "italian": "Italiaans",
+      "portuguese": "Portugees",
+      "dutch": "Nederlands"
+    },
+    "topics": {
+      "formation": "Vorming",
+      "spirituality": "Spiritualiteit",
+      "communitylife": "Gemeenschapsleven",
+      "mission": "Missie",
+      "vocation": "Roeping",
+      "prayer": "Gebed",
+      "scripture": "Schrift",
+      "community": "Gemeenschap",
+      "constitutions": "Constituties",
+      "directory": "Directory",
+      "evaluation": "Evaluatie",
+      "history": "Geschiedenis",
+      "ministry": "Ministerie",
+      "originsformationcoordinator": "Oorsprong: Vormingscoördinator",
+      "other": "Andere",
+      "psychology": "Psychologie",
+      "salesian": "Salesiaans",
+      "vows": "Geloften"
+    },
+    "purposes": {
+      "general": "Algemeen",
+      "novitiate": "Noviciaat",
+      "postulancy": "Postulaat",
+      "scholasticate": "Scholasticaat",
+      "ongoingformation": "Permanente vorming"
+    }
+  },
+  "DocumentList": {
+    "noDocumentsFound": "Geen documenten gevonden die aan uw criteria voldoen.",
+    "headerTitle": "Titel",
+    "headerCategory": "Categorie",
+    "headerType": "Type",
+    "headerAuthor": "Auteur",
+    "headerLanguage": "Taal",
+    "headerDate": "Datum",
+    "headerActions": "Acties",
+    "actionView": "Bekijken",
+    "actionDownload": "Downloaden",
+    "headerName": "Naam",
+    "headerLang": "Taal",
+    "headerRegion": "Regio",
+    "headerCreated": "Gemaakt",
+    "loading": "Documenten laden...",
+    "emptyStateTitle": "Geen documenten gevonden",
+    "emptyStateSuggestion": "Probeer uw zoekfilters aan te passen.",
+    "createNewDocument": "Nieuw document maken",
+    "downloadErrorNoPath": "Download mislukt: Geen bestandspad beschikbaar.",
+    "downloadErrorSignUrlFailed": "Genereren ondertekende URL mislukt.",
+    "downloadErrorGeneric": "Kon bestand niet downloaden:"
+  },
+  "Pagination": {
+    "ariaLabel": "Paginering",
+    "pageInfo": "Pagina {currentPage} van {totalPages}",
+    "previousButton": "Vorige",
+    "nextButton": "Volgende"
+  },
+  "AdminDocumentsPage": {
+    "title": "Documenten",
+    "description": "Door alle documenten bladeren en beheren.",
+    "uploadButton": "Document uploaden"
+  },
+  "AdminFoldersPage": {
+    "title": "Mappen",
+    "categoriesTitle": "Categorieën"
+  },
+  "AdminFormationPersonnelPage": {
+    "title": "Vormingspersoneel",
+    "errorPrefix": "Fout:",
+    "errorLoading": "Laden van leden mislukt.",
+    "emptyState": "Geen opgegeven leden gevonden.",
+    "groupTitleCoordinator": "Algemeen Coördinator Vorming",
+    "groupTitleOther": "Overig Personeel"
+  },
+  "AdminUsersPage": {
+    "pageTitle": "Gebruikersbeheer",
+    "pageDescription": "Beheer formator- en formee-gebruikersaccounts.",
+    "formatorsSectionTitle": "Formatoren",
+    "addFormatorButton": "+ Formator toevoegen",
+    "formeesSectionTitle": "Formees",
+    "addFormeeButton": "+ Formee toevoegen",
+    "errorLoading": "Fout bij het laden van gebruikersgegevens. Probeer het later opnieuw.",
+    "addUserModalTitlePrefix": "Nieuwe toevoegen",
+    "roleFormator": "Formator",
+    "roleFormee": "Formee",
+    "labelFullName": "Volledige naam",
+    "labelEmail": "E-mail",
+    "labelPassword": "Wachtwoord",
+    "labelConfirmPassword": "Bevestig wachtwoord",
+    "validationNameMin": "Naam moet minimaal 2 tekens bevatten",
+    "validationEmailInvalid": "Ongeldig e-mailformaat",
+    "validationPasswordMin": "Wachtwoord moet minimaal 8 tekens bevatten",
+    "validationPasswordMismatch": "Wachtwoorden komen niet overeen",
+    "errorCreationFailed": "Gebruiker aanmaken mislukt",
+    "errorUnexpected": "Er is een onverwachte fout opgetreden.",
+    "buttonCancel": "Annuleren",
+    "buttonCreating": "Bezig met maken...",
+    "buttonCreatePrefix": "Maak"
+  },
+  "AdminUsersTable": {
+    "headerName": "Naam",
+    "headerRole": "Rol",
+    "headerCreatedAt": "Aangemaakt op",
+    "headerActions": "Acties",
+    "emptyStateFormators": "Geen formatoren gevonden.",
+    "emptyStateFormees": "Geen formees gevonden.",
+    "actionsComingSoon": "Acties binnenkort beschikbaar"
+  }
+}

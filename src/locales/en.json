@@ -1,0 +1,191 @@
+{
+  "HomePage": {
+    "title": "OSFS Formation Resources",
+    "dashboard": "Go to Dashboard"
+  },
+  "AdminHeader": {
+    "dashboard": "Dashboard",
+    "documents": "Documents",
+    "users": "Users",
+    "formationPersonnel": "Formation Personnel",
+    "settings": "Settings",
+    "logout": "Logout",
+    "language": "Language"
+  },
+  "LanguageSwitcher": {
+    "changeLanguage": "Change language",
+    "en": "English",
+    "fr": "French",
+    "pt": "Portuguese",
+    "de": "German",
+    "it": "Italian",
+    "nl": "Dutch",
+    "es": "Spanish"
+  },
+  "Sidebar": {
+    "dashboard": "Dashboard",
+    "folders": "Folders",
+    "commonSyllabus": "Common Syllabus",
+    "workshops": "Workshops",
+    "formationPersonnel": "Formation Personnel",
+    "users": "Users",
+    "administration": "Administration",
+    "noSections": "No sections available for your role.",
+    "profileLoadError": "Could not load user profile.",
+    "needHelp": "Need help?",
+    "helpCenterLink": "Visit our help center"
+  },
+  "DocumentFilters": {
+    "title": "Filters",
+    "categoryLabel": "Category",
+    "allCategoriesOption": "All Categories",
+    "keywordsLabel": "Keywords",
+    "keywordsPlaceholder": "Search by keywords",
+    "authorLabel": "Author",
+    "authorPlaceholder": "Filter by author",
+    "hideAdvancedFilters": "Hide Advanced Filters",
+    "showAdvancedFilters": "Show Advanced Filters",
+    "resetFilters": "Reset Filters",
+    "categories": {
+      "articles": "Articles",
+      "sourcematerials": "Source materials",
+      "presentations": "Presentations",
+      "formationprograms": "Formation Programs",
+      "miscellaneous": "Miscellaneous",
+      "videos": "Videos",
+      "reflections4dimensions": "Reflections 4 Dimensions"
+    }
+  },
+  "AdvancedFilters": {
+    "title": "Advanced Filters",
+    "regionLabel": "Region",
+    "allRegionsOption": "All Regions",
+    "languageLabel": "Language",
+    "allLanguagesOption": "All Languages",
+    "topicsLabel": "Topics",
+    "purposeLabel": "Purpose",
+    "regions": {
+      "africa": "Africa",
+      "asia": "Asia",
+      "europe": "Europe",
+      "northamerica": "North America",
+      "southamerica": "South America",
+      "australia": "Australia"
+    },
+    "languages": {
+      "english": "English",
+      "french": "French",
+      "german": "German",
+      "spanish": "Spanish",
+      "italian": "Italian",
+      "portuguese": "Portuguese"
+    },
+    "topics": {
+      "formation": "Formation",
+      "spirituality": "Spirituality",
+      "communitylife": "Community Life",
+      "mission": "Mission",
+      "vocation": "Vocation",
+      "prayer": "Prayer",
+      "scripture": "Scripture",
+      "community": "Community",
+      "constitutions": "Constitutions",
+      "directory": "Directory",
+      "evaluation": "Evaluation",
+      "history": "History",
+      "ministry": "Ministry",
+      "originsformationcoordinator": "Origins: Formation Coordinator",
+      "other": "Other",
+      "psychology": "Psychology",
+      "salesian": "Salesian",
+      "vows": "Vows"
+    },
+    "purposes": {
+      "general": "General",
+      "novitiate": "Novitiate",
+      "postulancy": "Postulancy",
+      "scholasticate": "Scholasticate",
+      "ongoingformation": "Ongoing Formation"
+    }
+  },
+  "DocumentList": {
+    "noDocumentsFound": "No documents found matching your criteria.",
+    "headerTitle": "Title",
+    "headerCategory": "Category",
+    "headerType": "Type",
+    "headerAuthor": "Author",
+    "headerLanguage": "Language",
+    "headerDate": "Date",
+    "headerActions": "Actions",
+    "actionView": "View",
+    "actionDownload": "Download",
+    "headerName": "Name",
+    "headerLang": "Lang",
+    "headerRegion": "Region",
+    "headerCreated": "Created",
+    "loading": "Loading documents...",
+    "emptyStateTitle": "No documents found",
+    "emptyStateSuggestion": "Try adjusting your search filters.",
+    "createNewDocument": "Create New Document",
+    "downloadErrorNoPath": "Download failed: No file path available.",
+    "downloadErrorSignUrlFailed": "Failed to generate signed URL.",
+    "downloadErrorGeneric": "Failed to download file:"
+  },
+  "Pagination": {
+    "ariaLabel": "Pagination",
+    "pageInfo": "Page {currentPage} of {totalPages}",
+    "previousButton": "Previous",
+    "nextButton": "Next"
+  },
+  "AdminDocumentsPage": {
+    "title": "Documents",
+    "description": "Browse and manage all documents.",
+    "uploadButton": "Upload Document"
+  },
+  "AdminFoldersPage": {
+    "title": "Folders",
+    "categoriesTitle": "Categories"
+  },
+  "AdminFormationPersonnelPage": {
+    "title": "Formation Personnel",
+    "errorPrefix": "Error:",
+    "errorLoading": "Failed to load members.",
+    "emptyState": "No specified members found.",
+    "groupTitleCoordinator": "General Formation Coordinator",
+    "groupTitleOther": "Other Personnel"
+  },
+  "AdminUsersPage": {
+    "pageTitle": "User Management",
+    "pageDescription": "Manage formator and formee user accounts.",
+    "formatorsSectionTitle": "Formators",
+    "addFormatorButton": "+ Add Formator",
+    "formeesSectionTitle": "Formees",
+    "addFormeeButton": "+ Add Formee",
+    "errorLoading": "Error loading user data. Please try again later.",
+    "addUserModalTitlePrefix": "Add New",
+    "roleFormator": "Formator",
+    "roleFormee": "Formee",
+    "labelFullName": "Full Name",
+    "labelEmail": "Email",
+    "labelPassword": "Password",
+    "labelConfirmPassword": "Confirm Password",
+    "validationNameMin": "Name must be at least 2 characters",
+    "validationEmailInvalid": "Invalid email format",
+    "validationPasswordMin": "Password must be at least 8 characters",
+    "validationPasswordMismatch": "Passwords don't match",
+    "errorCreationFailed": "Failed to create user",
+    "errorUnexpected": "An unexpected error occurred.",
+    "buttonCancel": "Cancel",
+    "buttonCreating": "Creating...",
+    "buttonCreatePrefix": "Create"
+  },
+  "AdminUsersTable": {
+    "headerName": "Name",
+    "headerRole": "Role",
+    "headerCreatedAt": "Created At",
+    "headerActions": "Actions",
+    "emptyStateFormators": "No formators found.",
+    "emptyStateFormees": "No formees found.",
+    "actionsComingSoon": "Actions coming soon"
+  }
+}

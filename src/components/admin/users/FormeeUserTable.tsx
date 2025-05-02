@@ -1,6 +1,7 @@
 import React from 'react';
 import { Database } from '@/types/supabase';
 import { UserAvatar } from '@/components/ui/UserAvatar';
+import { useTranslations } from 'next-intl';
 
 // Define the type for a user profile row more explicitly
 type ProfileRow = Database['public']['Tables']['profiles']['Row'];
@@ -20,22 +21,24 @@ const formatDate = (dateString: string | null) => {
 };
 
 export default function FormeeUserTable({ users }: FormeeUserTableProps) {
+  const t = useTranslations('AdminUsersTable');
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider align-middle">
-              Name
+              {t('headerName')}
             </th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider align-middle">
-              Role
+              {t('headerRole')}
             </th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider align-middle">
-              Created At
+              {t('headerCreatedAt')}
             </th>
             <th scope="col" className="relative px-6 py-3 align-middle">
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">{t('headerActions')}</span>
             </th>
           </tr>
         </thead>
@@ -43,7 +46,7 @@ export default function FormeeUserTable({ users }: FormeeUserTableProps) {
           {users.length === 0 ? (
             <tr>
               <td colSpan={4} className="px-6 py-12 text-center text-sm text-gray-500 italic">
-                No formees found.
+                {t('emptyStateFormees')}
               </td>
             </tr>
           ) : (
@@ -61,7 +64,7 @@ export default function FormeeUserTable({ users }: FormeeUserTableProps) {
                   {formatDate(user.created_at)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right align-middle">
-                  <button className="text-indigo-600 hover:text-indigo-900 disabled:text-gray-400 disabled:cursor-not-allowed" disabled title="Actions coming soon">
+                  <button className="text-indigo-600 hover:text-indigo-900 disabled:text-gray-400 disabled:cursor-not-allowed" disabled title={t('actionsComingSoon')}>
                     ...
                   </button>
                 </td>

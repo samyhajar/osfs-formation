@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Document, SortKey, SortDirection } from '@/types/document';
 import { useAuth } from '@/contexts/AuthContext';
 import { DocumentRow } from './DocumentRow';
@@ -65,6 +66,7 @@ export default function DocumentList({
   const [currentPage, setCurrentPage] = useState(1);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [generatingUrl, setGeneratingUrl] = useState<string | null>(null);
+  const t = useTranslations('DocumentList');
 
   // Pagination calculations
   const totalPages = Math.ceil(documents.length / ITEMS_PER_PAGE);
@@ -84,7 +86,7 @@ export default function DocumentList({
   const handleDownload = async (doc: Document) => {
     if (!doc.content_url) {
       console.error('No file path found for this document.', doc.id);
-      alert('Download failed: No file path available.');
+      alert(t('downloadErrorNoPath'));
       return;
     }
     setGeneratingUrl(doc.id);
@@ -104,12 +106,12 @@ export default function DocumentList({
         // Use window.open for better compatibility, especially on mobile
         window.open(data.signedUrl, '_blank');
       } else {
-          throw new Error("Failed to generate signed URL.");
+          throw new Error(t('downloadErrorSignUrlFailed'));
       }
 
     } catch (err) {
       console.error('Download failed for doc:', doc.id, err);
-      alert(`Failed to download file: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      alert(`${t('downloadErrorGeneric')} ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
       setGeneratingUrl(null);
       setActiveDropdown(null); // Close dropdown after download attempt
@@ -121,7 +123,7 @@ export default function DocumentList({
     return (
       <div className="p-8 text-center text-gray-500">
         <ArrowPathIcon className="h-8 w-8 mx-auto text-gray-400 animate-spin mb-2" />
-        Loading documents...
+        {t('loading')}
       </div>
     );
   }
@@ -133,8 +135,8 @@ export default function DocumentList({
         <div className="mx-auto h-12 w-12 text-gray-400 bg-gray-100 rounded-full flex items-center justify-center mb-4">
           <MagnifyingGlassIcon className="h-6 w-6" />
         </div>
-        <h3 className="text-lg font-medium text-black mb-1">No documents found</h3>
-        <p className="text-gray-500 mb-4">Try adjusting your search filters.</p>
+        <h3 className="text-lg font-medium text-black mb-1">{t('emptyStateTitle')}</h3>
+        <p className="text-gray-500 mb-4">{t('emptyStateSuggestion')}</p>
         <Link
           href="/dashboard/admin/documents/new"
           className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-accent-primary hover:bg-accent-primary/90"
@@ -142,7 +144,7 @@ export default function DocumentList({
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
              <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
            </svg>
-          Create New Document
+          {t('createNewDocument')}
         </Link>
       </div>
     );
@@ -155,14 +157,14 @@ export default function DocumentList({
         <table className="min-w-full divide-y divide-gray-100">
           <thead className="bg-gray-50">
             <tr>
-              <SortableHeader label="Name" columnKey="title" {...{ sortKey, sortDirection, onSort }} />
-              <SortableHeader label="Type" columnKey="file_type" {...{ sortKey, sortDirection, onSort }} />
-              <SortableHeader label="Lang" columnKey="language" {...{ sortKey, sortDirection, onSort }} />
-              <SortableHeader label="Region" columnKey="region" {...{ sortKey, sortDirection, onSort }} />
-              <SortableHeader label="Category" columnKey="category" {...{ sortKey, sortDirection, onSort }} />
-              <SortableHeader label="Created" columnKey="created_at" {...{ sortKey, sortDirection, onSort }} />
+              <SortableHeader label={t('headerName')} columnKey="title" {...{ sortKey, sortDirection, onSort }} />
+              <SortableHeader label={t('headerType')} columnKey="file_type" {...{ sortKey, sortDirection, onSort }} />
+              <SortableHeader label={t('headerLang')} columnKey="language" {...{ sortKey, sortDirection, onSort }} />
+              <SortableHeader label={t('headerRegion')} columnKey="region" {...{ sortKey, sortDirection, onSort }} />
+              <SortableHeader label={t('headerCategory')} columnKey="category" {...{ sortKey, sortDirection, onSort }} />
+              <SortableHeader label={t('headerCreated')} columnKey="created_at" {...{ sortKey, sortDirection, onSort }} />
               <th scope="col" className="relative px-6 py-3">
-                <span className="sr-only">Actions</span>
+                <span className="sr-only">{t('headerActions')}</span>
               </th>
             </tr>
           </thead>

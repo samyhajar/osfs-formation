@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { useEffect, useState } from 'react';
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher'; // Import the LanguageSwitcher
 
 // Add isScrolled prop to expected props
 interface HeaderProps {
@@ -50,6 +51,9 @@ export default function Header({ isScrolled = false }: HeaderProps) {
         {/* <div className="flex items-center"> ... logo code removed ... </div> */}
 
         <div className="flex items-center gap-4">
+          {/* Add LanguageSwitcher here */}
+          <LanguageSwitcher />
+
           {/* Removed Notification Icons Block */}
           {/* {showLoggedIn && ( ... icon buttons removed ... )} */}
 

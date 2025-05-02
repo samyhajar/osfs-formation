@@ -1,6 +1,7 @@
 import { fetchMembersByNames } from '@/lib/wordpress/api';
 import type { WPMember } from '@/lib/wordpress/types';
 import MemberCard from '@/components/formation/MemberCard';
+import { getTranslations } from 'next-intl/server';
 
 // Define the structure for grouping
 interface PersonnelGroup {
@@ -37,61 +38,61 @@ function getProvinceName(member: WPMember): string | null {
 }
 
 export default async function AdminFormationPersonnelPage() {
+  // Get translations using getTranslations for Server Components
+  const t = await getTranslations('AdminFormationPersonnelPage');
+
   let fetchedMembers: WPMember[] = [];
   let fetchError: string | null = null;
   let groupedPersonnel: PersonnelGroup[] = [];
 
+  // Get translated static group titles
+  const translatedCoordinatorTitle = t('groupTitleCoordinator');
+  const translatedOtherTitle = t('groupTitleOther');
+
   try {
     fetchedMembers = await fetchMembersByNames(targetPersonnelNames);
 
-    // Grouping logic
     const groups: Record<string, PersonnelGroup> = {};
+    const coordinatorName = 'Francis W. Danella';
 
-    // Special case for General Coordinator - Use the name returned by API
-    const coordinatorName = 'Francis W. Danella'; // Corrected name based on logs
     const generalCoordinator = fetchedMembers.find(m => m.title.rendered === coordinatorName);
     if (generalCoordinator) {
-      groups['General Formation Coordinator'] = {
-        title: 'General Formation Coordinator',
+      // Use the translated title as the key and in the object
+      groups[translatedCoordinatorTitle] = {
+        title: translatedCoordinatorTitle,
         members: [generalCoordinator]
       };
     }
 
-    // Group the rest by Province
     fetchedMembers.forEach(member => {
-      // Skip the coordinator already grouped
       if (member.title.rendered === coordinatorName) return;
 
-      const province = getProvinceName(member) || 'Other Personnel'; // Group under 'Other' if no province
-      // --- TEMPORARY LOGGING ---
-      console.log(`Grouping member: ${member.title.rendered}, Province: ${province}`);
-      // --- END TEMPORARY LOGGING ---
+      // Use the translated title for the 'Other' group if no province
+      const province = getProvinceName(member) || translatedOtherTitle;
+      console.log(`Grouping member: ${member.title.rendered}, Province/Group: ${province}`);
       if (!groups[province]) {
         groups[province] = { title: province, members: [] };
       }
       groups[province].members.push(member);
     });
 
-    // Define desired order of groups (check if these match logged province names)
+    // Define desired order using translated static titles where applicable
     const groupOrder = [
-      'General Formation Coordinator',
-      'North American Provinces', // Check exact name from log
-      'France-West Africa Province', // Check exact name from log
-      'German-speaking Province', // Check exact name from log
-      'South American and Caribbean Province', // Check exact name from log
-      'Southern African Region', // Check exact name from log
-      'Indian Region', // Check exact name from log
-      'Other Personnel' // Catch-all for unmatched/missing provinces
+      translatedCoordinatorTitle,
+      'North American Provinces', // Dynamic - Keep as is
+      'France-West Africa Province', // Dynamic - Keep as is
+      'German-speaking Province', // Dynamic - Keep as is
+      'South American and Caribbean Province', // Dynamic - Keep as is
+      'Southern African Region', // Dynamic - Keep as is
+      'Indian Region', // Dynamic - Keep as is
+      translatedOtherTitle // Use translated fallback title
     ];
 
-    // Convert groups object to array in the desired order
     groupedPersonnel = groupOrder
       .map(title => groups[title])
-      .filter((group): group is PersonnelGroup => group !== undefined); // Filter out non-existent groups
+      .filter((group): group is PersonnelGroup => group !== undefined);
 
-    // --- TEMPORARY LOGGING ---
     console.log("Final groupedPersonnel structure:", JSON.stringify(groupedPersonnel.map(g => ({ title: g.title, memberCount: g.members.length })), null, 2));
-    // --- END TEMPORARY LOGGING ---
 
   } catch (error) {
     console.error("Failed to fetch/group formation personnel:", error);
@@ -100,17 +101,17 @@ export default async function AdminFormationPersonnelPage() {
 
   return (
     <main>
-      <h1 className="text-3xl font-bold mb-8">Formation Personnel</h1>
+      <h1 className="text-3xl font-bold mb-8">{t('title')}</h1>
 
       {fetchError && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
-          <strong className="font-bold">Error:</strong>
-          <span className="block sm:inline"> Failed to load members. {fetchError}</span>
+          <strong className="font-bold">{t('errorPrefix')}</strong>
+          <span className="block sm:inline"> {t('errorLoading')} {fetchError}</span>
         </div>
       )}
 
       {!fetchError && groupedPersonnel.length === 0 && (
-        <p className="text-gray-500">No specified members found.</p>
+        <p className="text-gray-500">{t('emptyState')}</p>
       )}
 
       {!fetchError && groupedPersonnel.length > 0 && (

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl'; // Import useTranslations
 import { DocumentCategory, DocumentPurpose } from '@/types/document';
 // Import the extracted component from shared location
 import { AdvancedFilters } from '@/components/shared/AdvancedFilters';
@@ -24,8 +25,20 @@ interface DocumentsFiltersProps {
   categoryCounts: Record<DocumentCategory, number>;
 }
 
+// Define category keys for translation mapping
+const categoryTranslationKeys: Record<DocumentCategory, string> = {
+  'Articles': 'articles',
+  'Source materials': 'sourceMaterials',
+  'Presentations': 'presentations',
+  'Formation Programs': 'formationPrograms',
+  'Miscellaneous': 'miscellaneous',
+  'Videos': 'videos',
+  'Reflections 4 Dimensions': 'reflections4Dimensions'
+};
+
 export default function DocumentsFilters({ filters, onFilterChange, categoryCounts }: DocumentsFiltersProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const t = useTranslations('DocumentFilters'); // Initialize translations
 
   // Keep only categories here
   const categories: DocumentCategory[] = [
@@ -81,7 +94,7 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
   return (
     <div className="bg-white shadow-sm border border-gray-100 rounded-lg p-4">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
+        <h2 className="text-lg font-semibold text-gray-900">{t('title')}</h2>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="text-text-secondary hover:text-text-primary p-1 rounded-full hover:bg-gray-50"
@@ -102,7 +115,7 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <div>
           <label htmlFor="category" className="block text-sm font-medium text-gray-900 mb-1">
-            Category
+            {t('categoryLabel')}
           </label>
           <select
             id="category"
@@ -111,11 +124,11 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
             onChange={handleInputChange}
             className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-gray-900"
           >
-            <option value="" className="text-gray-900">All Categories</option>
+            <option value="" className="text-gray-900">{t('allCategoriesOption')}</option>
             {categories.map((category) => (
               // Ensure value type matches FilterState.category
               <option key={category} value={category} className="text-gray-900">
-                {category} ({categoryCounts?.[category] ?? 0})
+                {t(`categories.${categoryTranslationKeys[category]}`)} ({categoryCounts?.[category] ?? 0})
               </option>
             ))}
           </select>
@@ -123,7 +136,7 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
 
         <div>
           <label htmlFor="keywords" className="block text-sm font-medium text-gray-900 mb-1">
-            Keywords
+            {t('keywordsLabel')}
           </label>
           <input
             type="text"
@@ -131,14 +144,14 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
             name="keywords"
             value={filters.keywords}
             onChange={handleInputChange}
-            placeholder="Search by keywords"
+            placeholder={t('keywordsPlaceholder')}
             className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-gray-900 placeholder:text-text-muted"
           />
         </div>
 
         <div>
           <label htmlFor="author" className="block text-sm font-medium text-gray-900 mb-1">
-            Author
+            {t('authorLabel')}
           </label>
           <input
             type="text"
@@ -146,7 +159,7 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
             name="author"
             value={filters.author}
             onChange={handleInputChange}
-            placeholder="Filter by author"
+            placeholder={t('authorPlaceholder')}
             className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-gray-900 placeholder:text-text-muted"
           />
         </div>
@@ -170,7 +183,7 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
               onClick={() => setIsExpanded(false)}
               className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-sky-100 text-sky-700 hover:bg-sky-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
             >
-              Hide Advanced Filters
+              {t('hideAdvancedFilters')}
                 </button>
             {/* Reset Filters Button (Now on the right) */}
                 <button
@@ -178,7 +191,7 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
               onClick={handleReset}
               className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
             >
-              Reset Filters
+              {t('resetFilters')}
                 </button>
           </div>
         </>
@@ -193,7 +206,7 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
             onClick={() => setIsExpanded(true)}
             className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-sky-100 text-sky-700 hover:bg-sky-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
           >
-            Show Advanced Filters
+            {t('showAdvancedFilters')}
           </button>
           {/* Reset Filters Button (visible when collapsed) */}
         <button
@@ -201,7 +214,7 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
             onClick={handleReset} // Use existing handler
             className="px-4 py-2 text-sm font-medium rounded-md transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
         >
-          Reset Filters
+          {t('resetFilters')}
         </button>
       </div>
       )}

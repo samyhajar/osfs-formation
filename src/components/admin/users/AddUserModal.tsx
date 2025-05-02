@@ -2,6 +2,7 @@
 
 import Modal from '@/components/ui/Modal';
 import AddUserForm from './AddUserForm';
+import { useTranslations } from 'next-intl';
 
 interface AddUserModalProps {
   isOpen: boolean;
@@ -11,13 +12,15 @@ interface AddUserModalProps {
 }
 
 export default function AddUserModal({ isOpen, onClose, role, onUserAdded }: AddUserModalProps) {
+  const t = useTranslations('AdminUsersPage');
 
   const handleSuccess = () => {
     onUserAdded(); // Notify parent about the addition
     onClose();     // Close the modal
   };
 
-  const modalTitle = `Add New ${role.charAt(0).toUpperCase() + role.slice(1)}`;
+  const translatedRole = role === 'formator' ? t('roleFormator') : t('roleFormee');
+  const modalTitle = `${t('addUserModalTitlePrefix')} ${translatedRole}`;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={modalTitle}>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { DocumentPurpose } from '@/types/document';
 // Assuming these components are moved to a shared location or duplicated
 import { SelectField } from '@/components/admin/documents/SelectField';
@@ -10,7 +11,7 @@ const regions = [
     'Africa', 'Asia', 'Europe', 'North America', 'South America', 'Australia'
 ];
 const languages = [
-    'English', 'French', 'German', 'Spanish', 'Italian', 'Portuguese'
+    'English', 'Portuguese', 'German', 'French', 'Italian', 'Dutch', 'Spanish'
 ];
 const topics = [
     'Formation', 'Spirituality', 'Community Life', 'Mission', 'Vocation',
@@ -38,6 +39,9 @@ interface AdvancedFiltersProps {
   _onReset: () => void;
 }
 
+// Helper function to generate translation keys (simple lowercase for this example)
+const toKey = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+
 export function AdvancedFilters({
   filters,
   onFilterChange,
@@ -45,19 +49,21 @@ export function AdvancedFilters({
   onPurposeChange,
   _onReset,
 }: AdvancedFiltersProps) {
+  const t = useTranslations('AdvancedFilters');
+
   return (
     <div className="mt-6 pt-4 border-t border-gray-100">
-      <h3 className="text-base font-medium text-gray-900 mb-3">Advanced Filters</h3>
+      <h3 className="text-base font-medium text-gray-900 mb-3">{t('title')}</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
          {/* Using updated SelectField for Region */}
          <SelectField<string>
            id="region"
-           label="Region"
+           label={t('regionLabel')}
            value={filters.region}
            onChange={(value) => onFilterChange({ region: value })}
            options={[
-              { value: '', label: 'All Regions' },
-              ...regions.map(r => ({ value: r, label: r }))
+              { value: '', label: t('allRegionsOption') },
+              ...regions.map(r => ({ value: r, label: t(`regions.${toKey(r)}`) }))
            ]}
            className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-black"
          />
@@ -65,12 +71,12 @@ export function AdvancedFilters({
         {/* Using updated SelectField for Language */}
         <SelectField<string>
            id="language"
-           label="Language"
+           label={t('languageLabel')}
            value={filters.language}
            onChange={(value) => onFilterChange({ language: value })}
            options={[
-             { value: '', label: 'All Languages' },
-             ...languages.map(l => ({ value: l, label: l }))
+             { value: '', label: t('allLanguagesOption') },
+             ...languages.map(l => ({ value: l, label: t(`languages.${toKey(l)}`) }))
            ]}
            className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-black"
          />
@@ -78,19 +84,21 @@ export function AdvancedFilters({
 
       {/* Using updated FilterMultiSelect for Topics */}
       <FilterMultiSelect<string>
-        label="Topics"
+        label={t('topicsLabel')}
         options={topics}
         selectedOptions={filters.topics}
         onChange={onTopicChange}
+        translationNamespace="AdvancedFilters.topics"
       />
 
       {/* Using updated FilterMultiSelect for Purpose */}
       <div className="mt-4">
          <FilterMultiSelect<DocumentPurpose>
-           label="Purpose"
+           label={t('purposeLabel')}
            options={purposes}
            selectedOptions={filters.purpose}
            onChange={onPurposeChange}
+           translationNamespace="AdvancedFilters.purposes"
          />
       </div>
     </div>

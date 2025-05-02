@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server-client';
 import { redirect } from 'next/navigation';
 import UserManagementClient from '@/components/admin/users/UserManagementClient';
 import { Database } from '@/types/supabase';
+import { getTranslations } from 'next-intl/server';
 
 // Removed dynamic export
 // export const dynamic = 'force-dynamic';
@@ -15,6 +16,7 @@ const DEFAULT_LIMIT = 20;
 // Revert function signature to not destructure props (as they are not used for now)
 export default async function AdminUsersPage() {
   const supabase = await createClient<Database>();
+  const t = await getTranslations('AdminUsersPage');
 
   // 1. Check if user is logged in and is an admin
   const { data: { user } } = await supabase.auth.getUser();
@@ -83,7 +85,7 @@ export default async function AdminUsersPage() {
       formatorCountError,
       formeeCountError
     );
-    return <div className="p-6">Error loading user data. Please try again later.</div>;
+    return <div className="p-6">{t('errorLoading')}</div>;
   }
 
   const formatorUsers = formators ?? [];

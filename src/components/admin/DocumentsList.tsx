@@ -1,6 +1,7 @@
 'use client';
 
 import React, { Suspense } from 'react';
+import { useTranslations } from 'next-intl';
 import { Document } from '@/types/document';
 
 // Helper component to render flags dynamically
@@ -27,6 +28,8 @@ interface DocumentsListProps {
 }
 
 export default function DocumentsList({ documents, loading }: DocumentsListProps) {
+  const t = useTranslations('DocumentList');
+
   if (loading) {
     return (
       <div className="bg-white p-6 rounded-lg shadow-md">
@@ -48,7 +51,7 @@ export default function DocumentsList({ documents, loading }: DocumentsListProps
   if (!Array.isArray(documents) || documents.length === 0) {
     return (
       <div className="bg-white p-6 rounded-lg shadow-md text-center">
-        <p className="text-gray-500">No documents found matching your criteria.</p>
+        <p className="text-gray-500">{t('noDocumentsFound')}</p>
       </div>
     );
   }
@@ -59,25 +62,25 @@ export default function DocumentsList({ documents, loading }: DocumentsListProps
         <thead className="bg-gray-50">
           <tr>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Title
+              {t('headerTitle')}
             </th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Category
+              {t('headerCategory')}
             </th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Type
+              {t('headerType')}
             </th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Author
+              {t('headerAuthor')}
             </th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Language
+              {t('headerLanguage')}
             </th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Date
+              {t('headerDate')}
             </th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Actions
+              {t('headerActions')}
             </th>
           </tr>
         </thead>
@@ -108,10 +111,10 @@ export default function DocumentsList({ documents, loading }: DocumentsListProps
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <button className="text-blue-600 hover:text-blue-900 mr-3">
-                  View
+                  {t('actionView')}
                 </button>
                 <button className="text-green-600 hover:text-green-900 mr-3">
-                  Download
+                  {t('actionDownload')}
                 </button>
               </td>
             </tr>

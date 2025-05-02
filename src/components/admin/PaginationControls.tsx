@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -16,6 +17,8 @@ export function PaginationControls({
   totalPages,
   onPageChange,
 }: PaginationControlsProps) {
+  const t = useTranslations('Pagination');
+
   if (totalPages <= 1) {
     return null; // Don't render pagination if there's only one page or less
   }
@@ -41,12 +44,11 @@ export function PaginationControls({
   return (
     <nav
       className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
-      aria-label="Pagination"
+      aria-label={t('ariaLabel')}
     >
       <div className="hidden sm:block">
         <p className="text-sm text-gray-700">
-          Page <span className="font-medium">{currentPage}</span> of{' '}
-          <span className="font-medium">{totalPages}</span>
+          {t('pageInfo', { currentPage: currentPage, totalPages: totalPages })}
         </p>
       </div>
       <div className="flex flex-1 justify-between sm:justify-end">
@@ -58,7 +60,7 @@ export function PaginationControls({
           }`}
         >
           <ChevronLeftIcon className="h-5 w-5 mr-1" aria-hidden="true" />
-          Previous
+          {t('previousButton')}
         </button>
 
         {/* Render page numbers (optional, can be added here if needed) */}
@@ -88,7 +90,7 @@ export function PaginationControls({
             currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         >
-          Next
+          {t('nextButton')}
           <ChevronRightIcon className="h-5 w-5 ml-1" aria-hidden="true" />
         </button>
       </div>

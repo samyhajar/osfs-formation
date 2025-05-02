@@ -1,0 +1,192 @@
+{
+  "HomePage": {
+    "title": "OSFS Ausbildungsressourcen",
+    "dashboard": "Zum Dashboard gehen"
+  },
+  "AdminHeader": {
+    "dashboard": "Dashboard",
+    "documents": "Dokumente",
+    "users": "Benutzer",
+    "formationPersonnel": "Ausbildungspersonal",
+    "settings": "Einstellungen",
+    "logout": "Abmelden",
+    "language": "Sprache"
+  },
+  "LanguageSwitcher": {
+    "changeLanguage": "Sprache ändern",
+    "en": "Englisch",
+    "fr": "Französisch",
+    "de": "Deutsch",
+    "pt": "Portugiesisch",
+    "it": "Italienisch",
+    "nl": "Niederländisch",
+    "es": "Spanisch"
+  },
+  "Sidebar": {
+    "dashboard": "Dashboard",
+    "folders": "Ordner",
+    "commonSyllabus": "Gemeinsamer Lehrplan",
+    "workshops": "Workshops",
+    "formationPersonnel": "Ausbildungspersonal",
+    "users": "Benutzer",
+    "administration": "Verwaltung",
+    "noSections": "Keine Abschnitte für Ihre Rolle verfügbar.",
+    "profileLoadError": "Benutzerprofil konnte nicht geladen werden.",
+    "needHelp": "Brauchen Sie Hilfe?",
+    "helpCenterLink": "Besuchen Sie unser Hilfezentrum"
+  },
+  "DocumentFilters": {
+    "title": "Filter",
+    "categoryLabel": "Kategorie",
+    "allCategoriesOption": "Alle Kategorien",
+    "keywordsLabel": "Stichwörter",
+    "keywordsPlaceholder": "Suche nach Stichwörtern",
+    "authorLabel": "Autor",
+    "authorPlaceholder": "Nach Autor filtern",
+    "hideAdvancedFilters": "Erweiterte Filter ausblenden",
+    "showAdvancedFilters": "Erweiterte Filter anzeigen",
+    "resetFilters": "Filter zurücksetzen",
+    "categories": {
+      "articles": "Artikel",
+      "sourceMaterials": "Quellenmaterialien",
+      "presentations": "Präsentationen",
+      "formationPrograms": "Ausbildungsprogramme",
+      "miscellaneous": "Verschiedenes",
+      "videos": "Videos",
+      "reflections4Dimensions": "Reflexionen 4 Dimensionen"
+    }
+  },
+  "AdvancedFilters": {
+    "title": "Erweiterte Filter",
+    "regionLabel": "Region",
+    "allRegionsOption": "Alle Regionen",
+    "languageLabel": "Sprache",
+    "allLanguagesOption": "Alle Sprachen",
+    "topicsLabel": "Themen",
+    "purposeLabel": "Zweck",
+    "regions": {
+      "africa": "Afrika",
+      "asia": "Asien",
+      "europe": "Europa",
+      "northamerica": "Nordamerika",
+      "southamerica": "Südamerika",
+      "australia": "Australien"
+    },
+    "languages": {
+      "english": "Englisch",
+      "french": "Französisch",
+      "german": "Deutsch",
+      "spanish": "Spanisch",
+      "italian": "Italienisch",
+      "portuguese": "Portugiesisch",
+      "dutch": "Niederländisch"
+    },
+    "topics": {
+      "formation": "Ausbildung",
+      "spirituality": "Spiritualität",
+      "communitylife": "Gemeinschaftsleben",
+      "mission": "Mission",
+      "vocation": "Berufung",
+      "prayer": "Gebet",
+      "scripture": "Heilige Schrift",
+      "community": "Gemeinschaft",
+      "constitutions": "Konstitutionen",
+      "directory": "Verzeichnis",
+      "evaluation": "Bewertung",
+      "history": "Geschichte",
+      "ministry": "Dienst",
+      "originsformationcoordinator": "Ursprünge: Ausbildungskoordinator",
+      "other": "Andere",
+      "psychology": "Psychologie",
+      "salesian": "Salesianisch",
+      "vows": "Gelübde"
+    },
+    "purposes": {
+      "general": "Allgemein",
+      "novitiate": "Noviziat",
+      "postulancy": "Postulat",
+      "scholasticate": "Scholastikat",
+      "ongoingformation": "Weiterbildung"
+    }
+  },
+  "DocumentList": {
+    "noDocumentsFound": "Keine Dokumente entsprechen Ihren Kriterien.",
+    "headerTitle": "Titel",
+    "headerCategory": "Kategorie",
+    "headerType": "Typ",
+    "headerAuthor": "Autor",
+    "headerLanguage": "Sprache",
+    "headerDate": "Datum",
+    "headerActions": "Aktionen",
+    "actionView": "Ansehen",
+    "actionDownload": "Herunterladen",
+    "headerName": "Name",
+    "headerLang": "Spr.",
+    "headerRegion": "Region",
+    "headerCreated": "Erstellt",
+    "loading": "Dokumente werden geladen...",
+    "emptyStateTitle": "Keine Dokumente gefunden",
+    "emptyStateSuggestion": "Versuchen Sie, Ihre Suchfilter anzupassen.",
+    "createNewDocument": "Neues Dokument erstellen",
+    "downloadErrorNoPath": "Download fehlgeschlagen: Kein Dateipfad verfügbar.",
+    "downloadErrorSignUrlFailed": "Generierung der signierten URL fehlgeschlagen.",
+    "downloadErrorGeneric": "Datei konnte nicht heruntergeladen werden:"
+  },
+  "Pagination": {
+    "ariaLabel": "Seitennummerierung",
+    "pageInfo": "Seite {currentPage} von {totalPages}",
+    "previousButton": "Zurück",
+    "nextButton": "Weiter"
+  },
+  "AdminDocumentsPage": {
+    "title": "Dokumente",
+    "description": "Alle Dokumente durchsuchen und verwalten.",
+    "uploadButton": "Dokument hochladen"
+  },
+  "AdminFoldersPage": {
+    "title": "Ordner",
+    "categoriesTitle": "Kategorien"
+  },
+  "AdminFormationPersonnelPage": {
+    "title": "Ausbildungspersonal",
+    "errorPrefix": "Fehler:",
+    "errorLoading": "Mitglieder konnten nicht geladen werden.",
+    "emptyState": "Keine angegebenen Mitglieder gefunden.",
+    "groupTitleCoordinator": "Generalkoordinator Ausbildung",
+    "groupTitleOther": "Sonstiges Personal"
+  },
+  "AdminUsersPage": {
+    "pageTitle": "Benutzerverwaltung",
+    "pageDescription": "Verwalten Sie Formator- und Formee-Benutzerkonten.",
+    "formatorsSectionTitle": "Formatoren",
+    "addFormatorButton": "+ Formator hinzufügen",
+    "formeesSectionTitle": "Formees",
+    "addFormeeButton": "+ Formee hinzufügen",
+    "errorLoading": "Fehler beim Laden der Benutzerdaten. Bitte versuchen Sie es später erneut.",
+    "addUserModalTitlePrefix": "Neu hinzufügen",
+    "roleFormator": "Formator",
+    "roleFormee": "Formee",
+    "labelFullName": "Vollständiger Name",
+    "labelEmail": "E-Mail",
+    "labelPassword": "Passwort",
+    "labelConfirmPassword": "Passwort bestätigen",
+    "validationNameMin": "Name muss mindestens 2 Zeichen lang sein",
+    "validationEmailInvalid": "Ungültiges E-Mail-Format",
+    "validationPasswordMin": "Passwort muss mindestens 8 Zeichen lang sein",
+    "validationPasswordMismatch": "Passwörter stimmen nicht überein",
+    "errorCreationFailed": "Benutzererstellung fehlgeschlagen",
+    "errorUnexpected": "Ein unerwarteter Fehler ist aufgetreten.",
+    "buttonCancel": "Abbrechen",
+    "buttonCreating": "Wird erstellt...",
+    "buttonCreatePrefix": "Erstellen"
+  },
+  "AdminUsersTable": {
+    "headerName": "Name",
+    "headerRole": "Rolle",
+    "headerCreatedAt": "Erstellt am",
+    "headerActions": "Aktionen",
+    "emptyStateFormators": "Keine Formatoren gefunden.",
+    "emptyStateFormees": "Keine Formees gefunden.",
+    "actionsComingSoon": "Aktionen folgen in Kürze"
+  }
+}

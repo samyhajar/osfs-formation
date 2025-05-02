@@ -1,0 +1,191 @@
+{
+  "HomePage": {
+    "title": "Ressources de Formation OSFS",
+    "dashboard": "Aller au Tableau de Bord"
+  },
+  "AdminHeader": {
+    "dashboard": "Tableau de Bord",
+    "documents": "Documents",
+    "users": "Utilisateurs",
+    "formationPersonnel": "Personnel de Formation",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "language": "Langue"
+  },
+  "LanguageSwitcher": {
+    "changeLanguage": "Changer de langue",
+    "en": "Anglais",
+    "fr": "Français",
+    "pt": "Portugais",
+    "de": "Allemand",
+    "it": "Italien",
+    "nl": "Néerlandais",
+    "es": "Espagnol"
+  },
+  "Sidebar": {
+    "dashboard": "Tableau de Bord",
+    "folders": "Dossiers",
+    "commonSyllabus": "Programme Commun",
+    "workshops": "Ateliers",
+    "formationPersonnel": "Personnel de Formation",
+    "users": "Utilisateurs",
+    "administration": "Administration",
+    "noSections": "Aucune section disponible pour votre rôle.",
+    "profileLoadError": "Impossible de charger le profil utilisateur.",
+    "needHelp": "Besoin d'aide ?",
+    "helpCenterLink": "Visitez notre centre d'aide"
+  },
+  "DocumentFilters": {
+    "title": "Filtres",
+    "categoryLabel": "Catégorie",
+    "allCategoriesOption": "Toutes les catégories",
+    "keywordsLabel": "Mots clés",
+    "keywordsPlaceholder": "Rechercher par mots clés",
+    "authorLabel": "Auteur",
+    "authorPlaceholder": "Filtrer par auteur",
+    "hideAdvancedFilters": "Masquer les filtres avancés",
+    "showAdvancedFilters": "Afficher les filtres avancés",
+    "resetFilters": "Réinitialiser les filtres",
+    "categories": {
+      "articles": "Articles",
+      "sourceMaterials": "Matériaux sources",
+      "presentations": "Présentations",
+      "formationPrograms": "Programmes de formation",
+      "miscellaneous": "Divers",
+      "videos": "Vidéos",
+      "reflections4Dimensions": "Réflexions 4 Dimensions"
+    }
+  },
+  "AdvancedFilters": {
+    "title": "Filtres avancés",
+    "regionLabel": "Région",
+    "allRegionsOption": "Toutes les régions",
+    "languageLabel": "Langue",
+    "allLanguagesOption": "Toutes les langues",
+    "topicsLabel": "Sujets",
+    "purposeLabel": "Objectif",
+    "regions": {
+      "africa": "Afrique",
+      "asia": "Asie",
+      "europe": "Europe",
+      "northamerica": "Amérique du Nord",
+      "southamerica": "Amérique du Sud",
+      "australia": "Australie"
+    },
+    "languages": {
+      "english": "Anglais",
+      "french": "Français",
+      "german": "Allemand",
+      "spanish": "Espagnol",
+      "italian": "Italien",
+      "portuguese": "Portugais"
+    },
+    "topics": {
+      "formation": "Formation",
+      "spirituality": "Spiritualité",
+      "communitylife": "Vie communautaire",
+      "mission": "Mission",
+      "vocation": "Vocation",
+      "prayer": "Prière",
+      "scripture": "Écriture",
+      "community": "Communauté",
+      "constitutions": "Constitutions",
+      "directory": "Répertoire",
+      "evaluation": "Évaluation",
+      "history": "Histoire",
+      "ministry": "Ministère",
+      "originsformationcoordinator": "Origines : Coordinateur de Formation",
+      "other": "Autre",
+      "psychology": "Psychologie",
+      "salesian": "Salésien",
+      "vows": "Vœux"
+    },
+    "purposes": {
+      "general": "Général",
+      "novitiate": "Noviciat",
+      "postulancy": "Postulat",
+      "scholasticate": "Scolasticat",
+      "ongoingformation": "Formation continue"
+    }
+  },
+  "DocumentList": {
+    "noDocumentsFound": "Aucun document ne correspond à vos critères.",
+    "headerTitle": "Titre",
+    "headerCategory": "Catégorie",
+    "headerType": "Type",
+    "headerAuthor": "Auteur",
+    "headerLanguage": "Langue",
+    "headerDate": "Date",
+    "headerActions": "Actions",
+    "actionView": "Voir",
+    "actionDownload": "Télécharger",
+    "headerName": "Nom",
+    "headerLang": "Lang",
+    "headerRegion": "Région",
+    "headerCreated": "Créé le",
+    "loading": "Chargement des documents...",
+    "emptyStateTitle": "Aucun document trouvé",
+    "emptyStateSuggestion": "Essayez d'ajuster vos filtres de recherche.",
+    "createNewDocument": "Créer un nouveau document",
+    "downloadErrorNoPath": "Échec du téléchargement : Chemin de fichier non disponible.",
+    "downloadErrorSignUrlFailed": "Échec de la génération de l'URL signée.",
+    "downloadErrorGeneric": "Échec du téléchargement du fichier :"
+  },
+  "Pagination": {
+    "ariaLabel": "Pagination",
+    "pageInfo": "Page {currentPage} sur {totalPages}",
+    "previousButton": "Précédent",
+    "nextButton": "Suivant"
+  },
+  "AdminDocumentsPage": {
+    "title": "Documents",
+    "description": "Parcourir et gérer tous les documents.",
+    "uploadButton": "Téléverser un document"
+  },
+  "AdminFoldersPage": {
+    "title": "Dossiers",
+    "categoriesTitle": "Catégories"
+  },
+  "AdminFormationPersonnelPage": {
+    "title": "Personnel de Formation",
+    "errorPrefix": "Erreur :",
+    "errorLoading": "Échec du chargement des membres.",
+    "emptyState": "Aucun membre spécifié trouvé.",
+    "groupTitleCoordinator": "Coordinateur Général de Formation",
+    "groupTitleOther": "Autre Personnel"
+  },
+  "AdminUsersPage": {
+    "pageTitle": "Gestion des utilisateurs",
+    "pageDescription": "Gérer les comptes utilisateurs formateurs et formés.",
+    "formatorsSectionTitle": "Formateurs",
+    "addFormatorButton": "+ Ajouter Formateur",
+    "formeesSectionTitle": "Formés",
+    "addFormeeButton": "+ Ajouter Formé",
+    "errorLoading": "Erreur lors du chargement des données utilisateur. Veuillez réessayer plus tard.",
+    "addUserModalTitlePrefix": "Ajouter nouveau",
+    "roleFormator": "Formateur",
+    "roleFormee": "Formé",
+    "labelFullName": "Nom complet",
+    "labelEmail": "E-mail",
+    "labelPassword": "Mot de passe",
+    "labelConfirmPassword": "Confirmer le mot de passe",
+    "validationNameMin": "Le nom doit comporter au moins 2 caractères",
+    "validationEmailInvalid": "Format d'e-mail invalide",
+    "validationPasswordMin": "Le mot de passe doit comporter au moins 8 caractères",
+    "validationPasswordMismatch": "Les mots de passe ne correspondent pas",
+    "errorCreationFailed": "Échec de la création de l'utilisateur",
+    "errorUnexpected": "Une erreur inattendue s'est produite.",
+    "buttonCancel": "Annuler",
+    "buttonCreating": "Création en cours...",
+    "buttonCreatePrefix": "Créer"
+  },
+  "AdminUsersTable": {
+    "headerName": "Nom",
+    "headerRole": "Rôle",
+    "headerCreatedAt": "Créé le",
+    "headerActions": "Actions",
+    "emptyStateFormators": "Aucun formateur trouvé.",
+    "emptyStateFormees": "Aucun formé trouvé.",
+    "actionsComingSoon": "Actions bientôt disponibles"
+  }
+}

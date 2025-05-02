@@ -1,0 +1,192 @@
+{
+  "HomePage": {
+    "title": "Recursos de Formação OSFS",
+    "dashboard": "Ir para o Painel"
+  },
+  "AdminHeader": {
+    "dashboard": "Painel",
+    "documents": "Documentos",
+    "users": "Usuários",
+    "formationPersonnel": "Pessoal de Formação",
+    "settings": "Configurações",
+    "logout": "Sair",
+    "language": "Idioma"
+  },
+  "LanguageSwitcher": {
+    "changeLanguage": "Mudar idioma",
+    "en": "Inglês",
+    "fr": "Francês",
+    "de": "Alemão",
+    "it": "Italiano",
+    "nl": "Holandês",
+    "es": "Espanhol",
+    "pt": "Português"
+  },
+  "Sidebar": {
+    "dashboard": "Painel",
+    "folders": "Pastas",
+    "commonSyllabus": "Programa Comum",
+    "workshops": "Workshops",
+    "formationPersonnel": "Pessoal de Formação",
+    "users": "Usuários",
+    "administration": "Administração",
+    "noSections": "Nenhuma seção disponível para sua função.",
+    "profileLoadError": "Não foi possível carregar o perfil do usuário.",
+    "needHelp": "Precisa de ajuda?",
+    "helpCenterLink": "Visite nosso centro de ajuda"
+  },
+  "DocumentFilters": {
+    "title": "Filtros",
+    "categoryLabel": "Categoria",
+    "allCategoriesOption": "Todas as categorias",
+    "keywordsLabel": "Palavras-chave",
+    "keywordsPlaceholder": "Buscar por palavras-chave",
+    "authorLabel": "Autor",
+    "authorPlaceholder": "Filtrar por autor",
+    "hideAdvancedFilters": "Ocultar filtros avançados",
+    "showAdvancedFilters": "Mostrar filtros avançados",
+    "resetFilters": "Redefinir filtros",
+    "categories": {
+      "articles": "Artigos",
+      "sourceMaterials": "Materiais fonte",
+      "presentations": "Apresentações",
+      "formationPrograms": "Programas de formação",
+      "miscellaneous": "Diversos",
+      "videos": "Vídeos",
+      "reflections4Dimensions": "Reflexões 4 Dimensões"
+    }
+  },
+  "AdvancedFilters": {
+    "title": "Filtros avançados",
+    "regionLabel": "Região",
+    "allRegionsOption": "Todas as regiões",
+    "languageLabel": "Idioma",
+    "allLanguagesOption": "Todos os idiomas",
+    "topicsLabel": "Tópicos",
+    "purposeLabel": "Propósito",
+    "regions": {
+      "africa": "África",
+      "asia": "Ásia",
+      "europe": "Europa",
+      "northamerica": "América do Norte",
+      "southamerica": "América do Sul",
+      "australia": "Austrália"
+    },
+    "languages": {
+      "english": "Inglês",
+      "french": "Francês",
+      "german": "Alemão",
+      "spanish": "Espanhol",
+      "italian": "Italiano",
+      "portuguese": "Português",
+      "dutch": "Holandês"
+    },
+    "topics": {
+      "formation": "Formação",
+      "spirituality": "Espiritualidade",
+      "communitylife": "Vida comunitária",
+      "mission": "Missão",
+      "vocation": "Vocação",
+      "prayer": "Oração",
+      "scripture": "Escritura",
+      "community": "Comunidade",
+      "constitutions": "Constituições",
+      "directory": "Diretório",
+      "evaluation": "Avaliação",
+      "history": "História",
+      "ministry": "Ministério",
+      "originsformationcoordinator": "Origens: Coordenador de Formação",
+      "other": "Outro",
+      "psychology": "Psicologia",
+      "salesian": "Salesiano",
+      "vows": "Votos"
+    },
+    "purposes": {
+      "general": "Geral",
+      "novitiate": "Noviciado",
+      "postulancy": "Postulantado",
+      "scholasticate": "Escolasticado",
+      "ongoingformation": "Formação contínua"
+    }
+  },
+  "DocumentList": {
+    "noDocumentsFound": "Nenhum documento encontrado que corresponda aos seus critérios.",
+    "headerTitle": "Título",
+    "headerCategory": "Categoria",
+    "headerType": "Tipo",
+    "headerAuthor": "Autor",
+    "headerLanguage": "Idioma",
+    "headerDate": "Data",
+    "headerActions": "Ações",
+    "actionView": "Ver",
+    "actionDownload": "Baixar",
+    "headerName": "Nome",
+    "headerLang": "Idioma",
+    "headerRegion": "Região",
+    "headerCreated": "Criado em",
+    "loading": "Carregando documentos...",
+    "emptyStateTitle": "Nenhum documento encontrado",
+    "emptyStateSuggestion": "Tente ajustar seus filtros de busca.",
+    "createNewDocument": "Criar novo documento",
+    "downloadErrorNoPath": "Falha no download: Caminho do arquivo não disponível.",
+    "downloadErrorSignUrlFailed": "Falha ao gerar URL assinada.",
+    "downloadErrorGeneric": "Falha ao baixar o arquivo:"
+  },
+  "Pagination": {
+    "ariaLabel": "Paginação",
+    "pageInfo": "Página {currentPage} de {totalPages}",
+    "previousButton": "Anterior",
+    "nextButton": "Próximo"
+  },
+  "AdminDocumentsPage": {
+    "title": "Documentos",
+    "description": "Navegar e gerenciar todos os documentos.",
+    "uploadButton": "Carregar Documento"
+  },
+  "AdminFoldersPage": {
+    "title": "Pastas",
+    "categoriesTitle": "Categorias"
+  },
+  "AdminFormationPersonnelPage": {
+    "title": "Pessoal de Formação",
+    "errorPrefix": "Erro:",
+    "errorLoading": "Falha ao carregar membros.",
+    "emptyState": "Nenhum membro especificado encontrado.",
+    "groupTitleCoordinator": "Coordenador Geral de Formação",
+    "groupTitleOther": "Outro Pessoal"
+  },
+  "AdminUsersPage": {
+    "pageTitle": "Gerenciamento de Usuários",
+    "pageDescription": "Gerenciar contas de usuário formador e formando.",
+    "formatorsSectionTitle": "Formadores",
+    "addFormatorButton": "+ Adicionar Formador",
+    "formeesSectionTitle": "Formandos",
+    "addFormeeButton": "+ Adicionar Formando",
+    "errorLoading": "Erro ao carregar dados do usuário. Tente novamente mais tarde.",
+    "addUserModalTitlePrefix": "Adicionar Novo",
+    "roleFormator": "Formador",
+    "roleFormee": "Formando",
+    "labelFullName": "Nome completo",
+    "labelEmail": "E-mail",
+    "labelPassword": "Senha",
+    "labelConfirmPassword": "Confirmar senha",
+    "validationNameMin": "O nome deve ter pelo menos 2 caracteres",
+    "validationEmailInvalid": "Formato de e-mail inválido",
+    "validationPasswordMin": "A senha deve ter pelo menos 8 caracteres",
+    "validationPasswordMismatch": "As senhas não coincidem",
+    "errorCreationFailed": "Falha ao criar usuário",
+    "errorUnexpected": "Ocorreu um erro inesperado.",
+    "buttonCancel": "Cancelar",
+    "buttonCreating": "Criando...",
+    "buttonCreatePrefix": "Criar"
+  },
+  "AdminUsersTable": {
+    "headerName": "Nome",
+    "headerRole": "Função",
+    "headerCreatedAt": "Criado em",
+    "headerActions": "Ações",
+    "emptyStateFormators": "Nenhum formador encontrado.",
+    "emptyStateFormees": "Nenhum formando encontrado.",
+    "actionsComingSoon": "Ações em breve"
+  }
+}

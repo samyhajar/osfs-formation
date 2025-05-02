@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Input from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
+import { useTranslations } from 'next-intl';
 
 // Schema matching the API route and adding confirmPassword
 const addUserSchema = z.object({
@@ -28,6 +29,8 @@ interface AddUserFormProps {
 }
 
 export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormProps) {
+  const t = useTranslations('AdminUsersPage');
+
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -38,6 +41,7 @@ export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormPr
     reset,
   } = useForm<AddUserFormValues>({
     resolver: zodResolver(addUserSchema),
+    mode: 'onTouched',
   });
 
   const onSubmit: SubmitHandler<AddUserFormValues> = async (data) => {
@@ -63,7 +67,7 @@ export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormPr
       const result: unknown = await response.json();
 
       if (!response.ok) {
-        let errorMessage = 'Failed to create user';
+        let errorMessage = t('errorCreationFailed');
 
         // More robust type checking for potential error shapes
         if (typeof result === 'object' && result !== null) {
@@ -91,7 +95,7 @@ export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormPr
 
     } catch (error: unknown) { // Type error as unknown
       console.error('Signup error:', error);
-      let message = 'An unexpected error occurred.';
+      let message = t('errorUnexpected');
       if (error instanceof Error) {
         message = error.message;
       }
@@ -100,6 +104,9 @@ export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormPr
       setIsLoading(false);
     }
   };
+
+  // Translate role for the button
+  const translatedRole = role === 'formator' ? t('roleFormator') : t('roleFormee');
 
   return (
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -111,7 +118,7 @@ export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormPr
        )}
 
       <Input
-        label="Full Name"
+        label={t('labelFullName')}
         id="name"
         {...register('name')}
         error={errors.name?.message}
@@ -119,7 +126,7 @@ export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormPr
         autoComplete="name"
       />
       <Input
-        label="Email"
+        label={t('labelEmail')}
         id="email"
         type="email"
         {...register('email')}
@@ -128,7 +135,7 @@ export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormPr
          autoComplete="email"
       />
       <Input
-        label="Password"
+        label={t('labelPassword')}
         id="password"
         type="password"
         {...register('password')}
@@ -137,7 +144,7 @@ export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormPr
         autoComplete="new-password"
       />
       <Input
-        label="Confirm Password"
+        label={t('labelConfirmPassword')}
         id="confirmPassword"
         type="password"
         {...register('confirmPassword')}
@@ -148,10 +155,10 @@ export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormPr
 
       <div className="flex justify-end space-x-3 pt-4"> {/* Increased top padding */}
          <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
-          Cancel
+          {t('buttonCancel')}
         </Button>
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? 'Creating...' : `Create ${role.charAt(0).toUpperCase() + role.slice(1)}`}
+          {isLoading ? t('buttonCreating') : `${t('buttonCreatePrefix')} ${translatedRole}`}
         </Button>
       </div>
     </form>

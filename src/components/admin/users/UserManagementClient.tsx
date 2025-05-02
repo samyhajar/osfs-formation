@@ -8,6 +8,7 @@ import AddUserModal from './AddUserModal';
 import { Button } from '@/components/ui/Button';
 import { Database } from '@/types/supabase';
 import PaginationControls from '@/components/shared/PaginationControls';
+import { useTranslations } from 'next-intl';
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
@@ -30,6 +31,8 @@ export default function UserManagementClient({
   currentPageFormee,
   limit,
 }: UserManagementClientProps) {
+  const t = useTranslations('AdminUsersPage');
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [roleToAdd, setRoleToAdd] = useState<'formator' | 'formee'>('formee');
   const router = useRouter();
@@ -76,15 +79,15 @@ export default function UserManagementClient({
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold text-gray-900">User Management</h1>
-        <p className="text-sm text-gray-600 mt-1">Manage formator and formee user accounts.</p>
+        <h1 className="text-2xl font-semibold text-gray-900">{t('pageTitle')}</h1>
+        <p className="text-sm text-gray-600 mt-1">{t('pageDescription')}</p>
       </div>
 
       <div className="bg-white shadow-sm rounded-lg overflow-hidden">
         <div className="px-4 py-5 sm:px-6 flex justify-between items-center border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">Formators ({formatorCount})</h2>
+          <h2 className="text-lg font-medium text-gray-900">{t('formatorsSectionTitle')} ({formatorCount})</h2>
           <Button onClick={() => openModal('formator')} variant="primary">
-            + Add Formator
+            {t('addFormatorButton')}
           </Button>
         </div>
         <div className="p-4 sm:p-6 space-y-4">
@@ -101,9 +104,9 @@ export default function UserManagementClient({
 
       <div className="bg-white shadow-sm rounded-lg overflow-hidden">
         <div className="px-4 py-5 sm:px-6 flex justify-between items-center border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">Formees ({formeeCount})</h2>
+          <h2 className="text-lg font-medium text-gray-900">{t('formeesSectionTitle')} ({formeeCount})</h2>
           <Button onClick={() => openModal('formee')} variant="primary">
-            + Add Formee
+            {t('addFormeeButton')}
           </Button>
         </div>
         <div className="p-4 sm:p-6 space-y-4">
