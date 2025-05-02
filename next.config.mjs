@@ -8,6 +8,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'wordpress-635146-5283628.cloudwaysapps.com',
+        port: '',
+        pathname: '/wp-content/uploads/**',
+      },
       // Add other allowed hostnames here if needed
     ],
   },

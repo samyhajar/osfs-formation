@@ -49,7 +49,7 @@ export default function Sidebar() {
     { name: 'Folders', path: `${basePath}/folders`, icon: FolderIcon, roles: ['admin', 'formator', 'formee'] },
     { name: 'Common Syllabus', path: `${basePath}/documents/syllabus`, icon: DocumentTextIcon, roles: ['admin', 'formator', 'formee'] },
     { name: 'Workshops', path: `${basePath}/workshops`, icon: AcademicCapIcon, roles: ['admin', 'formator', 'formee'] },
-    { name: 'Formation Personnel', path: `${basePath}/personnel`, icon: UserGroupIcon, roles: ['admin', 'formator', 'formee'] },
+    { name: 'Formation Personnel', path: `${basePath}/formation-personnel`, icon: UserGroupIcon, roles: ['admin', 'formator', 'formee'] },
 
     // Items visible only to admin and formator
     { name: 'Users', path: `${basePath}/users`, icon: UsersIcon, roles: ['admin', 'formator'] },
