@@ -14,6 +14,22 @@ export async function middleware(request: NextRequest) {
 
   // Run next-intl middleware first to handle locale redirects/detection
   const intlResponse = intlMiddleware(request);
+  console.log(
+    '🛡️ intlMiddleware response headers:',
+    Object.fromEntries(intlResponse.headers.entries()),
+  );
+  console.log('🛡️ intlMiddleware response status:', intlResponse.status);
+  console.log(
+    '🛡️ intlMiddleware response redirected:',
+    intlResponse.redirected,
+  );
+
+  // --- TEMPORARY DEBUG: Return intl response directly ---
+  console.log('🛡️ DEBUG: Returning intlResponse directly.');
+  return intlResponse;
+  // --- END TEMPORARY DEBUG ---
+
+  /* --- Original Supabase/Auth Logic (Commented Out) ---
   if (
     intlResponse.redirected ||
     intlResponse.headers.has('x-middleware-rewrite') ||
@@ -131,6 +147,7 @@ export async function middleware(request: NextRequest) {
       },
     });
   }
+  */
 }
 
 export const config = {
