@@ -101,50 +101,34 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
   }, [supabase, refreshSessionAndUser]);
 
+  // Simplified useEffect for profile fetching
   useEffect(() => {
     const currentUserId = user?.id;
+
     if (currentUserId) {
-      console.log(`[AuthContext] User detected (ID: ${currentUserId}), attempting profile fetch.`);
-      setLoading(true);
-
-      // --- Force refresh session first ---
-      // Although the auth listener should handle this, let's try an explicit refresh
-      // before fetching the profile to rule out stale session data issues.
-      refreshSessionAndUser().then(() => {
-         // Now fetch profile after ensuring session is fresh
-          fetchProfile(currentUserId)
-            .then((fetchedProfile) => {
-              console.log(`[AuthContext] Profile fetch completed for ${currentUserId}. Profile found:`, !!fetchedProfile);
-              setProfile(fetchedProfile);
-            })
-            .catch((error) => {
-              console.error(`[AuthContext] Error in profile fetching effect for ${currentUserId}:`, error);
-              setProfile(null);
-            })
-            .finally(() => {
-              console.log(`[AuthContext] Profile fetch attempt finished for ${currentUserId}. Setting loading false.`);
-              setLoading(false);
-            });
-
-      }).catch(err => {
-          console.error("[AuthContext] Error during explicit refresh before profile fetch:", err);
-          setLoading(false); // Ensure loading stops even if refresh fails
+      console.log(`[AuthContext] User detected (ID: ${currentUserId}), fetching profile.`);
+      setLoading(true); // Set loading true ONLY when starting fetch
+      fetchProfile(currentUserId)
+        .then((fetchedProfile) => {
+          console.log(`[AuthContext] Profile fetch completed for ${currentUserId}. Profile found:`, !!fetchedProfile);
+          setProfile(fetchedProfile);
+        })
+        .catch((error) => {
+          console.error(`[AuthContext] Error fetching profile for ${currentUserId}:`, error);
           setProfile(null);
-      });
-
+        })
+        .finally(() => {
+          console.log(`[AuthContext] Profile fetch attempt finished for ${currentUserId}. Setting loading false.`);
+          setLoading(false);
+        });
     } else {
-      console.log('[AuthContext] No user detected, ensuring profile is null.');
-      // Ensure profile is cleared if user becomes null
-      if (profile !== null) {
-          setProfile(null);
-      }
-      // If no user, we are not loading profile data
-      if (loading) {
-        setLoading(false);
-      }
+      console.log('[AuthContext] No user detected, clearing profile and setting loading false.');
+      // If there is no user, clear the profile and ensure loading is false.
+      setProfile(null);
+      setLoading(false);
     }
-    // Only depend on the user ID changing to trigger profile fetch
-  }, [user?.id, fetchProfile, refreshSessionAndUser, loading, profile]);
+    // Depend only on user ID and the fetch function instance
+  }, [user?.id, fetchProfile]);
 
   const signOut = async () => {
     console.log('[AuthContext] signOut function called.');
