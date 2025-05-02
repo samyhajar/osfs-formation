@@ -125,7 +125,7 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
           onFilterChange={onFilterChange} // Pass the general handler
           onTopicChange={handleTopicChange} // Pass specific handlers
           onPurposeChange={handlePurposeChange}
-          onReset={handleReset}
+          _onReset={handleReset}
         />
       )}
     </div>

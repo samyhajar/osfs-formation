@@ -13,7 +13,10 @@ const languages = [
     'English', 'French', 'German', 'Spanish', 'Italian', 'Portuguese'
 ];
 const topics = [
-    'Formation', 'Spirituality', 'Community Life', 'Mission', 'Vocation', 'Prayer', 'Scripture'
+    'Formation', 'Spirituality', 'Community Life', 'Mission', 'Vocation',
+    'Prayer', 'Scripture', 'Community', 'Constitutions', 'Directory',
+    'Evaluation', 'History', 'Ministry', 'Origins: Formation Coordinator',
+    'Other', 'Psychology', 'Salesian', 'Vows'
 ];
 const purposes: DocumentPurpose[] = [
     'General', 'Novitiate', 'Postulancy', 'Scholasticate', 'Ongoing Formation'
@@ -32,7 +35,7 @@ interface AdvancedFiltersProps {
   onFilterChange: (newFilters: Partial<FilterState>) => void;
   onTopicChange: (topic: string) => void;
   onPurposeChange: (purpose: DocumentPurpose) => void;
-  onReset: () => void;
+  _onReset: () => void;
 }
 
 export function AdvancedFilters({
@@ -40,7 +43,7 @@ export function AdvancedFilters({
   onFilterChange,
   onTopicChange,
   onPurposeChange,
-  onReset,
+  _onReset,
 }: AdvancedFiltersProps) {
   return (
     <div className="mt-6 pt-4 border-t border-gray-100">
@@ -89,16 +92,6 @@ export function AdvancedFilters({
            selectedOptions={filters.purpose}
            onChange={onPurposeChange}
          />
-      </div>
-
-      {/* Reset Button */}
-      <div className="mt-6 text-right">
-        <button
-          onClick={onReset}
-          className="text-sm font-medium text-accent-secondary hover:text-accent-primary transition-colors"
-        >
-          Reset All Filters
-        </button>
       </div>
     </div>
   );

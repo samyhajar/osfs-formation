@@ -161,7 +161,7 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
             onFilterChange={onFilterChange} // Pass the correct prop
             onTopicChange={handleTopicChange}
             onPurposeChange={handlePurposeChange}
-            onReset={handleReset} // Pass the onReset prop
+            _onReset={handleReset} // Renamed from onReset to _onReset
           />
           {/* Buttons visible when expanded */}
           <div className="mt-4 pt-4 border-t border-gray-100 flex justify-end gap-2">
