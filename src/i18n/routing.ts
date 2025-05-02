@@ -6,4 +6,7 @@ export const routing = defineRouting({
 
   // Used when no locale matches
   defaultLocale: 'en',
+
+  // Explicitly set the locale prefix strategy (default is 'always')
+  localePrefix: 'always',
 });
