@@ -56,7 +56,7 @@ export default function FormatorUserTable({ users }: FormatorUserTableProps) {
                     {user.role}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap align-middle">
+                <td className="px-6 py-4 whitespace-nowrap align-middle text-sm text-gray-900">
                   {formatDate(user.created_at)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right align-middle">
