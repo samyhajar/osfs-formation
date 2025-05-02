@@ -132,7 +132,7 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
             value={filters.keywords}
             onChange={handleInputChange}
             placeholder="Search by keywords"
-            className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-text-primary placeholder:text-text-muted"
+            className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-gray-900 placeholder:text-text-muted"
           />
         </div>
 
@@ -147,7 +147,7 @@ export default function DocumentsFilters({ filters, onFilterChange, categoryCoun
             value={filters.author}
             onChange={handleInputChange}
             placeholder="Filter by author"
-            className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-text-primary placeholder:text-text-muted"
+            className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-accent-primary/50 focus:border-accent-primary sm:text-sm text-gray-900 placeholder:text-text-muted"
           />
         </div>
       </div>
