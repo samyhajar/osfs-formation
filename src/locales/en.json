@@ -36,24 +36,36 @@
     "helpCenterLink": "Visit our help center"
   },
   "DocumentFilters": {
-    "title": "Filters",
+    "title": "Filter Documents",
+    "searchPlaceholder": "Search documents...",
+    "categoriesLabel": "Category:",
     "categoryLabel": "Category",
     "allCategoriesOption": "All Categories",
     "keywordsLabel": "Keywords",
     "keywordsPlaceholder": "Search by keywords",
     "authorLabel": "Author",
     "authorPlaceholder": "Filter by author",
+    "tagsLabel": "Tags:",
+    "dimensionsLabel": "Dimension:",
+    "resetButton": "Reset Filters",
+    "resetFilters": "Reset Filters",
     "hideAdvancedFilters": "Hide Advanced Filters",
     "showAdvancedFilters": "Show Advanced Filters",
-    "resetFilters": "Reset Filters",
+    "noResults": "No documents match your filters.",
     "categories": {
+      "all": "All Categories",
+      "syllabus": "Syllabus",
+      "workshop": "Workshops",
+      "reading": "Readings",
+      "guideline": "Guidelines",
+      "assessment": "Assessments",
+      "sourceMaterials": "Source Materials",
+      "formationPrograms": "Formation Programs",
+      "reflections4Dimensions": "Reflections (4 Dimensions)",
       "articles": "Articles",
-      "sourcematerials": "Source materials",
       "presentations": "Presentations",
-      "formationprograms": "Formation Programs",
       "miscellaneous": "Miscellaneous",
-      "videos": "Videos",
-      "reflections4dimensions": "Reflections 4 Dimensions"
+      "videos": "Videos"
     }
   },
   "AdvancedFilters": {

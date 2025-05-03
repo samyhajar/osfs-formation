@@ -2,35 +2,37 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import type { Database } from '@/types/supabase';
 
-export async function createClient<Db = Database>() {
+export async function createClient() {
   const cookieStore = await (cookies() as unknown as Promise<
     ReturnType<typeof cookies>
   >);
-  return createServerClient<Db>(
+
+  return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll() {
-          return cookieStore.getAll();
+        get(name: string) {
+          return cookieStore.get(name)?.value;
         },
-        setAll(
-          cookiesToSet: {
-            name: string;
-            value: string;
-            options: CookieOptions;
-          }[],
-        ) {
+        set(name: string, value: string, options: CookieOptions) {
           try {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              try {
-                cookieStore.set(name, value, options);
-              } catch (error) {
-                console.warn(`Failed to set cookie ${name}:`, error);
-              }
-            });
+            cookieStore.set(name, value, options);
           } catch (error) {
-            console.warn('setAll cookies error in Server Component:', error);
+            console.warn(
+              `Attempted to set cookie '${name}' outside of a Server Action or Route Handler.`,
+              error,
+            );
+          }
+        },
+        remove(name: string, options: CookieOptions) {
+          try {
+            cookieStore.set(name, '', options);
+          } catch (error) {
+            console.warn(
+              `Attempted to remove cookie '${name}' outside of a Server Action or Route Handler.`,
+              error,
+            );
           }
         },
       },
