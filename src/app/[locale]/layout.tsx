@@ -32,18 +32,13 @@ export const metadata: Metadata = {
 // Make the layout component async
 export default async function LocaleLayout({
   children,
-  params: { locale },
+  params,
 }: {
   children: ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  // Optional: Validate locale
-  // try {
-  //   const locales = ['en', 'fr'];
-  //   if (!locales.includes(locale)) notFound();
-  // } catch (error) {
-  //   notFound();
-  // }
+  // Extract locale from params
+  const { locale } = await params;
 
   // Fetch messages using getMessages on the server
   const messages = await getMessages();

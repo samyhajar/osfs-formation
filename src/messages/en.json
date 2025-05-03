@@ -1,0 +1,15 @@
+{
+  "DocumentFilters": {
+    "categories": {
+      "articles": "Articles",
+      "presentations": "Presentations",
+      "videos": "Videos",
+      "miscellaneous": "Miscellaneous",
+      "sourcematerials": "Source Materials",
+      "formationprograms": "Formation Programs",
+      "reflectionsdimensions": "Reflections & Dimensions",
+      "reflections4dimensions": "Reflections 4 Dimensions",
+      "prayerdimensions": "Prayer Dimensions"
+    }
+  }
+}

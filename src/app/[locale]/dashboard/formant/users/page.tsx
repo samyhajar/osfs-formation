@@ -1,14 +1,13 @@
 import { createClient } from '@/lib/supabase/server-client';
 import { redirect } from 'next/navigation';
 import UserManagementClient from '@/components/formant/users/UserManagementClient';
-import { Database } from '@/types/supabase';
 
 // Define default pagination parameters
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 20;
 
 export default async function FormantUsersPage() {
-  const supabase = await createClient<Database>();
+  const supabase = await createClient();
 
   // 1. Check if user is logged in and is a formant
   const { data: { user } } = await supabase.auth.getUser();

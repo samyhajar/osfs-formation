@@ -1,0 +1,13 @@
+{
+  "DocumentFilters": {
+    "categories": {
+      "articles": "Articles",
+      "presentations": "Présentations",
+      "videos": "Vidéos",
+      "miscellaneous": "Divers",
+      "sourcematerials": "Matériaux Sources",
+      "formationprograms": "Programmes de Formation",
+      "reflectionsdimensions": "Réflexions & Dimensions"
+    }
+  }
+}

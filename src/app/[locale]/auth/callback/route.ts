@@ -1,7 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { createClient as createServerClient } from '@/lib/supabase/server-client';
+import { createClient } from '@/lib/supabase/server-client';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { Database } from '@/types/supabase';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +10,7 @@ export async function GET(request: NextRequest) {
   const origin = requestUrl.origin;
 
   if (code) {
-    const supabaseServer = await createServerClient<Database>();
+    const supabaseServer = await createClient();
     const {
       error: exchangeError,
       data: { session },
