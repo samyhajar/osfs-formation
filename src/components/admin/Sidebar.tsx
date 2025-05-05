@@ -11,6 +11,7 @@ import {
   UserGroupIcon,
   Cog6ToothIcon,
   FolderIcon,
+  UserPlusIcon,
 } from '@heroicons/react/24/outline';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMemo } from 'react';
@@ -60,6 +61,9 @@ export default function Sidebar() {
     // Items visible only to admin and formator
     { nameKey: 'users', path: `${basePath}/users`, icon: UsersIcon, roles: ['admin', 'formator'] },
     { nameKey: 'administration', path: `${basePath}/admin`, icon: Cog6ToothIcon, roles: ['admin', 'formator'] },
+
+    // New item for pending user approvals - visible only to admins
+    { nameKey: 'pendingUsers', path: `${basePath}/pending-users`, icon: UserPlusIcon, roles: ['admin'] },
 
   ], [basePath]); // Depend on basePath
 

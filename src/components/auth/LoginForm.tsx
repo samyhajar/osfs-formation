@@ -54,7 +54,7 @@ export default function LoginForm() {
 
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
-          .select('role')
+          .select('role, is_approved')
           .eq('id', user.id)
           .single();
 
@@ -65,7 +65,26 @@ export default function LoginForm() {
           return;
         }
 
-        if (!profile?.role) {
+        // Type assertion to handle the potentially undefined is_approved field
+        // This is needed because the database migration might be recent and TypeScript
+        // definitions may not have been updated yet
+        type ProfileWithApproval = {
+          role: 'admin' | 'formator' | 'formee';
+          is_approved: boolean | null;
+        };
+
+        const typedProfile = profile as unknown as ProfileWithApproval;
+
+        // Check if the user is approved
+        if (typedProfile && typedProfile.is_approved === false) {
+          // If not approved, show error and sign out
+          await supabase.auth.signOut();
+          setError('Your account is pending approval. You will receive an email once your account has been approved.');
+          setLoading(false);
+          return;
+        }
+
+        if (!typedProfile?.role) {
            console.warn('Profile or role not found for user:', user.id);
            setError('User profile or role not found. Cannot determine dashboard.');
            setLoading(false);
@@ -73,7 +92,7 @@ export default function LoginForm() {
         }
 
         let redirectPath = '/dashboard';
-        switch (profile.role) {
+        switch (typedProfile.role) {
           case 'admin':
             redirectPath = '/dashboard/admin';
             break;
@@ -84,7 +103,7 @@ export default function LoginForm() {
             redirectPath = '/dashboard/formee';
             break;
           default:
-            console.warn('Unknown user role:', profile.role);
+            console.warn('Unknown user role:', typedProfile.role);
         }
 
         router.push(redirectPath);

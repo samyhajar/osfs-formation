@@ -1,9 +1,9 @@
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server-client'
-import LoginForm from '@/components/auth/LoginForm'
+import SignUpForm from '@/components/auth/SignUpForm'
 import Link from 'next/link'
 
-export default async function Home() {
+export default async function SignUp() {
   try {
     const supabase = await createClient()
     const { data: { session: _session } } = await supabase.auth.getSession()
@@ -31,16 +31,8 @@ export default async function Home() {
 
               <div className="w-full lg:w-1/2 flex items-center justify-center py-12 px-4">
                 <div className="w-full max-w-lg">
-                  <h3 className="text-2xl font-medium text-slate-800 mb-10 text-center">Sign In</h3>
-                  <LoginForm />
-                  <div className="mt-6 text-center">
-                    <p className="text-slate-600">
-                      Don't have an account?{' '}
-                      <Link href="/signup" className="text-blue-600 hover:text-blue-800 transition">
-                        Sign Up
-                      </Link>
-                    </p>
-                  </div>
+                  <h3 className="text-2xl font-medium text-slate-800 mb-10 text-center">Sign Up</h3>
+                  <SignUpForm />
                 </div>
               </div>
             </div>
@@ -66,7 +58,7 @@ export default async function Home() {
       </div>
     )
   } catch (error) {
-    console.error('Error in Home component:', error)
+    console.error('Error in SignUp component:', error)
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
         <h1 className="text-2xl font-bold text-slate-800 mb-4">OSFS Formation</h1>
@@ -75,7 +67,7 @@ export default async function Home() {
           href="/"
           className="py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
         >
-          Refresh
+          Return to Home
         </Link>
       </div>
     )

@@ -30,6 +30,7 @@
     "formationPersonnel": "Formation Personnel",
     "users": "Users",
     "administration": "Administration",
+    "pendingUsers": "Pending Approvals",
     "noSections": "No sections available for your role.",
     "profileLoadError": "Could not load user profile.",
     "needHelp": "Need help?",

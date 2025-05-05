@@ -30,6 +30,7 @@
     "formationPersonnel": "Personnel de Formation",
     "users": "Utilisateurs",
     "administration": "Administration",
+    "pendingUsers": "Approbations en Attente",
     "noSections": "Aucune section disponible pour votre rôle.",
     "profileLoadError": "Impossible de charger le profil utilisateur.",
     "needHelp": "Besoin d'aide ?",

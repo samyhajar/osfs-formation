@@ -13,6 +13,40 @@ const intlMiddleware = createMiddleware(routing);
 export async function middleware(request: NextRequest) {
   console.log('🛡️ Middleware running for:', request.nextUrl.pathname);
 
+  // Skip next-intl middleware for API routes
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    console.log('🛡️ API route detected, skipping intl middleware');
+
+    // For API routes, just handle Supabase auth
+    try {
+      const { supabase, response: supabaseResponse } =
+        createMiddlewareClient(request);
+
+      // Handle auth for API routes if needed
+      const isPublic = isPublicRoute(request.nextUrl.pathname);
+
+      if (isPublic) {
+        return supabaseResponse;
+      }
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+
+      return supabaseResponse;
+    } catch (e) {
+      console.error('🛡️ API Middleware error:', e);
+      return NextResponse.json(
+        { error: 'Internal server error' },
+        { status: 500 },
+      );
+    }
+  }
+
   // Log all cookies for debugging
   console.log('🔍 Cookies:');
   request.cookies.getAll().forEach((cookie) => {
@@ -30,7 +64,7 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
-  // Run next-intl middleware first to handle locale redirects/detection
+  // Run next-intl middleware for non-API routes
   const intlResponse = intlMiddleware(request);
 
   // --- Modified Check for Redirect/Rewrite ---
@@ -163,8 +197,8 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - Any files extensions like .svg, .png, etc.
-     * Include /api routes so next-intl can prefix them.
+     * - API routes should be handled separately
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|api/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
