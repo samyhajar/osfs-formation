@@ -92,7 +92,7 @@ export default function Sidebar() {
             alt="Oblate Logo"
             width={48}
             height={48}
-            className="h-12 w-auto"
+            className="h-12 w-12"
           />
           {/* Keep title potentially hardcoded or move to a generic namespace if needed */}
           <span className="text-base font-medium text-gray-700">

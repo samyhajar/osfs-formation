@@ -20,7 +20,7 @@ export default async function Home() {
                   alt="Oblate Logo"
                   width={320}
                   height={320}
-                  className="mx-auto"
+                  className="mx-auto h-auto w-auto"
                   priority
                 />
               </div>

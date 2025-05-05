@@ -11,6 +11,8 @@ import { useAuth } from '@/contexts/AuthContext';
 // Import our consistent browser client creator
 import { createClient } from '@/lib/supabase/browser-client';
 import React from 'react';
+import FormeeIntroductionModal from '@/components/formee/FormeeIntroductionModal';
+import { useFormeeIntroduction } from '@/components/formee/FormeeIntroductionHook';
 // Card import path needs verification, assuming it's meant to be used later.
 // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/???";
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/???";
@@ -47,6 +49,9 @@ export default function DashboardPage() {
   // --- Sorting State ---
   const [sortKey, setSortKey] = useState<SortKey>('created_at');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+
+  // Use the custom hook to manage introduction modal
+  const { introContent, introModalOpen, handleCloseIntroModal } = useFormeeIntroduction(authLoading);
 
   useEffect(() => {
     if (authLoading) {
@@ -210,6 +215,15 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
+      {/* Add the intro modal */}
+      {introContent && (
+        <FormeeIntroductionModal
+          isOpen={introModalOpen}
+          onClose={handleCloseIntroModal}
+          introContent={introContent}
+        />
+      )}
+
       <div className="flex justify-between items-center">
         <div>
            <h1 className="text-3xl font-bold text-black">Documents</h1>

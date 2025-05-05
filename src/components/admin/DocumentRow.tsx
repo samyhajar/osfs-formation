@@ -16,7 +16,7 @@ import {
 import FR from 'country-flag-icons/react/3x2/FR';
 import ES from 'country-flag-icons/react/3x2/ES';
 import DE from 'country-flag-icons/react/3x2/DE';
-import GB from 'country-flag-icons/react/3x2/GB'; // Use GB for English/UK flag
+import US from 'country-flag-icons/react/3x2/US'; // Use US for English/USA flag
 import IT from 'country-flag-icons/react/3x2/IT'; // Add Italian flag
 import PT from 'country-flag-icons/react/3x2/PT'; // Add Portuguese flag
 
@@ -26,14 +26,14 @@ const flagComponents: { [key: string]: any } = {
   FR,
   ES,
   DE,
-  GB,
+  US,
   IT,
   PT,
 };
 
 // Map full language names (lowercase) to country codes
 const languageNameToCodeMap: { [key: string]: string } = {
-  english: 'GB',
+  english: 'US',
   french: 'FR',
   spanish: 'ES',
   german: 'DE',

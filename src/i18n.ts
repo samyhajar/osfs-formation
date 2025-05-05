@@ -23,7 +23,7 @@ export default getRequestConfig(async ({ locale }) => {
     type MessagesModule = { default: AbstractIntlMessages };
     // Dynamically import the messages for the determined locale and assert the type.
     const messagesModule = (await import(
-      `./messages/${baseLocale}.json`
+      `./locales/${baseLocale}.json`
     )) as MessagesModule;
     messages = messagesModule.default;
   } catch (error) {

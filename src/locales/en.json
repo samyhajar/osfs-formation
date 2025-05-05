@@ -108,7 +108,8 @@
       "german": "German",
       "spanish": "Spanish",
       "italian": "Italian",
-      "portuguese": "Portuguese"
+      "portuguese": "Portuguese",
+      "dutch": "Dutch"
     },
     "topics": {
       "formation": "Formation",
@@ -438,5 +439,78 @@
     "emptyStateFormations": "No formation programs found.",
     "emptyStateFormees": "No formees found.",
     "actionsComingSoon": "Actions coming soon"
+  },
+  "CommonSyllabusPage": {
+    "title": "Common Syllabus Documents",
+    "description": "Upload and manage documents for the common syllabus.",
+    "uploadButton": "Upload New File",
+    "fetchErrorPermission": "You do not have permission to view these syllabus documents.",
+    "fetchErrorGeneric": "Failed to load syllabus documents.",
+    "deleteDbErrorPermission": "You do not have permission to delete this database record.",
+    "deleteStorageErrorPermission": "You do not have permission to delete this file from storage.",
+    "deleteErrorGeneric": "Failed to delete syllabus document.",
+    "pageErrorPrefix": "Error:"
+  },
+  "SyllabusUploadForm": {
+    "title": "Upload New Syllabus Document",
+    "fileRequiredError": "Please select a file to upload.",
+    "validationErrorRequired": "Title, Category, and File are required.",
+    "validationErrorAuth": "You must be logged in to upload.",
+    "storageError": "Storage upload failed: {errorMessage}",
+    "databaseError": "Database insert failed: {errorMessage}",
+    "unknownError": "An unknown error occurred during upload.",
+    "uploadSuccess": "Upload successful!",
+    "uploadingButton": "Uploading...",
+    "uploadButton": "Upload File and Save",
+    "fieldTitleLabel": "Title",
+    "fieldDescriptionLabel": "Description",
+    "fieldCategoryLabel": "Category",
+    "fieldRegionLabel": "Region",
+    "fieldLanguageLabel": "Language",
+    "fieldPurposeLabel": "Purpose",
+    "fieldTopicsLabel": "Topics (comma-separated)",
+    "fieldKeywordsLabel": "Keywords (comma-separated)",
+    "fieldIsPublicLabel": "Make document public",
+    "fieldTopicsPlaceholder": "e.g., Theology, Spirituality, History",
+    "fieldKeywordsPlaceholder": "e.g., Vocation, Formation, Prayer",
+    "categories": {
+      "Articles": "Articles",
+      "Source materials": "Source materials",
+      "Presentations": "Presentations",
+      "Formation Programs": "Formation Programs",
+      "Miscellaneous": "Miscellaneous",
+      "Videos": "Videos",
+      "Reflections 4 Dimensions": "Reflections 4 Dimensions"
+    },
+    "purposes": {
+      "General": "General",
+      "Novitiate": "Novitiate",
+      "Postulancy": "Postulancy",
+      "Scholasticate": "Scholasticate",
+      "Ongoing Formation": "Ongoing Formation"
+    }
+  },
+  "SyllabusFileList": {
+    "downloadErrorNoPath": "File path is missing for this document.",
+    "downloadErrorSignUrlFailed": "Failed to create download link.",
+    "downloadErrorGeneric": "Download failed:",
+    "deleteErrorNoPath": "Cannot delete: File path is missing.",
+    "deleteConfirm": "Are you sure you want to delete {title}?",
+    "deleteErrorGeneric": "Deletion failed:",
+    "loading": "Loading syllabus documents...",
+    "emptyStateTitle": "No syllabus documents found",
+    "emptyStateSuggestion": "Upload the first document using the form above.",
+    "headerName": "Name",
+    "headerType": "Type",
+    "headerLang": "Lang",
+    "headerRegion": "Region",
+    "headerCategory": "Category",
+    "headerCreated": "Created",
+    "headerActions": "Actions",
+    "actionDownload": "Download",
+    "actionDelete": "Delete"
+  },
+  "DashboardClientTest": {
+    "testMessage": "Test Message EN"
   }
 }

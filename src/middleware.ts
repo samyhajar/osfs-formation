@@ -13,6 +13,23 @@ const intlMiddleware = createMiddleware(routing);
 export async function middleware(request: NextRequest) {
   console.log('🛡️ Middleware running for:', request.nextUrl.pathname);
 
+  // Log all cookies for debugging
+  console.log('🔍 Cookies:');
+  request.cookies.getAll().forEach((cookie) => {
+    console.log(`🍪 ${cookie.name}: ${cookie.value}`);
+  });
+
+  // Debug route to clear cookies
+  if (request.nextUrl.pathname.endsWith('/debug-clear-cookie')) {
+    console.log('🔍 DEBUG: Clearing intro_page_seen cookie');
+    const response = NextResponse.redirect(new URL('/', request.url));
+    response.cookies.set('intro_page_seen', '', {
+      maxAge: 0,
+      path: '/',
+    });
+    return response;
+  }
+
   // Run next-intl middleware first to handle locale redirects/detection
   const intlResponse = intlMiddleware(request);
 
@@ -42,6 +59,10 @@ export async function middleware(request: NextRequest) {
     const pathWithoutLocale = urlLocale
       ? pathname.substring(urlLocale.length + 1)
       : pathname;
+
+    console.log('🔍 Original pathname:', pathname);
+    console.log('🔍 Detected locale:', urlLocale || 'none');
+    console.log('🔍 Path without locale:', pathWithoutLocale);
 
     const isPublic = isPublicRoute(pathWithoutLocale);
     console.log(`🛡️ Path (w/o locale): ${pathWithoutLocale}`);
@@ -73,7 +94,22 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    if (pathWithoutLocale.startsWith('/dashboard/admin')) {
+    // Check user role for formee redirect - for ANY dashboard path
+    if (pathWithoutLocale.startsWith('dashboard')) {
+      console.log('🔍 Dashboard path detected:', pathWithoutLocale);
+
+      const { data: userProfile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', session.user.id)
+        .single();
+
+      console.log('🔍 User profile role:', userProfile?.role);
+
+      // Only check admin access
+    }
+
+    if (pathWithoutLocale.startsWith('dashboard/admin')) {
       // Restore admin check logic if it was removed
       console.log('🛡️ Accessing admin route, checking role...');
       const { data: isAdmin, error: rpcError } = await supabase.rpc('is_admin');
@@ -106,7 +142,7 @@ export async function middleware(request: NextRequest) {
       ? request.nextUrl.pathname.substring(urlLocale.length + 1)
       : request.nextUrl.pathname;
 
-    if (pathWithoutLocale.startsWith('/dashboard')) {
+    if (pathWithoutLocale.startsWith('dashboard')) {
       return NextResponse.redirect(new URL('/', request.url));
     }
 
