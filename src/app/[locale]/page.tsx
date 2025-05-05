@@ -14,15 +14,17 @@ export default async function Home() {
           <div className="max-w-7xl w-full">
             <div className="flex flex-col lg:flex-row w-full">
               <div className="w-full lg:w-1/2 flex flex-col items-center justify-center py-12 px-4">
-                <h2 className="text-3xl font-bold text-slate-800 mb-10 text-center">Formation desalesoblates</h2>
-                <Image
-                  src="/oblate-logo.svg"
-                  alt="Oblate Logo"
-                  width={320}
-                  height={320}
-                  className="mx-auto h-auto w-auto"
-                  priority
-                />
+                <h2 className="text-3xl font-bold text-slate-800 mb-10 text-center">Formation</h2>
+                <div className="w-full flex justify-center">
+                  <Image
+                    src="/oblate-logo.svg"
+                    alt="Oblate Logo"
+                    width={800}
+                    height={800}
+                    className="w-[200px] sm:w-[250px] md:w-[280px] lg:w-[300px] h-auto object-contain"
+                    priority
+                  />
+                </div>
               </div>
 
               <div className="hidden lg:block w-px bg-slate-200 mx-2 self-stretch"></div>
