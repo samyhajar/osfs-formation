@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { createClient } from '@/lib/supabase/browser-client';
+import { Database } from '@/types/supabase';
 import DocumentsCard from './cards/DocumentsCard';
 import UsersCard from './cards/UsersCard';
 import StatusMessages from './cards/StatusMessages';
@@ -72,7 +73,7 @@ export default function EmailClient() {
 
         // Apply status filter if selected
         if (statusFilter) {
-          query = query.eq('status', statusFilter);
+          query = query.eq('status', statusFilter as Database['public']['Enums']['formee_status']);
         }
 
         const { data, error } = await query.order('name');

@@ -42,7 +42,7 @@ export default async function FormantUsersPage() {
   // 2. Fetch Formators (paginated) and total count
   const { data: formators, error: formatorsError } = await supabase
     .from('profiles')
-    .select('id, name, email, role, created_at, avatar_url')
+    .select('id, name, email, role, created_at, avatar_url, approval_date, is_approved, status')
     .eq('role', 'formator')
     .range(formatorFrom, formatorTo)
     .order('created_at', { ascending: false });
@@ -55,7 +55,7 @@ export default async function FormantUsersPage() {
   // 3. Fetch Formees (paginated) and total count
   const { data: formees, error: formeesError } = await supabase
     .from('profiles')
-    .select('id, name, email, role, created_at, avatar_url')
+    .select('id, name, email, role, created_at, avatar_url, approval_date, is_approved, status')
     .eq('role', 'formee')
     .range(formeeFrom, formeeTo)
     .order('created_at', { ascending: false });

@@ -47,34 +47,37 @@ export function FormeeIntroductionForm({ initialData }: FormeeIntroductionFormPr
     setError(null);
     setSuccess(false);
 
+    // Ensure required fields are present
+    if (!formData.coordinator_name || !formData.left_column_content || !formData.right_column_content) {
+      setError('All fields are required');
+      setLoading(false);
+      return;
+    }
+
     try {
       const supabase = createClient<Database>();
 
-      // The TypeScript error occurs because formee_introduction is not in the Database type yet
-      // We'll use proper type casting
       let response;
+
+      // Create a properly typed object that matches the Database type
+      const dataToSave: Database['public']['Tables']['formee_introduction']['Insert'] = {
+        coordinator_name: formData.coordinator_name,
+        left_column_content: formData.left_column_content,
+        right_column_content: formData.right_column_content,
+        active: true
+      };
 
       if (initialData?.id) {
         // Update existing record
         response = await supabase
-          .from('formee_introduction' as keyof Database['public']['Tables'])
-          .update({
-            coordinator_name: formData.coordinator_name,
-            left_column_content: formData.left_column_content,
-            right_column_content: formData.right_column_content,
-            active: true, // Ensure it's active
-          })
+          .from('formee_introduction')
+          .update(dataToSave)
           .eq('id', initialData.id);
       } else {
-        // Create new record
+        // Create new record - insert expects an array of objects
         response = await supabase
-          .from('formee_introduction' as keyof Database['public']['Tables'])
-          .insert({
-            coordinator_name: formData.coordinator_name,
-            left_column_content: formData.left_column_content,
-            right_column_content: formData.right_column_content,
-            active: true,
-          });
+          .from('formee_introduction')
+          .insert([dataToSave]);
       }
 
       if (response.error) {
