@@ -1,30 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
 import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
-import DocumentsCard from './cards/DocumentsCard';
-import UsersCard from './cards/UsersCard';
-import StatusMessages from './cards/StatusMessages';
-
-type Document = {
-  id: string;
-  title: string;
-  category: string;
-  created_at: string;
-};
-
-type User = {
-  id: string;
-  name: string | null;
-  email: string | null;
-  role: string;
-  status?: string | null;
-};
+import { Document, User, DocumentFilters } from './types';
+import { DocumentsTable } from './DocumentsTable';
+import { UsersTable } from './UsersTable';
+import { WorkflowSteps } from './WorkflowSteps';
+import { useEmailNotifications } from './useEmailNotifications';
 
 export default function EmailClient() {
-  const t = useTranslations('EmailPage');
   const supabase = createClient();
 
   const [documents, setDocuments] = useState<Document[]>([]);
@@ -33,19 +18,53 @@ export default function EmailClient() {
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [documentsConfirmed, setDocumentsConfirmed] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [sendingEmails, setSendingEmails] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string>('');
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [currentDocumentPage, setCurrentDocumentPage] = useState(1);
+
+  // Document filters state
+  const [documentFilters, setDocumentFilters] = useState<DocumentFilters>({
+    category: '',
+    language: '',
+    keywords: ''
+  });
+
+  // Use the email notifications hook
+  const { sendingEmails, successMessage, errorMessage, sendEmailNotifications } = useEmailNotifications({
+    selectedDocumentIds,
+    selectedUserIds,
+    onSuccess: () => {
+      // Reset selections after successful sending
+      setTimeout(() => {
+        setSelectedUserIds([]);
+        resetDocumentSelection();
+      }, 3000);
+    }
+  });
 
   // Fetch documents
   useEffect(() => {
     async function fetchDocuments() {
       try {
-        const { data, error } = await supabase
+        setLoading(true);
+        let query = supabase
           .from('documents')
-          .select('id, title, category, created_at')
+          .select('id, title, category, file_type, language, region, created_at, author_name')
           .order('created_at', { ascending: false });
+
+        // Apply filters
+        if (documentFilters.category) {
+          query = query.eq('category', documentFilters.category);
+        }
+
+        if (documentFilters.language) {
+          query = query.eq('language', documentFilters.language);
+        }
+
+        if (documentFilters.keywords) {
+          query = query.or(`title.ilike.%${documentFilters.keywords}%,description.ilike.%${documentFilters.keywords}%`);
+        }
+
+        const { data, error } = await query;
 
         if (error) {
           console.error('Error fetching documents:', error);
@@ -61,7 +80,7 @@ export default function EmailClient() {
     }
 
     void fetchDocuments();
-  }, [supabase]);
+  }, [supabase, documentFilters]);
 
   // Fetch users
   useEffect(() => {
@@ -127,52 +146,17 @@ export default function EmailClient() {
   };
 
   // Reset document selection
-  const resetDocumentSelection = () => {
-    setSelectedDocumentIds([]);
+  const resetDocumentSelection = (clearSelection = true) => {
+    if (clearSelection) {
+      setSelectedDocumentIds([]);
+    }
     setDocumentsConfirmed(false);
   };
 
-  // Send email notifications
-  const sendEmailNotifications = async () => {
-    if (selectedDocumentIds.length === 0 || selectedUserIds.length === 0) {
-      return;
-    }
-
-    try {
-      setSendingEmails(true);
-      setErrorMessage('');
-      setSuccessMessage('');
-
-      // Get the current locale from the URL path
-      const locale = window.location.pathname.split('/')[1] || 'en';
-
-      const response = await fetch(`/${locale}/api/send-document-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          documentIds: selectedDocumentIds,
-          recipientIds: selectedUserIds,
-        }),
-      });
-
-      const result = await response.json() as { error?: string };
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to send email notifications');
-      }
-
-      setSuccessMessage(t('emailSuccess'));
-      // Reset selections after successful sending
-      setSelectedUserIds([]);
-      resetDocumentSelection();
-    } catch (error) {
-      console.error('Error sending email notifications:', error);
-      setErrorMessage(error instanceof Error ? error.message : t('emailError'));
-    } finally {
-      setSendingEmails(false);
-    }
+  // Handle document filter changes
+  const handleFilterChange = (newFilters: Partial<DocumentFilters>) => {
+    setDocumentFilters(prev => ({ ...prev, ...newFilters }));
+    setCurrentDocumentPage(1); // Reset to first page when filters change
   };
 
   const handleSendEmails = (e: React.MouseEvent) => {
@@ -181,36 +165,64 @@ export default function EmailClient() {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-8">
-      {/* Documents Card */}
-      <DocumentsCard
-        documents={documents}
-        loading={loading}
-        selectedDocumentIds={selectedDocumentIds}
+    <div className="space-y-6">
+      {/* Workflow Steps */}
+      <WorkflowSteps
         documentsConfirmed={documentsConfirmed}
-        toggleDocumentSelection={toggleDocumentSelection}
-        confirmDocumentSelection={confirmDocumentSelection}
-        resetDocumentSelection={resetDocumentSelection}
-      />
-
-      {/* Users Card */}
-      <UsersCard
-        users={users}
-        loading={loading}
         selectedUserIds={selectedUserIds}
-        documentsConfirmed={documentsConfirmed}
-        statusFilter={statusFilter}
-        sendingEmails={sendingEmails}
-        toggleUserSelection={toggleUserSelection}
-        setStatusFilter={setStatusFilter}
-        onSendEmails={handleSendEmails}
+        selectedDocumentIds={selectedDocumentIds}
       />
 
-      {/* Status Messages */}
-      <StatusMessages
-        successMessage={successMessage}
-        errorMessage={errorMessage}
-      />
+      {/* Main Content */}
+      <div className="flex gap-6">
+        {/* Documents Section */}
+        <DocumentsTable
+          documents={documents}
+          selectedDocumentIds={selectedDocumentIds}
+          toggleDocumentSelection={toggleDocumentSelection}
+          documentsConfirmed={documentsConfirmed}
+          loading={loading}
+          currentDocumentPage={currentDocumentPage}
+          setCurrentDocumentPage={setCurrentDocumentPage}
+          documentFilters={documentFilters}
+          handleFilterChange={handleFilterChange}
+          confirmDocumentSelection={confirmDocumentSelection}
+          resetDocumentSelection={resetDocumentSelection}
+        />
+
+        {/* Users Section - Only show if documents are confirmed */}
+        <UsersTable
+          users={users}
+          selectedUserIds={selectedUserIds}
+          toggleUserSelection={toggleUserSelection}
+          documentsConfirmed={documentsConfirmed}
+          loading={loading}
+          sendingEmails={sendingEmails}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
+          successMessage={successMessage}
+          errorMessage={errorMessage}
+          handleSendEmails={handleSendEmails}
+        />
+      </div>
+
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+          from { transform: translateX(20px); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        .animate-slideIn {
+          animation: slideIn 0.3s ease-out forwards;
+        }
+      `}</style>
     </div>
   );
 }
