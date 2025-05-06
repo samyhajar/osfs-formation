@@ -30,8 +30,11 @@ export default function Header({ isScrolled = false }: HeaderProps) {
 
   const handleSignOut = () => {
     setIsSigningOut(true);
-    // Use a simple link to the sign-out API route - no need for fetch
-    window.location.href = '/api/auth/signout';
+    // Get the current locale from the URL path
+    const locale = window.location.pathname.split('/')[1] || 'en';
+
+    // Use the dedicated logout route with locale
+    window.location.href = `/${locale}/logout`;
   };
 
   // Determine what to display based on auth state
