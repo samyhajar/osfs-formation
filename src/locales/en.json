@@ -31,6 +31,7 @@
     "users": "Users",
     "administration": "Administration",
     "pendingUsers": "Pending Approvals",
+    "email": "Email",
     "noSections": "No sections available for your role.",
     "profileLoadError": "Could not load user profile.",
     "needHelp": "Need help?",
@@ -510,6 +511,26 @@
     "headerActions": "Actions",
     "actionDownload": "Download",
     "actionDelete": "Delete"
+  },
+  "EmailPage": {
+    "title": "Email Notifications",
+    "description": "Send document recommendations to formees via email",
+    "documentsCard": "Select Documents",
+    "usersCard": "Select Recipients",
+    "confirmDocuments": "Confirm Selection",
+    "sendEmails": "Send Email Notifications",
+    "noDocumentsSelected": "No documents selected",
+    "noUsersSelected": "No recipients selected",
+    "emailSuccess": "Email notifications sent successfully",
+    "emailError": "Failed to send email notifications",
+    "statusFilter": "Filter by Status",
+    "formeeStatus": {
+      "Scholastic": "Scholastic",
+      "Postulant": "Postulant",
+      "Deacon": "Deacon",
+      "Novice": "Novice",
+      "Other": "Other"
+    }
   },
   "DashboardClientTest": {
     "testMessage": "Test Message EN"

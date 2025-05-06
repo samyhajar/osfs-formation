@@ -12,6 +12,7 @@ import {
   Cog6ToothIcon,
   FolderIcon,
   UserPlusIcon,
+  EnvelopeIcon,
 } from '@heroicons/react/24/outline';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMemo } from 'react';
@@ -64,6 +65,9 @@ export default function Sidebar() {
 
     // New item for pending user approvals - visible only to admins
     { nameKey: 'pendingUsers', path: `${basePath}/pending-users`, icon: UserPlusIcon, roles: ['admin'] },
+
+    // New item for email notifications - visible only to admins
+    { nameKey: 'email', path: `${basePath}/email`, icon: EnvelopeIcon, roles: ['admin'] },
 
   ], [basePath]); // Depend on basePath
 

@@ -5,9 +5,11 @@ import PendingUsersList from '@/components/admin/PendingUsersList';
 export default async function PendingUsersPage() {
   // Check if the user is an admin
   const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
 
-  if (!session) {
+  // Use getUser() instead of getSession() for better security
+  const { data: { user }, error } = await supabase.auth.getUser();
+
+  if (error || !user) {
     redirect('/');
   }
 
@@ -15,7 +17,7 @@ export default async function PendingUsersPage() {
   const { data: profile } = await supabase
     .from('profiles')
     .select('role')
-    .eq('id', session.user.id)
+    .eq('id', user.id)
     .single();
 
   if (!profile || profile.role !== 'admin') {
