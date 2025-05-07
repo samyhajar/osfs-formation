@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
 
 interface UserIntroduction {
@@ -18,13 +18,16 @@ export function useUserIntroduction(authLoading: boolean) {
   const [introContent, setIntroContent] = useState<UserIntroduction | null>(null);
   const [introModalOpen, setIntroModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const supabase = createClientComponentClient<Database>();
 
   useEffect(() => {
     async function fetchIntroductionContent() {
       if (authLoading) return; // Skip if auth is still loading
 
       try {
+        setLoading(true);
+        // Use the consistent browser client creator
+        const supabase = createClient<Database>();
+
         // Fetch active introduction content
         const { data, error } = await supabase
           .from('user_introduction')
@@ -34,7 +37,6 @@ export function useUserIntroduction(authLoading: boolean) {
 
         if (error) {
           console.error('Error fetching introduction content:', error);
-          setLoading(false);
           return;
         }
 
@@ -50,7 +52,7 @@ export function useUserIntroduction(authLoading: boolean) {
     }
 
     void fetchIntroductionContent();
-  }, [supabase, authLoading]);
+  }, [authLoading]);
 
   const handleCloseIntroModal = () => {
     setIntroModalOpen(false);
