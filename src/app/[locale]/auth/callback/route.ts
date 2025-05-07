@@ -2,6 +2,9 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server-client';
 import { createAdminClient } from '@/lib/supabase/admin';
 
+// Define a type that includes both old and new role names for backward compatibility
+type UserRole = 'admin' | 'editor' | 'user' | 'formator' | 'formee';
+
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
@@ -50,13 +53,18 @@ export async function GET(request: NextRequest) {
 
         if (profile?.role) {
           console.log('Callback: User role found:', profile.role);
-          switch (profile.role) {
+          // Use type assertion to handle both old and new role names
+          const role = profile.role as UserRole;
+
+          switch (role) {
             case 'admin':
               return NextResponse.redirect(`${origin}/dashboard/admin`);
+            case 'editor':
             case 'formator':
-              return NextResponse.redirect(`${origin}/dashboard/formant`);
+              return NextResponse.redirect(`${origin}/dashboard/editor`);
+            case 'user':
             case 'formee':
-              return NextResponse.redirect(`${origin}/dashboard/formee`);
+              return NextResponse.redirect(`${origin}/dashboard/user`);
             default:
               console.warn('Callback: Unknown user role:', profile.role);
               return NextResponse.redirect(`${origin}/dashboard`);

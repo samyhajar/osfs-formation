@@ -122,9 +122,9 @@ export function useDocumentUpload(): UseDocumentUploadResult {
       let finalRedirectPath = '/dashboard'; // Default fallback
       if (profile.role === 'admin') {
         finalRedirectPath = '/dashboard/admin';
-      } else if (profile.role === 'formator') {
-        finalRedirectPath = '/dashboard/formant'; // Redirect formant here
-      } // Formee likely won't call this hook, but could add a case if needed
+      } else if (profile.role === 'editor') {
+        finalRedirectPath = '/dashboard/editor'; // Redirect editors here
+      } // Users likely won't call this hook, but could add a case if needed
 
       // Redirect after a short delay
       setTimeout(() => {

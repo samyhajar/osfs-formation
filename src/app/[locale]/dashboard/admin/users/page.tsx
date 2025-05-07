@@ -52,27 +52,27 @@ export default async function AdminUsersPage() {
   const { data: formators, error: formatorsError } = await supabase
     .from('profiles')
     .select('id, name, email, role, created_at, avatar_url, approval_date, is_approved, status')
-    .eq('role', 'formator')
+    .eq('role', 'editor')
     .range(formatorFrom, formatorTo)
     .order('created_at', { ascending: false });
 
   const { count: formatorCount, error: formatorCountError } = await supabase
     .from('profiles')
     .select('id', { count: 'exact', head: true })
-    .eq('role', 'formator');
+    .eq('role', 'editor');
 
   // ... (fetch formees) ...
   const { data: formees, error: formeesError } = await supabase
     .from('profiles')
     .select('id, name, email, role, created_at, avatar_url, approval_date, is_approved, status')
-    .eq('role', 'formee')
+    .eq('role', 'user')
     .range(formeeFrom, formeeTo)
     .order('created_at', { ascending: false });
 
   const { count: formeeCount, error: formeeCountError } = await supabase
     .from('profiles')
     .select('id', { count: 'exact', head: true })
-    .eq('role', 'formee');
+    .eq('role', 'user');
 
 
   if (formatorsError || formeesError || formatorCountError || formeeCountError) {

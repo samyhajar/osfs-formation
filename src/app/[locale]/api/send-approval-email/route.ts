@@ -57,6 +57,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Ensure the user is marked as approved in the profiles table
+    // This should already be set by the PendingUsersList component,
+    // but we double-check here to ensure consistency
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update({
+        is_approved: true,
+        approval_date: new Date().toISOString(),
+      })
+      .eq('id', user_id);
+
+    if (updateError) {
+      return NextResponse.json(
+        { error: `Failed to update user profile: ${updateError.message}` },
+        { status: 500 },
+      );
+    }
+
     // Extract locale from URL path
     const url = new URL(request.url);
     const pathSegments = url.pathname.split('/').filter(Boolean);

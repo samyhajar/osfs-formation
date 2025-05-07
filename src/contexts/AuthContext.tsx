@@ -13,7 +13,9 @@ import { User, Session, SupabaseClient } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
 
-type UserProfile = Database['public']['Tables']['profiles']['Row'];
+type UserProfile = Database['public']['Tables']['profiles']['Row'] & {
+  role: 'admin' | 'editor' | 'user' | 'formator' | 'formee'
+};
 
 interface AuthContextType {
   supabase: SupabaseClient<Database>;

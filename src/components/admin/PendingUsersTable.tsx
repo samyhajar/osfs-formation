@@ -4,16 +4,18 @@ interface Profile {
   id: string;
   email: string | null;
   name: string | null;
-  role: 'admin' | 'formator' | 'formee';
-  is_approved: boolean;
+  role: 'admin' | 'editor' | 'user';
+  is_approved: boolean | null;
   created_at: string;
   avatar_url: string | null;
+  approval_date?: string | null;
+  status?: 'Scholastic' | string | null;
 }
 
 interface PendingUsersTableProps {
   users: Profile[];
   actionInProgress: string | null;
-  onApprove: (userId: string, role: 'admin' | 'formator' | 'formee') => Promise<void>;
+  onApprove: (userId: string, role: 'admin' | 'editor' | 'user', email: string) => Promise<void>;
   onReject: (userId: string) => Promise<void>;
 }
 
@@ -25,12 +27,16 @@ export default function PendingUsersTable({
 }: PendingUsersTableProps) {
   const handleApprove = (userId: string) => {
     const select = document.getElementById(`role-${userId}`) as HTMLSelectElement;
-    const role = select.value as 'admin' | 'formator' | 'formee';
+    const role = select.value as 'admin' | 'editor' | 'user';
     if (!role) {
       alert('Please select a role');
       return;
     }
-    void onApprove(userId, role);
+
+    // Find the user's email
+    const userEmail = users.find(u => u.id === userId)?.email || '';
+
+    void onApprove(userId, role, userEmail);
   };
 
   const handleReject = (userId: string) => {
@@ -71,8 +77,8 @@ export default function PendingUsersTable({
                     >
                       <option value="" disabled>Select role</option>
                       <option value="admin">Admin</option>
-                      <option value="formator">Formator</option>
-                      <option value="formee">Formee</option>
+                      <option value="editor">Editor</option>
+                      <option value="user">User</option>
                     </select>
 
                     <button

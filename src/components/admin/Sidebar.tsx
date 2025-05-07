@@ -19,6 +19,9 @@ import { useMemo } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl'; // Import useTranslations
 
+// Add a proper role type at the top of the file
+type UserRole = 'admin' | 'editor' | 'user' | 'formator' | 'formee';
+
 // Simple Skeleton component for loading state
 const NavItemSkeleton = () => (
   <li className="animate-pulse">
@@ -38,13 +41,20 @@ export default function Sidebar() {
   const basePath = useMemo(() => {
     // Base path should NOT include locale for next-intl Link component
     if (!profile?.role) return '/dashboard'; // Default or loading state
-    switch (profile.role) {
+
+    const role = profile.role as UserRole;
+
+    switch (role) {
       case 'admin':
         return '/dashboard/admin';
-      case 'formator':
-        return '/dashboard/formant'; // Use 'formant' path for 'formator' role
-      case 'formee':
-        return '/dashboard/formee';
+      case 'editor':
+        return '/dashboard/editor';
+      case 'user':
+        return '/dashboard/user';
+      case 'formator': // Keep backward compatibility
+        return '/dashboard/editor';
+      case 'formee': // Keep backward compatibility
+        return '/dashboard/user';
       default:
         return '/dashboard'; // Fallback
     }
@@ -53,15 +63,15 @@ export default function Sidebar() {
   // Define base nav items - Use translation keys for names
   const allNavItems = useMemo(() => [
     // Items visible to all roles (adjust paths)
-    { nameKey: 'dashboard', path: `${basePath}`, icon: HomeIcon, roles: ['admin', 'formator', 'formee'] },
-    { nameKey: 'folders', path: `${basePath}/folders`, icon: FolderIcon, roles: ['admin', 'formator', 'formee'] },
-    { nameKey: 'commonSyllabus', path: `${basePath}/documents/syllabus`, icon: DocumentTextIcon, roles: ['admin', 'formator', 'formee'] },
-    { nameKey: 'workshops', path: `${basePath}/workshops`, icon: AcademicCapIcon, roles: ['admin', 'formator', 'formee'] },
-    { nameKey: 'formationPersonnel', path: `${basePath}/formation-personnel`, icon: UserGroupIcon, roles: ['admin', 'formator', 'formee'] },
+    { nameKey: 'dashboard', path: `${basePath}`, icon: HomeIcon, roles: ['admin', 'editor', 'user'] },
+    { nameKey: 'folders', path: `${basePath}/folders`, icon: FolderIcon, roles: ['admin', 'editor', 'user'] },
+    { nameKey: 'commonSyllabus', path: `${basePath}/documents/syllabus`, icon: DocumentTextIcon, roles: ['admin', 'editor', 'user'] },
+    { nameKey: 'workshops', path: `${basePath}/workshops`, icon: AcademicCapIcon, roles: ['admin', 'editor', 'user'] },
+    { nameKey: 'formationPersonnel', path: `${basePath}/formation-personnel`, icon: UserGroupIcon, roles: ['admin', 'editor', 'user'] },
 
     // Items visible only to admin and formator
-    { nameKey: 'users', path: `${basePath}/users`, icon: UsersIcon, roles: ['admin', 'formator'] },
-    { nameKey: 'administration', path: `${basePath}/admin`, icon: Cog6ToothIcon, roles: ['admin', 'formator'] },
+    { nameKey: 'users', path: `${basePath}/users`, icon: UsersIcon, roles: ['admin', 'editor'] },
+    { nameKey: 'administration', path: `${basePath}/admin`, icon: Cog6ToothIcon, roles: ['admin', 'editor'] },
 
     // New item for pending user approvals - visible only to admins
     { nameKey: 'pendingUsers', path: `${basePath}/pending-users`, icon: UserPlusIcon, roles: ['admin'] },
@@ -79,8 +89,14 @@ export default function Sidebar() {
     // Use the pathname from next/navigation which includes the locale prefix for isActive check
     const currentPathWithoutLocale = pathname.replace(/^\/(en|fr)/, '') || '/';
 
+    // Map old role names to new ones for compatibility
+    const role = profile.role as UserRole;
+    let effectiveRole = role;
+    if (role === 'formator') effectiveRole = 'editor';
+    if (role === 'formee') effectiveRole = 'user';
+
     return allNavItems
-      .filter(item => item.roles.includes(profile.role as string))
+      .filter(item => item.roles.includes(effectiveRole as string))
       .map(item => ({
         ...item,
         // isActive check compares the item's path (without locale)

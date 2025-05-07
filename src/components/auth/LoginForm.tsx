@@ -65,49 +65,33 @@ export default function LoginForm() {
           return;
         }
 
-        // Type assertion to handle the potentially undefined is_approved field
-        // This is needed because the database migration might be recent and TypeScript
-        // definitions may not have been updated yet
-        type ProfileWithApproval = {
-          role: 'admin' | 'formator' | 'formee';
-          is_approved: boolean | null;
-        };
-
-        const typedProfile = profile as unknown as ProfileWithApproval;
-
-        // Check if the user is approved
-        if (typedProfile && typedProfile.is_approved === false) {
-          // If not approved, show error and sign out
+        // Check if user is approved
+        if (profile && profile.is_approved === false) {
+          // Sign out the user immediately since they're not approved
           await supabase.auth.signOut();
-          setError('Your account is pending approval. You will receive an email once your account has been approved.');
+          setError('Your account is pending approval. You will receive an email when approved.');
           setLoading(false);
           return;
         }
 
-        if (!typedProfile?.role) {
-           console.warn('Profile or role not found for user:', user.id);
-           setError('User profile or role not found. Cannot determine dashboard.');
-           setLoading(false);
-           return;
-        }
-
+        // Determine redirect based on user role
         let redirectPath = '/dashboard';
-        switch (typedProfile.role) {
-          case 'admin':
-            redirectPath = '/dashboard/admin';
-            break;
-          case 'formator':
-            redirectPath = '/dashboard/formant';
-            break;
-          case 'formee':
-            redirectPath = '/dashboard/formee';
-            break;
-          default:
-            console.warn('Unknown user role:', typedProfile.role);
+        if (profile && profile.role) {
+          switch (profile.role) {
+            case 'admin':
+              redirectPath = '/dashboard/admin';
+              break;
+            case 'editor':
+              redirectPath = '/dashboard/editor';
+              break;
+            case 'user':
+              redirectPath = '/dashboard/user';
+              break;
+          }
         }
 
+        // Login successful, redirect to role-specific dashboard
         router.push(redirectPath);
-        router.refresh();
 
       } catch (err: unknown) {
         console.error('Login Process Failed:', err);

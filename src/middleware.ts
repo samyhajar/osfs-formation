@@ -128,21 +128,71 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    // Check user role for formee redirect - for ANY dashboard path
+    // Check user role for user redirect - for ANY dashboard path
     if (pathWithoutLocale.startsWith('dashboard')) {
       console.log('🔍 Dashboard path detected:', pathWithoutLocale);
 
       const { data: userProfile } = await supabase
         .from('profiles')
-        .select('role')
+        .select('role, is_approved')
         .eq('id', session.user.id)
         .single();
 
       console.log('🔍 User profile role:', userProfile?.role);
+      console.log('🔍 User is approved:', userProfile?.is_approved);
 
-      // Only check admin access
+      // Redirect to pending approval page if user is not approved
+      if (userProfile?.is_approved === false) {
+        console.log(
+          '🛡️ User is not approved, redirecting to pending approval page',
+        );
+        return NextResponse.redirect(
+          new URL(
+            `${urlLocale ? '/' + urlLocale : ''}/auth/pending-approval`,
+            request.url,
+          ),
+        );
+      }
+
+      // Check role-specific dashboard access
+      if (
+        pathWithoutLocale.startsWith('dashboard/admin') &&
+        userProfile?.role !== 'admin'
+      ) {
+        console.log(
+          '🛡️ Non-admin user trying to access admin dashboard, redirecting to general dashboard',
+        );
+        return NextResponse.redirect(
+          new URL(`${urlLocale ? '/' + urlLocale : ''}/dashboard`, request.url),
+        );
+      }
+
+      if (
+        pathWithoutLocale.startsWith('dashboard/editor') &&
+        userProfile?.role !== 'editor'
+      ) {
+        console.log(
+          '🛡️ Non-editor user trying to access editor dashboard, redirecting to general dashboard',
+        );
+        return NextResponse.redirect(
+          new URL(`${urlLocale ? '/' + urlLocale : ''}/dashboard`, request.url),
+        );
+      }
+
+      if (
+        pathWithoutLocale.startsWith('dashboard/user') &&
+        userProfile?.role !== 'user'
+      ) {
+        console.log(
+          '🛡️ Non-user trying to access user dashboard, redirecting to general dashboard',
+        );
+        return NextResponse.redirect(
+          new URL(`${urlLocale ? '/' + urlLocale : ''}/dashboard`, request.url),
+        );
+      }
     }
 
+    // The admin check is redundant now since we've already checked above, but keeping it for backward compatibility
     if (pathWithoutLocale.startsWith('dashboard/admin')) {
       // Restore admin check logic if it was removed
       console.log('🛡️ Accessing admin route, checking role...');

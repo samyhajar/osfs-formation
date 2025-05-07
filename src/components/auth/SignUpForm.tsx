@@ -4,6 +4,12 @@ import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 
+interface SignupResponse {
+  error?: string;
+  success?: boolean;
+  message?: string;
+}
+
 export default function SignUpForm() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -12,7 +18,7 @@ export default function SignUpForm() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const { supabase } = useAuth();
+  const { } = useAuth();
 
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,12 +28,6 @@ export default function SignUpForm() {
       setSuccess(null);
       setLoading(true);
 
-      if (!supabase) {
-        setError('Supabase client is not available.');
-        setLoading(false);
-        return;
-      }
-
       // Validate password match
       if (password !== confirmPassword) {
         setError('Passwords do not match.');
@@ -35,33 +35,53 @@ export default function SignUpForm() {
         return;
       }
 
+      // Validate password strength
+      if (password.length < 8) {
+        setError('Password must be at least 8 characters long.');
+        setLoading(false);
+        return;
+      }
+
+      // Check for at least one uppercase letter, one lowercase letter, and one number
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
+      if (!passwordRegex.test(password)) {
+        setError('Password must contain at least one uppercase letter, one lowercase letter, and one number.');
+        setLoading(false);
+        return;
+      }
+
       try {
-        // Sign up the user
-        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              name
-            }
-          }
+        // Get the current locale from the URL path
+        const locale = window.location.pathname.split('/')[1] || 'en';
+
+        // Call our custom signup API instead of using supabase directly
+        const response = await fetch(`/${locale}/api/auth/signup`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email,
+            password,
+            name,
+            role: 'user' // Always set role to 'user' for frontend signup
+          }),
         });
 
-        if (signUpError) {
-          console.error('Supabase Auth Error:', signUpError.message);
-          setError(signUpError.message);
-          setLoading(false);
-          return;
-        }
+        const data = await response.json() as SignupResponse;
 
-        if (!signUpData?.user) {
-          setError('Sign up successful but user data is missing.');
-          setLoading(false);
-          return;
+        if (!response.ok) {
+          throw new Error(data.error || 'An error occurred during signup');
         }
 
         // Show success message
         setSuccess('Your account has been created and is pending approval. You will receive a confirmation email once your account is approved. Click the link in that email to complete the setup process.');
+
+        // Clear form
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        setName('');
       } catch (err: unknown) {
         console.error('Sign Up Process Failed:', err);
         let message = 'Sign up failed due to an unexpected error.';

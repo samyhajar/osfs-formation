@@ -11,6 +11,7 @@ import { Document, DocumentCategory, DocumentPurpose, SortKey, SortDirection } f
 import { useAuth } from '@/contexts/AuthContext';
 // Import our consistent browser client creator
 import { createClient } from '@/lib/supabase/browser-client';
+import { convertToDocuments } from '@/lib/utils/document-utils';
 
 // Define the filter state type matching the component
 interface PageFilterState {
@@ -103,7 +104,7 @@ export default function DashboardPage() {
             setError("Invalid data format returned from the server");
             setDocuments([]);
           } else {
-            setDocuments((data as Document[]) || []);
+            setDocuments(convertToDocuments(data));
           }
         }
       } catch (err: unknown) { // Use unknown

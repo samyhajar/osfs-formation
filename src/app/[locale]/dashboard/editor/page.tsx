@@ -1,12 +1,11 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
 // Remove the auth-helpers import
 // import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
-import DocumentsFilters from '@/components/admin/DocumentsFilters';
-import DocumentList from '@/components/admin/DocumentList';
+import DocumentsFilters from '@/components/shared/DocumentsFilters';
+import DocumentList from '@/components/editor/DocumentList';
 import { Database } from '@/types/supabase';
 import { Document, DocumentCategory, DocumentPurpose, SortKey, SortDirection } from '@/types/document';
 import { useAuth } from '@/contexts/AuthContext';
@@ -46,9 +45,6 @@ export default function DashboardPage() {
   // --- Sorting State ---
   const [sortKey, setSortKey] = useState<SortKey>('created_at');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
-
-  // Initialize translations
-  const t = useTranslations('AdminDocumentsPage');
 
   useEffect(() => {
     if (authLoading) {
@@ -109,7 +105,7 @@ export default function DashboardPage() {
             setError("Invalid data format returned from the server");
             setDocuments([]);
           } else {
-            // Set the raw, unsorted documents
+            // Use the utility function to properly convert database documents to Document[]
             setDocuments(convertToDocuments(data));
           }
         }
@@ -214,17 +210,17 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-           <h1 className="text-3xl font-bold text-black">{t('title')}</h1>
-           <p className="text-gray-500 mt-1">{t('description')}</p>
+           <h1 className="text-3xl font-bold text-black">Documents</h1>
+           <p className="text-gray-500 mt-1">Browse and manage all documents.</p>
         </div>
         <Link
-          href="/dashboard/admin/documents/new"
+          href="/dashboard/editor/documents/new"
           className="flex items-center gap-2 bg-accent-primary hover:bg-accent-primary/90 text-white font-medium py-2 px-4 rounded-md"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
           </svg>
-          {t('uploadButton')}
+          Upload Document
         </Link>
       </div>
 

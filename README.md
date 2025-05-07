@@ -1457,3 +1457,1657 @@ osfs-formation
 └─ tsconfig.json
 
 ```
+```
+osfs-formation
+├─ .cursor
+│  └─ rules
+│     ├─ database-functions.mdc
+│     ├─ migrations-supabase.mdc
+│     ├─ postgresql-style.mdc
+│     ├─ rls-policies.mdc
+│     └─ supabase-edge-function.mdc
+├─ .cursorrules
+├─ .husky
+│  ├─ _
+│  │  ├─ applypatch-msg
+│  │  ├─ commit-msg
+│  │  ├─ h
+│  │  ├─ husky.sh
+│  │  ├─ post-applypatch
+│  │  ├─ post-checkout
+│  │  ├─ post-commit
+│  │  ├─ post-merge
+│  │  ├─ post-rewrite
+│  │  ├─ pre-applypatch
+│  │  ├─ pre-auto-gc
+│  │  ├─ pre-commit
+│  │  ├─ pre-merge-commit
+│  │  ├─ pre-push
+│  │  ├─ pre-rebase
+│  │  └─ prepare-commit-msg
+│  └─ pre-commit
+├─ .next
+│  ├─ BUILD_ID
+│  ├─ app-build-manifest.json
+│  ├─ app-path-routes-manifest.json
+│  ├─ build
+│  │  └─ chunks
+│  │     ├─ [root-of-the-server]__04d7a048._.js
+│  │     ├─ [root-of-the-server]__04d7a048._.js.map
+│  │     ├─ [root-of-the-server]__05f88b00._.js
+│  │     ├─ [root-of-the-server]__05f88b00._.js.map
+│  │     ├─ [turbopack]_runtime.js
+│  │     ├─ [turbopack]_runtime.js.map
+│  │     ├─ postcss_config_mjs_transform_ts_f0ffbaad._.js
+│  │     └─ postcss_config_mjs_transform_ts_f0ffbaad._.js.map
+│  ├─ build-manifest.json
+│  ├─ cache
+│  │  ├─ .rscinfo
+│  │  ├─ eslint
+│  │  │  └─ .cache_t3k93v
+│  │  ├─ fetch-cache
+│  │  │  ├─ 04d58910134a9d219827b4573dd3110569aa332c730b3c6e5d5b94fe823edf9a
+│  │  │  ├─ 09897803dca1272eb5b72c7def540ff03ca6ccafea89f1b3b24e59c6dcd4f191
+│  │  │  ├─ 2216c5aa123b6d45edda98d0d27b97d1e16ecd0ce49c84a3b96f3e0528b2f438
+│  │  │  ├─ 2cc4ec78043a56a93cb501c63038445ef15c1472c8dbe7201c5862244057b0c5
+│  │  │  ├─ 2f7c4a9354c118536925227935063c7146b51931c9ee6782067bf28f2190d3fe
+│  │  │  ├─ 2f801117e77b25dc772651fbc67ccab212e427fb5b011c5bfba3337903d627ae
+│  │  │  ├─ 4e54431dcf5caadc6512ecb226cf87b8ba3af57fb84a64ed2ef9de10bdc5e795
+│  │  │  ├─ 6cff6195de522664fe4d30ae184812929d3c00f93575def51663b5f6ffcf4d24
+│  │  │  ├─ 71b1defc47583546b19863e084e532cedb806b0319b7626a72dea97bb777d83e
+│  │  │  ├─ 7f68de837ffdecfd7cf590f663e68b1ad415472d36f89ac0b1519aec9af90e2d
+│  │  │  ├─ ad40466b343d7f9cdd7946c3f3a0dc8f5810aa4672d082ee389e02bc43b2f388
+│  │  │  ├─ b42b33e50411f36e27815240e3534cd3bda57b1d89ace03582eb0f1691aafae2
+│  │  │  ├─ b8e1d8761d6305e74b25a662f423477fcb7b20af944808c997e939a921222534
+│  │  │  ├─ bfd76e3a803e0a50e307e9207d5133c0a17b610ca7d7010abb68e6e8d32e9ca8
+│  │  │  ├─ cf7dbad9c9469c01b10749a76bc3180978e3ae2ef796407c045b2d57da97e78c
+│  │  │  ├─ e400149c3608c15538f0e1a4880b1b442ab86a9e3e50bd032ea8be339884c4ee
+│  │  │  └─ ee01d4cf37d331a938a081d255c30bcac5750140c589edb61379a7616deea8dd
+│  │  ├─ images
+│  │  │  ├─ -V59vBzNatipPeESMe-syx8q2WjNGmGrfWmmIyztv-8
+│  │  │  │  └─ 31536000.1778011428862.0DPzO_KR-Xn2k9RTKn91ZHbqiM3D1Cfw26-Mloc1MqY.IjY3YmE2MjI5LTRhNzci.webp
+│  │  │  ├─ 1bRTjuJvIq71JeHxruNk4IkX5qo4YMdxL6JAsHsK_hY
+│  │  │  │  └─ 31536000.1778022909803.SatbCl0lHS8Yht5Impf1jh6IbEsblLhVTyy0FKZ36Iw.IjY3YmE2MjI4LTI2OWMi.webp
+│  │  │  ├─ 1uADZb3rNpBb01sGLbBZlJZYXuzeSDv4V3IjsnNqq_4
+│  │  │  │  └─ 31536000.1778011430132.L1UeqjzO6xaLGNbQG8zWPpQPeDFn1VLPRNEhLEAlVUA.IjY3YmE2MjI5LTI3Nzki.webp
+│  │  │  ├─ 3mtpgsg-6Ij4W_XM4YFBds5fkM_YQPegRdkkKJK-8vo
+│  │  │  │  └─ 31536000.1778022909874.nKSz6jOXnjVDmy_Yjem0XVxrAU4TiMvdQ2g9efdSLPY.IjY3YmE2MjI5LTZlZTYi.webp
+│  │  │  ├─ 8k47rRtmrOarjJqz3Iluvx6q1HTAlhKuGsPP7jvxlFc
+│  │  │  │  └─ 31536000.1778022909810.j8l9uVxfNDDlDrWoJykaJG1sAGPdTcJJC4buYFNXV5g.IjY3YmE2MjJhLTQ4ZjEi.webp
+│  │  │  ├─ BPhKWb-pT-yPP8uxnNcoZdkG03jwxHV9yoex005GQmU
+│  │  │  │  └─ 31536000.1778022909762.d2dOnYUCvL3b73BUOagZsVOd-vWCUuk0lf40Sdk1x3g.IjY3YmE2MjI5LTQyYTAi.webp
+│  │  │  ├─ CGFhlI9PByVvGP1Hbr4zRZyjN1dEJ6HnG6dWRcC6hVU
+│  │  │  │  └─ 31536000.1778022909763.LrwmGXEqwQSar7wiecI-picFH44KenkCLjtNRLxRRfw.IjY3YmE2MjJhLTQ1YjUi.webp
+│  │  │  ├─ CJShXvhBryaZIqPwhYv6auKS8LtXTSSS3EREc3fFIXE
+│  │  │  │  └─ 31536000.1778022909806.ctIK4bWEYDD2dbuVJgHsbxyRddIK8818djX8-5T-Fs8.IjY3YmE2MjJhLTQ2YWIi.webp
+│  │  │  ├─ ECsbMSoAHn9Bx5kgmjQMAo0s7UWT3H8lIwkL0lHq8GY
+│  │  │  │  └─ 31536000.1778022909803.URlVCOwv11YDHGCI6AIdogVy0wIKQe4M5uvaxu1FF3o.IjY3YmE2MjJhLTMyZWUi.webp
+│  │  │  ├─ HXsNogeHhGk9RSGH6nER81PP79Yacdx4_SHmY2F11Og
+│  │  │  │  └─ 31536000.1778022909763.imq7bnpkvgRhLv9MTYWWZufplwoTYqdUmy587EqqGu4.IjY3YmE2MjJhLTY0NDEi.webp
+│  │  │  ├─ LLQJ-OH_oM5krsXz_sQQ5_pDiO3xoC-9mcLVds4aPqI
+│  │  │  │  └─ 31536000.1778011428785.ZFCyPoc3b62VTjXc6ESY4aFzTWZS7Tm5SC3RIXzpYgI.IjY3YmE2MjJhLTQ1YjUi.webp
+│  │  │  ├─ MnZq4nReXcQGbcvIDurrJCOEPjRqqji_qW9KCeas1qg
+│  │  │  │  └─ 31536000.1778011428860.lYAjqNIrRUtYPTMB4Vwo1cPKLBmQ1YBIOCziIUCO3Bs.IjY3YmE2MjJhLTQ2YWIi.webp
+│  │  │  ├─ OseFwiYooSvfSRl5MYvJFSVQAZMtGO1l2VF-TgGAnpI
+│  │  │  │  └─ 31536000.1778011428836.2I9HfMyvPtJW_ytCsXbyEqc3VtVTc6ePuw8RJ2w-Zo8.IjY3YmE2MjJhLTMyZWUi.webp
+│  │  │  ├─ Q6uZTa8s8axX6en39HwAsAuZM-3Q7rv4tPQXFUGu6RY
+│  │  │  │  └─ 31536000.1778011428776.WTdcyJWbm89bsXFRtAjJPTpUgBJ3YYr1CiDU4caFIvA.IjY3YmE2MjJhLTQ4ZjEi.webp
+│  │  │  ├─ QR62w9vZdCVwGv7pWbOeDoMla0EpDnlgdjuLOA3YWP0
+│  │  │  │  └─ 31536000.1778011428835.060XvpJfAmGPiOdkd-oHGeKvGkMgNMN83pKcsjNQMuo.IjY3YmE2MjI4LTI2OWMi.webp
+│  │  │  ├─ YmX76mwx28FzQeMAb--o_tUBZfceDpycE1uPR3xVE0I
+│  │  │  │  └─ 31536000.1778011428778.aUji3jwsw6eGbk7RALU6-qszHv8vxAtvVQamx_xEjSk.IjY3YmE2MjJhLTY0NDEi.webp
+│  │  │  ├─ _3E3tbr0GmeA9q-dlLWb9iLkV00Ym_bPWyYah2xGRY8
+│  │  │  │  └─ 31536000.1778011430171.6R-7Vr9Q90_Iw1fBR0HF8SgIVeOBFApgZnfZY3_x4o4.IjY3YmE2MjI4LWEwMjAi.webp
+│  │  │  ├─ fkax4TiMRrOu0DvIBVArMArRGJbwKBSBxk4cckYa_q0
+│  │  │  │  └─ 31536000.1778022909873.KWIoD5me6pbeWD9ALtAO29dthTMmA-DAbELtiYdKJzc.IjY3YmE2MjI5LTRhNzci.webp
+│  │  │  ├─ lPZiwflXBMIgko96Yj6iMPYPM5z84jCFx40aPacXDds
+│  │  │  │  └─ 31536000.1778022909764.Zc8vUmqjymkC-3vivqEaTsJ6PLZOmZJmYPI_b0YxG4A.IjY3YmE2MjJhLTdkZTAi.webp
+│  │  │  ├─ mTT4d4mdGqiNq5IChtCu9JebTKr5WFwO8rQWxGV7q8E
+│  │  │  │  └─ 31536000.1778011428908.bu8aOwjhIlhYJV5ELXdXBU4IhG5dYFoWHQDej9CqznY.IjY3YmE2MjI5LTZlZTYi.webp
+│  │  │  ├─ pgH88ipRXD7tlusXZ6iygPVBUps15ulWhxSyYh8MGfw
+│  │  │  │  └─ 31536000.1778011428780.0ocHDXV6aWU82N01YmH6SXV2OqJ2jprPKFLzqC30GVU.IjY3YmE2MjJhLTdkZTAi.webp
+│  │  │  ├─ q0aYGTTzU20nIdEOX5f8oDnmhPNbhrn45mfxJZLAh10
+│  │  │  │  └─ 31536000.1778011428827.lZ77DQbJQmB7_2m7Gi_fSbQdXLrV4ER_hz2SKEHYcxU.IjY3YmE2MjI5LTE4ODIi.webp
+│  │  │  ├─ tLkbhv4E_RR0ElI3oJV2HQuP3pqlICmSKAsEP0F5vgw
+│  │  │  │  └─ 31536000.1778022909795.6gRo13NZRtGhORzdrUQF1CPbTo1DALCNHObGg89FLcA.IjY3YmE2MjI5LTE4ODIi.webp
+│  │  │  └─ uK8k79y9lUJRBUD_tSPklPF0qkbCbgtmpjOI3-5fV9E
+│  │  │     └─ 31536000.1778011428775.DXPvw0b71WkqNtDRw3RoZlUYNx5Jbjtax9ZPKsEnv7Y.IjY3YmE2MjI5LTQyYTAi.webp
+│  │  ├─ swc
+│  │  │  └─ plugins
+│  │  │     └─ v7_macos_aarch64_9.0.0
+│  │  └─ webpack
+│  │     ├─ client-production
+│  │     │  ├─ 0.pack
+│  │     │  ├─ 1.pack
+│  │     │  ├─ 10.pack
+│  │     │  ├─ 11.pack
+│  │     │  ├─ 12.pack
+│  │     │  ├─ 13.pack
+│  │     │  ├─ 14.pack
+│  │     │  ├─ 15.pack
+│  │     │  ├─ 16.pack
+│  │     │  ├─ 17.pack
+│  │     │  ├─ 18.pack
+│  │     │  ├─ 2.pack
+│  │     │  ├─ 3.pack
+│  │     │  ├─ 4.pack
+│  │     │  ├─ 5.pack
+│  │     │  ├─ 6.pack
+│  │     │  ├─ 7.pack
+│  │     │  ├─ 8.pack
+│  │     │  ├─ 9.pack
+│  │     │  ├─ index.pack
+│  │     │  └─ index.pack.old
+│  │     ├─ edge-server-production
+│  │     │  ├─ 0.pack
+│  │     │  ├─ 1.pack
+│  │     │  ├─ 2.pack
+│  │     │  ├─ index.pack
+│  │     │  └─ index.pack.old
+│  │     └─ server-production
+│  │        ├─ 0.pack
+│  │        ├─ 1.pack
+│  │        ├─ 2.pack
+│  │        ├─ 3.pack
+│  │        ├─ 4.pack
+│  │        ├─ 5.pack
+│  │        ├─ 6.pack
+│  │        ├─ 7.pack
+│  │        ├─ 8.pack
+│  │        ├─ 9.pack
+│  │        ├─ index.pack
+│  │        └─ index.pack.old
+│  ├─ diagnostics
+│  │  ├─ build-diagnostics.json
+│  │  └─ framework.json
+│  ├─ export-marker.json
+│  ├─ fallback-build-manifest.json
+│  ├─ images-manifest.json
+│  ├─ next-minimal-server.js.nft.json
+│  ├─ next-server.js.nft.json
+│  ├─ package.json
+│  ├─ prerender-manifest.json
+│  ├─ react-loadable-manifest.json
+│  ├─ required-server-files.json
+│  ├─ routes-manifest.json
+│  ├─ server
+│  │  ├─ app
+│  │  │  ├─ [locale]
+│  │  │  │  ├─ api
+│  │  │  │  │  ├─ auth
+│  │  │  │  │  │  ├─ signout
+│  │  │  │  │  │  │  ├─ route.js
+│  │  │  │  │  │  │  ├─ route.js.nft.json
+│  │  │  │  │  │  │  └─ route_client-reference-manifest.js
+│  │  │  │  │  │  └─ signup
+│  │  │  │  │  │     ├─ route.js
+│  │  │  │  │  │     ├─ route.js.nft.json
+│  │  │  │  │  │     └─ route_client-reference-manifest.js
+│  │  │  │  │  ├─ create-admin
+│  │  │  │  │  │  ├─ route.js
+│  │  │  │  │  │  ├─ route.js.nft.json
+│  │  │  │  │  │  └─ route_client-reference-manifest.js
+│  │  │  │  │  ├─ delete-pending-user
+│  │  │  │  │  │  ├─ route.js
+│  │  │  │  │  │  ├─ route.js.nft.json
+│  │  │  │  │  │  └─ route_client-reference-manifest.js
+│  │  │  │  │  ├─ send-approval-email
+│  │  │  │  │  │  ├─ route.js
+│  │  │  │  │  │  ├─ route.js.nft.json
+│  │  │  │  │  │  └─ route_client-reference-manifest.js
+│  │  │  │  │  └─ send-document-email
+│  │  │  │  │     ├─ route.js
+│  │  │  │  │     ├─ route.js.nft.json
+│  │  │  │  │     └─ route_client-reference-manifest.js
+│  │  │  │  ├─ auth
+│  │  │  │  │  ├─ callback
+│  │  │  │  │  │  ├─ route.js
+│  │  │  │  │  │  ├─ route.js.nft.json
+│  │  │  │  │  │  └─ route_client-reference-manifest.js
+│  │  │  │  │  ├─ confirmation
+│  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  └─ confirmed
+│  │  │  │  │     ├─ page.js
+│  │  │  │  │     ├─ page.js.nft.json
+│  │  │  │  │     └─ page_client-reference-manifest.js
+│  │  │  │  ├─ dashboard
+│  │  │  │  │  ├─ admin
+│  │  │  │  │  │  ├─ admin
+│  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ documents
+│  │  │  │  │  │  │  ├─ new
+│  │  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  │  └─ syllabus
+│  │  │  │  │  │  │     ├─ page.js
+│  │  │  │  │  │  │     ├─ page.js.nft.json
+│  │  │  │  │  │  │     └─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ email
+│  │  │  │  │  │  │  ├─ page
+│  │  │  │  │  │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  ├─ page.js.map
+│  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ folders
+│  │  │  │  │  │  │  ├─ [category]
+│  │  │  │  │  │  │  │  ├─ page
+│  │  │  │  │  │  │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │  │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │  │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │  │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │  │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  │  ├─ page.js.map
+│  │  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  │  ├─ page
+│  │  │  │  │  │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  ├─ page.js.map
+│  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ formation-personnel
+│  │  │  │  │  │  │  ├─ page
+│  │  │  │  │  │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  ├─ page.js.map
+│  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ page
+│  │  │  │  │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  ├─ page.js.map
+│  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  ├─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ pending-users
+│  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ users
+│  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  └─ workshops
+│  │  │  │  │  │     ├─ [workshop]
+│  │  │  │  │  │     │  ├─ [...folder]
+│  │  │  │  │  │     │  │  ├─ page
+│  │  │  │  │  │     │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │     │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │     │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │     │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │     │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │     │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │     │  │  ├─ page.js
+│  │  │  │  │  │     │  │  ├─ page.js.map
+│  │  │  │  │  │     │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │     │  ├─ page
+│  │  │  │  │  │     │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │     │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │     │  │  ├─ build-manifest.json
+│  │  │  │  │  │     │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │     │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │     │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │     │  ├─ page.js
+│  │  │  │  │  │     │  ├─ page.js.map
+│  │  │  │  │  │     │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │     ├─ page
+│  │  │  │  │  │     │  ├─ app-build-manifest.json
+│  │  │  │  │  │     │  ├─ app-paths-manifest.json
+│  │  │  │  │  │     │  ├─ build-manifest.json
+│  │  │  │  │  │     │  ├─ next-font-manifest.json
+│  │  │  │  │  │     │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │     │  └─ server-reference-manifest.json
+│  │  │  │  │  │     ├─ page.js
+│  │  │  │  │  │     ├─ page.js.map
+│  │  │  │  │  │     ├─ page_client-reference-manifest.js
+│  │  │  │  │  │     └─ upload
+│  │  │  │  │  │        ├─ page
+│  │  │  │  │  │        │  ├─ app-build-manifest.json
+│  │  │  │  │  │        │  ├─ app-paths-manifest.json
+│  │  │  │  │  │        │  ├─ build-manifest.json
+│  │  │  │  │  │        │  ├─ next-font-manifest.json
+│  │  │  │  │  │        │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │        │  └─ server-reference-manifest.json
+│  │  │  │  │  │        ├─ page.js
+│  │  │  │  │  │        ├─ page.js.map
+│  │  │  │  │  │        └─ page_client-reference-manifest.js
+│  │  │  │  │  ├─ editor
+│  │  │  │  │  │  ├─ page
+│  │  │  │  │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  ├─ page.js.map
+│  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  ├─ formant
+│  │  │  │  │  │  ├─ document
+│  │  │  │  │  │  │  └─ new
+│  │  │  │  │  │  │     ├─ page.js
+│  │  │  │  │  │  │     ├─ page.js.nft.json
+│  │  │  │  │  │  │     └─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ documents
+│  │  │  │  │  │  │  └─ new
+│  │  │  │  │  │  │     ├─ page.js
+│  │  │  │  │  │  │     ├─ page.js.nft.json
+│  │  │  │  │  │  │     └─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ folders
+│  │  │  │  │  │  │  ├─ [category]
+│  │  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  │  ├─ page
+│  │  │  │  │  │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  ├─ page.js.map
+│  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ formation-personnel
+│  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ page
+│  │  │  │  │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  ├─ page.js.map
+│  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  ├─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ users
+│  │  │  │  │  │  │  ├─ page
+│  │  │  │  │  │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  ├─ page.js.map
+│  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  └─ workshops
+│  │  │  │  │  │     ├─ [workshop]
+│  │  │  │  │  │     │  ├─ [...folder]
+│  │  │  │  │  │     │  │  ├─ page
+│  │  │  │  │  │     │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │     │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │     │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │     │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │     │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │     │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │     │  │  ├─ page.js
+│  │  │  │  │  │     │  │  ├─ page.js.map
+│  │  │  │  │  │     │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │     │  ├─ page
+│  │  │  │  │  │     │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │     │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │     │  │  ├─ build-manifest.json
+│  │  │  │  │  │     │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │     │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │     │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │     │  ├─ page.js
+│  │  │  │  │  │     │  ├─ page.js.map
+│  │  │  │  │  │     │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │     ├─ page
+│  │  │  │  │  │     │  ├─ app-build-manifest.json
+│  │  │  │  │  │     │  ├─ app-paths-manifest.json
+│  │  │  │  │  │     │  ├─ build-manifest.json
+│  │  │  │  │  │     │  ├─ next-font-manifest.json
+│  │  │  │  │  │     │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │     │  └─ server-reference-manifest.json
+│  │  │  │  │  │     ├─ page.js
+│  │  │  │  │  │     ├─ page.js.map
+│  │  │  │  │  │     └─ page_client-reference-manifest.js
+│  │  │  │  │  ├─ formee
+│  │  │  │  │  │  ├─ documents
+│  │  │  │  │  │  │  └─ new
+│  │  │  │  │  │  │     ├─ page.js
+│  │  │  │  │  │  │     ├─ page.js.nft.json
+│  │  │  │  │  │  │     └─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ folders
+│  │  │  │  │  │  │  ├─ [category]
+│  │  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  │  ├─ page
+│  │  │  │  │  │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  ├─ page.js.map
+│  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ formation-personnel
+│  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ page
+│  │  │  │  │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  ├─ page.js.map
+│  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  ├─ page_client-reference-manifest.js
+│  │  │  │  │  │  ├─ users
+│  │  │  │  │  │  │  ├─ page.js
+│  │  │  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │  └─ workshops
+│  │  │  │  │  │     ├─ [workshop]
+│  │  │  │  │  │     │  ├─ [...folder]
+│  │  │  │  │  │     │  │  ├─ page
+│  │  │  │  │  │     │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │     │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │     │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │     │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │     │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │     │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │     │  │  ├─ page.js
+│  │  │  │  │  │     │  │  ├─ page.js.map
+│  │  │  │  │  │     │  │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │     │  ├─ page
+│  │  │  │  │  │     │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │     │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │     │  │  ├─ build-manifest.json
+│  │  │  │  │  │     │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │     │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │     │  │  └─ server-reference-manifest.json
+│  │  │  │  │  │     │  ├─ page.js
+│  │  │  │  │  │     │  ├─ page.js.map
+│  │  │  │  │  │     │  └─ page_client-reference-manifest.js
+│  │  │  │  │  │     ├─ page
+│  │  │  │  │  │     │  ├─ app-build-manifest.json
+│  │  │  │  │  │     │  ├─ app-paths-manifest.json
+│  │  │  │  │  │     │  ├─ build-manifest.json
+│  │  │  │  │  │     │  ├─ next-font-manifest.json
+│  │  │  │  │  │     │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │     │  └─ server-reference-manifest.json
+│  │  │  │  │  │     ├─ page.js
+│  │  │  │  │  │     ├─ page.js.map
+│  │  │  │  │  │     └─ page_client-reference-manifest.js
+│  │  │  │  │  ├─ page
+│  │  │  │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  ├─ page.js
+│  │  │  │  │  ├─ page.js.map
+│  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  ├─ logout
+│  │  │  │  │  ├─ route
+│  │  │  │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  │  ├─ build-manifest.json
+│  │  │  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  │  └─ server-reference-manifest.json
+│  │  │  │  │  ├─ route.js
+│  │  │  │  │  ├─ route.js.map
+│  │  │  │  │  ├─ route.js.nft.json
+│  │  │  │  │  └─ route_client-reference-manifest.js
+│  │  │  │  ├─ page
+│  │  │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  ├─ build-manifest.json
+│  │  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  └─ server-reference-manifest.json
+│  │  │  │  ├─ page.js
+│  │  │  │  ├─ page.js.map
+│  │  │  │  ├─ page.js.nft.json
+│  │  │  │  ├─ page_client-reference-manifest.js
+│  │  │  │  ├─ setup
+│  │  │  │  │  ├─ page.js
+│  │  │  │  │  ├─ page.js.nft.json
+│  │  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  │  └─ signup
+│  │  │  │     ├─ page.js
+│  │  │  │     ├─ page.js.nft.json
+│  │  │  │     └─ page_client-reference-manifest.js
+│  │  │  ├─ _not-found
+│  │  │  │  ├─ page
+│  │  │  │  │  ├─ app-build-manifest.json
+│  │  │  │  │  ├─ app-paths-manifest.json
+│  │  │  │  │  ├─ build-manifest.json
+│  │  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  │  ├─ react-loadable-manifest.json
+│  │  │  │  │  └─ server-reference-manifest.json
+│  │  │  │  ├─ page.js
+│  │  │  │  ├─ page.js.map
+│  │  │  │  ├─ page.js.nft.json
+│  │  │  │  └─ page_client-reference-manifest.js
+│  │  │  ├─ _not-found.html
+│  │  │  ├─ _not-found.meta
+│  │  │  ├─ _not-found.rsc
+│  │  │  ├─ api
+│  │  │  │  ├─ delete-pending-user
+│  │  │  │  │  ├─ route.js
+│  │  │  │  │  ├─ route.js.nft.json
+│  │  │  │  │  └─ route_client-reference-manifest.js
+│  │  │  │  └─ send-approval-email
+│  │  │  │     ├─ route.js
+│  │  │  │     ├─ route.js.nft.json
+│  │  │  │     └─ route_client-reference-manifest.js
+│  │  │  ├─ en
+│  │  │  │  ├─ auth
+│  │  │  │  └─ dashboard
+│  │  │  │     ├─ admin
+│  │  │  │     │  └─ documents
+│  │  │  │     ├─ formant
+│  │  │  │     │  ├─ document
+│  │  │  │     │  └─ documents
+│  │  │  │     └─ formee
+│  │  │  │        └─ documents
+│  │  │  └─ fr
+│  │  │     ├─ auth
+│  │  │     └─ dashboard
+│  │  │        ├─ admin
+│  │  │        │  └─ documents
+│  │  │        ├─ formant
+│  │  │        │  ├─ document
+│  │  │        │  └─ documents
+│  │  │        └─ formee
+│  │  │           └─ documents
+│  │  ├─ app-paths-manifest.json
+│  │  ├─ chunks
+│  │  │  ├─ 1981.js
+│  │  │  ├─ 2163.js
+│  │  │  ├─ 230.js
+│  │  │  ├─ 2355.js
+│  │  │  ├─ 2629.js
+│  │  │  ├─ 3061.js
+│  │  │  ├─ 3112.js
+│  │  │  ├─ 3384.js
+│  │  │  ├─ 3624.js
+│  │  │  ├─ 3646.js
+│  │  │  ├─ 4386.js
+│  │  │  ├─ 4408.js
+│  │  │  ├─ 4447.js
+│  │  │  ├─ 4825.js
+│  │  │  ├─ 4999.js
+│  │  │  ├─ 5116.js
+│  │  │  ├─ 580.js
+│  │  │  ├─ 5879.js
+│  │  │  ├─ 6402.js
+│  │  │  ├─ 6533.js
+│  │  │  ├─ 6690.js
+│  │  │  ├─ 6970.js
+│  │  │  ├─ 7221.js
+│  │  │  ├─ 7346.js
+│  │  │  ├─ 762.js
+│  │  │  ├─ 839.js
+│  │  │  ├─ 8548.js
+│  │  │  ├─ 9229.js
+│  │  │  ├─ 9525.js
+│  │  │  ├─ 9960.js
+│  │  │  ├─ [root-of-the-server]__15295433._.js
+│  │  │  ├─ [root-of-the-server]__15295433._.js.map
+│  │  │  ├─ [root-of-the-server]__9b5ea48b._.js
+│  │  │  ├─ [root-of-the-server]__9b5ea48b._.js.map
+│  │  │  ├─ [turbopack]_runtime.js
+│  │  │  ├─ [turbopack]_runtime.js.map
+│  │  │  └─ ssr
+│  │  │     ├─ [root-of-the-server]__0a46983d._.js
+│  │  │     ├─ [root-of-the-server]__0a46983d._.js.map
+│  │  │     ├─ [root-of-the-server]__1033ada8._.js
+│  │  │     ├─ [root-of-the-server]__1033ada8._.js.map
+│  │  │     ├─ [root-of-the-server]__15295433._.js
+│  │  │     ├─ [root-of-the-server]__15295433._.js.map
+│  │  │     ├─ [root-of-the-server]__3c66accb._.js
+│  │  │     ├─ [root-of-the-server]__3c66accb._.js.map
+│  │  │     ├─ [root-of-the-server]__44cdd46a._.js
+│  │  │     ├─ [root-of-the-server]__44cdd46a._.js.map
+│  │  │     ├─ [root-of-the-server]__50a7c09c._.js
+│  │  │     ├─ [root-of-the-server]__50a7c09c._.js.map
+│  │  │     ├─ [root-of-the-server]__55e2bc91._.js
+│  │  │     ├─ [root-of-the-server]__55e2bc91._.js.map
+│  │  │     ├─ [root-of-the-server]__63454377._.js
+│  │  │     ├─ [root-of-the-server]__63454377._.js.map
+│  │  │     ├─ [root-of-the-server]__7ef48f3c._.js
+│  │  │     ├─ [root-of-the-server]__7ef48f3c._.js.map
+│  │  │     ├─ [root-of-the-server]__82afaf85._.js
+│  │  │     ├─ [root-of-the-server]__82afaf85._.js.map
+│  │  │     ├─ [root-of-the-server]__86e7898f._.js
+│  │  │     ├─ [root-of-the-server]__86e7898f._.js.map
+│  │  │     ├─ [root-of-the-server]__941cd132._.js
+│  │  │     ├─ [root-of-the-server]__941cd132._.js.map
+│  │  │     ├─ [root-of-the-server]__b3b64e29._.js
+│  │  │     ├─ [root-of-the-server]__b3b64e29._.js.map
+│  │  │     ├─ [root-of-the-server]__b78590ee._.js
+│  │  │     ├─ [root-of-the-server]__b78590ee._.js.map
+│  │  │     ├─ [root-of-the-server]__c75c51b7._.js
+│  │  │     ├─ [root-of-the-server]__c75c51b7._.js.map
+│  │  │     ├─ [root-of-the-server]__cdb69e42._.js
+│  │  │     ├─ [root-of-the-server]__cdb69e42._.js.map
+│  │  │     ├─ [root-of-the-server]__ddf5ccc0._.js
+│  │  │     ├─ [root-of-the-server]__ddf5ccc0._.js.map
+│  │  │     ├─ [root-of-the-server]__de872f14._.js
+│  │  │     ├─ [root-of-the-server]__de872f14._.js.map
+│  │  │     ├─ [root-of-the-server]__fc907c7d._.js
+│  │  │     ├─ [root-of-the-server]__fc907c7d._.js.map
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_370e3dda._.js
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_370e3dda._.js.map
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_4c7ebdcb._.js
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_4c7ebdcb._.js.map
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_59fa4ecd._.js
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_59fa4ecd._.js.map
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_8b3553ba._.js
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_8b3553ba._.js.map
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_aaf0fd56._.js
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_aaf0fd56._.js.map
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_c27b933a._.js
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_c27b933a._.js.map
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_d4301d11._.js
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_d4301d11._.js.map
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_f4ce68a7._.js
+│  │  │     ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_f4ce68a7._.js.map
+│  │  │     ├─ [turbopack]_runtime.js
+│  │  │     ├─ [turbopack]_runtime.js.map
+│  │  │     ├─ _05f08393._.js
+│  │  │     ├─ _05f08393._.js.map
+│  │  │     ├─ _070dea64._.js
+│  │  │     ├─ _070dea64._.js.map
+│  │  │     ├─ _162b4884._.js
+│  │  │     ├─ _162b4884._.js.map
+│  │  │     ├─ _1699021e._.js
+│  │  │     ├─ _1699021e._.js.map
+│  │  │     ├─ _232c6d24._.js
+│  │  │     ├─ _232c6d24._.js.map
+│  │  │     ├─ _26f2438c._.js
+│  │  │     ├─ _26f2438c._.js.map
+│  │  │     ├─ _2a5f6795._.js
+│  │  │     ├─ _2a5f6795._.js.map
+│  │  │     ├─ _2f483082._.js
+│  │  │     ├─ _2f483082._.js.map
+│  │  │     ├─ _3a4962aa._.js
+│  │  │     ├─ _3a4962aa._.js.map
+│  │  │     ├─ _4734f707._.js
+│  │  │     ├─ _4734f707._.js.map
+│  │  │     ├─ _5131ed48._.js
+│  │  │     ├─ _5131ed48._.js.map
+│  │  │     ├─ _64f7511b._.js
+│  │  │     ├─ _64f7511b._.js.map
+│  │  │     ├─ _6a815074._.js
+│  │  │     ├─ _6a815074._.js.map
+│  │  │     ├─ _77421123._.js
+│  │  │     ├─ _77421123._.js.map
+│  │  │     ├─ _7a29ec4c._.js
+│  │  │     ├─ _7a29ec4c._.js.map
+│  │  │     ├─ _7bc11cdd._.js
+│  │  │     ├─ _7bc11cdd._.js.map
+│  │  │     ├─ _7d9692bc._.js
+│  │  │     ├─ _7d9692bc._.js.map
+│  │  │     ├─ _8a95ffc5._.js
+│  │  │     ├─ _8a95ffc5._.js.map
+│  │  │     ├─ _91987a3f._.js
+│  │  │     ├─ _91987a3f._.js.map
+│  │  │     ├─ _987c70d8._.js
+│  │  │     ├─ _987c70d8._.js.map
+│  │  │     ├─ _a344a0e9._.js
+│  │  │     ├─ _a344a0e9._.js.map
+│  │  │     ├─ _ae8760d2._.js
+│  │  │     ├─ _ae8760d2._.js.map
+│  │  │     ├─ _c2c92b66._.js
+│  │  │     ├─ _c2c92b66._.js.map
+│  │  │     ├─ _c6be3a6a._.js
+│  │  │     ├─ _c6be3a6a._.js.map
+│  │  │     ├─ _cc0d9b4f._.js
+│  │  │     ├─ _cc0d9b4f._.js.map
+│  │  │     ├─ _cc23f317._.js
+│  │  │     ├─ _cc23f317._.js.map
+│  │  │     ├─ _dc479662._.js
+│  │  │     ├─ _dc479662._.js.map
+│  │  │     ├─ _e4fb8799._.js
+│  │  │     ├─ _e4fb8799._.js.map
+│  │  │     ├─ _e7336537._.js
+│  │  │     ├─ _e7336537._.js.map
+│  │  │     ├─ _edb15e6b._.js
+│  │  │     ├─ _edb15e6b._.js.map
+│  │  │     ├─ _f5da8eca._.js
+│  │  │     ├─ _f5da8eca._.js.map
+│  │  │     ├─ src_0c8ce69d._.js
+│  │  │     ├─ src_0c8ce69d._.js.map
+│  │  │     ├─ src_20ac3c1a._.js
+│  │  │     ├─ src_20ac3c1a._.js.map
+│  │  │     ├─ src_234652b7._.js
+│  │  │     ├─ src_234652b7._.js.map
+│  │  │     ├─ src_31adbd24._.js
+│  │  │     ├─ src_31adbd24._.js.map
+│  │  │     ├─ src_33e6fe71._.js
+│  │  │     ├─ src_33e6fe71._.js.map
+│  │  │     ├─ src_400c5e33._.js
+│  │  │     ├─ src_400c5e33._.js.map
+│  │  │     ├─ src_443b6399._.js
+│  │  │     ├─ src_443b6399._.js.map
+│  │  │     ├─ src_47184216._.js
+│  │  │     ├─ src_47184216._.js.map
+│  │  │     ├─ src_49e398ce._.js
+│  │  │     ├─ src_49e398ce._.js.map
+│  │  │     ├─ src_515b411f._.js
+│  │  │     ├─ src_515b411f._.js.map
+│  │  │     ├─ src_55d783d5._.js
+│  │  │     ├─ src_55d783d5._.js.map
+│  │  │     ├─ src_5f55ff28._.js
+│  │  │     ├─ src_5f55ff28._.js.map
+│  │  │     ├─ src_84398321._.js
+│  │  │     ├─ src_84398321._.js.map
+│  │  │     ├─ src_931a14e9._.js
+│  │  │     ├─ src_931a14e9._.js.map
+│  │  │     ├─ src_a1bd9438._.js
+│  │  │     ├─ src_a1bd9438._.js.map
+│  │  │     ├─ src_ab87069c._.js
+│  │  │     ├─ src_ab87069c._.js.map
+│  │  │     ├─ src_ae696a7d._.js
+│  │  │     ├─ src_ae696a7d._.js.map
+│  │  │     ├─ src_app_[locale]_dashboard_admin_bc282407._.js
+│  │  │     ├─ src_app_[locale]_dashboard_admin_bc282407._.js.map
+│  │  │     ├─ src_app_[locale]_dashboard_editor_b9410cf6._.js
+│  │  │     ├─ src_app_[locale]_dashboard_editor_b9410cf6._.js.map
+│  │  │     ├─ src_app_[locale]_dashboard_formant_585e12f4._.js
+│  │  │     ├─ src_app_[locale]_dashboard_formant_585e12f4._.js.map
+│  │  │     ├─ src_app_[locale]_dashboard_formee_2fa21f38._.js
+│  │  │     ├─ src_app_[locale]_dashboard_formee_2fa21f38._.js.map
+│  │  │     ├─ src_b166e6d0._.js
+│  │  │     ├─ src_b166e6d0._.js.map
+│  │  │     ├─ src_b5bc753e._.js
+│  │  │     ├─ src_b5bc753e._.js.map
+│  │  │     ├─ src_b7ca0692._.js
+│  │  │     ├─ src_b7ca0692._.js.map
+│  │  │     ├─ src_b9958eb7._.js
+│  │  │     ├─ src_b9958eb7._.js.map
+│  │  │     ├─ src_cd08f697._.js
+│  │  │     ├─ src_cd08f697._.js.map
+│  │  │     ├─ src_components_6c6cca3b._.js
+│  │  │     ├─ src_components_6c6cca3b._.js.map
+│  │  │     ├─ src_d3a0e0b7._.js
+│  │  │     ├─ src_d3a0e0b7._.js.map
+│  │  │     ├─ src_d8ac44f8._.js
+│  │  │     ├─ src_d8ac44f8._.js.map
+│  │  │     ├─ src_f9365f39._.js
+│  │  │     ├─ src_f9365f39._.js.map
+│  │  │     ├─ src_locales_5ab44f70._.js
+│  │  │     ├─ src_locales_5ab44f70._.js.map
+│  │  │     ├─ src_locales_de_json_297ebdca._.js
+│  │  │     ├─ src_locales_de_json_297ebdca._.js.map
+│  │  │     ├─ src_locales_en_json_31442742._.js
+│  │  │     ├─ src_locales_en_json_31442742._.js.map
+│  │  │     ├─ src_locales_es_json_dc579319._.js
+│  │  │     ├─ src_locales_es_json_dc579319._.js.map
+│  │  │     ├─ src_locales_fr_json_29b82a82._.js
+│  │  │     ├─ src_locales_fr_json_29b82a82._.js.map
+│  │  │     ├─ src_locales_it_json_0ce66437._.js
+│  │  │     ├─ src_locales_it_json_0ce66437._.js.map
+│  │  │     ├─ src_locales_nl_json_df7d463e._.js
+│  │  │     ├─ src_locales_nl_json_df7d463e._.js.map
+│  │  │     ├─ src_locales_pt_json_377051d6._.js
+│  │  │     └─ src_locales_pt_json_377051d6._.js.map
+│  │  ├─ edge
+│  │  │  └─ chunks
+│  │  │     ├─ [root-of-the-server]__b07e5fa5._.js
+│  │  │     ├─ [root-of-the-server]__b07e5fa5._.js.map
+│  │  │     ├─ _0d3699dc._.js
+│  │  │     ├─ _0d3699dc._.js.map
+│  │  │     ├─ edge-wrapper_9ffd1475.js
+│  │  │     └─ edge-wrapper_9ffd1475.js.map
+│  │  ├─ edge-runtime-webpack.js
+│  │  ├─ edge-runtime-webpack.js.map
+│  │  ├─ functions-config-manifest.json
+│  │  ├─ interception-route-rewrite-manifest.js
+│  │  ├─ middleware
+│  │  │  └─ middleware-manifest.json
+│  │  ├─ middleware-build-manifest.js
+│  │  ├─ middleware-manifest.json
+│  │  ├─ middleware-react-loadable-manifest.js
+│  │  ├─ next-font-manifest.js
+│  │  ├─ next-font-manifest.json
+│  │  ├─ pages
+│  │  │  ├─ 404.html
+│  │  │  ├─ 500.html
+│  │  │  ├─ _app
+│  │  │  │  ├─ build-manifest.json
+│  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  ├─ pages-manifest.json
+│  │  │  │  └─ react-loadable-manifest.json
+│  │  │  ├─ _app.js
+│  │  │  ├─ _app.js.map
+│  │  │  ├─ _app.js.nft.json
+│  │  │  ├─ _document
+│  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  ├─ pages-manifest.json
+│  │  │  │  └─ react-loadable-manifest.json
+│  │  │  ├─ _document.js
+│  │  │  ├─ _document.js.map
+│  │  │  ├─ _document.js.nft.json
+│  │  │  ├─ _error
+│  │  │  │  ├─ build-manifest.json
+│  │  │  │  ├─ next-font-manifest.json
+│  │  │  │  ├─ pages-manifest.json
+│  │  │  │  └─ react-loadable-manifest.json
+│  │  │  ├─ _error.js
+│  │  │  ├─ _error.js.map
+│  │  │  └─ _error.js.nft.json
+│  │  ├─ pages-manifest.json
+│  │  ├─ server-reference-manifest.js
+│  │  ├─ server-reference-manifest.json
+│  │  ├─ src
+│  │  │  ├─ middleware.js
+│  │  │  └─ middleware.js.map
+│  │  └─ webpack-runtime.js
+│  ├─ static
+│  │  ├─ chunks
+│  │  │  ├─ 1684-ac9131758364e986.js
+│  │  │  ├─ 1850-0090c6206e3520ce.js
+│  │  │  ├─ 1898-c6768eb431b54793.js
+│  │  │  ├─ 1ab64_app_[locale]_dashboard_admin_workshops_[workshop]_[___folder]_page_tsx_d1a8d4d2._.js
+│  │  │  ├─ 294.e72d2554be082393.js
+│  │  │  ├─ 3063-81f32a9abd62adb6.js
+│  │  │  ├─ 3226-4b4581d529a8c0e0.js
+│  │  │  ├─ 3385-8cc062844c5c04e6.js
+│  │  │  ├─ 3568-172a13bf684149ca.js
+│  │  │  ├─ 4377-87647bd8fdb865d5.js
+│  │  │  ├─ 44-5fd8a94c0e554d8f.js
+│  │  │  ├─ 4bd1b696-3d8bf46fdf006764.js
+│  │  │  ├─ 6600-003494e4875c037f.js
+│  │  │  ├─ 6874-39a742459c4768bf.js
+│  │  │  ├─ 7505-1ea6e27b8e0517dd.js
+│  │  │  ├─ 8115-7360bb1cdc49f039.js
+│  │  │  ├─ 8212-dd920b444bcfb6e9.js
+│  │  │  ├─ 8487-367b8f53d5cba1dc.js
+│  │  │  ├─ 8588-f240281f28da8b2e.js
+│  │  │  ├─ 970-93b7983cbe78a3c8.js
+│  │  │  ├─ [next]_internal_font_google_geist_e531dabc_module_css_f9ee138c._.single.css
+│  │  │  ├─ [next]_internal_font_google_geist_e531dabc_module_css_f9ee138c._.single.css.map
+│  │  │  ├─ [next]_internal_font_google_geist_mono_68a01160_module_css_f9ee138c._.single.css
+│  │  │  ├─ [next]_internal_font_google_geist_mono_68a01160_module_css_f9ee138c._.single.css.map
+│  │  │  ├─ [root-of-the-server]__25638e8a._.css
+│  │  │  ├─ [root-of-the-server]__25638e8a._.css.map
+│  │  │  ├─ [root-of-the-server]__49fd8634._.js
+│  │  │  ├─ [root-of-the-server]__49fd8634._.js.map
+│  │  │  ├─ [root-of-the-server]__527cd323._.js
+│  │  │  ├─ [root-of-the-server]__527cd323._.js.map
+│  │  │  ├─ [root-of-the-server]__923cb372._.js
+│  │  │  ├─ [root-of-the-server]__923cb372._.js.map
+│  │  │  ├─ [root-of-the-server]__ec07ee34._.js
+│  │  │  ├─ [root-of-the-server]__ec07ee34._.js.map
+│  │  │  ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_61dcf9ba._.js
+│  │  │  ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_61dcf9ba._.js.map
+│  │  │  ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_66796270._.js
+│  │  │  ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_fd44f5a4._.js
+│  │  │  ├─ [turbopack]_browser_dev_hmr-client_hmr-client_ts_fd44f5a4._.js.map
+│  │  │  ├─ _056e2a6e._.js
+│  │  │  ├─ _056e2a6e._.js.map
+│  │  │  ├─ _1c7a5654._.js
+│  │  │  ├─ _1c7a5654._.js.map
+│  │  │  ├─ _25eb3154._.js
+│  │  │  ├─ _25eb3154._.js.map
+│  │  │  ├─ _33ded06a._.js
+│  │  │  ├─ _33ded06a._.js.map
+│  │  │  ├─ _93808211._.js
+│  │  │  ├─ _93808211._.js.map
+│  │  │  ├─ _ab75cf68._.js
+│  │  │  ├─ _ab75cf68._.js.map
+│  │  │  ├─ _c9119c99._.js
+│  │  │  ├─ _c9119c99._.js.map
+│  │  │  ├─ _d05a2ef6._.js
+│  │  │  ├─ _d05a2ef6._.js.map
+│  │  │  ├─ _e69f0d32._.js
+│  │  │  ├─ _f87c8cfa._.js
+│  │  │  ├─ _f87c8cfa._.js.map
+│  │  │  ├─ _fadcce58._.js
+│  │  │  ├─ _fadcce58._.js.map
+│  │  │  ├─ _fd4ce147._.js
+│  │  │  ├─ _fd4ce147._.js.map
+│  │  │  ├─ app
+│  │  │  │  ├─ [locale]
+│  │  │  │  │  ├─ api
+│  │  │  │  │  │  ├─ auth
+│  │  │  │  │  │  │  ├─ signout
+│  │  │  │  │  │  │  │  └─ route-7289048675363cc9.js
+│  │  │  │  │  │  │  └─ signup
+│  │  │  │  │  │  │     └─ route-42520d3216e51db2.js
+│  │  │  │  │  │  ├─ create-admin
+│  │  │  │  │  │  │  └─ route-04100a9fa6bde295.js
+│  │  │  │  │  │  ├─ delete-pending-user
+│  │  │  │  │  │  │  └─ route-5e2f756e8fc00169.js
+│  │  │  │  │  │  ├─ send-approval-email
+│  │  │  │  │  │  │  └─ route-0d008aa02bc4108c.js
+│  │  │  │  │  │  └─ send-document-email
+│  │  │  │  │  │     └─ route-a659849c779b60dc.js
+│  │  │  │  │  ├─ auth
+│  │  │  │  │  │  ├─ callback
+│  │  │  │  │  │  │  └─ route-a066c1a3a07d9ce5.js
+│  │  │  │  │  │  ├─ confirmation
+│  │  │  │  │  │  │  └─ page-a69b6ccd509033da.js
+│  │  │  │  │  │  └─ confirmed
+│  │  │  │  │  │     └─ page-ee953925f5c84ed6.js
+│  │  │  │  │  ├─ dashboard
+│  │  │  │  │  │  ├─ admin
+│  │  │  │  │  │  │  ├─ admin
+│  │  │  │  │  │  │  │  └─ page-a0e3a55f2d215db9.js
+│  │  │  │  │  │  │  ├─ documents
+│  │  │  │  │  │  │  │  ├─ new
+│  │  │  │  │  │  │  │  │  └─ page-5065da57f2033a1f.js
+│  │  │  │  │  │  │  │  └─ syllabus
+│  │  │  │  │  │  │  │     └─ page-10f5480dfaccd648.js
+│  │  │  │  │  │  │  ├─ email
+│  │  │  │  │  │  │  │  └─ page-1625f7088c8ad8d9.js
+│  │  │  │  │  │  │  ├─ folders
+│  │  │  │  │  │  │  │  ├─ [category]
+│  │  │  │  │  │  │  │  │  └─ page-6d3d6ae4c7b629fd.js
+│  │  │  │  │  │  │  │  └─ page-6ca27d81d9237ee1.js
+│  │  │  │  │  │  │  ├─ formation-personnel
+│  │  │  │  │  │  │  │  └─ page-defcc169c19a7d97.js
+│  │  │  │  │  │  │  ├─ layout-3af2eb2a15e735f1.js
+│  │  │  │  │  │  │  ├─ page-e73c51fab692bf15.js
+│  │  │  │  │  │  │  ├─ pending-users
+│  │  │  │  │  │  │  │  └─ page-3c6fcb2f06b973fa.js
+│  │  │  │  │  │  │  └─ users
+│  │  │  │  │  │  │     └─ page-5e3acffe7b464e98.js
+│  │  │  │  │  │  ├─ formant
+│  │  │  │  │  │  │  ├─ document
+│  │  │  │  │  │  │  │  └─ new
+│  │  │  │  │  │  │  │     └─ page-c72244155c07cf5b.js
+│  │  │  │  │  │  │  ├─ documents
+│  │  │  │  │  │  │  │  └─ new
+│  │  │  │  │  │  │  │     └─ page-0c33ba28dd54cc49.js
+│  │  │  │  │  │  │  ├─ folders
+│  │  │  │  │  │  │  │  ├─ [category]
+│  │  │  │  │  │  │  │  │  └─ page-6c98f4762aa206de.js
+│  │  │  │  │  │  │  │  └─ page-916e58787e70ac75.js
+│  │  │  │  │  │  │  ├─ formation-personnel
+│  │  │  │  │  │  │  │  └─ page-f6d91acac7687ccf.js
+│  │  │  │  │  │  │  ├─ layout-bf6be5006ec86a7f.js
+│  │  │  │  │  │  │  ├─ page-dd2fa3a1749d825f.js
+│  │  │  │  │  │  │  └─ users
+│  │  │  │  │  │  │     └─ page-b4ec63bddf9a4e0f.js
+│  │  │  │  │  │  ├─ formee
+│  │  │  │  │  │  │  ├─ documents
+│  │  │  │  │  │  │  │  └─ new
+│  │  │  │  │  │  │  │     └─ page-0d6d15a3e60683c4.js
+│  │  │  │  │  │  │  ├─ folders
+│  │  │  │  │  │  │  │  ├─ [category]
+│  │  │  │  │  │  │  │  │  └─ page-1c9561b29c242ed3.js
+│  │  │  │  │  │  │  │  └─ page-95772508f66fa75c.js
+│  │  │  │  │  │  │  ├─ formation-personnel
+│  │  │  │  │  │  │  │  └─ page-c4e6b04b544dd1d1.js
+│  │  │  │  │  │  │  ├─ layout-ca063986ffa2f8ad.js
+│  │  │  │  │  │  │  ├─ page-91e5940b43601211.js
+│  │  │  │  │  │  │  └─ users
+│  │  │  │  │  │  │     └─ page-4dded9f664e88519.js
+│  │  │  │  │  │  └─ page-ed250bf49252a945.js
+│  │  │  │  │  ├─ layout-4fba8acd56abefaa.js
+│  │  │  │  │  ├─ logout
+│  │  │  │  │  │  └─ route-eefa1cdf5dbde95b.js
+│  │  │  │  │  ├─ page-b610fa6feb3561fb.js
+│  │  │  │  │  ├─ setup
+│  │  │  │  │  │  └─ page-2ddc9ac13ee24704.js
+│  │  │  │  │  └─ signup
+│  │  │  │  │     └─ page-ef42a685aeafd4e8.js
+│  │  │  │  ├─ _not-found
+│  │  │  │  │  └─ page-74d5a6babf898609.js
+│  │  │  │  └─ api
+│  │  │  │     ├─ delete-pending-user
+│  │  │  │     │  └─ route-5202da5e54ccbacd.js
+│  │  │  │     └─ send-approval-email
+│  │  │  │        └─ route-07771402337c479c.js
+│  │  │  ├─ bef6a_[locale]_dashboard_formant_workshops_[workshop]_[___folder]_page_tsx_cb3c8e66._.js
+│  │  │  ├─ bef6a_[locale]_dashboard_formee_workshops_[workshop]_[___folder]_page_tsx_65a1c583._.js
+│  │  │  ├─ f4898fe8-21857011633a508d.js
+│  │  │  ├─ framework-5bd22f607ebc7826.js
+│  │  │  ├─ main-5253c13f24252a32.js
+│  │  │  ├─ main-app-b21ad418a24852bf.js
+│  │  │  ├─ pages
+│  │  │  │  ├─ _app-eb694f3fd49020c8.js
+│  │  │  │  ├─ _app.js
+│  │  │  │  ├─ _error-2b3482c094a540b4.js
+│  │  │  │  └─ _error.js
+│  │  │  ├─ pages__app_049595de._.js
+│  │  │  ├─ pages__app_049595de._.js.map
+│  │  │  ├─ pages__app_5771e187._.js
+│  │  │  ├─ pages__error_5771e187._.js
+│  │  │  ├─ pages__error_c5ed9705._.js
+│  │  │  ├─ pages__error_c5ed9705._.js.map
+│  │  │  ├─ polyfills-42372ed130431b0a.js
+│  │  │  ├─ src_0294f211._.js
+│  │  │  ├─ src_0294f211._.js.map
+│  │  │  ├─ src_059eaad3._.js
+│  │  │  ├─ src_059eaad3._.js.map
+│  │  │  ├─ src_0d0d17b2._.js
+│  │  │  ├─ src_0d0d17b2._.js.map
+│  │  │  ├─ src_29324bf1._.js
+│  │  │  ├─ src_29324bf1._.js.map
+│  │  │  ├─ src_2b7e3ed1._.js
+│  │  │  ├─ src_2b7e3ed1._.js.map
+│  │  │  ├─ src_300102fe._.js
+│  │  │  ├─ src_300102fe._.js.map
+│  │  │  ├─ src_335152c2._.js
+│  │  │  ├─ src_335152c2._.js.map
+│  │  │  ├─ src_459bc397._.js
+│  │  │  ├─ src_459bc397._.js.map
+│  │  │  ├─ src_45d61b4d._.js
+│  │  │  ├─ src_45d61b4d._.js.map
+│  │  │  ├─ src_462492a4._.js
+│  │  │  ├─ src_462492a4._.js.map
+│  │  │  ├─ src_52a975d6._.js
+│  │  │  ├─ src_52a975d6._.js.map
+│  │  │  ├─ src_53a1705a._.js
+│  │  │  ├─ src_53a1705a._.js.map
+│  │  │  ├─ src_5456ce20._.js
+│  │  │  ├─ src_5456ce20._.js.map
+│  │  │  ├─ src_5d43b26b._.js
+│  │  │  ├─ src_5d43b26b._.js.map
+│  │  │  ├─ src_63f7c0f7._.js
+│  │  │  ├─ src_63f7c0f7._.js.map
+│  │  │  ├─ src_6e9da967._.js
+│  │  │  ├─ src_6e9da967._.js.map
+│  │  │  ├─ src_74baf17d._.js
+│  │  │  ├─ src_74baf17d._.js.map
+│  │  │  ├─ src_77d57cb7._.js
+│  │  │  ├─ src_77d57cb7._.js.map
+│  │  │  ├─ src_7afbf472._.js
+│  │  │  ├─ src_7afbf472._.js.map
+│  │  │  ├─ src_817e96e6._.js
+│  │  │  ├─ src_817e96e6._.js.map
+│  │  │  ├─ src_82f782d9._.js
+│  │  │  ├─ src_82f782d9._.js.map
+│  │  │  ├─ src_88df1a7b._.js
+│  │  │  ├─ src_88df1a7b._.js.map
+│  │  │  ├─ src_8fabf948._.js
+│  │  │  ├─ src_8fabf948._.js.map
+│  │  │  ├─ src_91469b97._.js
+│  │  │  ├─ src_91469b97._.js.map
+│  │  │  ├─ src_a65ffcc0._.js
+│  │  │  ├─ src_a65ffcc0._.js.map
+│  │  │  ├─ src_app_[locale]_dashboard_admin_email_page_tsx_d1a8d4d2._.js
+│  │  │  ├─ src_app_[locale]_dashboard_admin_folders_[category]_page_tsx_d1a8d4d2._.js
+│  │  │  ├─ src_app_[locale]_dashboard_admin_folders_page_tsx_d1a8d4d2._.js
+│  │  │  ├─ src_app_[locale]_dashboard_admin_formation-personnel_page_tsx_d1a8d4d2._.js
+│  │  │  ├─ src_app_[locale]_dashboard_admin_layout_tsx_278d1ab5._.js
+│  │  │  ├─ src_app_[locale]_dashboard_admin_page_tsx_d1a8d4d2._.js
+│  │  │  ├─ src_app_[locale]_dashboard_admin_workshops_[workshop]_page_tsx_d1a8d4d2._.js
+│  │  │  ├─ src_app_[locale]_dashboard_admin_workshops_page_tsx_d1a8d4d2._.js
+│  │  │  ├─ src_app_[locale]_dashboard_admin_workshops_upload_page_tsx_d1a8d4d2._.js
+│  │  │  ├─ src_app_[locale]_dashboard_editor_layout_tsx_278d1ab5._.js
+│  │  │  ├─ src_app_[locale]_dashboard_editor_page_tsx_278d1ab5._.js
+│  │  │  ├─ src_app_[locale]_dashboard_editor_page_tsx_ec9cd2f3._.js
+│  │  │  ├─ src_app_[locale]_dashboard_formant_folders_page_tsx_cb3c8e66._.js
+│  │  │  ├─ src_app_[locale]_dashboard_formant_layout_tsx_278d1ab5._.js
+│  │  │  ├─ src_app_[locale]_dashboard_formant_page_tsx_cb3c8e66._.js
+│  │  │  ├─ src_app_[locale]_dashboard_formant_users_page_tsx_cb3c8e66._.js
+│  │  │  ├─ src_app_[locale]_dashboard_formant_workshops_[workshop]_page_tsx_cb3c8e66._.js
+│  │  │  ├─ src_app_[locale]_dashboard_formant_workshops_page_tsx_cb3c8e66._.js
+│  │  │  ├─ src_app_[locale]_dashboard_formee_folders_page_tsx_65a1c583._.js
+│  │  │  ├─ src_app_[locale]_dashboard_formee_layout_tsx_278d1ab5._.js
+│  │  │  ├─ src_app_[locale]_dashboard_formee_page_tsx_65a1c583._.js
+│  │  │  ├─ src_app_[locale]_dashboard_formee_workshops_[workshop]_page_tsx_65a1c583._.js
+│  │  │  ├─ src_app_[locale]_dashboard_formee_workshops_page_tsx_65a1c583._.js
+│  │  │  ├─ src_app_[locale]_dashboard_page_tsx_278d1ab5._.js
+│  │  │  ├─ src_app_[locale]_globals_css_f9ee138c._.single.css
+│  │  │  ├─ src_app_[locale]_globals_css_f9ee138c._.single.css.map
+│  │  │  ├─ src_app_[locale]_layout_tsx_c0237562._.js
+│  │  │  ├─ src_app_[locale]_page_tsx_278d1ab5._.js
+│  │  │  ├─ src_b2b7e486._.js
+│  │  │  ├─ src_b2b7e486._.js.map
+│  │  │  ├─ src_b4ec0fce._.js
+│  │  │  ├─ src_b4ec0fce._.js.map
+│  │  │  ├─ src_components_43466efb._.js
+│  │  │  ├─ src_components_43466efb._.js.map
+│  │  │  ├─ src_components_auth_LoginForm_tsx_c441ede3._.js
+│  │  │  ├─ src_components_auth_LoginForm_tsx_c441ede3._.js.map
+│  │  │  ├─ src_d7cef7da._.js
+│  │  │  ├─ src_d7cef7da._.js.map
+│  │  │  ├─ src_eeebdbaf._.js
+│  │  │  ├─ src_eeebdbaf._.js.map
+│  │  │  ├─ src_f0e4563e._.js
+│  │  │  ├─ src_f0e4563e._.js.map
+│  │  │  ├─ src_f2da9b27._.js
+│  │  │  ├─ src_f2da9b27._.js.map
+│  │  │  └─ webpack-9d68b3568d5d7ae1.js
+│  │  ├─ css
+│  │  │  └─ 98729b3839a66d98.css
+│  │  ├─ development
+│  │  │  ├─ _buildManifest.js
+│  │  │  ├─ _clientMiddlewareManifest.json
+│  │  │  └─ _ssgManifest.js
+│  │  ├─ jWFnIUkg2hfZQjB6n74ki
+│  │  │  ├─ _buildManifest.js
+│  │  │  └─ _ssgManifest.js
+│  │  └─ media
+│  │     ├─ 569ce4b8f30dc480-s.p.woff2
+│  │     ├─ 747892c23ea88013-s.woff2
+│  │     ├─ 8d697b304b401681-s.woff2
+│  │     ├─ 93f479601ee12b01-s.p.woff2
+│  │     ├─ 9610d9e46709d722-s.woff2
+│  │     ├─ ba015fad6dcf6784-s.woff2
+│  │     ├─ gyByhwUxId8gMEwSGFWNOITddY4-s.81df3a5b.woff2
+│  │     ├─ gyByhwUxId8gMEwYGFWNOITddY4-s.b7d310ad.woff2
+│  │     ├─ gyByhwUxId8gMEwcGFWNOITd-s.p.da1ebef7.woff2
+│  │     ├─ or3nQ6H_1_WfwkMZI_qYFrMdmhHkjkotbA-s.cb6bbcb1.woff2
+│  │     ├─ or3nQ6H_1_WfwkMZI_qYFrcdmhHkjko-s.p.be19f591.woff2
+│  │     └─ or3nQ6H_1_WfwkMZI_qYFrkdmhHkjkotbA-s.e32db976.woff2
+│  ├─ trace
+│  ├─ transform.js
+│  ├─ transform.js.map
+│  └─ types
+│     ├─ app
+│     │  ├─ [locale]
+│     │  │  ├─ api
+│     │  │  │  ├─ auth
+│     │  │  │  │  ├─ signout
+│     │  │  │  │  │  └─ route.ts
+│     │  │  │  │  └─ signup
+│     │  │  │  │     └─ route.ts
+│     │  │  │  ├─ create-admin
+│     │  │  │  │  └─ route.ts
+│     │  │  │  ├─ delete-pending-user
+│     │  │  │  │  └─ route.ts
+│     │  │  │  ├─ send-approval-email
+│     │  │  │  │  └─ route.ts
+│     │  │  │  └─ send-document-email
+│     │  │  │     └─ route.ts
+│     │  │  ├─ auth
+│     │  │  │  ├─ callback
+│     │  │  │  │  └─ route.ts
+│     │  │  │  ├─ confirmation
+│     │  │  │  │  └─ page.ts
+│     │  │  │  └─ confirmed
+│     │  │  │     └─ page.ts
+│     │  │  ├─ dashboard
+│     │  │  │  ├─ admin
+│     │  │  │  │  ├─ admin
+│     │  │  │  │  │  └─ page.ts
+│     │  │  │  │  ├─ documents
+│     │  │  │  │  │  ├─ new
+│     │  │  │  │  │  │  └─ page.ts
+│     │  │  │  │  │  └─ syllabus
+│     │  │  │  │  │     └─ page.ts
+│     │  │  │  │  ├─ email
+│     │  │  │  │  │  └─ page.ts
+│     │  │  │  │  ├─ folders
+│     │  │  │  │  │  ├─ [category]
+│     │  │  │  │  │  │  └─ page.ts
+│     │  │  │  │  │  └─ page.ts
+│     │  │  │  │  ├─ formation-personnel
+│     │  │  │  │  │  └─ page.ts
+│     │  │  │  │  ├─ layout.ts
+│     │  │  │  │  ├─ page.ts
+│     │  │  │  │  ├─ pending-users
+│     │  │  │  │  │  └─ page.ts
+│     │  │  │  │  └─ users
+│     │  │  │  │     └─ page.ts
+│     │  │  │  ├─ formant
+│     │  │  │  │  ├─ document
+│     │  │  │  │  │  └─ new
+│     │  │  │  │  │     └─ page.ts
+│     │  │  │  │  ├─ documents
+│     │  │  │  │  │  └─ new
+│     │  │  │  │  │     └─ page.ts
+│     │  │  │  │  ├─ folders
+│     │  │  │  │  │  ├─ [category]
+│     │  │  │  │  │  │  └─ page.ts
+│     │  │  │  │  │  └─ page.ts
+│     │  │  │  │  ├─ formation-personnel
+│     │  │  │  │  │  └─ page.ts
+│     │  │  │  │  ├─ layout.ts
+│     │  │  │  │  ├─ page.ts
+│     │  │  │  │  └─ users
+│     │  │  │  │     └─ page.ts
+│     │  │  │  ├─ formee
+│     │  │  │  │  ├─ documents
+│     │  │  │  │  │  └─ new
+│     │  │  │  │  │     └─ page.ts
+│     │  │  │  │  ├─ folders
+│     │  │  │  │  │  ├─ [category]
+│     │  │  │  │  │  │  └─ page.ts
+│     │  │  │  │  │  └─ page.ts
+│     │  │  │  │  ├─ formation-personnel
+│     │  │  │  │  │  └─ page.ts
+│     │  │  │  │  ├─ layout.ts
+│     │  │  │  │  ├─ page.ts
+│     │  │  │  │  └─ users
+│     │  │  │  │     └─ page.ts
+│     │  │  │  └─ page.ts
+│     │  │  ├─ layout.ts
+│     │  │  ├─ logout
+│     │  │  │  └─ route.ts
+│     │  │  ├─ page.ts
+│     │  │  ├─ setup
+│     │  │  │  └─ page.ts
+│     │  │  └─ signup
+│     │  │     └─ page.ts
+│     │  └─ api
+│     │     ├─ delete-pending-user
+│     │     │  └─ route.ts
+│     │     └─ send-approval-email
+│     │        └─ route.ts
+│     ├─ cache-life.d.ts
+│     ├─ package.json
+│     └─ server.d.ts
+├─ README.md
+├─ ROLE_MIGRATION_SUMMARY.md
+├─ eslint.config.mjs
+├─ next.config.mjs
+├─ next.config.ts
+├─ package-lock.json
+├─ package.json
+├─ postcss.config.mjs
+├─ public
+│  ├─ Rechnung_Teilzahlung_QLP_OSFS_800EUR.pdf
+│  ├─ file.svg
+│  ├─ globe.svg
+│  ├─ logo.png
+│  ├─ next.svg
+│  ├─ oblate-logo.svg
+│  ├─ vercel.svg
+│  └─ window.svg
+├─ schema_dump.sql
+├─ src
+│  ├─ app
+│  │  ├─ [locale]
+│  │  │  ├─ api
+│  │  │  │  ├─ auth
+│  │  │  │  │  ├─ signout
+│  │  │  │  │  │  └─ route.ts
+│  │  │  │  │  └─ signup
+│  │  │  │  │     └─ route.ts
+│  │  │  │  ├─ create-admin
+│  │  │  │  │  └─ route.ts
+│  │  │  │  ├─ delete-pending-user
+│  │  │  │  │  └─ route.ts
+│  │  │  │  ├─ send-approval-email
+│  │  │  │  │  └─ route.ts
+│  │  │  │  └─ send-document-email
+│  │  │  │     └─ route.ts
+│  │  │  ├─ auth
+│  │  │  │  ├─ callback
+│  │  │  │  │  └─ route.ts
+│  │  │  │  ├─ confirmation
+│  │  │  │  │  └─ page.tsx
+│  │  │  │  └─ confirmed
+│  │  │  │     └─ page.tsx
+│  │  │  ├─ dashboard
+│  │  │  │  ├─ admin
+│  │  │  │  │  ├─ DashboardClient.tsx
+│  │  │  │  │  ├─ admin
+│  │  │  │  │  │  ├─ components
+│  │  │  │  │  │  │  └─ FormeeIntroductionForm.tsx
+│  │  │  │  │  │  └─ page.tsx
+│  │  │  │  │  ├─ documents
+│  │  │  │  │  │  ├─ new
+│  │  │  │  │  │  │  └─ page.tsx
+│  │  │  │  │  │  └─ syllabus
+│  │  │  │  │  │     └─ page.tsx
+│  │  │  │  │  ├─ email
+│  │  │  │  │  │  └─ page.tsx
+│  │  │  │  │  ├─ folders
+│  │  │  │  │  │  ├─ [category]
+│  │  │  │  │  │  │  └─ page.tsx
+│  │  │  │  │  │  └─ page.tsx
+│  │  │  │  │  ├─ formation-personnel
+│  │  │  │  │  │  └─ page.tsx
+│  │  │  │  │  ├─ layout.tsx
+│  │  │  │  │  ├─ metadata.tsx
+│  │  │  │  │  ├─ page.tsx
+│  │  │  │  │  ├─ pending-users
+│  │  │  │  │  │  └─ page.tsx
+│  │  │  │  │  ├─ users
+│  │  │  │  │  │  └─ page.tsx
+│  │  │  │  │  └─ workshops
+│  │  │  │  │     ├─ [workshop]
+│  │  │  │  │     │  └─ [...folder]
+│  │  │  │  │     │     └─ page.tsx
+│  │  │  │  │     ├─ page.tsx
+│  │  │  │  │     └─ upload
+│  │  │  │  │        └─ page.tsx
+│  │  │  │  ├─ editor
+│  │  │  │  │  ├─ DashboardClient.tsx
+│  │  │  │  │  ├─ document
+│  │  │  │  │  │  └─ new
+│  │  │  │  │  │     └─ page.tsx
+│  │  │  │  │  ├─ documents
+│  │  │  │  │  │  └─ new
+│  │  │  │  │  │     └─ page.tsx
+│  │  │  │  │  ├─ folders
+│  │  │  │  │  │  ├─ [category]
+│  │  │  │  │  │  │  └─ page.tsx
+│  │  │  │  │  │  └─ page.tsx
+│  │  │  │  │  ├─ formation-personnel
+│  │  │  │  │  │  └─ page.tsx
+│  │  │  │  │  ├─ layout.tsx
+│  │  │  │  │  ├─ metadata.tsx
+│  │  │  │  │  ├─ page.tsx
+│  │  │  │  │  ├─ users
+│  │  │  │  │  │  └─ page.tsx
+│  │  │  │  │  └─ workshops
+│  │  │  │  │     ├─ [workshop]
+│  │  │  │  │     │  ├─ [...folder]
+│  │  │  │  │     │  │  └─ page.tsx
+│  │  │  │  │     │  └─ page.tsx
+│  │  │  │  │     └─ page.tsx
+│  │  │  │  ├─ formator
+│  │  │  │  │  └─ workshops
+│  │  │  │  │     └─ [workshop]
+│  │  │  │  │        └─ [...folder]
+│  │  │  │  │           └─ page.tsx
+│  │  │  │  ├─ page.tsx
+│  │  │  │  └─ user
+│  │  │  │     ├─ DashboardClient.tsx
+│  │  │  │     ├─ documents
+│  │  │  │     │  └─ new
+│  │  │  │     │     └─ page.tsx
+│  │  │  │     ├─ folders
+│  │  │  │     │  ├─ [category]
+│  │  │  │     │  │  └─ page.tsx
+│  │  │  │     │  └─ page.tsx
+│  │  │  │     ├─ formation-personnel
+│  │  │  │     │  └─ page.tsx
+│  │  │  │     ├─ layout.tsx
+│  │  │  │     ├─ metadata.tsx
+│  │  │  │     ├─ page.tsx
+│  │  │  │     ├─ users
+│  │  │  │     │  └─ page.tsx
+│  │  │  │     └─ workshops
+│  │  │  │        ├─ [workshop]
+│  │  │  │        │  ├─ [...folder]
+│  │  │  │        │  │  └─ page.tsx
+│  │  │  │        │  └─ page.tsx
+│  │  │  │        └─ page.tsx
+│  │  │  ├─ favicon.ico
+│  │  │  ├─ formation-personnel
+│  │  │  ├─ formee-introduction
+│  │  │  ├─ globals.css
+│  │  │  ├─ layout.tsx
+│  │  │  ├─ logout
+│  │  │  │  └─ route.ts
+│  │  │  ├─ page.tsx
+│  │  │  ├─ setup
+│  │  │  │  └─ page.tsx
+│  │  │  └─ signup
+│  │  │     └─ page.tsx
+│  │  └─ api
+│  │     ├─ delete-pending-user
+│  │     │  └─ route.ts
+│  │     └─ send-approval-email
+│  │        └─ route.ts
+│  ├─ components
+│  │  ├─ admin
+│  │  │  ├─ AdminAdvancedFilters.tsx
+│  │  │  ├─ DocumentCard.tsx
+│  │  │  ├─ DocumentList.tsx
+│  │  │  ├─ DocumentRow.tsx
+│  │  │  ├─ DocumentsFilters.tsx
+│  │  │  ├─ DocumentsList.tsx
+│  │  │  ├─ Header.tsx
+│  │  │  ├─ PaginationControls.tsx
+│  │  │  ├─ PendingUsersList.tsx
+│  │  │  ├─ PendingUsersTable.tsx
+│  │  │  ├─ Sidebar.tsx
+│  │  │  ├─ SortableHeader.tsx
+│  │  │  ├─ documents
+│  │  │  │  ├─ CheckboxField.tsx
+│  │  │  │  ├─ DatalistField.tsx
+│  │  │  │  ├─ FileDropzone.tsx
+│  │  │  │  ├─ FormField.tsx
+│  │  │  │  ├─ MultiSelectButtons.tsx
+│  │  │  │  ├─ SelectField.tsx
+│  │  │  │  ├─ UploadForm.tsx
+│  │  │  │  └─ UploadProgress.tsx
+│  │  │  ├─ email
+│  │  │  │  ├─ DocumentRow.tsx
+│  │  │  │  ├─ DocumentTable.tsx
+│  │  │  │  ├─ DocumentsTable.tsx
+│  │  │  │  ├─ EmailClient.tsx
+│  │  │  │  ├─ EmailFilters.tsx
+│  │  │  │  ├─ LanguageFlag.tsx
+│  │  │  │  ├─ UserRow.tsx
+│  │  │  │  ├─ UserTable.tsx
+│  │  │  │  ├─ UsersTable.tsx
+│  │  │  │  ├─ WorkflowSteps.tsx
+│  │  │  │  ├─ cards
+│  │  │  │  │  ├─ DocumentsCard.tsx
+│  │  │  │  │  ├─ StatusMessages.tsx
+│  │  │  │  │  └─ UsersCard.tsx
+│  │  │  │  ├─ types.ts
+│  │  │  │  └─ useEmailNotifications.ts
+│  │  │  ├─ syllabus
+│  │  │  │  ├─ SyllabusFileList.tsx
+│  │  │  │  ├─ SyllabusFormFields.tsx
+│  │  │  │  ├─ SyllabusListStates.tsx
+│  │  │  │  ├─ SyllabusTableRow.tsx
+│  │  │  │  └─ SyllabusUploadForm.tsx
+│  │  │  ├─ users
+│  │  │  │  ├─ AddUserForm.tsx
+│  │  │  │  ├─ AddUserModal.tsx
+│  │  │  │  ├─ FormatorUserTable.tsx
+│  │  │  │  ├─ FormeeUserTable.tsx
+│  │  │  │  └─ UserManagementClient.tsx
+│  │  │  └─ workshops
+│  │  │     ├─ FileUploadForm.tsx
+│  │  │     ├─ WorkshopFilesList.tsx
+│  │  │     └─ WorkshopUploadForm.tsx
+│  │  ├─ auth
+│  │  │  ├─ LoginForm.tsx
+│  │  │  └─ SignUpForm.tsx
+│  │  ├─ editor
+│  │  │  ├─ AdminAdvancedFilters.tsx
+│  │  │  ├─ DocumentCard.tsx
+│  │  │  ├─ DocumentList.tsx
+│  │  │  ├─ DocumentRow.tsx
+│  │  │  ├─ DocumentsFilters.tsx
+│  │  │  ├─ DocumentsList.tsx
+│  │  │  ├─ Header.tsx
+│  │  │  ├─ PaginationControls.tsx
+│  │  │  ├─ SortableHeader.tsx
+│  │  │  ├─ documents
+│  │  │  │  ├─ CheckboxField.tsx
+│  │  │  │  ├─ DatalistField.tsx
+│  │  │  │  ├─ FileDropzone.tsx
+│  │  │  │  ├─ FormField.tsx
+│  │  │  │  ├─ MultiSelectButtons.tsx
+│  │  │  │  ├─ SelectField.tsx
+│  │  │  │  ├─ UploadForm.tsx
+│  │  │  │  └─ UploadProgress.tsx
+│  │  │  └─ users
+│  │  │     ├─ AddUserForm.tsx
+│  │  │     ├─ AddUserModal.tsx
+│  │  │     ├─ FormatorUserTable.tsx
+│  │  │     ├─ FormeeUserTable.tsx
+│  │  │     └─ UserManagementClient.tsx
+│  │  ├─ formation
+│  │  │  └─ MemberCard.tsx
+│  │  ├─ shared
+│  │  │  ├─ AdvancedFilters.tsx
+│  │  │  ├─ DocumentsFilters.tsx
+│  │  │  ├─ FilterMultiSelect.tsx
+│  │  │  ├─ FolderComponent.tsx
+│  │  │  ├─ PaginationControls.tsx
+│  │  │  └─ SimpleDocumentCard.tsx
+│  │  ├─ ui
+│  │  │  ├─ AuthForm.tsx
+│  │  │  ├─ Avatar.tsx
+│  │  │  ├─ Button.tsx
+│  │  │  ├─ FileIcon.tsx
+│  │  │  ├─ Input.tsx
+│  │  │  ├─ LanguageSwitcher.tsx
+│  │  │  ├─ Modal.tsx
+│  │  │  ├─ UserAvatar.tsx
+│  │  │  ├─ card.tsx
+│  │  │  └─ tabs.tsx
+│  │  └─ user
+│  │     ├─ AdminAdvancedFilters.tsx
+│  │     ├─ DocumentCard.tsx
+│  │     ├─ DocumentList.tsx
+│  │     ├─ DocumentRow.tsx
+│  │     ├─ DocumentsFilters.tsx
+│  │     ├─ DocumentsList.tsx
+│  │     ├─ FormeeIntroductionHook.tsx
+│  │     ├─ FormeeIntroductionModal.tsx
+│  │     ├─ Header.tsx
+│  │     ├─ PaginationControls.tsx
+│  │     ├─ SortableHeader.tsx
+│  │     ├─ documents
+│  │     │  ├─ CheckboxField.tsx
+│  │     │  ├─ DatalistField.tsx
+│  │     │  ├─ FileDropzone.tsx
+│  │     │  ├─ FormField.tsx
+│  │     │  ├─ MultiSelectButtons.tsx
+│  │     │  ├─ SelectField.tsx
+│  │     │  ├─ UploadForm.tsx
+│  │     │  └─ UploadProgress.tsx
+│  │     └─ users
+│  │        ├─ AddUserForm.tsx
+│  │        ├─ AddUserModal.tsx
+│  │        ├─ FormatorUserTable.tsx
+│  │        ├─ FormeeUserTable.tsx
+│  │        └─ UserManagementClient.tsx
+│  ├─ contexts
+│  │  └─ AuthContext.tsx
+│  ├─ hooks
+│  │  ├─ useDocumentUpload.ts
+│  │  ├─ useWorkshopDocumentUpload.ts
+│  │  └─ useWorkshopFiles.ts
+│  ├─ i18n
+│  │  ├─ navigation.ts
+│  │  ├─ request.ts
+│  │  └─ routing.ts
+│  ├─ i18n.ts
+│  ├─ lib
+│  │  ├─ auth
+│  │  ├─ supabase
+│  │  │  ├─ admin.ts
+│  │  │  ├─ browser-client.ts
+│  │  │  ├─ middleware-client.ts
+│  │  │  └─ server-client.ts
+│  │  ├─ utils
+│  │  │  ├─ auth-routes.ts
+│  │  │  ├─ file-icons.ts
+│  │  │  ├─ format.ts
+│  │  │  ├─ locale.ts
+│  │  │  ├─ routes.ts
+│  │  │  └─ urls.ts
+│  │  ├─ utils.ts
+│  │  └─ wordpress
+│  │     ├─ api.ts
+│  │     └─ types.ts
+│  ├─ locales
+│  │  ├─ de.json
+│  │  ├─ en.json
+│  │  ├─ es.json
+│  │  ├─ fr.json
+│  │  ├─ it.json
+│  │  ├─ nl.json
+│  │  └─ pt.json
+│  ├─ messages
+│  │  ├─ en.json
+│  │  └─ fr.json
+│  ├─ middleware.ts
+│  ├─ services
+│  └─ types
+│     ├─ document.ts
+│     ├─ supabase.ts
+│     └─ workshop.ts
+├─ storage_policies.sql
+├─ supabase
+│  ├─ .branches
+│  │  └─ _current_branch
+│  ├─ .temp
+│  │  ├─ cli-latest
+│  │  ├─ gotrue-version
+│  │  ├─ pooler-url
+│  │  ├─ postgres-version
+│  │  ├─ project-ref
+│  │  ├─ rest-version
+│  │  └─ storage-version
+│  ├─ config.toml
+│  ├─ migrations
+│  │  ├─ 20240518170000_create_timestamp_function.sql
+│  │  ├─ 20240518180000_create_workshops_table.sql
+│  │  ├─ 20240518185000_add_file_columns_to_workshops.sql
+│  │  ├─ 20240518190000_create_workshop_files_table.sql
+│  │  ├─ 20250430100825_init.sql
+│  │  ├─ 20250430110000_add_role_to_profiles.sql
+│  │  ├─ 20250430110001_fix_user_role_enum.sql
+│  │  ├─ 20250430115000_add_documents_table.sql
+│  │  ├─ 20250430120000_create_admin_user.sql
+│  │  ├─ 20250430120001_fix_infinite_recursion.sql
+│  │  ├─ 20250430130000_fix_admin_user.sql
+│  │  ├─ 20250430140000_fix_null_fields_in_admin_user.sql
+│  │  ├─ 20250430212801_create_get_category_counts_function.sql
+│  │  ├─ 20250430231210_update_user_roles_v2.sql
+│  │  ├─ 20250501000000_fix_email_change_field.sql
+│  │  ├─ 20250501010000_fix_email_change_token_new.sql
+│  │  ├─ 20250502000000_update_handle_new_user.sql
+│  │  ├─ 20250502000729_update_handle_new_user_v2.sql
+│  │  ├─ 20250502002032_add_admin_select_profiles_policy.sql
+│  │  ├─ 20250502002252_create_is_admin_func_and_update_policy.sql
+│  │  ├─ 20250502011951_fix_documents_admin_rls.sql
+│  │  ├─ 20250504191056_add_common_syllabus_storage_policies.sql
+│  │  ├─ 20250504191900_create_moddatetime_function.sql
+│  │  ├─ 20250504191901_create_syllabus_documents.sql
+│  │  ├─ 20250505222827_create_formee_introduction.sql
+│  │  ├─ 20250516153000_add_documents_storage_policies.sql
+│  │  ├─ 20250516164500_add_documents_insert_policy.sql
+│  │  ├─ 20250516170000_allow_authenticated_storage_read.sql
+│  │  ├─ 20250516170001_add_approval_status_to_profiles.sql
+│  │  ├─ 20250516180000_fix_user_role_type.sql
+│  │  ├─ 20250516180001_add_workshops_storage_policies.sql
+│  │  ├─ 20250516230000_update_workshop_storage_policies.sql
+│  │  ├─ 20250516240000_add_formee_workshop_read_policy.sql
+│  │  └─ 20250516250000_fix_workshop_storage_policies.sql
+│  └─ supabase
+│     ├─ .temp
+│     │  └─ cli-latest
+│     ├─ config.toml
+│     └─ functions
+├─ tailwind.config.mjs
+└─ tsconfig.json
+
+```

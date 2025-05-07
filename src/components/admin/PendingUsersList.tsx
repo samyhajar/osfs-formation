@@ -8,10 +8,12 @@ interface Profile {
   id: string;
   email: string | null;
   name: string | null;
-  role: 'admin' | 'formator' | 'formee';
-  is_approved: boolean;
+  role: 'admin' | 'editor' | 'user';
+  is_approved: boolean | null;
   created_at: string;
   avatar_url: string | null;
+  approval_date?: string | null;
+  status?: 'Scholastic' | string | null;
 }
 
 interface ApiResponse {
@@ -28,6 +30,13 @@ export default function PendingUsersList() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const { supabase } = useAuth();
 
+  // Update role mapping to match database values
+  const roleMapping: Record<string, 'admin' | 'editor' | 'user'> = {
+    'admin': 'admin',
+    'editor': 'editor',
+    'user': 'user'
+  };
+
   // Fetch all pending users
   const fetchPendingUsers = useCallback(async () => {
     if (!supabase) return;
@@ -41,7 +50,7 @@ export default function PendingUsersList() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setUsers(data as Profile[]);
+      setUsers(data);
     } catch (err) {
       console.error('Error fetching pending users:', err);
       setError('Failed to load pending users');
@@ -51,28 +60,25 @@ export default function PendingUsersList() {
   }, [supabase]);
 
   // Approve a user and set their role
-  const approveUser = async (userId: string, role: 'admin' | 'formator' | 'formee') => {
-    if (!supabase) return;
+  const approveUser = async (userId: string, role: 'admin' | 'editor' | 'user', userEmail: string) => {
+    setActionInProgress(userId);
+    setError(null);
 
     try {
-      setActionInProgress(userId);
-      setSuccessMessage(null);
-      setError(null);
+      // Map the selected role to the correct database value
+      const dbRole = roleMapping[role];
 
-      // Find the user's email
-      const userEmail = users.find(u => u.id === userId)?.email;
-
-      if (!userEmail) {
-        throw new Error('User email not found');
+      if (!dbRole) {
+        throw new Error(`Invalid role selected: ${role}`);
       }
 
-      // Update profile with approval status and role
+      // Update the user's role and approval status
       const { error: updateError } = await supabase
         .from('profiles')
         .update({
+          role: dbRole,
           is_approved: true,
-          approval_date: new Date().toISOString(),
-          role: role
+          approval_date: new Date().toISOString()
         })
         .eq('id', userId);
 
@@ -85,8 +91,11 @@ export default function PendingUsersList() {
         throw new Error('No active session');
       }
 
-      // Use absolute URL to bypass next-intl middleware
-      const response = await fetch(`${window.location.origin}/api/send-approval-email`, {
+      // Get the current locale from the URL path
+      const locale = window.location.pathname.split('/')[1] || 'en';
+
+      // Use localized API route
+      const response = await fetch(`${window.location.origin}/${locale}/api/send-approval-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,21 +107,16 @@ export default function PendingUsersList() {
         }),
       });
 
-      const result = await response.json() as ApiResponse;
-
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to send approval email');
+        const errorData = await response.json() as ApiResponse;
+        throw new Error(errorData.error || 'Failed to send approval email');
       }
 
-      // Remove the approved user from the list
-      setUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
-      setSuccessMessage('User approved and confirmation email sent successfully');
-
-      // Refresh the list
+      // Refresh the users list
       void fetchPendingUsers();
-    } catch (err) {
-      console.error('Error approving user:', err);
-      setError(err instanceof Error ? err.message : 'Failed to approve user');
+    } catch (error) {
+      console.error('Error approving user:', error);
+      setError(error instanceof Error ? error.message : 'An error occurred while approving user');
     } finally {
       setActionInProgress(null);
     }

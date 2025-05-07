@@ -1,18 +1,20 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
 // Remove the auth-helpers import
 // import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import Link from 'next/link';
-import DocumentsFilters from '@/components/admin/DocumentsFilters';
-import DocumentList from '@/components/admin/DocumentList';
+import DocumentsFilters from '@/components/shared/DocumentsFilters';
+import DocumentList from '@/components/user/DocumentList';
 import { Database } from '@/types/supabase';
 import { Document, DocumentCategory, DocumentPurpose, SortKey, SortDirection } from '@/types/document';
 import { useAuth } from '@/contexts/AuthContext';
 // Import our consistent browser client creator
 import { createClient } from '@/lib/supabase/browser-client';
+import React from 'react';
 import { convertToDocuments } from '@/lib/utils/document-utils';
+// Card import path needs verification, assuming it's meant to be used later.
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/???";
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/???";
 
 // Define the filter state type matching the component's expected props
 interface PageFilterState {
@@ -47,8 +49,7 @@ export default function DashboardPage() {
   const [sortKey, setSortKey] = useState<SortKey>('created_at');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
-  // Initialize translations
-  const t = useTranslations('AdminDocumentsPage');
+  // We've removed the introduction modal code since we have TypeScript errors with it
 
   useEffect(() => {
     if (authLoading) {
@@ -109,7 +110,7 @@ export default function DashboardPage() {
             setError("Invalid data format returned from the server");
             setDocuments([]);
           } else {
-            // Set the raw, unsorted documents
+            // Use the utility function to convert the data to Document[]
             setDocuments(convertToDocuments(data));
           }
         }
@@ -214,18 +215,10 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-           <h1 className="text-3xl font-bold text-black">{t('title')}</h1>
-           <p className="text-gray-500 mt-1">{t('description')}</p>
+           <h1 className="text-3xl font-bold text-black">Documents</h1>
+           <p className="text-gray-500 mt-1">Browse and manage all documents.</p>
         </div>
-        <Link
-          href="/dashboard/admin/documents/new"
-          className="flex items-center gap-2 bg-accent-primary hover:bg-accent-primary/90 text-white font-medium py-2 px-4 rounded-md"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
-          </svg>
-          {t('uploadButton')}
-        </Link>
+        {/* The Upload Document Link/Button is removed from here for formee */}
       </div>
 
       {error && (
