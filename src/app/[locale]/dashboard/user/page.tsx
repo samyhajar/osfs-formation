@@ -12,6 +12,9 @@ import { useAuth } from '@/contexts/AuthContext';
 import { createClient } from '@/lib/supabase/browser-client';
 import React from 'react';
 import { convertToDocuments } from '@/lib/utils/document-utils';
+// Add the UserIntroductionHook and Modal imports
+import { useUserIntroduction } from '@/components/user/UserIntroductionHook';
+import UserIntroductionModal from '@/components/user/UserIntroductionModal';
 // Card import path needs verification, assuming it's meant to be used later.
 // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/???";
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/???";
@@ -30,6 +33,10 @@ interface PageFilterState {
 export default function DashboardPage() {
   // Remove unused 'user'
   const { loading: authLoading } = useAuth();
+
+  // Add the user introduction modal hook
+  const { introContent, introModalOpen, handleCloseIntroModal, loading: _introLoading } = useUserIntroduction(authLoading);
+
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -213,6 +220,15 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
+      {/* Add the user introduction modal */}
+      {introContent && (
+        <UserIntroductionModal
+          isOpen={introModalOpen}
+          onClose={handleCloseIntroModal}
+          introContent={introContent}
+        />
+      )}
+
       <div className="flex justify-between items-center">
         <div>
            <h1 className="text-3xl font-bold text-black">Documents</h1>

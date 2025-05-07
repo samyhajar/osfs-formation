@@ -31,9 +31,9 @@ export default function AdminPage() {
         setLoading(true);
         const supabase = createClient<Database>();
 
-        // Use proper type assertion for tables not yet in the generated types
+        // Use the proper table name from types
         const { data, error: fetchError } = await supabase
-          .from('user_introduction' as keyof Database['public']['Tables'])
+          .from('user_introduction')
           .select('*')
           .eq('active', true)
           .single();
