@@ -28,21 +28,21 @@ export type SortDirection = 'asc' | 'desc' | null;
 export interface Document {
   id: string;
   title: string;
-  description?: string | null;
-  content_url?: string | null;
-  file_type?: string | null;
-  file_size?: number | null;
+  description?: string;
   category: DocumentCategory;
-  author_id?: string | null;
-  author_name?: string | null;
+  file_name: string;
+  file_type: string;
+  file_size: number;
+  file_path: string;
+  file_url?: string;
   created_at: string;
-  updated_at?: string | null;
-  region?: string | null;
-  language?: string | null;
-  topics?: string[] | null;
-  purpose?: DocumentPurpose[] | null;
-  keywords?: string[] | null;
-  is_public: boolean;
+  updated_at: string;
+  created_by: string;
+  created_by_name?: string;
+  author_name?: string;
+  content_url?: string;
+  region?: string;
+  language?: string;
 }
 
 // Type for data fetched from the syllabus_documents table

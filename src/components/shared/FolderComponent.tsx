@@ -9,7 +9,7 @@ interface FolderComponentProps {
   basePath: string; // Add basePath for dynamic linking
   categoryName: string; // Keep original name for key generation
   categoryTranslationNamespace: string; // Namespace for category keys
-  // Remove onClick and isSelected as navigation handles this
+  title?: string; // Optional title to display instead of translated category name
 }
 
 // Helper to generate translation keys (consistent with others)
@@ -18,17 +18,23 @@ const toKey = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
 export function FolderComponent({
   basePath,
   categoryName,
-  categoryTranslationNamespace
+  categoryTranslationNamespace,
+  title
 }: FolderComponentProps) {
   const t = useTranslations(); // Generic translation function
 
-  // Encode categoryName for URL safety
-  const encodedCategoryName = encodeURIComponent(categoryName);
-  const href = `${basePath}/folders/${encodedCategoryName}`;
+  // Generate the href based on the base path and category name
+  const href = `${basePath}/${categoryName}`;
 
-  // Generate the full translation key
-  const translationKey = `${categoryTranslationNamespace}.${toKey(categoryName)}`;
-  const translatedName = t(translationKey);
+  // Use title if provided, otherwise try to get translation
+  const displayName = title || (() => {
+    try {
+      return t(`${categoryTranslationNamespace}.${toKey(categoryName)}`);
+    } catch {
+      // If translation fails, use the category name as is
+      return categoryName;
+    }
+  })();
 
   return (
     <Link
@@ -39,9 +45,9 @@ export function FolderComponent({
       {/* Display the translated name */}
       <span
         className="text-sm font-medium break-words w-full px-1 overflow-hidden text-ellipsis whitespace-nowrap"
-        title={translatedName} // Add title attribute for full name on hover
+        title={displayName} // Add title attribute for full name on hover
       >
-        {translatedName}
+        {displayName}
       </span>
     </Link>
   );

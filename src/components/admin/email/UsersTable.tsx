@@ -87,7 +87,6 @@ export const UsersTable = ({
         </div>
 
         <UserTable
-          users={users}
           loading={loading}
           paginatedUsers={paginatedUsers}
           totalPages={totalUserPages}

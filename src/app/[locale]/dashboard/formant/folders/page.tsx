@@ -21,7 +21,7 @@ const categories: DocumentCategory[] = [
 
 export default function FoldersPage() {
   // Determine the base path for links - specific to this formant page
-  const basePath = '/dashboard/formant';
+  const basePath = '/dashboard/formant/folders';
 
   return (
     <div className="flex flex-col h-full">
@@ -36,9 +36,9 @@ export default function FoldersPage() {
             {categories.map((category) => (
               <FolderComponent
                 key={category}
-                basePath={basePath} // Pass the base path
+                basePath={basePath}
                 categoryName={category}
-                categoryTranslationNamespace="documents.categories" // Add the missing prop
+                categoryTranslationNamespace="documents.categories"
               />
             ))}
           </div>

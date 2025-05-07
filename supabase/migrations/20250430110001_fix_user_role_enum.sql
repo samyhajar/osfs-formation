@@ -1,10 +1,6 @@
 -- First drop all policies that depend on the role column
 DROP POLICY IF EXISTS "Admins can view all profiles" ON public.profiles;
 DROP POLICY IF EXISTS "Admins can update all profiles" ON public.profiles;
-DROP POLICY IF EXISTS "Admins can view all documents" ON public.documents;
-DROP POLICY IF EXISTS "Admins can insert documents" ON public.documents;
-DROP POLICY IF EXISTS "Admins can update documents" ON public.documents;
-DROP POLICY IF EXISTS "Admins can delete documents" ON public.documents;
 
 -- Drop the trigger that depends on the function
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
@@ -50,35 +46,6 @@ CREATE POLICY "Admins can view all profiles"
 CREATE POLICY "Admins can update all profiles"
   ON public.profiles
   FOR UPDATE
-  USING (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'::public.user_role
-  ));
-
--- Recreate policies for documents table
-CREATE POLICY "Admins can view all documents"
-  ON public.documents
-  FOR SELECT
-  USING (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'::public.user_role
-  ));
-
-CREATE POLICY "Admins can insert documents"
-  ON public.documents
-  FOR INSERT
-  WITH CHECK (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'::public.user_role
-  ));
-
-CREATE POLICY "Admins can update documents"
-  ON public.documents
-  FOR UPDATE
-  USING (auth.uid() IN (
-    SELECT id FROM public.profiles WHERE role = 'admin'::public.user_role
-  ));
-
-CREATE POLICY "Admins can delete documents"
-  ON public.documents
-  FOR DELETE
   USING (auth.uid() IN (
     SELECT id FROM public.profiles WHERE role = 'admin'::public.user_role
   ));

@@ -12,7 +12,7 @@ import { SimpleDocumentCard } from '@/components/shared/SimpleDocumentCard';
 export default function CategoryDocumentsPage() {
   const params = useParams();
   const category = params?.category ? decodeURIComponent(params.category as string) as DocumentCategory : null;
-  const basePath = '/dashboard/formee'; // Adjusted for formee
+  const basePath = '/dashboard/formee/folders';
 
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,9 +33,9 @@ export default function CategoryDocumentsPage() {
       const supabase = createClient<Database>();
       const { data, error: fetchError } = await supabase
         .from('documents')
-        .select('*') // Select all columns for the card
+        .select('*')
         .eq('category', category)
-        .order('created_at', { ascending: false }); // Example order
+        .order('created_at', { ascending: false });
 
       if (fetchError) {
         console.error('Supabase fetch error:', fetchError);
@@ -48,11 +48,11 @@ export default function CategoryDocumentsPage() {
     } catch (err: unknown) {
       console.error('Error fetching documents:', err);
       setError(`Failed to load documents: ${err instanceof Error ? err.message : 'Unknown error'}`);
-      setDocuments([]); // Clear documents on error
+      setDocuments([]);
     } finally {
       setLoading(false);
     }
-  }, [category]); // Dependency on category
+  }, [category]);
 
   useEffect(() => {
     void fetchCategoryDocuments();
@@ -64,7 +64,7 @@ export default function CategoryDocumentsPage() {
         {/* Back link and Title */}
         <div className="mb-6 flex items-center gap-3">
           <Link
-            href={`${basePath}/folders`} // Use adjusted basePath
+            href={`${basePath}`}
             className="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100 transition-colors"
             aria-label="Back to Folders"
           >
@@ -107,7 +107,11 @@ export default function CategoryDocumentsPage() {
           {!loading && !error && documents.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-x-1 gap-y-3">
               {documents.map((doc) => (
-                <SimpleDocumentCard key={doc.id} document={doc} />
+                <SimpleDocumentCard
+                  key={doc.id}
+                  document={doc}
+                  hideActions={true} // Hide delete/edit actions for formee
+                />
               ))}
             </div>
           )}

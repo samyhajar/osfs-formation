@@ -22,7 +22,7 @@ const categories: DocumentCategory[] = [
 
 export default function FoldersPage() {
   // Determine the base path for links - specific to this admin page
-  const basePath = '/dashboard/admin';
+  const basePath = '/dashboard/admin/folders';
   const t = useTranslations('AdminFoldersPage');
 
   return (

@@ -43,7 +43,12 @@ export default function CategoryDocumentsPage() {
       }
 
       console.log(`Fetched ${data?.length ?? 0} documents for ${category}`);
-      setDocuments(data as Document[] || []);
+      setDocuments(data?.map(doc => ({
+        ...doc,
+        file_name: doc.title,
+        file_path: doc.content_url || '',
+        created_by: doc.author_id || ''
+      })) as Document[] || []);
 
     } catch (err: unknown) {
       console.error('Error fetching documents:', err);

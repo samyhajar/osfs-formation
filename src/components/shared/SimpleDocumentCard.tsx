@@ -1,90 +1,50 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Document } from '@/types/document';
-import { FileIcon } from '@/components/ui/FileIcon';
-import { createClient } from '@/lib/supabase/browser-client';
-import { Database } from '@/types/supabase';
-import toast from 'react-hot-toast';
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import { getFileIcon } from '@/lib/utils/file-icons';
+import { formatFileSize } from '@/lib/utils/format';
+import { useTranslations } from 'next-intl';
 
 interface SimpleDocumentCardProps {
   document: Document;
+  hideActions?: boolean;
+  onDownload?: (document: Document) => Promise<void>;
 }
 
-export function SimpleDocumentCard({ document }: SimpleDocumentCardProps) {
-  const { title, author_name, file_type, content_url, id } = document;
-  const [isDownloading, setIsDownloading] = useState(false);
-
-  const handleDownload = async () => {
-    if (!content_url) {
-      toast.error('File path is missing, cannot download.');
-      console.error('Missing content_url for document:', id);
-      return;
-    }
-    if (isDownloading) return;
-
-    setIsDownloading(true);
-    const toastId = toast.loading('Preparing download...');
-
-    try {
-      const supabase = createClient<Database>();
-      const { data, error } = await supabase.storage
-        .from('documents') // Corrected bucket name
-        .createSignedUrl(content_url, 60 * 5); // 5-minute validity
-
-      if (error) throw error;
-
-      if (data?.signedUrl) {
-        // Use window.open for direct download prompt in most browsers
-        window.open(data.signedUrl, '_blank');
-        toast.success('Download started!', { id: toastId });
-      } else {
-        throw new Error('Failed to generate download link.');
-      }
-    } catch (err: unknown) {
-      console.error('Download error:', err);
-      const message = err instanceof Error ? err.message : 'Unknown error';
-      toast.error(`Download failed: ${message}`, { id: toastId });
-    } finally {
-      setIsDownloading(false);
-    }
-  };
+export function SimpleDocumentCard({ document, hideActions = false, onDownload }: SimpleDocumentCardProps) {
+  const t = useTranslations('DocumentCard');
+  const Icon = getFileIcon(document.file_type || document.file_name);
 
   return (
-    <button
-      type="button"
-      onClick={() => void handleDownload()}
-      disabled={isDownloading || !content_url}
-      className="group flex flex-col items-center text-center p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md w-24 disabled:opacity-50 disabled:cursor-not-allowed"
-      title={`Download ${title}`}
-    >
-      {/* Larger Icon Representation */}
-      <div className="relative mb-2 flex flex-col items-center">
-         {isDownloading ? (
-           <ArrowPathIcon className="h-16 w-16 sm:h-16 sm:w-16 text-gray-400 animate-spin" />
-         ) : (
-           <FileIcon fileType={file_type ?? undefined} size={64} className="transition-transform duration-150 group-hover:scale-105" />
-         )}
-        {/* File Type Text Below Icon */}
-        {file_type && !isDownloading && (
-          <span className="mt-1 text-[10px] font-medium text-gray-500 uppercase tracking-wider">
-            {file_type}
-          </span>
-        )}
-        {/* Placeholder for spacing if no file type */}
-        {!file_type && !isDownloading && <div className="h-[15px] mt-1"></div>}
+    <div className="relative group">
+      <div className="p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow">
+        <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 text-gray-400">
+          <Icon className="w-8 h-8" />
+      </div>
+        <div className="text-center">
+          <h3 className="text-sm font-medium text-gray-900 truncate" title={document.title}>
+            {document.title}
+        </h3>
+          <p className="mt-1 text-xs text-gray-500">
+            {formatFileSize(document.file_size)}
+        </p>
+        </div>
       </div>
 
-      {/* Text Content Below Icon Area */}
-      <div className="w-full">
-        <h3 className="text-xs sm:text-sm font-medium text-gray-700 group-hover:text-blue-600 mb-0.5 line-clamp-2 break-words">
-          {title}
-        </h3>
-        <p className="text-[10px] sm:text-[11px] text-gray-500 line-clamp-1 break-words">
-          By {author_name || 'Unknown Author'}
-        </p>
-      </div>
+      {!hideActions && onDownload && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              void onDownload(document);
+            }}
+            className="bg-white text-gray-800 px-3 py-1 rounded-md text-sm hover:bg-gray-100 transition-colors"
+          >
+            {t('download')}
     </button>
+        </div>
+      )}
+    </div>
   );
 }
