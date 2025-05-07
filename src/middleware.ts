@@ -4,11 +4,36 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { createMiddlewareClient } from '@/lib/supabase/middleware-client';
 import { isPublicRoute } from '@/lib/utils/routes';
 import { routing } from './i18n/routing';
+import { match as matchLocale } from '@formatjs/intl-localematcher';
+import Negotiator from 'negotiator';
 // Import Database type if needed for RPC response typing
 // import { Database } from '@/types/supabase';
 
 // Create the next-intl middleware
 const intlMiddleware = createMiddleware(routing);
+
+// List of supported locales
+const locales = ['en', 'de', 'fr'];
+const defaultLocale = 'en';
+
+// Get the preferred locale from the request - Currently unused but kept for future use
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getLocale(request: NextRequest): string {
+  // Get the Accept-Language header
+  const negotiatorHeaders: Record<string, string> = {};
+  request.headers.forEach((value, key) => {
+    negotiatorHeaders[key] = value;
+  });
+
+  const languages = new Negotiator({ headers: negotiatorHeaders }).languages();
+
+  // Try to match the user's preferred language with our supported locales
+  try {
+    return matchLocale(languages, locales, defaultLocale);
+  } catch (_error) {
+    return defaultLocale;
+  }
+}
 
 export async function middleware(request: NextRequest) {
   console.log('🛡️ Middleware running for:', request.nextUrl.pathname);

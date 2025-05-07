@@ -50,7 +50,14 @@ export default function PendingUsersList() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setUsers(data);
+
+      // Filter out any null roles and set default to 'user'
+      const validUsers = data.map(user => ({
+        ...user,
+        role: user.role || 'user'
+      })) as Profile[];
+
+      setUsers(validUsers);
     } catch (err) {
       console.error('Error fetching pending users:', err);
       setError('Failed to load pending users');

@@ -11,5 +11,10 @@
       "reflections4dimensions": "Reflections 4 Dimensions",
       "prayerdimensions": "Prayer Dimensions"
     }
+  },
+  "NotFound": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you are looking for could not be found. It might have been moved, deleted, or never existed.",
+    "returnHome": "Return to Home"
   }
 }

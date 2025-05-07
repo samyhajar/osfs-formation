@@ -13,7 +13,11 @@ import { User, Session, SupabaseClient } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
 
-type UserProfile = Database['public']['Tables']['profiles']['Row'] & {
+// Update the UserProfile type to make it match the database type
+type ProfileFromDB = Database['public']['Tables']['profiles']['Row'];
+
+// Define UserProfile with required role (no null)
+type UserProfile = Omit<ProfileFromDB, 'role'> & {
   role: 'admin' | 'editor' | 'user' | 'formator' | 'formee'
 };
 
@@ -54,7 +58,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         return null;
       }
       console.log(`[AuthContext] Profile fetched for ${userId}:`, data);
-      return data;
+
+      // Handle null roles by providing a default 'user' role
+      if (data) {
+        const processedProfile: UserProfile = {
+          ...data,
+          role: data.role ?? 'user' // Default to 'user' if role is null
+        };
+        return processedProfile;
+      }
+
+      return null;
     } catch (err) {
       console.error(`[AuthContext] CAUGHT generic error fetching profile for ${userId}:`, err);
       return null;

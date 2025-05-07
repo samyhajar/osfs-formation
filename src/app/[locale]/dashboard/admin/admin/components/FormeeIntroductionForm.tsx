@@ -60,7 +60,7 @@ export function FormeeIntroductionForm({ initialData }: FormeeIntroductionFormPr
       let response;
 
       // Create a properly typed object that matches the Database type
-      const dataToSave: Database['public']['Tables']['formee_introduction']['Insert'] = {
+      const dataToSave: Database['public']['Tables']['user_introduction']['Insert'] = {
         coordinator_name: formData.coordinator_name,
         left_column_content: formData.left_column_content,
         right_column_content: formData.right_column_content,
@@ -70,13 +70,13 @@ export function FormeeIntroductionForm({ initialData }: FormeeIntroductionFormPr
       if (initialData?.id) {
         // Update existing record
         response = await supabase
-          .from('formee_introduction')
+          .from('user_introduction')
           .update(dataToSave)
           .eq('id', initialData.id);
       } else {
         // Create new record - insert expects an array of objects
         response = await supabase
-          .from('formee_introduction')
+          .from('user_introduction')
           .insert([dataToSave]);
       }
 
