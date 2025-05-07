@@ -1,4 +1,5 @@
-import './[locale]/globals.css';
+// This is a minimal root layout that redirects to localized pages
+// It imports no CSS as that's handled in locale layouts
 
 export const metadata = {
   title: 'OSFS Formation',
@@ -12,7 +13,7 @@ export default function RootLayout({
 }) {
   // Middleware handles redirects instead of component-level redirect
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>{children}</body>
     </html>
   );

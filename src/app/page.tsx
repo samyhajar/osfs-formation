@@ -1,8 +1,14 @@
+'use client';
+
+import { useEffect } from 'react';
+
 export default function RootPage() {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
-      <h1 className="text-2xl font-bold mb-4">Loading...</h1>
-      <p className="text-gray-500">Please wait while we redirect you to the appropriate page.</p>
-    </div>
-  );
+  // Use client-side only redirect to avoid hydration issues
+  useEffect(() => {
+    // Redirect to English locale as fallback if middleware fails
+    window.location.href = '/en';
+  }, []);
+
+  // Return an empty loading component
+  return null;
 }
