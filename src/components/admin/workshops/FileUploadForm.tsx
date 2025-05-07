@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
 import { useTranslations } from 'next-intl';
@@ -16,14 +16,14 @@ const commonLanguages = ['English', 'French', 'Spanish', 'German', 'Italian', 'P
 
 interface FileUploadFormProps {
   workshopId: string;
+  folderPath: string;
   onSuccess: () => void;
   onCancel: () => void;
 }
 
-export default function FileUploadForm({ workshopId, onSuccess, onCancel }: FileUploadFormProps) {
+export default function FileUploadForm({ workshopId: _workshopId, folderPath, onSuccess, onCancel }: FileUploadFormProps) {
   const t = useTranslations('FileUpload');
   const { user, profile } = useAuth();
-  const [workshop, setWorkshop] = useState<Database['public']['Tables']['workshops']['Row'] | null>(null);
 
   // Form state
   const [file, setFile] = useState<File | null>(null);
@@ -35,24 +35,6 @@ export default function FileUploadForm({ workshopId, onSuccess, onCancel }: File
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
 
-  // Fetch workshop details to get the folder path
-  useEffect(() => {
-    const fetchWorkshop = async () => {
-      const supabase = createClient<Database>();
-      const { data } = await supabase
-        .from('workshops')
-        .select('*')
-        .eq('id', workshopId)
-        .single();
-
-      if (data) {
-        setWorkshop(data);
-      }
-    };
-
-    void fetchWorkshop();
-  }, [workshopId]);
-
   const handleFileChange = (selectedFile: File | null) => {
     setFile(selectedFile);
     setError(null);
@@ -63,7 +45,7 @@ export default function FileUploadForm({ workshopId, onSuccess, onCancel }: File
   };
 
   const handleSubmit = async () => {
-    if (!file || !title || !workshop?.folder_path) {
+    if (!file || !title) {
       setError(t('validationError'));
       return;
     }
@@ -73,7 +55,7 @@ export default function FileUploadForm({ workshopId, onSuccess, onCancel }: File
     try {
       const supabase = createClient<Database>();
 
-      // Construct the file path using just the workshop folder path
+      // Construct the file path using the provided folderPath
       const fileExtension = file.name.split('.').pop() || '';
       const sanitizedTitle = title
         .toLowerCase()
@@ -93,7 +75,7 @@ export default function FileUploadForm({ workshopId, onSuccess, onCancel }: File
       const metadataString = Object.values(metadata).join('_');
       const fileName = `${sanitizedTitle}_${metadataString}_${timestamp}.${fileExtension}`;
 
-      const filePath = `${workshop.folder_path}/${fileName}`
+      const filePath = `${folderPath}/${fileName}`
         .replace(/\/+/g, '/') // Replace multiple slashes with single slash
         .replace(/^\/|\/$/g, ''); // Remove leading and trailing slashes
 
