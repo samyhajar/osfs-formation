@@ -41,19 +41,6 @@ const formatDate = (dateString: string) => {
   }).format(date);
 };
 
-// Re-added Helper for Language Abbreviations
-const _getLanguageCode = (language: string | null | undefined): string => {
-  if (!language) return '--';
-  const lowerLang = language.toLowerCase().trim();
-  if (lowerLang.startsWith('en') || lowerLang === 'english') return 'EN';
-  if (lowerLang.startsWith('fr') || lowerLang === 'french') return 'FR';
-  if (lowerLang.startsWith('es') || lowerLang === 'spanish') return 'ES';
-  if (lowerLang.startsWith('de') || lowerLang === 'german') return 'DE';
-  if (lowerLang.startsWith('it') || lowerLang === 'italian') return 'IT';
-  if (lowerLang.startsWith('pt') || lowerLang === 'portuguese') return 'PT';
-  return language.substring(0, 2).toUpperCase();
-};
-
 export default function DocumentList({
   documents,
   isLoading,
@@ -93,7 +80,7 @@ export default function DocumentList({
     try {
       const filePath = doc.content_url;
       const { data, error } = await supabase.storage
-        .from('media') // Adjusted bucket name
+        .from('documents') // Correct bucket name
         .createSignedUrl(filePath, 60 * 5); // 5-minute expiry
 
       if (error) {

@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/browser-client';
 import { SyllabusDocument } from '@/types/document';
 import { SyllabusTableRow } from './SyllabusTableRow';
 import { EmptyState, LoadingState } from './SyllabusListStates';
+import { getLanguageCode } from './LanguageFlag';
 
 const TARGET_BUCKET = 'common-syllabus';
 
@@ -21,20 +22,6 @@ function formatDate(isoString: string | null | undefined): string {
     return 'Invalid Date';
   }
 }
-
-// Helper for Language Abbreviations
-const getLanguageCode = (language: string | null | undefined): string => {
-  if (!language) return '-';
-  const lowerLang = language.toLowerCase().trim();
-  if (lowerLang.startsWith('en') || lowerLang === 'english') return 'EN';
-  if (lowerLang.startsWith('fr') || lowerLang === 'french') return 'FR';
-  if (lowerLang.startsWith('es') || lowerLang === 'spanish') return 'ES';
-  if (lowerLang.startsWith('de') || lowerLang === 'german') return 'DE';
-  if (lowerLang.startsWith('it') || lowerLang === 'italian') return 'IT';
-  if (lowerLang.startsWith('pt') || lowerLang === 'portuguese') return 'PT';
-  // Fallback to first 2 chars or original if short
-  return language.length > 2 ? language.substring(0, 2).toUpperCase() : language.toUpperCase();
-};
 
 interface SyllabusFileListProps {
   documents: SyllabusDocument[];
@@ -123,7 +110,7 @@ export default function SyllabusFileList({
           <thead className="bg-gray-50">
             <tr>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('headerName', { default: 'Name' })}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('headerType', { default: 'Type' })}</th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[150px]">{t('headerType', { default: 'Type' })}</th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('headerLang', { default: 'Lang' })}</th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('headerRegion', { default: 'Region' })}</th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('headerCategory', { default: 'Category' })}</th>

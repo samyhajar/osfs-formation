@@ -10,6 +10,7 @@ import {
   TrashIcon,
   ArrowDownTrayIcon,
   ArrowPathIcon,
+  EyeIcon,
 } from '@heroicons/react/24/outline';
 
 // Statically import required flags
@@ -18,7 +19,7 @@ import ES from 'country-flag-icons/react/3x2/ES';
 import DE from 'country-flag-icons/react/3x2/DE';
 import US from 'country-flag-icons/react/3x2/US'; // Use US for English/USA flag
 import IT from 'country-flag-icons/react/3x2/IT'; // Add Italian flag
-import PT from 'country-flag-icons/react/3x2/PT'; // Add Portuguese flag
+import BR from 'country-flag-icons/react/3x2/BR'; // Use Brazilian flag for Portuguese
 
 // Map country codes to components - use basic object type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,7 +29,7 @@ const flagComponents: { [key: string]: any } = {
   DE,
   US,
   IT,
-  PT,
+  BR,
 };
 
 // Map full language names (lowercase) to country codes
@@ -38,7 +39,7 @@ const languageNameToCodeMap: { [key: string]: string } = {
   spanish: 'ES',
   german: 'DE',
   italian: 'IT',
-  portuguese: 'PT',
+  portuguese: 'BR', // Use Brazilian flag for Portuguese
 };
 
 // Updated LanguageFlag component
@@ -111,7 +112,7 @@ export function DocumentRow({
           </div>
           <div>
             <div className="text-sm font-medium text-gray-900">
-              <Link href={`/dashboard/documents/${doc.id}`} className="hover:text-accent-primary transition-colors">
+              <Link href={`/dashboard/admin/documents/${doc.id}`} className="hover:text-accent-primary transition-colors">
                 {doc.title}
               </Link>
             </div>
@@ -155,6 +156,15 @@ export function DocumentRow({
             onMouseLeave={() => toggleDropdown(doc.id)} // Close on mouse leave
           >
             <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+              <Link
+                href={`/dashboard/admin/documents/${doc.id}`}
+                className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                role="menuitem"
+                onClick={() => toggleDropdown(doc.id)} // Close dropdown on click
+              >
+                <EyeIcon className="h-4 w-4" />
+                View
+              </Link>
               <Link
                 href={`/dashboard/admin/documents/${doc.id}/edit`}
                 className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"

@@ -74,6 +74,7 @@ export function WorkshopFilesList({ workshopId, folderPath, hideUpload = false }
             <SimpleDocumentCard
               key={file.id}
               document={file}
+              basePath="/dashboard/admin/workshops"
               hideActions={hideUpload}
               onDownload={handleDownload}
             />

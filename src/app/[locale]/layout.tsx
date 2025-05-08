@@ -35,25 +35,30 @@ export default async function LocaleLayout({
   params,
 }: {
   children: ReactNode;
-  params: Promise<{ locale: string }>;
+  params: { locale: string };
 }) {
   // Extract locale from params
-  const { locale } = await params;
+  const { locale } = params;
 
   // Fetch messages using getMessages on the server
-  const messages = await getMessages();
+  const messages = await getMessages({locale});
 
+  // Add the font variables to the body instead of html
   return (
-    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
-      <body>
-        {/* NextIntlClientProvider now receives server-fetched messages */}
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <AuthProvider>
-            {children}
-            <Toaster position="bottom-center" />
-          </AuthProvider>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <>
+      {/* Set the language of the document using a script tag instead of the html element */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `document.documentElement.lang = "${locale}"; document.documentElement.className = "${geistSans.variable} ${geistMono.variable} antialiased font-sans";`,
+        }}
+      />
+      {/* NextIntlClientProvider now receives server-fetched messages */}
+      <NextIntlClientProvider locale={locale} messages={messages}>
+        <AuthProvider>
+          {children}
+          <Toaster position="bottom-center" />
+        </AuthProvider>
+      </NextIntlClientProvider>
+    </>
   );
 }

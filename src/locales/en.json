@@ -164,6 +164,24 @@
     "downloadErrorSignUrlFailed": "Failed to generate signed URL.",
     "downloadErrorGeneric": "Failed to download file:"
   },
+  "DocumentViewer": {
+    "loading": "Loading document...",
+    "error": "Error",
+    "documentNotFound": "Document not found or access denied",
+    "goBack": "Go back",
+    "download": "Download",
+    "downloading": "Downloading...",
+    "fileType": "File Type",
+    "uploadDate": "Upload Date",
+    "language": "Language",
+    "unknown": "Unknown",
+    "unknownAuthor": "Unknown Author",
+    "previewNotAvailable": "Preview not available for this file type",
+    "downloadToView": "Download to view",
+    "noContentUrl": "No content URL available for this document",
+    "signedUrlError": "Failed to generate preview URL",
+    "downloadUrlError": "Failed to generate download URL"
+  },
   "Pagination": {
     "ariaLabel": "Pagination",
     "pageInfo": "Page {currentPage} of {totalPages}",
@@ -417,8 +435,8 @@
   },
   "NotFound": {
     "title": "Page Not Found",
-    "message": "Sorry, the page you are looking for does not exist.",
-    "goHome": "Go to Homepage"
+    "description": "Sorry, the page you are looking for could not be found. It might have been moved, deleted, or never existed.",
+    "returnHome": "Return to Home"
   },
   "FormationManagement": {
     "title": "Formation Management",
@@ -524,6 +542,28 @@
     "emailSuccess": "Email notifications sent successfully",
     "emailError": "Failed to send email notifications",
     "statusFilter": "Filter by Status",
+    "selectDocuments": "Select Documents",
+    "selectUsers": "Select Users",
+    "documents": "Documents",
+    "searchDocuments": "Search documents",
+    "filters": "Filters",
+    "headerName": "Name",
+    "headerType": "Type",
+    "headerLang": "Language",
+    "headerRegion": "Region",
+    "headerCategory": "Category",
+    "headerCreated": "Created",
+    "selectedDocuments": "Selected Documents",
+    "change": "Change",
+    "searchUsers": "Search users",
+    "allStatuses": "All Statuses",
+    "category": "Category",
+    "allCategories": "All Categories",
+    "language": "Language",
+    "allLanguages": "All Languages",
+    "resetFilters": "Reset Filters",
+    "reset": "Reset",
+    "next": "Next",
     "formeeStatus": {
       "Scholastic": "Scholastic",
       "Postulant": "Postulant",
@@ -534,5 +574,37 @@
   },
   "DashboardClientTest": {
     "testMessage": "Test Message EN"
+  },
+  "Administration": {
+    "title": "Administration",
+    "description": "Manage system settings and configurations",
+    "userIntroductionTab": "User Introduction",
+    "settingsTab": "Settings",
+    "userIntroductionTitle": "User Introduction Message",
+    "systemSettingsTitle": "System Settings",
+    "systemSettingsDescription": "Additional system settings will be available here in the future.",
+    "systemSettings": "System Settings"
+  },
+  "UserIntroduction": {
+    "coordinatorNameLabel": "Coordinator Name",
+    "leftColumnLabel": "Welcome Message (Left Column)",
+    "textFormatInfo": "Text can include basic formatting",
+    "rightColumnLabel": "Additional Information (Right Column)",
+    "saveButton": "Save Changes",
+    "saveSuccess": "Content saved successfully!"
+  },
+  "AdminWorkshopsPage": {
+    "title": "Workshops",
+    "uploadWorkshop": "Upload Workshop",
+    "loading": "Loading workshops...",
+    "noWorkshops": "No workshops available. Create a workshop to get started.",
+    "workshopsTitle": "Available Workshops",
+    "workshops": {
+      "general": "General",
+      "prayer": "Prayer",
+      "community": "Community",
+      "mission": "Mission",
+      "default": "Workshop"
+    }
   }
 }

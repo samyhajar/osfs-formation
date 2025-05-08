@@ -112,7 +112,11 @@ export default function CategoryDocumentsPage() {
           {!loading && !error && documents.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-x-1 gap-y-3">
               {documents.map((doc) => (
-                <SimpleDocumentCard key={doc.id} document={doc} />
+                <SimpleDocumentCard
+                  key={doc.id}
+                  document={doc}
+                  basePath={`${basePath}/documents`}
+                />
               ))}
             </div>
           )}

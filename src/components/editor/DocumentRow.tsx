@@ -18,7 +18,7 @@ import ES from 'country-flag-icons/react/3x2/ES';
 import DE from 'country-flag-icons/react/3x2/DE';
 import GB from 'country-flag-icons/react/3x2/GB';
 import IT from 'country-flag-icons/react/3x2/IT';
-import PT from 'country-flag-icons/react/3x2/PT';
+import BR from 'country-flag-icons/react/3x2/BR';
 
 // Map country codes to components - use basic object type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,7 +28,7 @@ const flagComponents: { [key: string]: any } = {
   DE,
   GB,
   IT,
-  PT,
+  BR,
 };
 
 // Map full language names (lowercase) to country codes
@@ -38,7 +38,7 @@ const languageNameToCodeMap: { [key: string]: string } = {
   spanish: 'ES',
   german: 'DE',
   italian: 'IT',
-  portuguese: 'PT',
+  portuguese: 'BR',
 };
 
 // Updated LanguageFlag component

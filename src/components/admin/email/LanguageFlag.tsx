@@ -6,7 +6,7 @@ import ES from 'country-flag-icons/react/3x2/ES';
 import DE from 'country-flag-icons/react/3x2/DE';
 import US from 'country-flag-icons/react/3x2/US'; // Use US for English/USA flag
 import IT from 'country-flag-icons/react/3x2/IT'; // Add Italian flag
-import PT from 'country-flag-icons/react/3x2/PT'; // Add Portuguese flag
+import BR from 'country-flag-icons/react/3x2/BR'; // Use Brazilian flag for Portuguese
 
 // Map country codes to components
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -16,7 +16,7 @@ const flagComponents: { [key: string]: any } = {
   DE,
   US,
   IT,
-  PT,
+  BR,
 };
 
 // Map full language names (lowercase) to country codes
@@ -26,7 +26,7 @@ const languageNameToCodeMap: { [key: string]: string } = {
   spanish: 'ES',
   german: 'DE',
   italian: 'IT',
-  portuguese: 'PT',
+  portuguese: 'BR', // Use Brazilian flag for Portuguese
 };
 
 // LanguageFlag component
@@ -60,6 +60,6 @@ export const getLanguageCode = (language: string | null | undefined): string => 
   if (lowerLang.startsWith('es') || lowerLang === 'spanish') return 'ES';
   if (lowerLang.startsWith('de') || lowerLang === 'german') return 'DE';
   if (lowerLang.startsWith('it') || lowerLang === 'italian') return 'IT';
-  if (lowerLang.startsWith('pt') || lowerLang === 'portuguese') return 'PT';
+  if (lowerLang.startsWith('pt') || lowerLang === 'portuguese') return 'BR'; // Use Brazilian flag for Portuguese
   return language.substring(0, 2).toUpperCase();
 };

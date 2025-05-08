@@ -3,6 +3,8 @@
 import { SyllabusDocument } from '@/types/document';
 import { DocumentArrowDownIcon, TrashIcon, EllipsisHorizontalIcon, ArrowPathIcon } from '@heroicons/react/24/solid';
 import { useTranslations } from 'next-intl';
+import { LanguageFlag } from './LanguageFlag';
+import { FileIcon } from '@/components/ui/FileIcon';
 
 // Define ReturnType locally since the direct import is causing issues
 type TranslatorFunction = ReturnType<typeof useTranslations>;
@@ -16,9 +18,37 @@ interface SyllabusTableRowProps {
   handleDownload: (doc: SyllabusDocument) => Promise<void>;
   handleDelete: (doc: SyllabusDocument) => Promise<void>;
   formatDate: (isoString: string | null | undefined) => string;
-  getLanguageCode: (language: string | null | undefined) => string;
   t: TranslatorFunction;
 }
+
+// Helper function to get descriptive file type name
+const getFileTypeDescription = (fileType: string | null): string => {
+  if (!fileType) return 'Unknown';
+
+  const lowerType = fileType.toLowerCase();
+
+  // Return more descriptive names for common file types
+  const fileTypeNames: Record<string, string> = {
+    'pdf': 'PDF Document',
+    'doc': 'Word Document',
+    'docx': 'Word Document',
+    'xls': 'Excel Spreadsheet',
+    'xlsx': 'Excel Spreadsheet',
+    'ppt': 'PowerPoint Presentation',
+    'pptx': 'PowerPoint Presentation',
+    'txt': 'Text Document',
+    'jpg': 'JPEG Image',
+    'jpeg': 'JPEG Image',
+    'png': 'PNG Image',
+    'gif': 'GIF Image',
+    'svg': 'SVG Image',
+    'pages': 'Apple Pages Document',
+    'numbers': 'Apple Numbers Spreadsheet',
+    'keynote': 'Apple Keynote Presentation',
+  };
+
+  return fileTypeNames[lowerType] || fileType.toUpperCase();
+};
 
 export function SyllabusTableRow({
   doc,
@@ -29,19 +59,28 @@ export function SyllabusTableRow({
   handleDownload,
   handleDelete,
   formatDate,
-  getLanguageCode,
   t
 }: SyllabusTableRowProps) {
+  // Extract file extension from file_type
+  const fileExtension = doc.file_type ? doc.file_type.split('/').pop()?.toLowerCase() || null : null;
+
   return (
     <tr>
       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 truncate max-w-xs">
         {doc.title}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-        {doc.file_type ? doc.file_type.split('/').pop()?.toUpperCase() : 'N/A'}
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 max-w-[150px]">
+        <div className="flex items-center">
+          <FileIcon fileType={fileExtension || undefined} size={16} className="flex-shrink-0" />
+          <span className="ml-2 truncate" title={getFileTypeDescription(fileExtension)}>
+            {getFileTypeDescription(fileExtension)}
+          </span>
+        </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-        {getLanguageCode(doc.language)}
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+        <div className="inline-flex justify-center items-center w-full">
+          <LanguageFlag languageName={doc.language ?? null} />
+        </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 truncate max-w-[100px]">
         {doc.region || '-'}

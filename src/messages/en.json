@@ -16,5 +16,46 @@
     "title": "Page Not Found",
     "description": "Sorry, the page you are looking for could not be found. It might have been moved, deleted, or never existed.",
     "returnHome": "Return to Home"
+  },
+  "Administration": {
+    "title": "Administration",
+    "description": "Manage system settings and configurations",
+    "userIntroductionTab": "User Introduction",
+    "settingsTab": "Settings",
+    "userIntroductionTitle": "User Introduction Message",
+    "systemSettingsTitle": "System Settings",
+    "systemSettingsDescription": "Additional system settings will be available here in the future."
+  },
+  "UserIntroduction": {
+    "coordinatorNameLabel": "Coordinator Name",
+    "leftColumnLabel": "Welcome Message (Left Column)",
+    "textFormatInfo": "Text can include basic formatting",
+    "rightColumnLabel": "Additional Information (Right Column)",
+    "saveButton": "Save Changes",
+    "saveSuccess": "Content saved successfully!"
+  },
+  "EmailPage": {
+    "selectDocuments": "Select Documents",
+    "selectUsers": "Select Users",
+    "documents": "Documents",
+    "searchDocuments": "Search documents",
+    "filters": "Filters",
+    "headerName": "Name",
+    "headerType": "Type",
+    "headerLang": "Language",
+    "headerRegion": "Region",
+    "headerCategory": "Category",
+    "headerCreated": "Created",
+    "selectedDocuments": "Selected Documents",
+    "change": "Change",
+    "searchUsers": "Search users",
+    "allStatuses": "All Statuses",
+    "category": "Category",
+    "allCategories": "All Categories",
+    "language": "Language",
+    "allLanguages": "All Languages",
+    "resetFilters": "Reset Filters",
+    "reset": "Reset",
+    "next": "Next"
   }
 }

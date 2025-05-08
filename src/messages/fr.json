@@ -9,5 +9,51 @@
       "formationprograms": "Programmes de Formation",
       "reflectionsdimensions": "Réflexions & Dimensions"
     }
+  },
+  "NotFound": {
+    "title": "Page Non Trouvée",
+    "description": "Désolé, la page que vous recherchez n'a pas pu être trouvée. Elle a peut-être été déplacée, supprimée, ou n'a jamais existé.",
+    "returnHome": "Retourner à l'Accueil"
+  },
+  "Administration": {
+    "title": "Administration",
+    "description": "Gérer les paramètres et configurations du système",
+    "userIntroductionTab": "Introduction Utilisateur",
+    "settingsTab": "Paramètres",
+    "userIntroductionTitle": "Message d'Introduction Utilisateur",
+    "systemSettingsTitle": "Paramètres Système",
+    "systemSettingsDescription": "Des paramètres système supplémentaires seront disponibles ici à l'avenir."
+  },
+  "UserIntroduction": {
+    "coordinatorNameLabel": "Nom du Coordinateur",
+    "leftColumnLabel": "Message de Bienvenue (Colonne Gauche)",
+    "textFormatInfo": "Le texte peut inclure un formatage de base",
+    "rightColumnLabel": "Informations Supplémentaires (Colonne Droite)",
+    "saveButton": "Enregistrer les Modifications",
+    "saveSuccess": "Contenu enregistré avec succès !"
+  },
+  "EmailPage": {
+    "selectDocuments": "Sélectionner des Documents",
+    "selectUsers": "Sélectionner des Utilisateurs",
+    "documents": "Documents",
+    "searchDocuments": "Rechercher des documents",
+    "filters": "Filtres",
+    "headerName": "Nom",
+    "headerType": "Type",
+    "headerLang": "Langue",
+    "headerRegion": "Région",
+    "headerCategory": "Catégorie",
+    "headerCreated": "Créé le",
+    "selectedDocuments": "Documents Sélectionnés",
+    "change": "Modifier",
+    "searchUsers": "Rechercher des utilisateurs",
+    "allStatuses": "Tous les Statuts",
+    "category": "Catégorie",
+    "allCategories": "Toutes les Catégories",
+    "language": "Langue",
+    "allLanguages": "Toutes les Langues",
+    "resetFilters": "Réinitialiser les Filtres",
+    "reset": "Réinitialiser",
+    "next": "Suivant"
   }
 }

@@ -3,6 +3,7 @@
 import React, { Suspense } from 'react';
 import { useTranslations } from 'next-intl';
 import { Document } from '@/types/document';
+import Link from 'next/link';
 
 // Helper component to render flags dynamically
 const LanguageFlag = ({ code }: { code: string | null }) => {
@@ -89,7 +90,9 @@ export default function DocumentsList({ documents, loading }: DocumentsListProps
             <tr key={doc.id} className="hover:bg-gray-50">
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm font-medium text-blue-600 hover:underline">
-                  {doc.title}
+                  <Link href={`/dashboard/admin/documents/${doc.id}`}>
+                    {doc.title}
+                  </Link>
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
@@ -110,9 +113,12 @@ export default function DocumentsList({ documents, loading }: DocumentsListProps
                 {doc.created_at ? new Date(doc.created_at).toLocaleDateString() : 'N/A'}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button className="text-blue-600 hover:text-blue-900 mr-3">
+                <Link
+                  href={`/dashboard/admin/documents/${doc.id}`}
+                  className="text-blue-600 hover:text-blue-900 mr-3"
+                >
                   {t('actionView')}
-                </button>
+                </Link>
                 <button className="text-green-600 hover:text-green-900 mr-3">
                   {t('actionDownload')}
                 </button>
