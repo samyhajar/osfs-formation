@@ -10,17 +10,23 @@ import BR from 'country-flag-icons/react/3x2/BR'; // Use Brazilian flag for Port
 import NL from 'country-flag-icons/react/3x2/NL'; // Dutch flag
 import React from 'react';
 
-// Map for flag components - using any but in a more constrained way
-const flagComponents: Record<string, React.ElementType> = {
-  'FR': FR,
-  'ES': ES,
-  'DE': DE,
-  'US': US,
-  'EN': US, // Use US flag for English
-  'IT': IT,
-  'BR': BR,
-  'PT': BR, // Use Brazilian flag for Portuguese
-  'NL': NL
+// Define a type that represents what these components actually accept
+type FlagProps = {
+  title?: string;
+  className?: string;
+};
+
+// Map for flag components
+const flagComponents: Record<string, React.ComponentType<FlagProps>> = {
+  'FR': FR as React.ComponentType<FlagProps>,
+  'ES': ES as React.ComponentType<FlagProps>,
+  'DE': DE as React.ComponentType<FlagProps>,
+  'US': US as React.ComponentType<FlagProps>,
+  'EN': US as React.ComponentType<FlagProps>, // Use US flag for English
+  'IT': IT as React.ComponentType<FlagProps>,
+  'BR': BR as React.ComponentType<FlagProps>,
+  'PT': BR as React.ComponentType<FlagProps>, // Use Brazilian flag for Portuguese
+  'NL': NL as React.ComponentType<FlagProps>
 };
 
 // Language code to country code mapping
@@ -35,7 +41,7 @@ const languageToCountryCode: Record<string, string> = {
 };
 
 // LanguageFlag component
-export const LanguageFlag = ({ languageName }: { languageName: string | null }): JSX.Element => {
+export const LanguageFlag = ({ languageName }: { languageName: string | null }): React.ReactNode => {
   if (!languageName) return <span className="text-gray-400">--</span>;
 
   // Convert to lowercase for normalization

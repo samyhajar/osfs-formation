@@ -9,11 +9,13 @@ import { formatFileSize } from '@/lib/utils/format';
 interface SimpleDocumentCardProps {
   document: Document;
   basePath?: string;
+  hideActions?: boolean;
 }
 
 export function SimpleDocumentCard({
   document,
   basePath = '/dashboard/admin/documents',
+  hideActions: _hideActions = false,
 }: SimpleDocumentCardProps) {
   const Icon = getFileIcon(document.file_type || document.file_name);
 
