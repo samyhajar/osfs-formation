@@ -24,18 +24,28 @@ export const publicRoutes = [
  * Supports exact matches and wildcard patterns (e.g., '/auth/**').
  */
 export function isPublicRoute(path: string): boolean {
-  return publicRoutes.some((route) => {
-    // Exact match
-    if (route === path) {
-      return true;
-    }
+  const publicPaths = [
+    '',
+    '/',
+    '/login',
+    '/signup',
+    '/auth/pending-approval',
+    '/auth/reset-password',
+    '/auth/callback',
+    '/auth/confirm',
+    '/about',
+    '/contact',
+    '/resources',
+    '/debug-clear-cookie',
+  ];
 
-    // Path with wildcard at the end (e.g., /auth/**)
-    if (route.endsWith('/**')) {
-      const baseRoute = route.slice(0, -3);
-      return path.startsWith(baseRoute);
-    }
+  // Check if path is in the publicPaths array
+  if (publicPaths.includes(path)) {
+    return true;
+  }
 
-    return false;
-  });
+  // Check if path starts with any of these prefixes
+  const publicPrefixes = ['/auth/', '/api/auth/'];
+
+  return publicPrefixes.some((prefix) => path.startsWith(prefix));
 }

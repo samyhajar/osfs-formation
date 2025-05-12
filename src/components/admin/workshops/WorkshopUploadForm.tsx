@@ -12,6 +12,39 @@ import { useWorkshopDocumentUpload } from '@/hooks/useWorkshopDocumentUpload';
 const commonRegions = ['Global', 'Africa', 'Asia', 'Europe', 'North America', 'South America'];
 const commonLanguages = ['English', 'French', 'Spanish', 'German', 'Italian', 'Portuguese'];
 
+const allowedMimeTypes = [
+  // Documents
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-powerpoint',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'text/plain',
+  'application/rtf',
+  'text/csv',
+  'application/vnd.oasis.opendocument.text',
+  'application/vnd.oasis.opendocument.spreadsheet',
+  'application/vnd.oasis.opendocument.presentation',
+  'application/epub+zip',
+  'text/html',
+  // Images
+  'image/png',
+  'image/jpeg',
+  'image/gif',
+  // Video
+  'video/mp4',
+  'video/quicktime',
+  'video/x-msvideo',
+  // Audio
+  'audio/mpeg',
+  'audio/wav',
+  // Archives
+  'application/zip',
+  'application/x-zip-compressed',
+];
+
 interface WorkshopUploadFormProps {
   onUploadComplete?: () => void;
 }
@@ -36,6 +69,10 @@ export default function WorkshopUploadForm({ onUploadComplete }: WorkshopUploadF
   const handleFileUpdate = (newFile: File | null) => {
     setFile(newFile);
     setFormError(null);
+    if (newFile && !allowedMimeTypes.includes(newFile.type)) {
+      setFormError('This file type is not supported. Please upload a common document, image, video, audio, or archive file.');
+      setFile(null);
+    }
   };
 
   const handleSubmit = async () => {
@@ -43,6 +80,10 @@ export default function WorkshopUploadForm({ onUploadComplete }: WorkshopUploadF
 
     if (!file || !title) {
       setFormError('Title and File are required.');
+      return;
+    }
+    if (!allowedMimeTypes.includes(file.type)) {
+      setFormError('This file type is not supported. Please upload a common document, image, video, audio, or archive file.');
       return;
     }
 

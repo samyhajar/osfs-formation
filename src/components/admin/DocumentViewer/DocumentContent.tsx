@@ -3,6 +3,7 @@ import { Document } from '@/types/document';
 import { ArrowDownTrayIcon, ArrowPathIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import { FileIcon } from '@/components/ui/FileIcon';
 import { PDFViewer } from '@/components/shared/PDFViewer';
+import { getFileExtension, canDisplayInIframe, getIframeUrl, isPdf, getFileTypeDescription } from '@/lib/utils/file-utils';
 
 interface DocumentContentProps {
   document: Document;
@@ -19,84 +20,30 @@ export const DocumentContent: React.FC<DocumentContentProps> = ({
   onDownload,
   t
 }) => {
-  // Determine if the file type can be displayed in an iframe
-  const canDisplayInIframe = (fileType: string | null): boolean => {
-    if (!fileType) return false;
+  // Get the normalized file type
+  const fileExtension = getFileExtension(document.file_type, document.file_name);
 
-    // Directly supported types that can be rendered in an iframe
-    const directlySupportedTypes = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'svg', 'html', 'txt'];
+  console.log('File processing:', {
+    originalType: document.file_type,
+    fileName: document.file_name,
+    extractedExtension: fileExtension
+  });
 
-    // Microsoft Office formats that can be viewed via Office Online Viewer
-    const officeFormats = ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'];
-
-    return directlySupportedTypes.includes(fileType.toLowerCase()) ||
-           officeFormats.includes(fileType.toLowerCase());
-  };
-
-  // Get the appropriate URL for displaying in iframe based on file type
-  const getIframeUrl = (fileUrl: string, fileType: string): string => {
-    const lowerFileType = fileType.toLowerCase();
-
-    // Microsoft Office formats should be viewed via Office Online Viewer
-    const officeFormats = ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'];
-
-    if (officeFormats.includes(lowerFileType)) {
-      // Use Microsoft Office Online Viewer
-      return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`;
-    }
-
-    // Try Google Docs viewer as a fallback for other supported formats
-    const googleSupportedFormats = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt'];
-    if (googleSupportedFormats.includes(lowerFileType)) {
-      // Use Google Docs Viewer as a fallback option
-      return `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
-    }
-
-    // For all other supported formats, use the direct URL
-    return fileUrl;
-  };
-
-  // Get appropriate file type description
-  const getFileTypeDescription = (fileType: string | null): string => {
-    if (!fileType) return t('unknown');
-
-    const lowerType = fileType.toLowerCase();
-
-    // Return more descriptive names for common file types
-    const fileTypeNames: Record<string, string> = {
-      'pdf': 'PDF Document',
-      'doc': 'Word Document',
-      'docx': 'Word Document',
-      'xls': 'Excel Spreadsheet',
-      'xlsx': 'Excel Spreadsheet',
-      'ppt': 'PowerPoint Presentation',
-      'pptx': 'PowerPoint Presentation',
-      'txt': 'Text Document',
-      'jpg': 'JPEG Image',
-      'jpeg': 'JPEG Image',
-      'png': 'PNG Image',
-      'gif': 'GIF Image',
-      'svg': 'SVG Image',
-      'pages': 'Apple Pages Document',
-      'numbers': 'Apple Numbers Spreadsheet',
-      'keynote': 'Apple Keynote Presentation',
-    };
-
-    return fileTypeNames[lowerType] || fileType.toUpperCase();
-  };
+  // Check if it's a PDF
+  const isPdfFile = isPdf(document.file_type, document.file_name, fileExtension);
 
   return (
     <div className="p-2 bg-gray-50 min-h-[70vh]">
       {signedUrl ? (
-        canDisplayInIframe(document.file_type) ? (
+        canDisplayInIframe(document.file_type, fileExtension) ? (
           <>
-            {document.file_type?.toLowerCase() === 'pdf' ? (
+            {isPdfFile ? (
               // Use our custom PDF viewer component
               <PDFViewer url={signedUrl} title={document.title} />
             ) : (
               // Use iframe for non-PDF formats
               <iframe
-                src={getIframeUrl(signedUrl, document.file_type || '')}
+                src={getIframeUrl(signedUrl, document.file_type || '', document.file_name)}
                 className="w-full h-[70vh] border-0 rounded"
                 title={document.title}
                 sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation"
@@ -106,7 +53,7 @@ export const DocumentContent: React.FC<DocumentContentProps> = ({
             {/* Debug info - remove in production */}
             {process.env.NODE_ENV === 'development' && (
               <div className="mt-2 text-xs text-gray-400 p-2">
-                Using viewer URL: {document.file_type?.toLowerCase() === 'pdf' ? signedUrl : getIframeUrl(signedUrl, document.file_type || '')}
+                Using viewer URL: {isPdfFile ? signedUrl : getIframeUrl(signedUrl, document.file_type || '', document.file_name)}
               </div>
             )}
           </>
@@ -116,7 +63,6 @@ export const DocumentContent: React.FC<DocumentContentProps> = ({
             signedUrl={signedUrl}
             onDownload={onDownload}
             t={t}
-            getFileTypeDescription={getFileTypeDescription}
           />
         )
       ) : !document.content_url ? (
@@ -139,15 +85,13 @@ interface PreviewNotAvailableProps {
   signedUrl: string | null;
   onDownload: () => void;
   t: (key: string) => string;
-  getFileTypeDescription: (fileType: string | null) => string;
 }
 
 const PreviewNotAvailable: React.FC<PreviewNotAvailableProps> = ({
   document,
   signedUrl,
   onDownload,
-  t,
-  getFileTypeDescription
+  t
 }) => (
   <div className="flex flex-col items-center justify-center h-[70vh] bg-gray-100 rounded">
     <FileIcon fileType={document.file_type ?? undefined} size={48} />
@@ -178,24 +122,20 @@ const PreviewNotAvailable: React.FC<PreviewNotAvailableProps> = ({
     {(['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(document.file_type?.toLowerCase() || '') && !signedUrl) && (
       <p className="mt-2 text-gray-600 max-w-md text-center">
         The Microsoft Office viewer is temporarily unavailable.
-        Please try again later or download the file to view it offline.
+        Please try downloading the file instead.
       </p>
     )}
 
-    {!['pages', 'numbers', 'keynote', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(document.file_type?.toLowerCase() || '') && (
-      <p className="mt-2 text-gray-600 max-w-md text-center">
-        This file type ({getFileTypeDescription(document.file_type)}) cannot be previewed directly in the browser.
-        Please download to view the contents.
-      </p>
-    )}
+    <p className="mt-2 text-sm text-gray-600">
+      {t('fileType')}: {getFileTypeDescription(document.file_type)}
+    </p>
 
     <button
-      onClick={() => void onDownload()}
-      disabled={!document.content_url}
-      className="mt-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-300 disabled:cursor-not-allowed"
+      onClick={onDownload}
+      className="mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-accent-primary hover:bg-accent-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-primary"
     >
       <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
-      {t('downloadToView')}
+      {t('download')}
     </button>
   </div>
 );

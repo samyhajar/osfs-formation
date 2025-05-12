@@ -127,7 +127,7 @@
     "actionView": "Ansehen",
     "actionDownload": "Herunterladen",
     "headerName": "Name",
-    "headerLang": "Spr.",
+    "headerLang": "Sprache",
     "headerRegion": "Region",
     "headerCreated": "Erstellt",
     "loading": "Dokumente werden geladen...",
@@ -136,7 +136,13 @@
     "createNewDocument": "Neues Dokument erstellen",
     "downloadErrorNoPath": "Download fehlgeschlagen: Kein Dateipfad verfügbar.",
     "downloadErrorSignUrlFailed": "Generierung der signierten URL fehlgeschlagen.",
-    "downloadErrorGeneric": "Datei konnte nicht heruntergeladen werden:"
+    "downloadErrorGeneric": "Datei konnte nicht heruntergeladen werden:",
+    "deleteModalTitle": "Dokument löschen",
+    "deleteModalDescription": "Sind Sie sicher, dass Sie \"{documentTitle}\" löschen möchten?",
+    "deleteModalWarning": "Diese Aktion kann nicht rückgängig gemacht werden. Das Dokument wird dauerhaft gelöscht.",
+    "deleteModalConfirm": "Löschen",
+    "deleteModalCancel": "Abbrechen",
+    "deleteModalDeleting": "Wird gelöscht..."
   },
   "Pagination": {
     "ariaLabel": "Seitennummerierung",
@@ -299,14 +305,20 @@
   },
   "SyllabusFileList": {
     "downloadErrorNoPath": "Dateipfad fehlt für dieses Dokument.",
-    "downloadErrorSignUrlFailed": "Fehler beim Erstellen des Download-Links.",
+    "downloadErrorSignUrlFailed": "Erstellung des Download-Links fehlgeschlagen.",
     "downloadErrorGeneric": "Download fehlgeschlagen:",
     "deleteErrorNoPath": "Kann nicht gelöscht werden: Dateipfad fehlt.",
     "deleteConfirm": "Sind Sie sicher, dass Sie {title} löschen möchten?",
     "deleteErrorGeneric": "Löschen fehlgeschlagen:",
-    "loading": "Lehrplandokumente werden geladen...",
-    "emptyStateTitle": "Keine Lehrplandokumente gefunden",
-    "emptyStateSuggestion": "Laden Sie das erste Dokument mit dem Formular oben hoch.",
+    "deleteModalTitle": "Lehrplan-Dokument löschen",
+    "deleteModalDescription": "Sind Sie sicher, dass Sie \"{documentTitle}\" löschen möchten?",
+    "deleteModalWarning": "Diese Aktion kann nicht rückgängig gemacht werden. Das Dokument wird dauerhaft gelöscht.",
+    "deleteModalConfirm": "Löschen",
+    "deleteModalCancel": "Abbrechen",
+    "deleteModalDeleting": "Wird gelöscht...",
+    "loading": "Lehrplan-Dokumente werden geladen...",
+    "emptyStateTitle": "Keine Lehrplan-Dokumente gefunden",
+    "emptyStateSuggestion": "Laden Sie das erste Dokument mit dem obigen Formular hoch.",
     "headerName": "Name",
     "headerType": "Typ",
     "headerLang": "Sprache",
@@ -398,5 +410,29 @@
       "mission": "Mission",
       "default": "Workshop"
     }
+  },
+  "WorkshopFiles": {
+    "uploadFile": "Datei hochladen",
+    "noFiles": "Keine Dateien in diesem Ordner. Laden Sie eine Datei hoch, um zu beginnen.",
+    "uploadFileTitle": "Neue Workshop-Datei hochladen",
+    "loading": "Dateien werden geladen...",
+    "error": "Fehler beim Laden der Dateien"
+  },
+  "Auth": {
+    "signInTitle": "Anmelden",
+    "signUpTitle": "Registrieren",
+    "emailLabel": "E-Mail-Adresse",
+    "passwordLabel": "Passwort",
+    "confirmPasswordLabel": "Passwort bestätigen",
+    "signInButton": "Anmelden",
+    "signUpButton": "Registrieren",
+    "signingInButton": "Anmeldung läuft...",
+    "signingUpButton": "Registrierung läuft...",
+    "forgotPasswordLink": "Passwort vergessen?",
+    "noAccountPrompt": "Noch kein Konto?",
+    "alreadyAccountPrompt": "Bereits ein Konto?",
+    "nameLabel": "Vollständiger Name",
+    "signInLink": "Anmelden",
+    "signUpLink": "Registrieren"
   }
 }

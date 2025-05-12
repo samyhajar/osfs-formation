@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthError, User } from '@supabase/supabase-js';
+import { useTranslations } from 'next-intl';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -12,6 +13,7 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { supabase } = useAuth();
+  const t = useTranslations('Auth');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -120,7 +122,7 @@ export default function LoginForm() {
 
       <div className="mb-6">
         <label htmlFor="email" className="block text-base font-medium text-slate-700 mb-2">
-          Email Address
+          {t('emailLabel')}
         </label>
         <input
           type="email"
@@ -136,7 +138,7 @@ export default function LoginForm() {
 
       <div className="mb-8">
         <label htmlFor="password" className="block text-base font-medium text-slate-700 mb-2">
-          Password
+          {t('passwordLabel')}
         </label>
         <input
           type="password"
@@ -155,7 +157,7 @@ export default function LoginForm() {
         disabled={loading}
         className={`w-full py-4 px-6 text-base bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition duration-300 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
       >
-        {loading ? 'Signing In...' : 'Sign In'}
+        {loading ? t('signingInButton') : t('signInButton')}
       </button>
     </form>
   );

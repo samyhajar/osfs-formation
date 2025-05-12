@@ -162,7 +162,13 @@
     "createNewDocument": "Create New Document",
     "downloadErrorNoPath": "Download failed: No file path available.",
     "downloadErrorSignUrlFailed": "Failed to generate signed URL.",
-    "downloadErrorGeneric": "Failed to download file:"
+    "downloadErrorGeneric": "Failed to download file:",
+    "deleteModalTitle": "Delete Document",
+    "deleteModalDescription": "Are you sure you want to delete \"{documentTitle}\"?",
+    "deleteModalWarning": "This action cannot be undone. The document will be permanently deleted.",
+    "deleteModalConfirm": "Delete",
+    "deleteModalCancel": "Cancel",
+    "deleteModalDeleting": "Deleting..."
   },
   "DocumentViewer": {
     "loading": "Loading document...",
@@ -303,9 +309,12 @@
     "confirmPasswordLabel": "Confirm Password",
     "signInButton": "Sign In",
     "signUpButton": "Sign Up",
+    "signingInButton": "Signing In...",
+    "signingUpButton": "Signing Up...",
     "forgotPasswordLink": "Forgot Password?",
     "noAccountPrompt": "Don't have an account?",
     "alreadyAccountPrompt": "Already have an account?",
+    "nameLabel": "Full Name",
     "signInLink": "Sign In",
     "signUpLink": "Sign Up",
     "signInSuccess": "Successfully signed in!",
@@ -517,6 +526,12 @@
     "deleteErrorNoPath": "Cannot delete: File path is missing.",
     "deleteConfirm": "Are you sure you want to delete {title}?",
     "deleteErrorGeneric": "Deletion failed:",
+    "deleteModalTitle": "Delete Syllabus Document",
+    "deleteModalDescription": "Are you sure you want to delete \"{documentTitle}\"?",
+    "deleteModalWarning": "This action cannot be undone. The document will be permanently deleted.",
+    "deleteModalConfirm": "Delete",
+    "deleteModalCancel": "Cancel",
+    "deleteModalDeleting": "Deleting...",
     "loading": "Loading syllabus documents...",
     "emptyStateTitle": "No syllabus documents found",
     "emptyStateSuggestion": "Upload the first document using the form above.",
@@ -606,5 +621,12 @@
       "mission": "Mission",
       "default": "Workshop"
     }
+  },
+  "WorkshopFiles": {
+    "uploadFile": "Upload File",
+    "noFiles": "No files in this folder. Upload a file to get started.",
+    "uploadFileTitle": "Upload New Workshop File",
+    "loading": "Loading files...",
+    "error": "Error loading files"
   }
 }

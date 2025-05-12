@@ -135,7 +135,13 @@
     "createNewDocument": "Créer un nouveau document",
     "downloadErrorNoPath": "Échec du téléchargement : Chemin de fichier non disponible.",
     "downloadErrorSignUrlFailed": "Échec de la génération de l'URL signée.",
-    "downloadErrorGeneric": "Échec du téléchargement du fichier :"
+    "downloadErrorGeneric": "Échec du téléchargement du fichier :",
+    "deleteModalTitle": "Supprimer le document",
+    "deleteModalDescription": "Êtes-vous sûr de vouloir supprimer \"{documentTitle}\" ?",
+    "deleteModalWarning": "Cette action ne peut pas être annulée. Le document sera définitivement supprimé.",
+    "deleteModalConfirm": "Supprimer",
+    "deleteModalCancel": "Annuler",
+    "deleteModalDeleting": "Suppression en cours..."
   },
   "Pagination": {
     "ariaLabel": "Pagination",
@@ -253,6 +259,12 @@
     "deleteErrorNoPath": "Impossible de supprimer : chemin de fichier manquant.",
     "deleteConfirm": "Êtes-vous sûr de vouloir supprimer {title} ?",
     "deleteErrorGeneric": "Échec de la suppression :",
+    "deleteModalTitle": "Supprimer le document du programme",
+    "deleteModalDescription": "Êtes-vous sûr de vouloir supprimer \"{documentTitle}\" ?",
+    "deleteModalWarning": "Cette action ne peut pas être annulée. Le document sera définitivement supprimé.",
+    "deleteModalConfirm": "Supprimer",
+    "deleteModalCancel": "Annuler",
+    "deleteModalDeleting": "Suppression en cours...",
     "loading": "Chargement des documents du programme...",
     "emptyStateTitle": "Aucun document du programme trouvé",
     "emptyStateSuggestion": "Téléchargez le premier document en utilisant le formulaire ci-dessus.",
@@ -347,5 +359,27 @@
       "mission": "Mission",
       "default": "Atelier"
     }
+  },
+  "WorkshopFiles": {
+    "uploadFile": "Téléverser un Fichier",
+    "noFiles": "Aucun fichier dans ce dossier. Téléversez un fichier pour commencer.",
+    "uploadFileTitle": "Téléverser un Nouveau Fichier d'Atelier",
+    "loading": "Chargement des fichiers...",
+    "error": "Erreur lors du chargement des fichiers"
+  },
+  "Auth": {
+    "signInTitle": "Se Connecter",
+    "signUpTitle": "S'inscrire",
+    "emailLabel": "Adresse Email",
+    "passwordLabel": "Mot de passe",
+    "confirmPasswordLabel": "Confirmer le mot de passe",
+    "signInButton": "Se Connecter",
+    "signUpButton": "S'inscrire",
+    "signingInButton": "Connexion en cours...",
+    "signingUpButton": "Inscription en cours...",
+    "forgotPasswordLink": "Mot de passe oublié ?",
+    "noAccountPrompt": "Vous n'avez pas de compte ?",
+    "alreadyAccountPrompt": "Vous avez déjà un compte ?",
+    "nameLabel": "Nom complet"
   }
 }

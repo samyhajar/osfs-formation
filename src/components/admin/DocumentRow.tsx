@@ -90,10 +90,8 @@ export function DocumentRow({
 
   const handleDeleteClick = () => {
     if (onDelete) {
-      // Confirm before deleting (optional but recommended)
-      if (window.confirm(`Are you sure you want to delete "${doc.title}"?`)) {
-        onDelete(doc.id);
-      }
+      // Remove window.confirm and directly call onDelete
+      onDelete(doc.id);
       toggleDropdown(doc.id); // Close dropdown after action
     }
   };

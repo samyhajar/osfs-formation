@@ -136,7 +136,13 @@
     "createNewDocument": "Nieuw document maken",
     "downloadErrorNoPath": "Download mislukt: Geen bestandspad beschikbaar.",
     "downloadErrorSignUrlFailed": "Genereren ondertekende URL mislukt.",
-    "downloadErrorGeneric": "Kon bestand niet downloaden:"
+    "downloadErrorGeneric": "Kon bestand niet downloaden:",
+    "deleteModalTitle": "Document verwijderen",
+    "deleteModalDescription": "Weet u zeker dat u \"{documentTitle}\" wilt verwijderen?",
+    "deleteModalWarning": "Deze actie kan niet ongedaan worden gemaakt. Het document wordt permanent verwijderd.",
+    "deleteModalConfirm": "Verwijderen",
+    "deleteModalCancel": "Annuleren",
+    "deleteModalDeleting": "Verwijderen..."
   },
   "Pagination": {
     "ariaLabel": "Paginering",
@@ -257,6 +263,12 @@
     "deleteErrorNoPath": "Kan niet verwijderen: bestandspad ontbreekt.",
     "deleteConfirm": "Weet u zeker dat u {title} wilt verwijderen?",
     "deleteErrorGeneric": "Verwijderen mislukt:",
+    "deleteModalTitle": "Syllabusdocument verwijderen",
+    "deleteModalDescription": "Weet u zeker dat u \"{documentTitle}\" wilt verwijderen?",
+    "deleteModalWarning": "Deze actie kan niet ongedaan worden gemaakt. Het document wordt permanent verwijderd.",
+    "deleteModalConfirm": "Verwijderen",
+    "deleteModalCancel": "Annuleren",
+    "deleteModalDeleting": "Verwijderen...",
     "loading": "Syllabus documenten worden geladen...",
     "emptyStateTitle": "Geen syllabus documenten gevonden",
     "emptyStateSuggestion": "Upload het eerste document met het formulier hierboven.",
@@ -346,5 +358,12 @@
       "mission": "Missie",
       "default": "Workshop"
     }
+  },
+  "WorkshopFiles": {
+    "uploadFile": "Bestand uploaden",
+    "noFiles": "Geen bestanden in deze map. Upload een bestand om te beginnen.",
+    "uploadFileTitle": "Nieuw Workshop-bestand uploaden",
+    "loading": "Bestanden laden...",
+    "error": "Fout bij het laden van bestanden"
   }
 }

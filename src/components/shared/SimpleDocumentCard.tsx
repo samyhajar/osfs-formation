@@ -10,12 +10,14 @@ interface SimpleDocumentCardProps {
   document: Document;
   basePath?: string;
   hideActions?: boolean;
+  disableLink?: boolean;
 }
 
 export function SimpleDocumentCard({
   document,
   basePath = '/dashboard/admin/documents',
   hideActions: _hideActions = false,
+  disableLink = false,
 }: SimpleDocumentCardProps) {
   const Icon = getFileIcon(document.file_type || document.file_name);
 
@@ -29,6 +31,26 @@ export function SimpleDocumentCard({
     // For regular documents, use the document viewer path
     return `${basePath}/${document.id}`;
   };
+
+  if (disableLink) {
+    return (
+      <div className="relative group">
+        <div className="p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer">
+          <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 text-gray-400">
+            <Icon className="w-8 h-8" />
+          </div>
+          <div className="text-center">
+            <h3 className="text-sm font-medium text-gray-900 truncate" title={document.title}>
+              {document.title}
+            </h3>
+            <p className="mt-1 text-xs text-gray-500">
+              {formatFileSize(document.file_size)}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative group">

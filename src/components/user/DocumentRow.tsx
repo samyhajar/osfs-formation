@@ -89,9 +89,7 @@ export function DocumentRow({
 
   const handleDeleteClick = () => {
     if (onDelete) {
-      if (window.confirm(`Are you sure you want to delete "${doc.title}"?`)) {
-        onDelete(doc.id);
-      }
+      onDelete(doc.id);
       toggleDropdown(doc.id);
     }
   };

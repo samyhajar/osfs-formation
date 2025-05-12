@@ -134,9 +134,15 @@
     "emptyStateTitle": "No se encontraron documentos",
     "emptyStateSuggestion": "Intenta ajustar tus filtros de búsqueda.",
     "createNewDocument": "Crear nuevo documento",
-    "downloadErrorNoPath": "Error de descarga: Ruta de archivo no disponible.",
-    "downloadErrorSignUrlFailed": "Error al generar la URL firmada.",
-    "downloadErrorGeneric": "Error al descargar el archivo:"
+    "downloadErrorNoPath": "Descarga fallida: No hay ruta de archivo disponible.",
+    "downloadErrorSignUrlFailed": "Error al generar URL firmada.",
+    "downloadErrorGeneric": "Error al descargar archivo:",
+    "deleteModalTitle": "Eliminar documento",
+    "deleteModalDescription": "¿Estás seguro de que deseas eliminar \"{documentTitle}\"?",
+    "deleteModalWarning": "Esta acción no se puede deshacer. El documento se eliminará permanentemente.",
+    "deleteModalConfirm": "Eliminar",
+    "deleteModalCancel": "Cancelar",
+    "deleteModalDeleting": "Eliminando..."
   },
   "Pagination": {
     "ariaLabel": "Paginación",
@@ -253,13 +259,19 @@
   "SyllabusFileList": {
     "downloadErrorNoPath": "Falta la ruta del archivo para este documento.",
     "downloadErrorSignUrlFailed": "Error al crear el enlace de descarga.",
-    "downloadErrorGeneric": "Error al descargar:",
-    "deleteErrorNoPath": "No se puede eliminar: Falta la ruta del archivo.",
-    "deleteConfirm": "¿Estás seguro de que quieres eliminar {title}?",
+    "downloadErrorGeneric": "Error de descarga:",
+    "deleteErrorNoPath": "No se puede eliminar: falta la ruta del archivo.",
+    "deleteConfirm": "¿Estás seguro de que deseas eliminar {title}?",
     "deleteErrorGeneric": "Error al eliminar:",
+    "deleteModalTitle": "Eliminar documento del programa",
+    "deleteModalDescription": "¿Estás seguro de que deseas eliminar \"{documentTitle}\"?",
+    "deleteModalWarning": "Esta acción no se puede deshacer. El documento se eliminará permanentemente.",
+    "deleteModalConfirm": "Eliminar",
+    "deleteModalCancel": "Cancelar",
+    "deleteModalDeleting": "Eliminando...",
     "loading": "Cargando documentos del programa...",
     "emptyStateTitle": "No se encontraron documentos del programa",
-    "emptyStateSuggestion": "Sube el primer documento utilizando el formulario de arriba.",
+    "emptyStateSuggestion": "Sube el primer documento usando el formulario de arriba.",
     "headerName": "Nombre",
     "headerType": "Tipo",
     "headerLang": "Idioma",
@@ -346,5 +358,12 @@
       "mission": "Misión",
       "default": "Taller"
     }
+  },
+  "WorkshopFiles": {
+    "uploadFile": "Subir Archivo",
+    "noFiles": "No hay archivos en esta carpeta. Sube un archivo para comenzar.",
+    "uploadFileTitle": "Subir Nuevo Archivo de Taller",
+    "loading": "Cargando archivos...",
+    "error": "Error al cargar archivos"
   }
 }

@@ -136,7 +136,13 @@
     "createNewDocument": "Crea nuovo documento",
     "downloadErrorNoPath": "Download fallito: Percorso file non disponibile.",
     "downloadErrorSignUrlFailed": "Generazione URL firmato fallita.",
-    "downloadErrorGeneric": "Impossibile scaricare il file:"
+    "downloadErrorGeneric": "Impossibile scaricare il file:",
+    "deleteModalTitle": "Elimina documento",
+    "deleteModalDescription": "Sei sicuro di voler eliminare \"{documentTitle}\"?",
+    "deleteModalWarning": "Questa azione non può essere annullata. Il documento verrà eliminato permanentemente.",
+    "deleteModalConfirm": "Elimina",
+    "deleteModalCancel": "Annulla",
+    "deleteModalDeleting": "Eliminazione in corso..."
   },
   "Pagination": {
     "ariaLabel": "Impaginazione",
@@ -257,8 +263,14 @@
     "deleteErrorNoPath": "Impossibile eliminare: percorso file mancante.",
     "deleteConfirm": "Sei sicuro di voler eliminare {title}?",
     "deleteErrorGeneric": "Eliminazione fallita:",
-    "loading": "Caricamento documenti del programma...",
-    "emptyStateTitle": "Nessun documento del programma trovato",
+    "deleteModalTitle": "Elimina documento del syllabus",
+    "deleteModalDescription": "Sei sicuro di voler eliminare \"{documentTitle}\"?",
+    "deleteModalWarning": "Questa azione non può essere annullata. Il documento verrà eliminato permanentemente.",
+    "deleteModalConfirm": "Elimina",
+    "deleteModalCancel": "Annulla",
+    "deleteModalDeleting": "Eliminazione in corso...",
+    "loading": "Caricamento documenti del syllabus...",
+    "emptyStateTitle": "Nessun documento del syllabus trovato",
     "emptyStateSuggestion": "Carica il primo documento utilizzando il modulo sopra.",
     "headerName": "Nome",
     "headerType": "Tipo",
@@ -346,5 +358,12 @@
       "mission": "Missione",
       "default": "Workshop"
     }
+  },
+  "WorkshopFiles": {
+    "uploadFile": "Carica File",
+    "noFiles": "Nessun file in questa cartella. Carica un file per iniziare.",
+    "uploadFileTitle": "Carica Nuovo File Workshop",
+    "loading": "Caricamento file...",
+    "error": "Errore durante il caricamento dei file"
   }
 }

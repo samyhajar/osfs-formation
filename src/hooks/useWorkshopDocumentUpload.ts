@@ -44,14 +44,6 @@ export function useWorkshopDocumentUpload(): UseWorkshopDocumentUploadResult {
       return;
     }
 
-    console.log('Starting workshop upload process');
-    console.log('User profile:', {
-      id: user.id,
-      email: user.email,
-      role: profile.role,
-      is_approved: profile.is_approved,
-    });
-
     setLoading(true);
     setError(null);
     setUploadProgress(0);
@@ -64,13 +56,6 @@ export function useWorkshopDocumentUpload(): UseWorkshopDocumentUploadResult {
       .replace(/[^a-z0-9_-]/g, '');
 
     try {
-      console.log('Creating workshop entry with data:', {
-        title: data.title,
-        folder_path: sanitizedTitle,
-        created_by: user.id,
-        role: profile.role,
-      });
-
       // First create the workshop entry
       const workshopData: WorkshopInsert = {
         title: data.title,
@@ -94,7 +79,6 @@ export function useWorkshopDocumentUpload(): UseWorkshopDocumentUploadResult {
         .single();
 
       if (insertError) {
-        console.error('Error inserting workshop:', insertError);
         throw new Error(
           `Database Error: ${
             insertError?.message || 'Failed to create workshop'
@@ -102,7 +86,6 @@ export function useWorkshopDocumentUpload(): UseWorkshopDocumentUploadResult {
         );
       }
 
-      console.log('Workshop created successfully:', workshop);
       setUploadProgress(25);
 
       // Prepare metadata for the initial file
@@ -128,7 +111,6 @@ export function useWorkshopDocumentUpload(): UseWorkshopDocumentUploadResult {
         .replace(/\/+/g, '/')
         .replace(/^\/|\/$/g, '');
 
-      console.log('Uploading file to path:', filePath);
       setUploadProgress(50);
 
       // Upload file
@@ -140,13 +122,11 @@ export function useWorkshopDocumentUpload(): UseWorkshopDocumentUploadResult {
         });
 
       if (uploadError) {
-        console.error('Error uploading file to storage:', uploadError);
         // Delete the workshop if file upload fails
         await supabase.from('workshops').delete().eq('id', workshop.id);
         throw new Error(`Storage Error: ${uploadError.message}`);
       }
 
-      console.log('File uploaded successfully to:', filePath);
       setUploadProgress(75);
 
       // Get signed URL for the uploaded file

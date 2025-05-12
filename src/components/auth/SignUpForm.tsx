@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 interface SignupResponse {
   error?: string;
@@ -19,6 +20,7 @@ export default function SignUpForm() {
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const { } = useAuth();
+  const t = useTranslations('Auth');
 
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,7 +117,7 @@ export default function SignUpForm() {
 
       <div className="mb-6">
         <label htmlFor="name" className="block text-base font-medium text-slate-700 mb-2">
-          Full Name
+          {t('nameLabel')}
         </label>
         <input
           type="text"
@@ -131,7 +133,7 @@ export default function SignUpForm() {
 
       <div className="mb-6">
         <label htmlFor="email" className="block text-base font-medium text-slate-700 mb-2">
-          Email Address
+          {t('emailLabel')}
         </label>
         <input
           type="email"
@@ -147,7 +149,7 @@ export default function SignUpForm() {
 
       <div className="mb-6">
         <label htmlFor="password" className="block text-base font-medium text-slate-700 mb-2">
-          Password
+          {t('passwordLabel')}
         </label>
         <input
           type="password"
@@ -164,7 +166,7 @@ export default function SignUpForm() {
 
       <div className="mb-8">
         <label htmlFor="confirmPassword" className="block text-base font-medium text-slate-700 mb-2">
-          Confirm Password
+          {t('confirmPasswordLabel')}
         </label>
         <input
           type="password"
@@ -184,14 +186,14 @@ export default function SignUpForm() {
         disabled={loading}
         className={`w-full py-4 px-6 text-base bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition duration-300 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
       >
-        {loading ? 'Signing Up...' : 'Sign Up'}
+        {loading ? t('signingUpButton') : t('signUpButton')}
       </button>
 
       <div className="mt-4 text-center">
         <p className="text-slate-600">
-          Already have an account?{' '}
-          <Link href="/" className="text-blue-600 hover:text-blue-800 transition">
-            Sign In
+          {t('alreadyAccountPrompt')}{' '}
+          <Link href="/login" className="text-blue-600 hover:text-blue-800 transition">
+            {t('signInLink')}
           </Link>
         </p>
       </div>

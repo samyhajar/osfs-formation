@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { createClient } from '@/lib/supabase/browser-client';
 import { SyllabusDocument } from '@/types/document';
 import { SyllabusTableRow } from './SyllabusTableRow';
 import { EmptyState, LoadingState } from './SyllabusListStates';
-import { getLanguageCode } from './LanguageFlag';
+import DeleteSyllabusModal from './DeleteSyllabusModal';
 
 const TARGET_BUCKET = 'common-syllabus';
 
@@ -38,10 +38,25 @@ export default function SyllabusFileList({
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [generatingUrl, setGeneratingUrl] = useState<string | null>(null);
   const [deletingFile, setDeletingFile] = useState<string | null>(null);
+  const [documentToDelete, setDocumentToDelete] = useState<SyllabusDocument | null>(null);
   const supabase = createClient();
 
+  // Add global click handler to close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (activeDropdown && !(event.target as Element).closest('.dropdown-button')) {
+        setActiveDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [activeDropdown]);
+
   const toggleDropdown = (docId: string) => {
-    setActiveDropdown(activeDropdown === docId ? null : docId);
+    setActiveDropdown(docId === '' ? null : docId);
   };
 
   const handleDownload = async (doc: SyllabusDocument) => {
@@ -71,25 +86,37 @@ export default function SyllabusFileList({
     }
   };
 
-  const handleDelete = async (doc: SyllabusDocument) => {
+  const handleDelete = (doc: SyllabusDocument) => {
     if (!doc.file_path) {
       alert(t('deleteErrorNoPath', { default: 'Cannot delete: File path is missing.' }));
       return;
     }
-    if (!confirm(t('deleteConfirm', { default: `Are you sure you want to delete ${doc.title}?` }))) {
-      setActiveDropdown(null);
-      return;
-    }
-    setDeletingFile(doc.id);
-    try {
-      await onDelete(doc.id, doc.file_path);
-    } catch (err) {
-      console.error('Deletion failed in component:', err);
-      alert(`${t('deleteErrorGeneric', { default: 'Deletion failed:' })} ${err instanceof Error ? err.message : 'Unknown error'}`);
-    } finally {
-      setDeletingFile(null);
-      setActiveDropdown(null);
-    }
+    // Open the delete confirmation modal
+    setDocumentToDelete(doc);
+    setActiveDropdown(null);
+  };
+
+  const confirmDelete = () => {
+    if (!documentToDelete || !documentToDelete.file_path) return;
+
+    const deleteDocument = async () => {
+      setDeletingFile(documentToDelete.id);
+      try {
+        await onDelete(documentToDelete.id, documentToDelete.file_path as string);
+      } catch (err) {
+        console.error('Deletion failed in component:', err);
+        alert(`${t('deleteErrorGeneric', { default: 'Deletion failed:' })} ${err instanceof Error ? err.message : 'Unknown error'}`);
+      } finally {
+        setDeletingFile(null);
+        setDocumentToDelete(null);
+      }
+    };
+
+    void deleteDocument();
+  };
+
+  const cancelDelete = () => {
+    setDocumentToDelete(null);
   };
 
   // --- Render Loading State ---
@@ -104,41 +131,53 @@ export default function SyllabusFileList({
 
   // --- Render File Table ---
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm mt-6">
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-100">
-          <thead className="bg-gray-50">
-            <tr>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('headerName', { default: 'Name' })}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[150px]">{t('headerType', { default: 'Type' })}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('headerLang', { default: 'Lang' })}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('headerRegion', { default: 'Region' })}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('headerCategory', { default: 'Category' })}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('headerCreated', { default: 'Created' })}</th>
-              <th scope="col" className="relative px-6 py-3">
-                <span className="sr-only">{t('headerActions', { default: 'Actions' })}</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {documents.map((doc) => (
-              <SyllabusTableRow
-                key={doc.id}
-                doc={doc}
-                activeDropdown={activeDropdown}
-                deletingFile={deletingFile}
-                generatingUrl={generatingUrl}
-                toggleDropdown={toggleDropdown}
-                handleDownload={handleDownload}
-                handleDelete={handleDelete}
-                t={t}
-                formatDate={formatDate}
-                getLanguageCode={getLanguageCode}
-              />
-            ))}
-          </tbody>
-        </table>
+    <>
+      <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm mt-6">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-100">
+            <thead className="bg-gray-50">
+              <tr>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('headerName', { default: 'Name' })}</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[150px]">{t('headerType', { default: 'Type' })}</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('headerLang', { default: 'Lang' })}</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('headerRegion', { default: 'Region' })}</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('headerCategory', { default: 'Category' })}</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('headerCreated', { default: 'Created' })}</th>
+                <th scope="col" className="relative px-6 py-3">
+                  <span className="sr-only">{t('headerActions', { default: 'Actions' })}</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {documents.map((doc) => (
+                <SyllabusTableRow
+                  key={doc.id}
+                  doc={doc}
+                  activeDropdown={activeDropdown}
+                  deletingFile={deletingFile}
+                  generatingUrl={generatingUrl}
+                  toggleDropdown={toggleDropdown}
+                  handleDownload={handleDownload}
+                  handleDelete={handleDelete}
+                  t={t}
+                  formatDate={formatDate}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+
+      {/* Delete Confirmation Modal */}
+      {documentToDelete && (
+        <DeleteSyllabusModal
+          isOpen={!!documentToDelete}
+          documentTitle={documentToDelete.title}
+          onClose={cancelDelete}
+          onConfirm={confirmDelete}
+          isDeleting={deletingFile === documentToDelete.id}
+        />
+      )}
+    </>
   );
 }

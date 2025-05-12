@@ -38,6 +38,15 @@ function getLocale(request: NextRequest): string {
 export async function middleware(request: NextRequest) {
   console.log('🛡️ Middleware running for:', request.nextUrl.pathname);
 
+  // Skip middleware for direct login and signup routes
+  if (
+    request.nextUrl.pathname === '/login' ||
+    request.nextUrl.pathname === '/signup'
+  ) {
+    console.log('🛡️ Direct auth route detected, skipping middleware');
+    return NextResponse.next();
+  }
+
   // Skip next-intl middleware for API routes
   if (request.nextUrl.pathname.startsWith('/api/')) {
     console.log('🛡️ API route detected, skipping intl middleware');
@@ -139,7 +148,7 @@ export async function middleware(request: NextRequest) {
 
     if (sessionError) {
       console.error('🛡️ Error fetching session:', sessionError);
-      return NextResponse.redirect(new URL('/', request.url));
+      return NextResponse.redirect(new URL('/login', request.url));
     }
 
     console.log(
@@ -148,8 +157,8 @@ export async function middleware(request: NextRequest) {
     );
 
     if (!session) {
-      console.log('🛡️ No session found, redirecting to locale root');
-      const url = new URL('/', request.url);
+      console.log('🛡️ No session found, redirecting to login');
+      const url = new URL('/login', request.url);
       return NextResponse.redirect(url);
     }
 
@@ -244,36 +253,18 @@ export async function middleware(request: NextRequest) {
     return supabaseResponse;
   } catch (e) {
     console.error('🛡️ Middleware error:', e);
-    const urlLocale = routing.locales.find((loc) =>
+    const _urlLocale = routing.locales.find((loc) =>
       request.nextUrl.pathname.startsWith(`/${loc}/`),
     );
-    const pathWithoutLocale = urlLocale
-      ? request.nextUrl.pathname.substring(urlLocale.length + 1)
-      : request.nextUrl.pathname;
-
-    if (pathWithoutLocale.startsWith('dashboard')) {
-      return NextResponse.redirect(new URL('/', request.url));
-    }
-
-    console.log('🛡️ Non-protected route error, passing through.');
-    return NextResponse.next({
-      request: {
-        headers: request.headers,
-      },
-    });
+    // Redirect to non-internationalized login on error
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 }
 
+// Update the config to include /login and /signup in the matcher
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - Any files extensions like .svg, .png, etc.
-     * - API routes should be handled separately
-     */
-    '/((?!_next/static|_next/image|favicon.ico|api/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    // Skip all internal paths (_next)
+    '/((?!_next|.*\\..*).*)',
   ],
 };

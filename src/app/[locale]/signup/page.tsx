@@ -2,11 +2,13 @@ import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server-client'
 import SignUpForm from '@/components/auth/SignUpForm'
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 
 export default async function SignUp() {
   try {
     const supabase = await createClient()
     const { data: { session: _session } } = await supabase.auth.getSession()
+    const t = await getTranslations('Auth')
 
     return (
       <div className="min-h-screen flex flex-col bg-white">
@@ -31,7 +33,7 @@ export default async function SignUp() {
 
               <div className="w-full lg:w-1/2 flex items-center justify-center py-12 px-4">
                 <div className="w-full max-w-lg">
-                  <h3 className="text-2xl font-medium text-slate-800 mb-10 text-center">Sign Up</h3>
+                  <h3 className="text-2xl font-medium text-slate-800 mb-10 text-center">{t('signUpTitle')}</h3>
                   <SignUpForm />
                 </div>
               </div>

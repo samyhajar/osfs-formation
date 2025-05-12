@@ -35,10 +35,11 @@ export default async function LocaleLayout({
   params,
 }: {
   children: ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }> | { locale: string };
 }) {
-  // Extract locale from params
-  const { locale } = params;
+  // Await params if it's a promise
+  const resolvedParams = await Promise.resolve(params);
+  const locale = resolvedParams.locale;
 
   // Fetch messages using getMessages on the server
   const messages = await getMessages({locale});

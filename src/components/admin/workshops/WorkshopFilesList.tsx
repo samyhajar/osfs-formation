@@ -8,8 +8,10 @@ import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
 import { Document } from '@/types/document';
 import Modal from '@/components/ui/Modal';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { PlusIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface WorkshopFilesListProps {
   workshopId: string;
@@ -21,8 +23,10 @@ export function WorkshopFilesList({ workshopId, folderPath, hideUpload = false }
   const { files, loading, error, fetchFiles } = useWorkshopFiles(workshopId, folderPath);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const t = useTranslations('WorkshopFiles');
+  const { profile } = useAuth();
+  const locale = useLocale();
 
-  const handleDownload = async (document: Document) => {
+  const _handleDownload = async (document: Document) => {
     const supabase = createClient<Database>();
     const { data, error } = await supabase.storage
       .from('workshops')
@@ -71,13 +75,18 @@ export function WorkshopFilesList({ workshopId, folderPath, hideUpload = false }
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {files.map((file) => (
-            <SimpleDocumentCard
+            <Link
               key={file.id}
-              document={file}
-              basePath="/dashboard/admin/workshops"
-              hideActions={hideUpload}
-              onDownload={handleDownload}
-            />
+              href={`/${locale}/dashboard/${profile?.role || 'user'}/workshops/${workshopId}/file/${encodeURIComponent(file.file_name)}`}
+              className="block hover:bg-gray-50 rounded transition"
+            >
+              <SimpleDocumentCard
+                document={file}
+                basePath="/dashboard/admin/workshops"
+                hideActions={hideUpload}
+                disableLink={true}
+              />
+            </Link>
           ))}
         </div>
       )}

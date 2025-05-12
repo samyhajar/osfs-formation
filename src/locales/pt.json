@@ -124,19 +124,25 @@
     "headerLanguage": "Idioma",
     "headerDate": "Data",
     "headerActions": "Ações",
-    "actionView": "Ver",
+    "actionView": "Visualizar",
     "actionDownload": "Baixar",
     "headerName": "Nome",
     "headerLang": "Idioma",
     "headerRegion": "Região",
-    "headerCreated": "Criado em",
+    "headerCreated": "Criado",
     "loading": "Carregando documentos...",
     "emptyStateTitle": "Nenhum documento encontrado",
-    "emptyStateSuggestion": "Tente ajustar seus filtros de busca.",
-    "createNewDocument": "Criar novo documento",
-    "downloadErrorNoPath": "Falha no download: Caminho do arquivo não disponível.",
+    "emptyStateSuggestion": "Tente ajustar seus filtros de pesquisa.",
+    "createNewDocument": "Criar Novo Documento",
+    "downloadErrorNoPath": "Download falhou: Nenhum caminho de arquivo disponível.",
     "downloadErrorSignUrlFailed": "Falha ao gerar URL assinada.",
-    "downloadErrorGeneric": "Falha ao baixar o arquivo:"
+    "downloadErrorGeneric": "Falha ao baixar arquivo:",
+    "deleteModalTitle": "Excluir Documento",
+    "deleteModalDescription": "Tem certeza de que deseja excluir \"{documentTitle}\"?",
+    "deleteModalWarning": "Esta ação não pode ser desfeita. O documento será excluído permanentemente.",
+    "deleteModalConfirm": "Excluir",
+    "deleteModalCancel": "Cancelar",
+    "deleteModalDeleting": "Excluindo..."
   },
   "Pagination": {
     "ariaLabel": "Paginação",
@@ -300,13 +306,19 @@
   "SyllabusFileList": {
     "downloadErrorNoPath": "Caminho do arquivo ausente para este documento.",
     "downloadErrorSignUrlFailed": "Falha ao criar link de download.",
-    "downloadErrorGeneric": "Falha no download:",
+    "downloadErrorGeneric": "Download falhou:",
     "deleteErrorNoPath": "Não é possível excluir: caminho do arquivo ausente.",
-    "deleteConfirm": "Tem certeza que deseja excluir {title}?",
+    "deleteConfirm": "Tem certeza de que deseja excluir {title}?",
     "deleteErrorGeneric": "Falha na exclusão:",
+    "deleteModalTitle": "Excluir Documento do Programa",
+    "deleteModalDescription": "Tem certeza de que deseja excluir \"{documentTitle}\"?",
+    "deleteModalWarning": "Esta ação não pode ser desfeita. O documento será excluído permanentemente.",
+    "deleteModalConfirm": "Excluir",
+    "deleteModalCancel": "Cancelar",
+    "deleteModalDeleting": "Excluindo...",
     "loading": "Carregando documentos do programa...",
     "emptyStateTitle": "Nenhum documento do programa encontrado",
-    "emptyStateSuggestion": "Carregue o primeiro documento usando o formulário acima.",
+    "emptyStateSuggestion": "Faça upload do primeiro documento usando o formulário acima.",
     "headerName": "Nome",
     "headerType": "Tipo",
     "headerLang": "Idioma",
@@ -398,5 +410,12 @@
       "mission": "Missão",
       "default": "Workshop"
     }
+  },
+  "WorkshopFiles": {
+    "uploadFile": "Carregar Arquivo",
+    "noFiles": "Não há arquivos nesta pasta. Carregue um arquivo para começar.",
+    "uploadFileTitle": "Carregar Novo Arquivo de Workshop",
+    "loading": "Carregando arquivos...",
+    "error": "Erro ao carregar arquivos"
   }
 }

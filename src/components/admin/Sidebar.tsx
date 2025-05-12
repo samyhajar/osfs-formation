@@ -71,7 +71,7 @@ export default function Sidebar() {
 
     // Items visible only to admin and formator
     { nameKey: 'users', path: `${basePath}/users`, icon: UsersIcon, roles: ['admin', 'editor'] },
-    { nameKey: 'administration', path: `${basePath}/admin`, icon: Cog6ToothIcon, roles: ['admin', 'editor'] },
+    { nameKey: 'administration', path: `${basePath}/admin`, icon: Cog6ToothIcon, roles: ['admin'] },
 
     // New item for pending user approvals - visible only to admins
     { nameKey: 'pendingUsers', path: `${basePath}/pending-users`, icon: UserPlusIcon, roles: ['admin'] },
@@ -178,20 +178,6 @@ export default function Sidebar() {
           )}
         </ul>
       </nav>
-
-      {/* Use translations for help section */}
-      <div className="mt-auto p-4 mx-3 mb-6 rounded-xl bg-accent-secondary/5 border border-accent-secondary/10">
-        <div className="flex flex-col space-y-2">
-          <p className="text-xs font-medium text-text-secondary">{t('needHelp')}</p>
-          {/* Use the next-intl Link for this as well */}
-          <Link
-            href="/dashboard/help" // Path without locale
-            className="text-sm font-medium text-accent-primary hover:text-accent-secondary transition-colors"
-          >
-            {t('helpCenterLink')}
-          </Link>
-        </div>
-      </div>
     </div>
   );
 }
