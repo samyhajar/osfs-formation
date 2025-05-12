@@ -7,7 +7,7 @@ import { ReactNode } from 'react';
 // Imports for next-intl
 import { NextIntlClientProvider } from 'next-intl';
 // Import getMessages for server-side fetching
-import { getMessages } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 
 // Function to validate locales (optional but recommended)
 export function generateStaticParams() {
@@ -29,37 +29,38 @@ export const metadata: Metadata = {
   description: "Resource management for OSFS formation.",
 };
 
+// Define params type
+type LayoutProps = {
+  children: ReactNode;
+  params: Promise<{ locale: string }>;
+};
+
 // Make the layout component async
 export default async function LocaleLayout({
   children,
   params,
-}: {
-  children: ReactNode;
-  params: Promise<{ locale: string }> | { locale: string };
-}) {
-  // Await params if it's a promise
-  const resolvedParams = await Promise.resolve(params);
-  const locale = resolvedParams.locale;
+}: LayoutProps) {
+  // Await params to get the locale
+  const { locale } = await params;
+
+  // Set the locale for static rendering
+  setRequestLocale(locale);
 
   // Fetch messages using getMessages on the server
-  const messages = await getMessages({locale});
+  const messages = await getMessages();
 
   // Add the font variables to the body instead of html
   return (
-    <>
-      {/* Set the language of the document using a script tag instead of the html element */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `document.documentElement.lang = "${locale}"; document.documentElement.className = "${geistSans.variable} ${geistMono.variable} antialiased font-sans";`,
-        }}
-      />
-      {/* NextIntlClientProvider now receives server-fetched messages */}
-      <NextIntlClientProvider locale={locale} messages={messages}>
-        <AuthProvider>
-          {children}
-          <Toaster position="bottom-center" />
-        </AuthProvider>
-      </NextIntlClientProvider>
-    </>
+    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className="antialiased font-sans">
+        {/* NextIntlClientProvider now receives server-fetched messages */}
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <AuthProvider>
+            {children}
+            <Toaster position="bottom-center" />
+          </AuthProvider>
+        </NextIntlClientProvider>
+      </body>
+    </html>
   );
 }

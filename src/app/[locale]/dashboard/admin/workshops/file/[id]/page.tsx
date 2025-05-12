@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Document, DocumentCategory } from '@/types/document';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTranslations } from 'next-intl';
-import { DocumentViewer } from '@/components/admin/DocumentViewer';
+import { DocumentViewer } from '@/components/admin/DocumentViewer/index';
 
 export default function WorkshopFileViewerPage() {
   const params = useParams();
@@ -160,7 +160,7 @@ export default function WorkshopFileViewerPage() {
       error={error}
       generatingUrl={generatingUrl}
       onBack={() => router.back()}
-      onDownload={handleDownload}
+      onDownload={() => void handleDownload()}
       t={t}
     />
   );
