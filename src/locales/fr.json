@@ -164,7 +164,11 @@
     "errorLoading": "Échec du chargement des membres.",
     "emptyState": "Aucun membre spécifié trouvé.",
     "groupTitleCoordinator": "Coordinateur Général de Formation",
-    "groupTitleOther": "Autre Personnel"
+    "groupTitleOther": "Autre Personnel",
+    "selectPosition": "Sélectionner une Position",
+    "selectPositionPrompt": "-- Sélectionner une position --",
+    "selectPositionInstruction": "Veuillez sélectionner une position pour voir les membres.",
+    "noPositionsSelected": "Aucune position n'a été sélectionnée par les administrateurs. Veuillez vérifier plus tard."
   },
   "AdminUsersPage": {
     "pageTitle": "Gestion des utilisateurs",
@@ -276,7 +280,14 @@
     "headerCreated": "Créé",
     "headerActions": "Actions",
     "actionDownload": "Télécharger",
-    "actionDelete": "Supprimer"
+    "actionDelete": "Supprimer",
+    "optionsButtonLabel": "Options du document",
+    "deleting": "Suppression en cours...",
+    "downloading": "Téléchargement en cours...",
+    "SyllabusList": {
+      "download": "Télécharger",
+      "delete": "Supprimer"
+    }
   },
   "EmailPage": {
     "title": "Notifications par E-mail",

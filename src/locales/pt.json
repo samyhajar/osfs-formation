@@ -327,7 +327,14 @@
     "headerCreated": "Criado",
     "headerActions": "Ações",
     "actionDownload": "Baixar",
-    "actionDelete": "Excluir"
+    "actionDelete": "Excluir",
+    "optionsButtonLabel": "Opções do documento",
+    "deleting": "Excluindo...",
+    "downloading": "Baixando...",
+    "SyllabusList": {
+      "download": "Baixar",
+      "delete": "Excluir"
+    }
   },
   "EmailPage": {
     "title": "Notificações por E-mail",

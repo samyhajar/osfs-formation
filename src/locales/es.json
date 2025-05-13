@@ -165,7 +165,11 @@
     "errorLoading": "Error al cargar miembros.",
     "emptyState": "No se encontraron miembros especificados.",
     "groupTitleCoordinator": "Coordinador General de Formación",
-    "groupTitleOther": "Otro Personal"
+    "groupTitleOther": "Otro Personal",
+    "selectPosition": "Seleccionar Posición",
+    "selectPositionPrompt": "-- Seleccionar una posición --",
+    "selectPositionInstruction": "Por favor seleccione una posición para ver los miembros.",
+    "noPositionsSelected": "No se han seleccionado posiciones por los administradores. Por favor, vuelva más tarde."
   },
   "AdminUsersPage": {
     "pageTitle": "Gestión de Usuarios",
@@ -280,7 +284,14 @@
     "headerCreated": "Creado",
     "headerActions": "Acciones",
     "actionDownload": "Descargar",
-    "actionDelete": "Eliminar"
+    "actionDelete": "Eliminar",
+    "optionsButtonLabel": "Opciones del documento",
+    "deleting": "Eliminando...",
+    "downloading": "Descargando...",
+    "SyllabusList": {
+      "download": "Descargar",
+      "delete": "Eliminar"
+    }
   },
   "EmailPage": {
     "title": "Notificaciones por Correo Electrónico",

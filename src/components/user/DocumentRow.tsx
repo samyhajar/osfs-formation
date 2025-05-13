@@ -5,9 +5,6 @@ import React, { Suspense } from 'react';
 import { Document } from '@/types/document';
 import { FileIcon } from '@/components/ui/FileIcon';
 import {
-  EllipsisHorizontalIcon,
-  PencilIcon,
-  TrashIcon,
   ArrowDownTrayIcon,
   ArrowPathIcon,
 } from '@heroicons/react/24/outline';
@@ -78,21 +75,10 @@ export function DocumentRow({
   doc,
   region,
   formattedDate,
-  activeDropdown,
   generatingUrl,
-  toggleDropdown,
   handleDownload,
-  onDelete,
 }: DocumentRowProps) {
-  const isDropdownOpen = activeDropdown === doc.id;
   const isDownloading = generatingUrl === doc.id;
-
-  const handleDeleteClick = () => {
-    if (onDelete) {
-      onDelete(doc.id);
-      toggleDropdown(doc.id);
-    }
-  };
 
   const handleDownloadClick = () => {
     void handleDownload(doc);
@@ -134,58 +120,20 @@ export function DocumentRow({
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
         {formattedDate}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium relative">
+      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
         <button
-          onClick={() => toggleDropdown(doc.id)}
-          className="text-gray-500 hover:text-gray-700 focus:outline-none p-1 rounded-md hover:bg-gray-100"
-          aria-haspopup="true"
-          aria-expanded={isDropdownOpen}
+          onClick={handleDownloadClick}
+          disabled={isDownloading}
+          className="inline-flex items-center text-gray-500 hover:text-accent-primary focus:outline-none"
+          title="Download document"
         >
-          <EllipsisHorizontalIcon className="h-5 w-5" />
+          {isDownloading ? (
+            <ArrowPathIcon className="h-5 w-5 animate-spin" />
+          ) : (
+            <ArrowDownTrayIcon className="h-5 w-5" />
+          )}
+          <span className="sr-only">Download</span>
         </button>
-
-        {isDropdownOpen && (
-          <div
-            className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20"
-            style={{ top: '100%' }}
-            onMouseLeave={() => toggleDropdown(doc.id)}
-          >
-            <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-              <Link
-                href={`/dashboard/admin/documents/${doc.id}/edit`}
-                className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
-                role="menuitem"
-                onClick={() => toggleDropdown(doc.id)}
-              >
-                <PencilIcon className="h-4 w-4" />
-                Edit
-              </Link>
-              <button
-                onClick={handleDownloadClick}
-                disabled={isDownloading}
-                className={`flex items-center gap-2 px-4 py-2 text-sm w-full text-left ${isDownloading ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'}`}
-                role="menuitem"
-              >
-                {isDownloading ? (
-                  <ArrowPathIcon className="h-4 w-4 animate-spin" />
-                ) : (
-                  <ArrowDownTrayIcon className="h-4 w-4" />
-                )}
-                {isDownloading ? 'Generating...' : 'Download'}
-              </button>
-              {onDelete && (
-                <button
-                  onClick={handleDeleteClick}
-                  className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-800 w-full text-left"
-                  role="menuitem"
-                >
-                  <TrashIcon className="h-4 w-4" />
-                  Delete
-                </button>
-              )}
-            </div>
-          </div>
-        )}
       </td>
     </tr>
   );

@@ -9,6 +9,7 @@ import { FileIcon } from '@/components/ui/FileIcon';
 import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { createPortal } from 'react-dom';
 
 // Define ReturnType locally since the direct import is causing issues
 type TranslatorFunction = ReturnType<typeof useTranslations>;
@@ -36,34 +37,20 @@ export const SyllabusTableRow: React.FC<SyllabusTableRowProps> = ({
   t,
   formatDate
 }) => {
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const locale = useLocale();
   const { profile } = useAuth();
   const userRole = profile?.role || 'user';
 
-  // Adjust dropdown position based on available screen space
+  // Update dropdown position whenever it opens
   useEffect(() => {
-    if (activeDropdown === doc.id && dropdownRef.current) {
-      const rect = dropdownRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      const windowWidth = window.innerWidth;
-
-      // Check if dropdown would go off-screen vertically
-      const bottomSpace = windowHeight - rect.bottom;
-      if (bottomSpace < 100) { // If less than 100px from bottom
-        setDropdownPosition(prev => ({ ...prev, top: -100 }));
-      } else {
-        setDropdownPosition(prev => ({ ...prev, top: 0 }));
-      }
-
-      // Check if dropdown would go off-screen horizontally
-      const rightSpace = windowWidth - rect.right;
-      if (rightSpace < 150) { // If less than 150px from right edge
-        setDropdownPosition(prev => ({ ...prev, right: 150 }));
-      } else {
-        setDropdownPosition(prev => ({ ...prev, right: 0 }));
-      }
+    if (activeDropdown === doc.id && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + window.scrollY,
+        left: rect.right - 150 + window.scrollX, // Position dropdown to the left of the button
+      });
     }
   }, [activeDropdown, doc.id]);
 
@@ -115,47 +102,50 @@ export const SyllabusTableRow: React.FC<SyllabusTableRowProps> = ({
         )}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium relative">
-        <div className="relative flex justify-end">
-          <button
-            type="button"
-            disabled={deletingFile === doc.id}
-            onClick={() => toggleDropdown(doc.id)}
-            className="dropdown-button text-gray-400 hover:text-gray-600 focus:outline-none p-1 rounded-full disabled:opacity-50"
-            aria-label={t('optionsButtonLabel', { default: 'Document options' })}
-          >
-            <EllipsisHorizontalIcon className="h-5 w-5" aria-hidden="true" />
-          </button>
+        <button
+          ref={buttonRef}
+          type="button"
+          disabled={deletingFile === doc.id}
+          onClick={() => toggleDropdown(doc.id)}
+          className="text-gray-400 hover:text-gray-600 focus:outline-none p-1 rounded-full disabled:opacity-50"
+          aria-label={t('optionsButtonLabel', { default: 'Document options' })}
+        >
+          <EllipsisHorizontalIcon className="h-5 w-5" aria-hidden="true" />
+        </button>
 
-          {activeDropdown === doc.id && (
-            <div
-              ref={dropdownRef}
-              style={{
-                top: `${dropdownPosition.top}px`,
-                right: `${dropdownPosition.right}px`,
-              }}
-              className="absolute z-10 right-0 top-0 mt-8 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-            >
-              <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                <button
-                  onClick={() => { void handleDownload(doc); }}
-                  className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  disabled={generatingUrl === doc.id}
-                >
-                  <DocumentArrowDownIcon className="mr-3 h-5 w-5 text-gray-400" aria-hidden="true" />
-                  {generatingUrl === doc.id ? t('downloading', { default: 'Downloading...' }) : t('download', { default: 'Download' })}
-                </button>
-                <button
-                  onClick={() => handleDelete(doc)}
-                  className="flex w-full items-center px-4 py-2 text-sm text-red-700 hover:bg-red-50"
-                  disabled={deletingFile === doc.id}
-                >
-                  <TrashIcon className="mr-3 h-5 w-5 text-red-400" aria-hidden="true" />
-                  {deletingFile === doc.id ? t('deleting', { default: 'Deleting...' }) : t('delete', { default: 'Delete' })}
-                </button>
-              </div>
+        {activeDropdown === doc.id && typeof document !== 'undefined' && createPortal(
+          <div
+            className="fixed shadow-lg bg-white rounded-md ring-1 ring-black ring-opacity-5 z-50"
+            style={{
+              top: `${dropdownPosition.top}px`,
+              left: `${dropdownPosition.left}px`,
+            }}
+          >
+            <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+              <button
+                onClick={() => { void handleDownload(doc); }}
+                className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                disabled={generatingUrl === doc.id}
+              >
+                <DocumentArrowDownIcon className="mr-3 h-5 w-5 text-gray-400" aria-hidden="true" />
+                {generatingUrl === doc.id
+                  ? t('SyllabusFileList.downloading', { default: 'Downloading...' })
+                  : t('SyllabusList.download', { default: 'Download' })}
+              </button>
+              <button
+                onClick={() => handleDelete(doc)}
+                className="flex w-full items-center px-4 py-2 text-sm text-red-700 hover:bg-red-50"
+                disabled={deletingFile === doc.id}
+              >
+                <TrashIcon className="mr-3 h-5 w-5 text-red-400" aria-hidden="true" />
+                {deletingFile === doc.id
+                  ? t('SyllabusFileList.deleting', { default: 'Deleting...' })
+                  : t('SyllabusList.delete', { default: 'Delete' })}
+              </button>
             </div>
-          )}
-        </div>
+          </div>,
+          document.body
+        )}
       </td>
     </tr>
   );

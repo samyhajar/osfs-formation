@@ -14,7 +14,7 @@ export default function RootLayout({
   // Middleware handles redirects instead of component-level redirect
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>{children}</body>
+      <body className="antialiased font-sans">{children}</body>
     </html>
   );
 }

@@ -1,123 +1,169 @@
-import { fetchMembersByNames } from '@/lib/wordpress/api';
-import type { WPMember } from '@/lib/wordpress/types';
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import { fetchPositions, fetchMembersByPosition } from '@/lib/wordpress/api';
+import type { WPMember, WPTerm } from '@/lib/wordpress/types';
 import MemberCard from '@/components/formation/MemberCard';
-import { getTranslations } from 'next-intl/server';
+import MultiSelect from '@/components/ui/MultiSelect';
 
 // Define the structure for grouping
 interface PersonnelGroup {
+  id: number;
   title: string;
   members: WPMember[];
 }
 
-// List of specific personnel to display - using the original list again
-const targetPersonnelNames = [
-  'Danella Francis W.',
-  'Wisniewski Daniel P.',
-  'Kifolo Patrick J.',
-  'McKenna Kenneth N.',
-  'Extejt John I.',
-  'GANYE Fabrice Emmanuel Sèdjro', // Check accent/casing if issues persist
-  'SOGBEGNON Jean Degbegnon',
-  'Nguyen Dominik Viet Hien',
-  'Célleri Luis Paul Muñoz',
-  'Jean Nixon',
-  'Adams Fernando Miguel',
-  'Pontier Ronald',
-  'Vergara Alberto Benavides',
-  'Mostert Jan',
-  'Atkins Gavin Peter',
-  'Mekala Thambi Joseph',
-  'Akkutte Jacob Anil'
-];
+// Key for localStorage to store selected positions
+const SELECTED_POSITIONS_KEY = 'formationPersonnel_selectedPositions';
 
-// Helper function to get province name (copied from MemberCard for grouping)
-function getProvinceName(member: WPMember): string | null {
-  const terms = member._embedded?.['wp:term']
-    ?.find(termArray => termArray[0]?.taxonomy === 'province');
-  return terms?.[0]?.name ?? null;
-}
+export default function AdminFormationPersonnelPage() {
+  const t = useTranslations('AdminFormationPersonnelPage');
 
-export default async function AdminFormationPersonnelPage() {
-  // Get translations using getTranslations for Server Components
-  const t = await getTranslations('AdminFormationPersonnelPage');
+  const [positions, setPositions] = useState<WPTerm[]>([]);
+  const [selectedPositionIds, setSelectedPositionIds] = useState<number[]>([]);
+  const [_members, setMembers] = useState<WPMember[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [groupedPersonnel, setGroupedPersonnel] = useState<PersonnelGroup[]>([]);
 
-  let fetchedMembers: WPMember[] = [];
-  let fetchError: string | null = null;
-  let groupedPersonnel: PersonnelGroup[] = [];
+  // Fetch positions on component mount
+  useEffect(() => {
+    async function loadPositions() {
+      try {
+        setIsLoading(true);
+        const positionTerms = await fetchPositions();
+        setPositions(positionTerms);
 
-  // Get translated static group titles
-  const translatedCoordinatorTitle = t('groupTitleCoordinator');
-  const translatedOtherTitle = t('groupTitleOther');
+        // Try to load previously saved positions
+        try {
+          const savedPositions = localStorage.getItem(SELECTED_POSITIONS_KEY);
+          if (savedPositions) {
+            const parsedPositions = JSON.parse(savedPositions) as number[];
+            if (Array.isArray(parsedPositions)) {
+              setSelectedPositionIds(parsedPositions);
+            }
+          }
+        } catch (e) {
+          console.error('Failed to load saved positions:', e);
+        }
 
-  try {
-    fetchedMembers = await fetchMembersByNames(targetPersonnelNames);
-
-    const groups: Record<string, PersonnelGroup> = {};
-    const coordinatorName = 'Francis W. Danella';
-
-    const generalCoordinator = fetchedMembers.find(m => m.title.rendered === coordinatorName);
-    if (generalCoordinator) {
-      // Use the translated title as the key and in the object
-      groups[translatedCoordinatorTitle] = {
-        title: translatedCoordinatorTitle,
-        members: [generalCoordinator]
-      };
+        setIsLoading(false);
+      } catch (err) {
+        console.error('Failed to fetch positions:', err);
+        setError(err instanceof Error ? err.message : 'An unknown error occurred.');
+        setIsLoading(false);
+      }
     }
 
-    fetchedMembers.forEach(member => {
-      if (member.title.rendered === coordinatorName) return;
+    void loadPositions();
+  }, []);
 
-      // Use the translated title for the 'Other' group if no province
-      const province = getProvinceName(member) || translatedOtherTitle;
-      console.log(`Grouping member: ${member.title.rendered}, Province/Group: ${province}`);
-      if (!groups[province]) {
-        groups[province] = { title: province, members: [] };
+  // Fetch members when positions are selected
+  useEffect(() => {
+    async function loadMembersByPositions() {
+      if (selectedPositionIds.length === 0) {
+        setMembers([]);
+        setGroupedPersonnel([]);
+        return;
       }
-      groups[province].members.push(member);
-    });
 
-    // Define desired order using translated static titles where applicable
-    const groupOrder = [
-      translatedCoordinatorTitle,
-      'North American Provinces', // Dynamic - Keep as is
-      'France-West Africa Province', // Dynamic - Keep as is
-      'German-speaking Province', // Dynamic - Keep as is
-      'South American and Caribbean Province', // Dynamic - Keep as is
-      'Southern African Region', // Dynamic - Keep as is
-      'Indian Region', // Dynamic - Keep as is
-      translatedOtherTitle // Use translated fallback title
-    ];
+      try {
+        setIsLoading(true);
+        setError(null);
 
-    groupedPersonnel = groupOrder
-      .map(title => groups[title])
-      .filter((group): group is PersonnelGroup => group !== undefined);
+        // Save selected positions to localStorage for user page to access
+        try {
+          localStorage.setItem(SELECTED_POSITIONS_KEY, JSON.stringify(selectedPositionIds));
+        } catch (e) {
+          console.error('Failed to save selected positions:', e);
+        }
 
-    console.log("Final groupedPersonnel structure:", JSON.stringify(groupedPersonnel.map(g => ({ title: g.title, memberCount: g.members.length })), null, 2));
+        // Create an array to store the grouped personnel in order of selection
+        const orderedGroups: PersonnelGroup[] = [];
 
-  } catch (error) {
-    console.error("Failed to fetch/group formation personnel:", error);
-    fetchError = error instanceof Error ? error.message : 'An unknown error occurred.';
-  }
+        // Process positions in the order they were selected
+        for (const positionId of selectedPositionIds) {
+          // Find the position name
+          const position = positions.find(p => p.id === positionId);
+          if (!position) continue;
+
+          // Fetch members for this position
+          const positionMembers = await fetchMembersByPosition(positionId);
+
+          // Add this group to our ordered array
+          orderedGroups.push({
+            id: positionId,
+            title: position.name,
+            members: positionMembers
+          });
+
+          // Add members to the flat list of all members
+          setMembers(prev => [...prev, ...positionMembers]);
+        }
+
+        setGroupedPersonnel(orderedGroups);
+        setIsLoading(false);
+      } catch (err) {
+        console.error('Failed to fetch members:', err);
+        setError(err instanceof Error ? err.message : 'An unknown error occurred.');
+        setIsLoading(false);
+      }
+    }
+
+    // Reset members list when reloading
+    setMembers([]);
+    void loadMembersByPositions();
+  }, [selectedPositionIds, positions]);
+
+  // Transform positions for MultiSelect component
+  const positionOptions = positions.map(position => ({
+    value: position.id,
+    label: position.name
+  }));
 
   return (
     <main>
       <h1 className="text-3xl font-bold mb-8">{t('title')}</h1>
 
-      {fetchError && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
-          <strong className="font-bold">{t('errorPrefix')}</strong>
-          <span className="block sm:inline"> {t('errorLoading')} {fetchError}</span>
+      <div className="mb-8">
+        <MultiSelect
+          id="position-select"
+          label={t('selectPosition')}
+          options={positionOptions}
+          selectedValues={selectedPositionIds}
+          onChange={(values) => setSelectedPositionIds(values as number[])}
+          placeholder={t('selectPositionPrompt')}
+          disabled={isLoading || positions.length === 0}
+          className="mb-1"
+        />
+      </div>
+
+      {isLoading && (
+        <div className="flex justify-center items-center h-32">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
         </div>
       )}
 
-      {!fetchError && groupedPersonnel.length === 0 && (
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
+          <strong className="font-bold">{t('errorPrefix')}</strong>
+          <span className="block sm:inline"> {t('errorLoading')} {error}</span>
+        </div>
+      )}
+
+      {!isLoading && !error && selectedPositionIds.length > 0 && groupedPersonnel.length === 0 && (
         <p className="text-gray-500">{t('emptyState')}</p>
       )}
 
-      {!fetchError && groupedPersonnel.length > 0 && (
+      {!isLoading && !error && selectedPositionIds.length === 0 && (
+        <p className="text-gray-500">{t('selectPositionInstruction')}</p>
+      )}
+
+      {!isLoading && !error && groupedPersonnel.length > 0 && (
         <div className="space-y-10">
           {groupedPersonnel.map((group) => (
-            <section key={group.title}>
+            <section key={group.id}>
               <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b border-gray-200 pb-2">{group.title}</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {group.members.map((member) => (

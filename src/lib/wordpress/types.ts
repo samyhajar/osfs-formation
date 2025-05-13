@@ -1,7 +1,7 @@
 /**
  * Represents a Term object as returned by the WordPress REST API (often within _embedded).
  */
-interface WPTerm {
+export interface WPTerm {
   id: number;
   link: string;
   name: string;

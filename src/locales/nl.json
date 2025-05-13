@@ -165,7 +165,11 @@
     "errorLoading": "Laden van leden mislukt.",
     "emptyState": "Geen opgegeven leden gevonden.",
     "groupTitleCoordinator": "Algemeen Coördinator Vorming",
-    "groupTitleOther": "Overig Personeel"
+    "groupTitleOther": "Overig Personeel",
+    "selectPosition": "Selecteer Positie",
+    "selectPositionPrompt": "-- Selecteer een positie --",
+    "selectPositionInstruction": "Selecteer een positie om leden te bekijken.",
+    "noPositionsSelected": "Er zijn geen posities geselecteerd door beheerders. Kom later terug."
   },
   "AdminUsersPage": {
     "pageTitle": "Gebruikersbeheer",
@@ -280,7 +284,14 @@
     "headerCreated": "Aangemaakt",
     "headerActions": "Acties",
     "actionDownload": "Downloaden",
-    "actionDelete": "Verwijderen"
+    "actionDelete": "Verwijderen",
+    "optionsButtonLabel": "Documentopties",
+    "deleting": "Verwijderen...",
+    "downloading": "Downloaden...",
+    "SyllabusList": {
+      "download": "Downloaden",
+      "delete": "Verwijderen"
+    }
   },
   "EmailPage": {
     "title": "E-mailnotificaties",

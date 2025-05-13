@@ -165,7 +165,11 @@
     "errorLoading": "Mitglieder konnten nicht geladen werden.",
     "emptyState": "Keine angegebenen Mitglieder gefunden.",
     "groupTitleCoordinator": "Generalkoordinator Ausbildung",
-    "groupTitleOther": "Sonstiges Personal"
+    "groupTitleOther": "Sonstiges Personal",
+    "selectPosition": "Position auswählen",
+    "selectPositionPrompt": "-- Position auswählen --",
+    "selectPositionInstruction": "Bitte wählen Sie eine Position, um Mitglieder anzuzeigen.",
+    "noPositionsSelected": "Es wurden keine Positionen von Administratoren ausgewählt. Bitte schauen Sie später wieder nach."
   },
   "AdminUsersPage": {
     "pageTitle": "Benutzerverwaltung",
@@ -327,7 +331,14 @@
     "headerCreated": "Erstellt",
     "headerActions": "Aktionen",
     "actionDownload": "Herunterladen",
-    "actionDelete": "Löschen"
+    "actionDelete": "Löschen",
+    "optionsButtonLabel": "Dokumentoptionen",
+    "deleting": "Wird gelöscht...",
+    "downloading": "Wird heruntergeladen...",
+    "SyllabusList": {
+      "download": "Herunterladen",
+      "delete": "Löschen"
+    }
   },
   "EmailPage": {
     "title": "E-Mail-Benachrichtigungen",

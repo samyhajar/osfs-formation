@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import React, { Suspense } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Document } from '@/types/document';
 import { FileIcon } from '@/components/ui/FileIcon';
 import {
@@ -12,57 +12,8 @@ import {
   ArrowPathIcon,
   EyeIcon,
 } from '@heroicons/react/24/outline';
-
-// Statically import required flags
-import FR from 'country-flag-icons/react/3x2/FR';
-import ES from 'country-flag-icons/react/3x2/ES';
-import DE from 'country-flag-icons/react/3x2/DE';
-import US from 'country-flag-icons/react/3x2/US'; // Use US for English/USA flag
-import IT from 'country-flag-icons/react/3x2/IT'; // Add Italian flag
-import BR from 'country-flag-icons/react/3x2/BR'; // Use Brazilian flag for Portuguese
-
-// Map country codes to components - use basic object type
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const flagComponents: { [key: string]: any } = {
-  FR,
-  ES,
-  DE,
-  US,
-  IT,
-  BR,
-};
-
-// Map full language names (lowercase) to country codes
-const languageNameToCodeMap: { [key: string]: string } = {
-  english: 'US',
-  french: 'FR',
-  spanish: 'ES',
-  german: 'DE',
-  italian: 'IT',
-  portuguese: 'BR', // Use Brazilian flag for Portuguese
-};
-
-// Updated LanguageFlag component
-const LanguageFlag = ({ languageName }: { languageName: string | null }) => {
-  if (!languageName) {
-    return <span className="text-gray-500 text-xs">N/A</span>;
-  }
-  const lowerLanguageName = languageName.toLowerCase();
-  const countryCode = languageNameToCodeMap[lowerLanguageName];
-  if (!countryCode) {
-    return <span className="text-gray-500 text-xs">{languageName}</span>;
-  }
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const FlagComponent = flagComponents[countryCode];
-  if (!FlagComponent) {
-    return <span className="text-gray-500 text-xs">{countryCode}</span>;
-  }
-  return (
-    <Suspense fallback={<div className="h-4 w-6 bg-gray-200 rounded-sm animate-pulse"></div>}>
-      <FlagComponent title={languageName} className="h-4 w-6 rounded-sm shadow-sm" />
-    </Suspense>
-  );
-};
+import { createPortal } from 'react-dom';
+import LanguageFlag from '@/components/ui/LanguageFlag';
 
 interface DocumentRowProps {
   doc: Document;
@@ -87,6 +38,8 @@ export function DocumentRow({
 }: DocumentRowProps) {
   const isDropdownOpen = activeDropdown === doc.id;
   const isDownloading = generatingUrl === doc.id;
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
 
   const handleDeleteClick = () => {
     if (onDelete) {
@@ -100,6 +53,17 @@ export function DocumentRow({
     void handleDownload(doc); // Correctly call async function
     // Keep dropdown open during download generation
   };
+
+  // Update dropdown position whenever it opens
+  useEffect(() => {
+    if (isDropdownOpen && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + window.scrollY,
+        left: rect.right - 150 + window.scrollX, // Position dropdown to the left of the button
+      });
+    }
+  }, [isDropdownOpen]);
 
   return (
     <tr key={doc.id} className="hover:bg-gray-50/50">
@@ -139,6 +103,7 @@ export function DocumentRow({
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium relative">
         <button
+          ref={buttonRef}
           onClick={() => toggleDropdown(doc.id)}
           className="text-gray-500 hover:text-gray-700 focus:outline-none p-1 rounded-md hover:bg-gray-100"
           aria-haspopup="true"
@@ -147,11 +112,13 @@ export function DocumentRow({
           <EllipsisHorizontalIcon className="h-5 w-5" />
         </button>
 
-        {isDropdownOpen && (
+        {isDropdownOpen && typeof document !== 'undefined' && createPortal(
           <div
-            className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20"
-            style={{ top: '100%' }} // Position dropdown below button
-            onMouseLeave={() => toggleDropdown(doc.id)} // Close on mouse leave
+            className="fixed shadow-lg bg-white rounded-md ring-1 ring-black ring-opacity-5 z-50"
+            style={{
+              top: `${dropdownPosition.top}px`,
+              left: `${dropdownPosition.left}px`,
+            }}
           >
             <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
               <Link
@@ -196,7 +163,8 @@ export function DocumentRow({
                 </button>
               )}
             </div>
-          </div>
+          </div>,
+          document.body
         )}
       </td>
     </tr>

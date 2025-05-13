@@ -209,7 +209,11 @@
     "errorLoading": "Failed to load members.",
     "emptyState": "No specified members found.",
     "groupTitleCoordinator": "General Formation Coordinator",
-    "groupTitleOther": "Other Personnel"
+    "groupTitleOther": "Other Personnel",
+    "selectPosition": "Select Position",
+    "selectPositionPrompt": "-- Select a position --",
+    "selectPositionInstruction": "Please select a position to view members.",
+    "noPositionsSelected": "No positions have been selected by administrators. Please check back later."
   },
   "AdminUsersPage": {
     "pageTitle": "User Management",
@@ -543,7 +547,14 @@
     "headerCreated": "Created",
     "headerActions": "Actions",
     "actionDownload": "Download",
-    "actionDelete": "Delete"
+    "actionDelete": "Delete",
+    "optionsButtonLabel": "Document options",
+    "deleting": "Deleting...",
+    "downloading": "Downloading...",
+    "SyllabusList": {
+      "download": "Download",
+      "delete": "Delete"
+    }
   },
   "EmailPage": {
     "title": "Email Notifications",
