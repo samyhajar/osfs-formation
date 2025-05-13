@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient as createAdminClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server-client';
 import { Database } from '@/types/supabase';
 import { z } from 'zod';
 import { AuthError } from '@supabase/supabase-js';
@@ -17,20 +18,11 @@ export async function POST(request: Request) {
     const requestData: unknown = await request.json();
     const { email, password, name } = createAdminSchema.parse(requestData);
 
-    // Create admin Supabase client with service role key
-    const supabaseAdmin = createClient<Database>(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false,
-        },
-      },
-    );
+    // Create a regular Supabase client for queries
+    const supabase = await createClient();
 
     // Check if admin already exists
-    const { count, error: countError } = await supabaseAdmin
+    const { count, error: countError } = await supabase
       .from('profiles')
       .select('*', { count: 'exact', head: true })
       .eq('role', 'admin');
@@ -50,6 +42,18 @@ export async function POST(request: Request) {
         { status: 403 }, // Use 403 Forbidden
       );
     }
+
+    // Create admin Supabase client with service role key for admin operations
+    const supabaseAdmin = createAdminClient<Database>(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+        },
+      },
+    );
 
     // Create user with Supabase auth API
     const { data: userData, error: createError } =

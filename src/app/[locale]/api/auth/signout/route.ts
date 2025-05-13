@@ -1,15 +1,12 @@
-import { createClient } from '@supabase/supabase-js';
-import { Database } from '@/types/supabase';
+import { createClient } from '@/lib/supabase/server-client';
 import { createRedirect, getOrigin } from '@/lib/utils/auth-routes';
 
 export async function GET(request: Request) {
   console.log('🔴 API: Sign-out route called');
 
   try {
-    // Create a direct Supabase client
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-    const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+    // Create a Supabase client using our server-client helper
+    const supabase = await createClient();
 
     try {
       // Try to sign out using the Supabase client

@@ -44,7 +44,7 @@ export default function LanguageFlag({ languageName }: LanguageFlagProps) {
   if (!countryCode) {
     return <span className="text-gray-500 text-xs">{languageName}</span>;
   }
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+   
   const FlagComponent = flagComponents[countryCode];
   if (!FlagComponent) {
     return <span className="text-gray-500 text-xs">{countryCode}</span>;

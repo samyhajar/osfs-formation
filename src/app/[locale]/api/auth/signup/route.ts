@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server-client';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getSiteUrl } from '@/lib/utils/urls';
@@ -19,10 +19,7 @@ export async function POST(request: NextRequest) {
     const { email, password, name, role } = validatedData;
 
     // Create a Supabase client (server-side)
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    );
+    const supabase = await createClient();
 
     // Sign up the user with role in metadata
     const { data, error } = await supabase.auth.signUp({
