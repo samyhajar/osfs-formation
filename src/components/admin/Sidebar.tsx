@@ -86,7 +86,8 @@ export default function Sidebar() {
     navItems.push(
       { nameKey: 'commonSyllabus', path: `${basePath}/documents/syllabus`, icon: DocumentTextIcon, roles: ['admin', 'editor', 'user'] },
       { nameKey: 'workshops', path: `${basePath}/workshops`, icon: AcademicCapIcon, roles: ['admin', 'editor', 'user'] },
-      { nameKey: 'formationPersonnel', path: `${basePath}/formation-personnel`, icon: UserGroupIcon, roles: ['admin', 'editor', 'user'] }
+      { nameKey: 'formationPersonnel', path: `${basePath}/formation-personnel`, icon: UserGroupIcon, roles: ['admin', 'editor', 'user'] },
+      { nameKey: 'confreresInFormation', path: `${basePath}/confreres-in-formation`, icon: UserGroupIcon, roles: ['admin', 'editor', 'user'] }
     );
 
     // 4. Admin/Editor specific items

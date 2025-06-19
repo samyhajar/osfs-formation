@@ -841,3 +841,62 @@ export async function fetchMemberBySlug(
     throw error;
   }
 }
+
+/**
+ * Fetches all members for the "Confreres in Formation" feature with filtering capabilities.
+ * This includes members with statuses: NOVICE, SCHOLASTIC, and Brothers.
+ * @returns {Promise<WPMember[]>} A promise resolving to an array of filtered members.
+ */
+export async function fetchConfreresInFormation(): Promise<WPMember[]> {
+  try {
+    console.log('Fetching all confreres in formation from WordPress API...');
+
+    // Fetch all members with embedded data
+    const allMembers = await fetchMembers();
+    console.log(`✅ Fetched ${allMembers.length} total members from WordPress`);
+
+    // Filter members by status (state taxonomy)
+    // We only want members with status: Novice, Scholastic, or Brother
+    const allowedStatuses = ['Novice', 'Scholastic', 'Brother'];
+
+    const filteredMembers = allMembers.filter((member) => {
+      // Check if member has embedded taxonomy data
+      if (!member._embedded?.['wp:term'] || member.state.length === 0) {
+        return false;
+      }
+
+      // Get all terms and find state terms
+      const terms = member._embedded['wp:term'].flat();
+      const stateTerms = terms.filter(
+        (term) => member.state.includes(term.id) && term.taxonomy === 'state',
+      );
+
+      // Check if any of the member's state terms match our allowed statuses
+      const hasAllowedStatus = stateTerms.some((term) =>
+        allowedStatuses.includes(term.name),
+      );
+
+      return hasAllowedStatus;
+    });
+
+    console.log(
+      `✅ Filtered to ${filteredMembers.length} confreres in formation (Novice, Scholastic, Brother)`,
+    );
+
+    // Log the statuses found for debugging
+    const foundStatuses = new Set<string>();
+    filteredMembers.forEach((member) => {
+      const terms = member._embedded?.['wp:term']?.flat() || [];
+      const stateTerms = terms.filter(
+        (term) => member.state.includes(term.id) && term.taxonomy === 'state',
+      );
+      stateTerms.forEach((term) => foundStatuses.add(term.name));
+    });
+    console.log(`📊 Found statuses: ${Array.from(foundStatuses).join(', ')}`);
+
+    return filteredMembers;
+  } catch (error) {
+    console.error('Error fetching confreres in formation:', error);
+    throw error;
+  }
+}
