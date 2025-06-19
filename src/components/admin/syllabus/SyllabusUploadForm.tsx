@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/browser-client';
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
 import { Database } from '@/types/supabase';
 import { useAuth } from '@/contexts/AuthContext';
-import SyllabusFormFields from './SyllabusFormFields';
+import { SyllabusFormFields } from './SyllabusFormFields';
 import { DocumentCategory, DocumentPurpose } from '@/types/document';
 
 const TARGET_BUCKET = 'common-syllabus';
