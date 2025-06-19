@@ -8,10 +8,12 @@ import { ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 // Import getMessages for server-side fetching
 import { getMessages, setRequestLocale } from 'next-intl/server';
+// Import routing configuration for locales
+import { routing } from '@/i18n/routing';
 
 // Function to validate locales (optional but recommended)
 export function generateStaticParams() {
-  return [{ locale: 'en' }, { locale: 'fr' }];
+  return routing.locales.map((locale) => ({ locale }));
 }
 
 const geistSans = Geist({

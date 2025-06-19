@@ -21,7 +21,7 @@ export default async function PendingUsersPage() {
     .single();
 
   if (!profile || profile.role !== 'admin') {
-    redirect('/dashboard');
+    redirect('/dashboard/admin');
   }
 
   return (

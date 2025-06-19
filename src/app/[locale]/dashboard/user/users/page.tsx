@@ -25,7 +25,7 @@ export default async function UserUsersPage() {
   // Ensure user is a user for this page
   if (profileError || !profile || profile.role !== 'user') {
     console.error('Access denied or profile fetch error:', profileError);
-    redirect('/dashboard');
+    redirect('/dashboard/user');
   }
 
   // Hardcode fetching first page

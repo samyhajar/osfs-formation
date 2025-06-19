@@ -119,7 +119,7 @@ export function useDocumentUpload(): UseDocumentUploadResult {
       toast.success(`Successfully uploaded: ${data.file.name}`);
 
       // Determine redirect path based on role
-      let finalRedirectPath = '/dashboard'; // Default fallback
+      let finalRedirectPath = '/dashboard/user'; // Default fallback
       if (profile.role === 'admin') {
         finalRedirectPath = '/dashboard/admin';
       } else if (profile.role === 'editor') {

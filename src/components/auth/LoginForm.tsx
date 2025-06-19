@@ -77,7 +77,7 @@ export default function LoginForm() {
         }
 
         // Determine redirect based on user role
-        let redirectPath = '/dashboard';
+        let redirectPath = '/dashboard/user';
         if (profile && profile.role) {
           switch (profile.role) {
             case 'admin':

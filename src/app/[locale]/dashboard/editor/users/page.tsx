@@ -25,7 +25,7 @@ export default async function EditorUsersPage() {
   // Ensure user is an editor for this page
   if (profileError || !profile || profile.role !== 'editor') {
     console.error('Access denied or profile fetch error:', profileError);
-    redirect('/dashboard'); // Redirect if not an editor
+    redirect('/dashboard/editor'); // Redirect if not an editor
   }
 
   // Hardcode fetching first page

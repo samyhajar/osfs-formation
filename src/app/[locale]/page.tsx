@@ -4,21 +4,46 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Welcome() {
   const { session, loading } = useAuth();
   const router = useRouter();
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Handle hydration
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   useEffect(() => {
-    // If user is already logged in, redirect to dashboard
-    if (!loading && session) {
-      router.push('/dashboard');
-    }
-  }, [session, loading, router]);
+    // If user is already logged in, redirect to role-specific dashboard
+    if (isHydrated && !loading && session) {
+      // Get user profile to determine role and redirect accordingly
+      const getUserRole = async () => {
+        const { createClient } = await import('@/lib/supabase/browser-client');
+        const supabase = createClient();
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', session.user.id)
+          .single();
 
-  // Show loading while checking authentication
-  if (loading) {
+        if (profile?.role === 'admin') {
+          router.push('/dashboard/admin');
+        } else if (profile?.role === 'editor') {
+          router.push('/dashboard/editor');
+        } else {
+          router.push('/dashboard/user');
+        }
+      };
+
+      void getUserRole();
+    }
+  }, [session, loading, router, isHydrated]);
+
+  // Show loading while checking authentication or during hydration
+  if (!isHydrated || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-slate-50">
         <div className="text-center">
@@ -31,11 +56,42 @@ export default function Welcome() {
 
   // Don't render the welcome page if user is logged in (redirect is in progress)
   if (session) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-slate-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-slate-600">Redirecting...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-slate-50">
+      {/* Back to OSFS World Link */}
+      <div className="absolute top-6 left-6 z-10">
+        <Link
+          href="https://osfs.world/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 hover:underline transition-all duration-200 text-base font-medium"
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          </svg>
+          Back to OSFS World
+        </Link>
+      </div>
       <main className="flex-grow flex items-center justify-center py-12 px-4">
         <div className="max-w-4xl w-full text-center">
           {/* Logo Section */}

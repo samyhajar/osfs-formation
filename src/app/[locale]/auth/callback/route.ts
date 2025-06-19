@@ -46,9 +46,7 @@ export async function GET(request: NextRequest) {
             'Callback: Admin client error fetching profile:',
             profileError,
           );
-          return NextResponse.redirect(
-            `${origin}/dashboard?error=profile_fetch_failed`,
-          );
+          return NextResponse.redirect(`${origin}?error=profile_fetch_failed`);
         }
 
         if (profile?.role) {
@@ -67,25 +65,21 @@ export async function GET(request: NextRequest) {
               return NextResponse.redirect(`${origin}/dashboard/user`);
             default:
               console.warn('Callback: Unknown user role:', profile.role);
-              return NextResponse.redirect(`${origin}/dashboard`);
+              return NextResponse.redirect(`${origin}/dashboard/user`);
           }
         } else {
           console.warn(
             'Callback: Profile or role not found for user (admin fetch):',
             session.user.id,
           );
-          return NextResponse.redirect(
-            `${origin}/dashboard?error=profile_missing`,
-          );
+          return NextResponse.redirect(`${origin}?error=profile_missing`);
         }
       } catch (adminError) {
         console.error(
           'Callback: Error during admin client profile fetch:',
           adminError,
         );
-        return NextResponse.redirect(
-          `${origin}/dashboard?error=admin_fetch_error`,
-        );
+        return NextResponse.redirect(`${origin}?error=admin_fetch_error`);
       }
     } else {
       console.warn('Callback: Code exchanged but session or user is null.');
@@ -95,9 +89,9 @@ export async function GET(request: NextRequest) {
 
   // If no code is present, this might be an email confirmation flow
   // where Supabase puts the session in the URL fragment (#).
-  // Redirect to the dashboard where the client-side AuthContext can handle the fragment.
+  // Redirect to the welcome page where the client-side AuthContext can handle the fragment.
   console.warn(
-    'Callback: No code found in request URL. Redirecting to /dashboard for client-side session handling.',
+    'Callback: No code found in request URL. Redirecting to welcome page for client-side session handling.',
   );
-  return NextResponse.redirect(`${origin}/dashboard`);
+  return NextResponse.redirect(`${origin}`);
 }
