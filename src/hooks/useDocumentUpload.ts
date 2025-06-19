@@ -17,6 +17,7 @@ interface UploadData {
   description: string;
   file: File;
   category: DocumentCategory;
+  authorName: string;
   region: string;
   language: string;
   topics: string[];
@@ -86,7 +87,11 @@ export function useDocumentUpload(): UseDocumentUploadResult {
         file_size: data.file.size,
         category: data.category,
         author_id: user.id,
-        author_name: (profile.name as string) || user.email || 'Unknown User',
+        author_name:
+          data.authorName ||
+          (profile.name as string) ||
+          user.email ||
+          'Unknown User',
         region: data.region || null,
         language: data.language || null,
         topics: data.topics.length > 0 ? data.topics : null,

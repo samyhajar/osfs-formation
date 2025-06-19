@@ -26,12 +26,13 @@ export default function SyllabusUploadForm({ onUploadComplete }: SyllabusUploadF
   const [description, setDescription] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [category, setCategory] = useState<DocumentCategory>('Articles');
+  const [authorName, setAuthorName] = useState('');
   const [region, setRegion] = useState<string>('');
   const [language, setLanguage] = useState<string>('');
   const [topics, setTopics] = useState<string[]>([]);
   const [purpose, setPurpose] = useState<DocumentPurpose[]>([]);
   const [keywords, setKeywords] = useState<string[]>([]);
-  const [isPublic, setIsPublic] = useState(false);
+  const [isPublic, setIsPublic] = useState(true);
 
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -61,7 +62,7 @@ export default function SyllabusUploadForm({ onUploadComplete }: SyllabusUploadF
     setTopics([]);
     setPurpose([]);
     setKeywords([]);
-    setIsPublic(false);
+    setIsPublic(true);
     setError(null);
     setFormError(null);
     setProgress(0);
@@ -114,7 +115,7 @@ export default function SyllabusUploadForm({ onUploadComplete }: SyllabusUploadF
         file_size: file.size,
         category,
         author_id: user.id,
-        author_name: profile?.name || user.email,
+        author_name: authorName || profile?.name || user.email,
         region: region || null,
         language: language || null,
         topics: topics.length > 0 ? topics : null,
@@ -173,6 +174,8 @@ export default function SyllabusUploadForm({ onUploadComplete }: SyllabusUploadF
         handleFileUpdate={handleFileUpdate}
         category={category}
         setCategory={setCategory}
+        authorName={authorName}
+        setAuthorName={setAuthorName}
         region={region}
         setRegion={setRegion}
         language={language}

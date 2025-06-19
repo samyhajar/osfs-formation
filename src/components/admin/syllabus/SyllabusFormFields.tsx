@@ -37,6 +37,8 @@ export interface SyllabusFormFieldsProps {
   handleFileUpdate: (file: File | null) => void;
   category: DocumentCategory;
   setCategory: (category: DocumentCategory) => void;
+  authorName: string;
+  setAuthorName: (authorName: string) => void;
   region: string;
   setRegion: (region: string) => void;
   language: string;
@@ -62,6 +64,7 @@ export function SyllabusFormFields({
   description, setDescription,
   file, handleFileUpdate,
   category, setCategory,
+  authorName, setAuthorName,
   region, setRegion,
   language, setLanguage,
   topics, setTopics,
@@ -91,6 +94,15 @@ export function SyllabusFormFields({
         value={description}
         onChange={setDescription}
         isTextArea
+        disabled={uploading}
+      />
+
+      <FormField
+        id="authorName"
+        label={t('fieldAuthorLabel', { default: 'Author' })}
+        value={authorName}
+        onChange={setAuthorName}
+        placeholder={t('fieldAuthorPlaceholder', { default: 'Enter author name (optional)' })}
         disabled={uploading}
       />
 

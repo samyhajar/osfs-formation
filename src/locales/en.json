@@ -504,6 +504,8 @@
     "uploadButton": "Upload File and Save",
     "fieldTitleLabel": "Title",
     "fieldDescriptionLabel": "Description",
+    "fieldAuthorLabel": "Author",
+    "fieldAuthorPlaceholder": "Enter author name (optional)",
     "fieldCategoryLabel": "Category",
     "fieldRegionLabel": "Region",
     "fieldLanguageLabel": "Language",

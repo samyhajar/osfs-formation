@@ -59,6 +59,7 @@ export function DocumentEditForm({ document, onEditComplete, onCancel }: Documen
   const [title, setTitle] = useState(document.title);
   const [description, setDescription] = useState(document.description || '');
   const [category, setCategory] = useState<DocumentCategory>(document.category as DocumentCategory);
+  const [authorName, setAuthorName] = useState(document.author_name || '');
   const [region, setRegion] = useState(document.region || '');
   const [language, setLanguage] = useState(document.language || '');
   const [topics, setTopics] = useState<string[]>(document.topics || []);
@@ -94,6 +95,7 @@ export function DocumentEditForm({ document, onEditComplete, onCancel }: Documen
       title,
       description,
       category,
+      authorName,
       region,
       language,
       topics,
@@ -136,6 +138,8 @@ export function DocumentEditForm({ document, onEditComplete, onCancel }: Documen
         handleFileChange={handleFileChange}
         category={category}
         setCategory={setCategory}
+        authorName={authorName}
+        setAuthorName={setAuthorName}
         region={region}
         setRegion={setRegion}
         language={language}

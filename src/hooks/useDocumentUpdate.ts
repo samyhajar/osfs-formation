@@ -17,6 +17,7 @@ interface DocumentUpdateData {
   title: string;
   description: string;
   category: DocumentCategory;
+  authorName: string;
   region: string;
   language: string;
   topics: string[];
@@ -52,6 +53,7 @@ export function useDocumentUpdate({
       title,
       description,
       category,
+      authorName,
       region,
       language,
       topics,
@@ -130,6 +132,7 @@ export function useDocumentUpdate({
               file_type: file ? file.type : undefined,
               file_size: file ? file.size : undefined,
               category,
+              author_name: authorName || null,
               region: region || null,
               language: language || null,
               topics: topics.length > 0 ? topics : null,
@@ -145,6 +148,7 @@ export function useDocumentUpdate({
               file_type: file ? file.type : undefined,
               file_size: file ? file.size : undefined,
               category,
+              author_name: authorName || null,
               region: region || null,
               language: language || null,
               topics: topics.length > 0 ? topics : null,

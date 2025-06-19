@@ -40,6 +40,7 @@ export default function UploadForm() {
   const [description, setDescription] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [category, setCategory] = useState<DocumentCategory>('Articles');
+  const [authorName, setAuthorName] = useState('');
   const [region, setRegion] = useState<string>('');
   const [language, setLanguage] = useState<string>('');
   const [topics, setTopics] = useState<string[]>([]);
@@ -75,10 +76,11 @@ export default function UploadForm() {
 
     // Call the hook's upload function
     void uploadDocument({
-          title,
+      title,
       description,
       file,
-          category,
+      category,
+      authorName,
       region,
       language,
       topics,
@@ -116,6 +118,15 @@ export default function UploadForm() {
         onChange={setDescription}
         isTextArea
         disabled={loading} // Use loading state from hook
+      />
+
+      <FormField
+        id="authorName"
+        label="Author"
+        value={authorName}
+        onChange={setAuthorName}
+        placeholder="Enter author name (optional)"
+        disabled={loading}
       />
 
       <FileDropzone file={file} onFileChange={handleFileUpdate} required />

@@ -18,6 +18,8 @@ interface DocumentFormFieldsProps {
   handleFileChange: (file: File | null) => void;
   category: DocumentCategory;
   setCategory: (category: DocumentCategory) => void;
+  authorName: string;
+  setAuthorName: (authorName: string) => void;
   region: string;
   setRegion: (region: string) => void;
   language: string;
@@ -49,6 +51,7 @@ export function DocumentFormFields({
   description, setDescription,
   file, handleFileChange,
   category, setCategory,
+  authorName, setAuthorName,
   region, setRegion,
   language, setLanguage,
   topics, setTopics,
@@ -84,6 +87,15 @@ export function DocumentFormFields({
         placeholder={t('descriptionPlaceholder', { fallback: 'Brief description of the document' })}
         disabled={disabled}
         isTextArea
+      />
+
+      <FormField
+        id="authorName"
+        label={t('authorLabel', { fallback: 'Author' })}
+        value={authorName}
+        onChange={setAuthorName}
+        placeholder={t('authorPlaceholder', { fallback: 'Enter author name (optional)' })}
+        disabled={disabled}
       />
 
       {showCurrentFile && currentDocument && (
