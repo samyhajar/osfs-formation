@@ -102,8 +102,7 @@ export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormPr
   };
 
   return (
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={(e) => { void handleSubmit(onSubmit)(e); }} className="space-y-4">
        {serverError && (
         <p className="text-sm text-red-600 bg-red-100 p-3 rounded border border-red-300"> {/* Adjusted padding */}
           {serverError}

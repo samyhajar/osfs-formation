@@ -24,6 +24,7 @@
   },
   "Sidebar": {
     "dashboard": "Dashboard",
+    "documents": "Documents",
     "folders": "Folders",
     "commonSyllabus": "Common Syllabus",
     "workshops": "Workshops",
@@ -484,6 +485,12 @@
     "deleteErrorGeneric": "Failed to delete syllabus document.",
     "pageErrorPrefix": "Error:"
   },
+  "WorkshopsPage": {
+    "title": "Workshops",
+    "loading": "Loading workshops...",
+    "noWorkshops": "No workshops available.",
+    "workshopsTitle": "Available Workshops"
+  },
   "SyllabusUploadForm": {
     "title": "Upload New Syllabus Document",
     "fileRequiredError": "Please select a file to upload.",
@@ -537,6 +544,8 @@
     "deleteModalCancel": "Cancel",
     "deleteModalDeleting": "Deleting...",
     "loading": "Loading syllabus documents...",
+    "noDocuments": "No syllabus documents yet",
+    "noDocumentsDetails": "Syllabus documents will appear here once added by administrators.",
     "emptyStateTitle": "No syllabus documents found",
     "emptyStateSuggestion": "Upload the first document using the form above.",
     "headerName": "Name",
@@ -548,9 +557,10 @@
     "headerActions": "Actions",
     "actionDownload": "Download",
     "actionDelete": "Delete",
+    "download": "Download",
+    "downloading": "Downloading...",
     "optionsButtonLabel": "Document options",
     "deleting": "Deleting...",
-    "downloading": "Downloading...",
     "SyllabusList": {
       "download": "Download",
       "delete": "Delete"
@@ -639,5 +649,23 @@
     "uploadFileTitle": "Upload New Workshop File",
     "loading": "Loading files...",
     "error": "Error loading files"
+  },
+  "MemberDetailPage": {
+    "loading": "Loading member details...",
+    "backToPersonnel": "Back to Formation Personnel",
+    "memberNotFound": "Member Not Found",
+    "memberNotFoundMessage": "The requested member could not be found.",
+    "error": "Error",
+    "invalidMemberId": "Invalid member ID",
+    "memberNotFoundError": "Member not found",
+    "failedToLoad": "Failed to load member details",
+    "positionsTitle": "Positions & Responsibilities",
+    "formationStatusTitle": "Formation Status",
+    "ministryAreasTitle": "Ministry Areas",
+    "contactInfoTitle": "Contact Information",
+    "contactMessage": "For spiritual guidance, formation questions, or to schedule a meeting, please contact through your local community or provincial office.",
+    "contactNote": "📧 Contact through official channels for privacy and proper communication protocols.",
+    "guidanceTitle": "Formation Guidance",
+    "guidanceMessage": "This member is available to provide spiritual direction, formation guidance, and support throughout your journey of discernment and religious formation. Please reach out through proper channels when you need assistance or have questions about your formation path."
   }
 }

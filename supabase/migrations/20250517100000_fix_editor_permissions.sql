@@ -2,7 +2,8 @@
 -- Description: Adds policies to allow editors to upload and manage workshop files
 
 -- Create policy allowing editors to insert into workshops
-CREATE POLICY IF NOT EXISTS "Editors and admins can create workshops" ON public.workshops
+DROP POLICY IF EXISTS "Editors and admins can create workshops" ON public.workshops;
+CREATE POLICY "Editors and admins can create workshops" ON public.workshops
   FOR INSERT
   TO authenticated
   WITH CHECK (
@@ -14,7 +15,8 @@ CREATE POLICY IF NOT EXISTS "Editors and admins can create workshops" ON public.
   );
 
 -- Create policy allowing editors to update their workshops
-CREATE POLICY IF NOT EXISTS "Editors can update their workshops" ON public.workshops
+DROP POLICY IF EXISTS "Editors can update their workshops" ON public.workshops;
+CREATE POLICY "Editors can update their workshops" ON public.workshops
   FOR UPDATE
   USING (
     (auth.jwt()->>'role' IN ('admin', 'editor') OR
@@ -26,7 +28,8 @@ CREATE POLICY IF NOT EXISTS "Editors can update their workshops" ON public.works
   );
 
 -- Create policy for storage to allow editors to upload files
-CREATE POLICY IF NOT EXISTS "workshop_files_editor_admin_upload_policy" ON storage.objects
+DROP POLICY IF EXISTS "workshop_files_editor_admin_upload_policy" ON storage.objects;
+CREATE POLICY "workshop_files_editor_admin_upload_policy" ON storage.objects
   FOR INSERT
   TO authenticated
   WITH CHECK (

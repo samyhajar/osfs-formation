@@ -8,8 +8,8 @@ DROP POLICY IF EXISTS "workshops_authenticated_uploads" ON storage.objects;
 DROP POLICY IF EXISTS "workshops_owner_admin_select" ON storage.objects;
 DROP POLICY IF EXISTS "workshops_owner_admin_update" ON storage.objects;
 DROP POLICY IF EXISTS "workshops_owner_admin_delete" ON storage.objects;
-DROP POLICY IF EXISTS "workshops_formator_read_access" ON storage.objects;
-DROP POLICY IF EXISTS "workshop_files_formee_read_policy" ON storage.objects;
+DROP POLICY IF EXISTS "workshops_editor_read_access" ON storage.objects;
+DROP POLICY IF EXISTS "workshop_files_user_read_policy" ON storage.objects;
 
 -- Create policies for admin users (full access)
 CREATE POLICY "Admin Workshop Full Access"
@@ -45,7 +45,7 @@ USING (
   (
     EXISTS (
       SELECT 1 FROM public.profiles
-      WHERE id = auth.uid() AND role IN ('admin', 'formator')
+      WHERE id = auth.uid() AND role IN ('admin', 'editor')
     )
   )
 );
@@ -57,7 +57,7 @@ USING (
   (
     EXISTS (
       SELECT 1 FROM public.profiles
-      WHERE id = auth.uid() AND role IN ('admin', 'formator')
+      WHERE id = auth.uid() AND role IN ('admin', 'editor')
     )
   )
 );
@@ -69,29 +69,29 @@ USING (
   (
     EXISTS (
       SELECT 1 FROM public.profiles
-      WHERE id = auth.uid() AND role IN ('admin', 'formator')
+      WHERE id = auth.uid() AND role IN ('admin', 'editor')
     )
   )
 );
 
--- Create policy for formator read access
-CREATE POLICY "workshops_formator_read_access"
+-- Create policy for editor read access
+CREATE POLICY "workshops_editor_read_access"
 ON storage.objects FOR SELECT
 USING (
   bucket_id = 'workshops' AND
   EXISTS (
     SELECT 1 FROM public.profiles
-    WHERE id = auth.uid() AND role = 'formator'
+    WHERE id = auth.uid() AND role = 'editor'
   )
 );
 
--- Create policy for formee read access
-CREATE POLICY "workshop_files_formee_read_policy"
+-- Create policy for user read access
+CREATE POLICY "workshop_files_user_read_policy"
 ON storage.objects FOR SELECT
 USING (
   bucket_id = 'workshops' AND
   EXISTS (
     SELECT 1 FROM public.profiles
-    WHERE id = auth.uid() AND role = 'formee'
+    WHERE id = auth.uid() AND role = 'user'
   )
 );

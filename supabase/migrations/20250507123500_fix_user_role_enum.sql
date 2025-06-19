@@ -1,22 +1,44 @@
 -- Fix user_role enum type to align with application code
 DO $$
 BEGIN
-    -- First drop the old type if it exists
+    -- Check if the profiles table exists and handle the column migration carefully
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'profiles') THEN
+        -- Store current role values as text, handling all possible existing values
+        ALTER TABLE public.profiles ADD COLUMN role_temp text;
+        UPDATE public.profiles SET role_temp =
+            CASE
+                WHEN role::text = 'user' THEN 'user'
+                WHEN role::text = 'editor' THEN 'editor'
+                WHEN role::text = 'formant' THEN 'editor'
+                WHEN role::text = 'admin' THEN 'admin'
+                WHEN role::text = 'editor' THEN 'editor'
+                WHEN role::text = 'user' THEN 'user'
+                ELSE 'user' -- Default fallback
+            END;
+
+        -- Drop the old column
+        ALTER TABLE public.profiles DROP COLUMN role;
+    END IF;
+
+    -- Now drop the old type if it exists
     DROP TYPE IF EXISTS public.user_role CASCADE;
 
     -- Create the new type with the correct values
     CREATE TYPE public.user_role AS ENUM ('admin', 'editor', 'user');
 
-    -- Update the profiles table if it exists to use the new enum
+    -- Re-add the role column with the new type if profiles table exists
     IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'profiles') THEN
-        -- First update existing records to have valid values before applying the type constraint
-        UPDATE public.profiles SET role = 'user' WHERE role = 'formee';
-        UPDATE public.profiles SET role = 'editor' WHERE role = 'formator';
+        -- Add the role column back with the new type
+        ALTER TABLE public.profiles ADD COLUMN role public.user_role DEFAULT 'user';
 
-        -- Now alter the column to use the new type
-        ALTER TABLE public.profiles
-        ALTER COLUMN role TYPE public.user_role
-        USING role::text::public.user_role;
+        -- Restore the role values from temp column (they should all be valid now)
+        UPDATE public.profiles SET role = role_temp::public.user_role WHERE role_temp IS NOT NULL;
+
+        -- Clean up temp column
+        ALTER TABLE public.profiles DROP COLUMN role_temp;
+
+        -- Make role column NOT NULL
+        ALTER TABLE public.profiles ALTER COLUMN role SET NOT NULL;
     END IF;
 END$$;
 
@@ -83,18 +105,18 @@ CREATE TRIGGER on_auth_user_created
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- Update the roleMapping in user-related functions if they exist
-DO $$
+DO $outer$
 BEGIN
     IF EXISTS (SELECT 1 FROM pg_proc WHERE proname = 'is_admin') THEN
         -- Update the is_admin function to use the new role values
         CREATE OR REPLACE FUNCTION public.is_admin(user_id uuid DEFAULT auth.uid())
-        RETURNS boolean AS $$
+        RETURNS boolean AS $inner$
         DECLARE
             user_role text;
         BEGIN
             SELECT role::text INTO user_role FROM public.profiles WHERE id = user_id;
             RETURN user_role = 'admin';
         END;
-        $$ LANGUAGE plpgsql SECURITY DEFINER;
+        $inner$ LANGUAGE plpgsql SECURITY DEFINER;
     END IF;
-END$$;
+END$outer$;

@@ -11,14 +11,13 @@ import IT from 'country-flag-icons/react/3x2/IT'; // Add Italian flag
 import BR from 'country-flag-icons/react/3x2/BR'; // Use Brazilian flag for Portuguese
 
 // Map country codes to components - use basic object type
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const flagComponents: { [key: string]: any } = {
-  FR,
-  ES,
-  DE,
-  US,
-  IT,
-  BR,
+const flagComponents: Record<string, React.ComponentType<{ title?: string; className?: string }>> = {
+  FR: FR as React.ComponentType<{ title?: string; className?: string }>,
+  ES: ES as React.ComponentType<{ title?: string; className?: string }>,
+  DE: DE as React.ComponentType<{ title?: string; className?: string }>,
+  US: US as React.ComponentType<{ title?: string; className?: string }>,
+  IT: IT as React.ComponentType<{ title?: string; className?: string }>,
+  BR: BR as React.ComponentType<{ title?: string; className?: string }>,
 };
 
 // Map full language names (lowercase) to country codes
@@ -44,7 +43,7 @@ export default function LanguageFlag({ languageName }: LanguageFlagProps) {
   if (!countryCode) {
     return <span className="text-gray-500 text-xs">{languageName}</span>;
   }
-   
+
   const FlagComponent = flagComponents[countryCode];
   if (!FlagComponent) {
     return <span className="text-gray-500 text-xs">{countryCode}</span>;

@@ -79,7 +79,7 @@ CREATE POLICY "Admins can delete documents" ON public.documents
     )
   );
 
--- 2. Formants and formators can view public documents
+-- 2. Formants and editors can view public documents
 CREATE POLICY "Users can view public documents" ON public.documents
   FOR SELECT
   USING (is_public = TRUE);

@@ -6,7 +6,7 @@ import RoleDropdown from './RoleDropdown';
 // Define the type for a user profile row more explicitly
 type ProfileRow = Database['public']['Tables']['profiles']['Row'];
 
-interface FormatorUserTableProps {
+interface AllUsersTableProps {
   users: ProfileRow[];
 }
 
@@ -20,7 +20,7 @@ const formatDate = (dateString: string | null) => {
   }).format(new Date(dateString));
 };
 
-export default function FormatorUserTable({ users }: FormatorUserTableProps) {
+export default function AllUsersTable({ users }: AllUsersTableProps) {
   const t = useTranslations('AdminUsersTable');
 
   return (
@@ -35,6 +35,9 @@ export default function FormatorUserTable({ users }: FormatorUserTableProps) {
               {t('headerRole')}
             </th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider align-middle">
+              Status
+            </th>
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider align-middle">
               {t('headerCreatedAt')}
             </th>
             <th scope="col" className="relative px-6 py-3 align-middle">
@@ -45,8 +48,8 @@ export default function FormatorUserTable({ users }: FormatorUserTableProps) {
         <tbody className="bg-white divide-y divide-gray-200">
           {users.length === 0 ? (
             <tr>
-              <td colSpan={4} className="px-6 py-12 text-center text-sm text-gray-500 italic">
-                {t('emptyStateFormators')}
+              <td colSpan={5} className="px-6 py-12 text-center text-sm text-gray-500 italic">
+                No users found
               </td>
             </tr>
           ) : (
@@ -64,12 +67,19 @@ export default function FormatorUserTable({ users }: FormatorUserTableProps) {
                     }}
                   />
                 </td>
+                <td className="px-6 py-4 whitespace-nowrap align-middle">
+                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                    user.is_approved ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                  }`}>
+                    {user.is_approved ? 'Approved' : 'Pending'}
+                  </span>
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap align-middle text-sm text-gray-900">
                   {formatDate(user.created_at)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right align-middle">
                   <div className="text-sm text-gray-400">
-                    Role management enabled
+                    Role management
                   </div>
                 </td>
               </tr>

@@ -10,6 +10,32 @@
       "reflectionsdimensions": "Réflexions & Dimensions"
     }
   },
+  "WorkshopsPage": {
+    "title": "Ateliers",
+    "loading": "Chargement des ateliers...",
+    "noWorkshops": "Aucun atelier disponible",
+    "workshopsTitle": "Ateliers Disponibles",
+    "workshops": {
+      "title": "Atelier"
+    }
+  },
+  "SyllabusFileList": {
+    "loading": "Chargement des documents du syllabus...",
+    "noDocuments": "Aucun document de syllabus pour le moment",
+    "noDocumentsDetails": "Les documents du syllabus apparaîtront ici une fois ajoutés par les administrateurs.",
+    "headerName": "Nom",
+    "headerType": "Type",
+    "headerLang": "Langue",
+    "headerRegion": "Région",
+    "headerCategory": "Catégorie",
+    "headerCreated": "Créé le",
+    "headerActions": "Actions",
+    "download": "Télécharger",
+    "downloading": "Téléchargement...",
+    "downloadErrorNoPath": "Le chemin du fichier est manquant pour ce document.",
+    "downloadErrorSignUrlFailed": "Échec de la création du lien de téléchargement.",
+    "downloadErrorGeneric": "Échec du téléchargement :"
+  },
   "NotFound": {
     "title": "Page Non Trouvée",
     "description": "Désolé, la page que vous recherchez n'a pas pu être trouvée. Elle a peut-être été déplacée, supprimée, ou n'a jamais existé.",

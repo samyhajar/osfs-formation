@@ -10,8 +10,8 @@ BEGIN
   -- Extract role from user metadata if available
   IF NEW.raw_user_meta_data ? 'role' THEN
     -- Check if the role in metadata is valid
-    IF NEW.raw_user_meta_data->>'role' = 'formator' THEN
-      user_role := 'formator';
+    IF NEW.raw_user_meta_data->>'role' = 'editor' THEN
+      user_role := 'editor';
     ELSIF NEW.raw_user_meta_data->>'role' = 'admin' THEN
       user_role := 'admin';
     END IF;

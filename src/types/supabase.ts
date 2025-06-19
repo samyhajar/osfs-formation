@@ -144,6 +144,37 @@ export interface Database {
           },
         ];
       };
+      formation_settings: {
+        Row: {
+          id: string;
+          selected_member_ids: Json;
+          created_at: string;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          id?: string;
+          selected_member_ids?: Json;
+          created_at?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          id?: string;
+          selected_member_ids?: Json;
+          created_at?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'formation_settings_updated_by_fkey';
+            columns: ['updated_by'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       profiles: {
         Row: {
           approval_date: string | null;

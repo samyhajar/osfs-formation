@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import FormatorUserTable from '@/components/admin/users/FormatorUserTable';
-import FormeeUserTable from '@/components/admin/users/FormeeUserTable';
+import AllUsersTable from './AllUsersTable';
 import AddUserModal from './AddUserModal';
 import { Button } from '@/components/ui/Button';
 import { Database } from '@/types/supabase';
@@ -13,40 +12,29 @@ import { useTranslations } from 'next-intl';
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
 interface UserManagementClientProps {
-  initialFormatorUsers: Profile[];
-  initialFormeeUsers: Profile[];
-  formatorCount: number;
-  formeeCount: number;
-  currentPageFormator: number;
-  currentPageFormee: number;
+  initialUsers: Profile[];
+  totalCount: number;
+  currentPage: number;
   limit: number;
 }
 
 export default function UserManagementClient({
-  initialFormatorUsers,
-  initialFormeeUsers,
-  formatorCount,
-  formeeCount,
-  currentPageFormator,
-  currentPageFormee,
+  initialUsers,
+  totalCount,
+  currentPage,
   limit,
 }: UserManagementClientProps) {
   const t = useTranslations('AdminUsersPage');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [roleToAdd, setRoleToAdd] = useState<'formator' | 'formee'>('formee');
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const formatorUsers = initialFormatorUsers;
-  const formeeUsers = initialFormeeUsers;
+  const users = initialUsers;
+  const totalPages = Math.ceil(totalCount / limit);
 
-  const totalFormatorPages = Math.ceil(formatorCount / limit);
-  const totalFormeePages = Math.ceil(formeeCount / limit);
-
-  const openModal = (role: 'formator' | 'formee') => {
-    setRoleToAdd(role);
+  const openModal = () => {
     setIsModalOpen(true);
   };
 
@@ -56,23 +44,12 @@ export default function UserManagementClient({
 
   const handleUserAdded = () => {
     router.refresh();
-    // Consider adding a toast notification here for better UX
-    console.log(`Successfully added ${roleToAdd}`);
+    console.log('Successfully added user');
   };
 
-  const handlePageChange = (role: 'formator' | 'formee', newPage: number) => {
+  const handlePageChange = (newPage: number) => {
     const currentParams = new URLSearchParams(searchParams.toString());
-    if (role === 'formator') {
-      currentParams.set('formatorPage', String(newPage));
-    } else {
-      currentParams.set('formeePage', String(newPage));
-    }
-    if (role === 'formator' && !currentParams.has('formeePage')) {
-       currentParams.set('formeePage', String(currentPageFormee));
-    } else if (role === 'formee' && !currentParams.has('formatorPage')) {
-        currentParams.set('formatorPage', String(currentPageFormator));
-    }
-
+    currentParams.set('page', String(newPage));
     router.push(`${pathname}?${currentParams.toString()}`);
   };
 
@@ -85,37 +62,18 @@ export default function UserManagementClient({
 
       <div className="bg-white shadow-sm rounded-lg overflow-hidden">
         <div className="px-4 py-5 sm:px-6 flex justify-between items-center border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">{t('formatorsSectionTitle')} ({formatorCount})</h2>
-          <Button onClick={() => openModal('formator')} variant="primary">
-            {t('addFormatorButton')}
+          <h2 className="text-lg font-medium text-gray-900">All Users ({totalCount})</h2>
+          <Button onClick={openModal} variant="primary">
+            Add New User
           </Button>
         </div>
         <div className="p-4 sm:p-6 space-y-4">
-         <FormatorUserTable users={formatorUsers} />
-         {totalFormatorPages > 1 && (
+          <AllUsersTable users={users} />
+          {totalPages > 1 && (
             <PaginationControls
-              currentPage={currentPageFormator}
-              totalPages={totalFormatorPages}
-              onPageChange={(newPage: number) => handlePageChange('formator', newPage)}
-            />
-         )}
-        </div>
-      </div>
-
-      <div className="bg-white shadow-sm rounded-lg overflow-hidden">
-        <div className="px-4 py-5 sm:px-6 flex justify-between items-center border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">{t('formeesSectionTitle')} ({formeeCount})</h2>
-          <Button onClick={() => openModal('formee')} variant="primary">
-            {t('addFormeeButton')}
-          </Button>
-        </div>
-        <div className="p-4 sm:p-6 space-y-4">
-          <FormeeUserTable users={formeeUsers} />
-          {totalFormeePages > 1 && (
-            <PaginationControls
-                currentPage={currentPageFormee}
-                totalPages={totalFormeePages}
-                onPageChange={(newPage: number) => handlePageChange('formee', newPage)}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
             />
           )}
         </div>
@@ -125,7 +83,7 @@ export default function UserManagementClient({
         <AddUserModal
           isOpen={isModalOpen}
           onClose={closeModal}
-          role={roleToAdd}
+          defaultRole="user" // Default role for new users
           onUserAdded={handleUserAdded}
         />
       )}

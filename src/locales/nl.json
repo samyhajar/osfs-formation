@@ -24,6 +24,7 @@
   },
   "Sidebar": {
     "dashboard": "Dashboard",
+    "documents": "Documenten",
     "folders": "Mappen",
     "commonSyllabus": "Gemeenschappelijke Syllabus",
     "workshops": "Workshops",
@@ -220,6 +221,12 @@
     "deleteStorageErrorPermission": "U heeft geen toestemming om dit bestand uit de opslag te verwijderen.",
     "deleteErrorGeneric": "Verwijderen van syllabusdocument mislukt.",
     "pageErrorPrefix": "Fout:"
+  },
+  "WorkshopsPage": {
+    "title": "Workshops",
+    "loading": "Workshops laden...",
+    "noWorkshops": "Geen workshops beschikbaar.",
+    "workshopsTitle": "Beschikbare Workshops"
   },
   "SyllabusUploadForm": {
     "title": "Nieuw Syllabus Document Uploaden",

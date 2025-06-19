@@ -14,6 +14,7 @@ const addUserSchema = z.object({
     email: z.string().email('Invalid email format'),
     password: z.string().min(8, 'Password must be at least 8 characters'),
     confirmPassword: z.string().min(8, 'Password must be at least 8 characters'),
+    role: z.enum(['admin', 'editor', 'user']),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -23,12 +24,16 @@ const addUserSchema = z.object({
 type AddUserFormValues = z.infer<typeof addUserSchema>;
 
 interface AddUserFormProps {
-  role: 'formator' | 'formee';
+  defaultRole?: 'admin' | 'editor' | 'user';
   onSuccess: () => void;
   onCancel: () => void;
 }
 
-export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormProps) {
+export default function AddUserForm({
+  defaultRole = 'user',
+  onSuccess,
+  onCancel
+}: AddUserFormProps) {
   const t = useTranslations('AdminUsersPage');
 
   const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +47,9 @@ export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormPr
   } = useForm<AddUserFormValues>({
     resolver: zodResolver(addUserSchema),
     mode: 'onTouched',
+    defaultValues: {
+      role: defaultRole,
+    },
   });
 
   const onSubmit: SubmitHandler<AddUserFormValues> = async (data) => {
@@ -58,7 +66,7 @@ export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormPr
           name: data.name,
           email: data.email,
           password: data.password,
-          role: role,
+          role: data.role,
         }),
       });
 
@@ -105,14 +113,10 @@ export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormPr
     }
   };
 
-  // Translate role for the button
-  const translatedRole = role === 'formator' ? t('roleFormator') : t('roleFormee');
-
   return (
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={(e) => { void handleSubmit(onSubmit)(e); }} className="space-y-4">
        {serverError && (
-        <p className="text-sm text-red-600 bg-red-100 p-3 rounded border border-red-300"> {/* Adjusted padding */}
+        <p className="text-sm text-red-600 bg-red-100 p-3 rounded border border-red-300">
           {serverError}
         </p>
        )}
@@ -153,12 +157,31 @@ export default function AddUserForm({ role, onSuccess, onCancel }: AddUserFormPr
         autoComplete="new-password"
       />
 
-      <div className="flex justify-end space-x-3 pt-4"> {/* Increased top padding */}
+      <div className="space-y-1">
+        <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+          Role
+        </label>
+        <select
+          id="role"
+          {...register('role')}
+          disabled={isLoading}
+          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
+        >
+          <option value="user">User</option>
+          <option value="editor">Editor</option>
+          <option value="admin">Admin</option>
+        </select>
+        {errors.role && (
+          <p className="text-sm text-red-600">{errors.role.message}</p>
+        )}
+      </div>
+
+      <div className="flex justify-end space-x-3 pt-4">
          <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
-          {t('buttonCancel')}
+          Cancel
         </Button>
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? t('buttonCreating') : `${t('buttonCreatePrefix')} ${translatedRole}`}
+          {isLoading ? 'Creating...' : 'Create User'}
         </Button>
       </div>
     </form>

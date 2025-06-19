@@ -24,6 +24,7 @@
   },
   "Sidebar": {
     "dashboard": "Panel de Control",
+    "documents": "Documentos",
     "folders": "Carpetas",
     "commonSyllabus": "Programa Común",
     "workshops": "Talleres",
@@ -220,6 +221,12 @@
     "deleteStorageErrorPermission": "No tienes permiso para eliminar este archivo del almacenamiento.",
     "deleteErrorGeneric": "Error al eliminar el documento del programa.",
     "pageErrorPrefix": "Error:"
+  },
+  "WorkshopsPage": {
+    "title": "Talleres",
+    "loading": "Cargando talleres...",
+    "noWorkshops": "No hay talleres disponibles.",
+    "workshopsTitle": "Talleres Disponibles"
   },
   "SyllabusUploadForm": {
     "title": "Subir Nuevo Documento del Programa",

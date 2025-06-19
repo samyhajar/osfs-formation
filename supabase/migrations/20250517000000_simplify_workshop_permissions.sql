@@ -89,13 +89,13 @@ DROP POLICY IF EXISTS "workshops_authenticated_uploads" ON storage.objects;
 DROP POLICY IF EXISTS "workshops_owner_admin_select" ON storage.objects;
 DROP POLICY IF EXISTS "workshops_owner_admin_update" ON storage.objects;
 DROP POLICY IF EXISTS "workshops_owner_admin_delete" ON storage.objects;
-DROP POLICY IF EXISTS "workshops_formator_read_access" ON storage.objects;
-DROP POLICY IF EXISTS "workshop_files_formee_read_policy" ON storage.objects;
+DROP POLICY IF EXISTS "workshops_editor_read_access" ON storage.objects;
+DROP POLICY IF EXISTS "workshop_files_user_read_policy" ON storage.objects;
 DROP POLICY IF EXISTS "workshop_files_upload_policy" ON storage.objects;
 DROP POLICY IF EXISTS "workshop_files_admin_owner_select_policy" ON storage.objects;
 DROP POLICY IF EXISTS "workshop_files_admin_owner_update_policy" ON storage.objects;
 DROP POLICY IF EXISTS "workshop_files_admin_owner_delete_policy" ON storage.objects;
-DROP POLICY IF EXISTS "workshop_files_formator_read_policy" ON storage.objects;
+DROP POLICY IF EXISTS "workshop_files_editor_read_policy" ON storage.objects;
 DROP POLICY IF EXISTS "workshop_files_editor_admin_upload_policy" ON storage.objects;
 
 -- Create new simplified storage policies for workshops bucket

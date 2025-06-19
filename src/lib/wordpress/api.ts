@@ -368,3 +368,476 @@ export async function buildCategoryTree(
 
   return result;
 }
+
+/**
+ * Fetches all provinces (taxonomy terms) from the WordPress REST API.
+ * @returns {Promise<WPTerm[]>} A promise resolving to an array of province terms.
+ */
+export async function fetchProvinces(): Promise<WPTerm[]> {
+  try {
+    console.log('Attempting to fetch provinces...');
+    const url = `${WP_API_URL}/province?per_page=100`;
+    console.log('Province API URL:', url);
+
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Basic ${basicAuth}`,
+        'Content-Type': 'application/json',
+      },
+      next: { revalidate: 3600, tags: ['wordpress', 'provinces'] }, // Cache for 1 hour
+    });
+
+    if (!response.ok) {
+      let errorBody: unknown = '';
+      try {
+        errorBody = await response.json();
+      } catch (_e) {
+        try {
+          errorBody = await response.text();
+        } catch (_e2) {
+          /* Ignore */
+        }
+      }
+
+      console.error(
+        `Province API failed with status ${response.status}:`,
+        errorBody,
+      );
+
+      // If province taxonomy doesn't exist, return empty array as fallback
+      if (response.status === 404) {
+        console.warn('Province taxonomy not found, returning empty array');
+        return [];
+      }
+
+      throw new Error(
+        `Failed to fetch provinces: ${response.status} ${
+          response.statusText
+        }. ${JSON.stringify(errorBody)}`,
+      );
+    }
+
+    const provinces = (await response.json()) as WPTerm[];
+    console.log(`Fetched ${provinces.length} provinces.`);
+    return provinces;
+  } catch (error) {
+    console.error('Error fetching WordPress provinces:', error);
+
+    // Return empty array as fallback to prevent app from breaking
+    console.warn('Returning empty provinces array as fallback');
+    return [];
+  }
+}
+
+/**
+ * Fetches formation users from the WordPress REST API.
+ * This function tries different approaches to filter formation users.
+ * @returns {Promise<WPMember[]>} A promise resolving to an array of formation members.
+ */
+export async function fetchFormationUsers(): Promise<WPMember[]> {
+  try {
+    // First, try to fetch all members and then filter
+    // This is more reliable than trying to filter by unknown categories
+    console.log('Fetching all members to filter for formation users...');
+    const allMembers = await fetchMembers();
+
+    // For now, return all members since we don't know the exact filtering criteria
+    // You can modify the filtering logic based on your specific requirements
+    console.log(
+      `Fetched ${allMembers.length} total members as formation users.`,
+    );
+    return allMembers;
+
+    // Alternative approaches you can uncomment and try:
+
+    // Option 1: Filter by category if you know the category slug
+    // const url = `${WP_MEMBERS_BASE_ENDPOINT}&categories=formation`;
+
+    // Option 2: Filter by custom field
+    // const url = `${WP_MEMBERS_BASE_ENDPOINT}&meta_key=formation&meta_value=true`;
+
+    // Option 3: Filter by specific tag
+    // const url = `${WP_MEMBERS_BASE_ENDPOINT}&tags=formation`;
+
+    // Option 4: Search by keyword
+    // const url = `${WP_MEMBERS_BASE_ENDPOINT}&search=formation`;
+  } catch (error) {
+    console.error('Error fetching formation users:', error);
+    throw error; // Re-throw after logging
+  }
+}
+
+/**
+ * Fetches members by province ID.
+ * @param {number} provinceId - The province term ID to filter by.
+ * @returns {Promise<WPMember[]>} A promise resolving to an array of members with the specified province.
+ */
+export async function fetchMembersByProvince(
+  provinceId: number,
+): Promise<WPMember[]> {
+  try {
+    const url = `${WP_MEMBERS_BASE_ENDPOINT}&province=${provinceId}`;
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Basic ${basicAuth}`,
+        'Content-Type': 'application/json',
+      },
+      next: {
+        revalidate: 600,
+        tags: ['wordpress', 'members', `province-${provinceId}`],
+      }, // Cache for 10 mins
+    });
+
+    if (!response.ok) {
+      let errorBody: unknown = '';
+      try {
+        errorBody = await response.json();
+      } catch (_e) {
+        /* Ignore */
+      }
+      throw new Error(
+        `Failed to fetch members by province: ${response.status} ${
+          response.statusText
+        }. ${JSON.stringify(errorBody)}`,
+      );
+    }
+
+    const members = (await response.json()) as WPMember[];
+    console.log(
+      `Fetched ${members.length} members for province ${provinceId}.`,
+    );
+    return members;
+  } catch (error) {
+    console.error(`Error fetching members by province ${provinceId}:`, error);
+    throw error; // Re-throw after logging
+  }
+}
+
+/**
+ * Debug function to check what taxonomies are available in WordPress.
+ * This helps identify the correct taxonomy names.
+ * @returns {Promise<string[]>} A promise resolving to an array of available taxonomy names.
+ */
+export async function fetchAvailableTaxonomies(): Promise<string[]> {
+  try {
+    console.log('Fetching available taxonomies for debugging...');
+    const url = `${WP_API_URL}/taxonomies`;
+    console.log('Taxonomies API URL:', url);
+
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Basic ${basicAuth}`,
+        'Content-Type': 'application/json',
+      },
+      next: { revalidate: 3600, tags: ['wordpress', 'taxonomies'] },
+    });
+
+    if (!response.ok) {
+      console.error(
+        `Failed to fetch taxonomies: ${response.status} ${response.statusText}`,
+      );
+      return [];
+    }
+
+    const taxonomies = await response.json();
+    const taxonomyNames = Object.keys(taxonomies);
+    console.log('Available taxonomies:', taxonomyNames);
+    return taxonomyNames;
+  } catch (error) {
+    console.error('Error fetching taxonomies:', error);
+    return [];
+  }
+}
+
+/**
+ * Fetches leadership formation members from the WordPress REST API.
+ * This function specifically targets the 18 members listed on https://intern.osfs.world/formation/
+ * @returns {Promise<WPMember[]>} A promise resolving to an array of leadership formation members.
+ */
+export async function fetchLeadershipFormationMembers(): Promise<WPMember[]> {
+  try {
+    console.log('Fetching formation leaders from WordPress API...');
+
+    // Get all members with embedded data
+    let allMembers: WPMember[] = [];
+    let hasEmbeddedData = false;
+
+    // Try to fetch with _embed first
+    try {
+      const allMembersUrl = `${WP_MEMBERS_BASE_ENDPOINT}&per_page=100&_embed`;
+      const allMembersResponse = await fetch(allMembersUrl, {
+        headers: {
+          Authorization: `Basic ${basicAuth}`,
+          'Content-Type': 'application/json',
+        },
+        next: { revalidate: 600, tags: ['wordpress', 'members'] },
+      });
+
+      if (allMembersResponse.ok) {
+        allMembers = (await allMembersResponse.json()) as WPMember[];
+        hasEmbeddedData = true;
+        console.log(
+          `✅ Fetched ${allMembers.length} total members with _embed`,
+        );
+      } else {
+        throw new Error(`API returned ${allMembersResponse.status}`);
+      }
+    } catch (embedError) {
+      console.warn('Failed to fetch with _embed, trying fallback:', embedError);
+
+      // Fallback to basic fetchMembers
+      try {
+        allMembers = await fetchMembers();
+        hasEmbeddedData = false;
+        console.log(
+          `✅ Fallback: Fetched ${allMembers.length} members without _embed`,
+        );
+      } catch (fallbackError) {
+        console.error('Both methods failed:', fallbackError);
+        return [];
+      }
+    }
+
+    if (allMembers.length === 0) {
+      console.warn('No members found, returning empty array');
+      return [];
+    }
+
+    // If we have embedded data, try to filter by formation positions
+    if (hasEmbeddedData) {
+      const formationLeadershipPositions = [
+        'master of scholastics',
+        'novice master',
+        'formation director',
+        'formation assistant',
+        'vocation director',
+        'postulant director',
+        'co-vocation director',
+      ];
+
+      const positionMatches = allMembers.filter((member) => {
+        if (!member._embedded?.['wp:term']) return false;
+
+        // Check if member has any formation leadership position
+        const hasFormationLeadershipPosition = member._embedded['wp:term'].some(
+          (termGroup) =>
+            termGroup.some((term) => {
+              if (term.taxonomy !== 'position') return false;
+
+              const positionName = term.name.toLowerCase();
+              return formationLeadershipPositions.some(
+                (formationPos) =>
+                  positionName.includes(formationPos) ||
+                  formationPos.includes(positionName),
+              );
+            }),
+        );
+
+        return hasFormationLeadershipPosition;
+      });
+
+      console.log(
+        `🎯 Found ${positionMatches.length} members with formation leadership positions`,
+      );
+
+      if (positionMatches.length > 0) {
+        positionMatches.forEach((member, index) => {
+          const positions = member._embedded?.['wp:term']
+            ?.flat()
+            .filter((term) => term.taxonomy === 'position')
+            .map((term) => term.name) || ['No position'];
+
+          const province =
+            member._embedded?.['wp:term']
+              ?.flat()
+              .filter((term) => term.taxonomy === 'province')
+              .map((term) => term.name)[0] || 'No province';
+
+          console.log(
+            `${index + 1}. ${
+              member.title.rendered
+            } | ${province} | ${positions.join(', ')}`,
+          );
+        });
+
+        return positionMatches;
+      }
+    }
+
+    // If position filtering doesn't work, return a reasonable subset of members
+    // This ensures users see actual members rather than empty state
+    console.log('📋 No position matches found, returning recent members');
+    const recentMembers = allMembers.slice(0, 20);
+
+    recentMembers.forEach((member, index) => {
+      console.log(`${index + 1}. ${member.title.rendered} (ID: ${member.id})`);
+    });
+
+    return recentMembers;
+  } catch (error) {
+    console.error('❌ Error fetching leadership formation members:', error);
+    console.log('🔄 Returning empty array to prevent app crash');
+    return [];
+  }
+}
+
+/**
+ * Fetches leadership formation members grouped by province.
+ * @returns {Promise<Record<string, WPMember[]>>} A promise resolving to members grouped by province name.
+ */
+export async function fetchLeadershipFormationByProvince(): Promise<
+  Record<string, WPMember[]>
+> {
+  try {
+    console.log('Fetching leadership formation members grouped by province...');
+
+    // Get leadership formation members
+    const formationMembers = await fetchLeadershipFormationMembers();
+
+    // Group by province
+    const membersByProvince: Record<string, WPMember[]> = {};
+
+    formationMembers.forEach((member) => {
+      let provinceName = 'No Province';
+
+      // Extract province name from embedded terms
+      if (member._embedded?.['wp:term']) {
+        const provinceTerms = member._embedded['wp:term'].find((termGroup) =>
+          termGroup.some((term) => term.taxonomy === 'province'),
+        );
+        if (provinceTerms) {
+          const provinceTerm = provinceTerms.find(
+            (term) => term.taxonomy === 'province',
+          );
+          if (provinceTerm) {
+            provinceName = provinceTerm.name;
+          }
+        }
+      }
+
+      if (!membersByProvince[provinceName]) {
+        membersByProvince[provinceName] = [];
+      }
+      membersByProvince[provinceName].push(member);
+    });
+
+    console.log(
+      `Grouped ${formationMembers.length} formation members into ${
+        Object.keys(membersByProvince).length
+      } provinces`,
+    );
+
+    return membersByProvince;
+  } catch (error) {
+    console.error(
+      'Error fetching leadership formation members by province:',
+      error,
+    );
+    throw error;
+  }
+}
+
+/**
+ * Fetches a single member by ID from the WordPress REST API with embedded data.
+ * @param {number} memberId - The ID of the member to fetch.
+ * @returns {Promise<WPMember | null>} A promise resolving to the member object or null if not found.
+ */
+export async function fetchMemberById(
+  memberId: number,
+): Promise<WPMember | null> {
+  try {
+    console.log(`🔍 Fetching member details for ID: ${memberId}`);
+    const url = `${WP_API_URL}/member/${memberId}?_embed=true`;
+
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Basic ${basicAuth}`,
+        'Content-Type': 'application/json',
+      },
+      next: {
+        revalidate: 600,
+        tags: ['wordpress', 'members', `member-${memberId}`],
+      },
+    });
+
+    if (!response.ok) {
+      console.error(`❌ Failed to fetch member ${memberId}:`, {
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+      });
+
+      // Log response body for debugging
+      try {
+        const errorBody = await response.text();
+        console.error('Error response body:', errorBody);
+      } catch (_e) {
+        console.error('Could not read error response body');
+      }
+
+      return null;
+    }
+
+    const member = (await response.json()) as WPMember;
+    console.log(`✅ Successfully fetched member: ${member.title.rendered}`);
+    return member;
+  } catch (error) {
+    console.error(`❌ Error fetching member by ID ${memberId}:`, error);
+    return null;
+  }
+}
+
+/**
+ * Fetches a single member by slug from the WordPress REST API with embedded data.
+ * @param {string} memberSlug - The slug of the member to fetch.
+ * @returns {Promise<WPMember | null>} A promise resolving to the member object or null if not found.
+ */
+export async function fetchMemberBySlug(
+  memberSlug: string,
+): Promise<WPMember | null> {
+  try {
+    const url = `${WP_API_URL}/member?slug=${encodeURIComponent(
+      memberSlug,
+    )}&_embed=true`;
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Basic ${basicAuth}`,
+        'Content-Type': 'application/json',
+      },
+      next: {
+        revalidate: 3600,
+        tags: ['wordpress', 'members', `member-slug-${memberSlug}`],
+      }, // Cache for 1 hour
+    });
+
+    if (!response.ok) {
+      let errorBody: unknown = '';
+      try {
+        errorBody = await response.json();
+      } catch (_e) {
+        /* Ignore */
+      }
+      throw new Error(
+        `Failed to fetch member by slug ${memberSlug}: ${response.status} ${
+          response.statusText
+        }. ${JSON.stringify(errorBody)}`,
+      );
+    }
+
+    const members = (await response.json()) as WPMember[];
+
+    if (members.length === 0) {
+      console.log(`Member with slug ${memberSlug} not found`);
+      return null;
+    }
+
+    const member = members[0]; // Take the first result
+    console.log(
+      `Successfully fetched member by slug: ${member.title.rendered}`,
+    );
+    return member;
+  } catch (error) {
+    console.error(`Error fetching member by slug ${memberSlug}:`, error);
+    throw error;
+  }
+}

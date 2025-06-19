@@ -24,6 +24,7 @@
   },
   "Sidebar": {
     "dashboard": "Dashboard",
+    "documents": "Documenti",
     "folders": "Cartelle",
     "commonSyllabus": "Programma Comune",
     "workshops": "Workshop",
@@ -220,6 +221,12 @@
     "deleteStorageErrorPermission": "Non hai il permesso di eliminare questo file dallo storage.",
     "deleteErrorGeneric": "Impossibile eliminare il documento del programma.",
     "pageErrorPrefix": "Errore:"
+  },
+  "WorkshopsPage": {
+    "title": "Workshop",
+    "loading": "Caricamento workshop...",
+    "noWorkshops": "Nessun workshop disponibile.",
+    "workshopsTitle": "Workshop Disponibili"
   },
   "SyllabusUploadForm": {
     "title": "Carica Nuovo Documento del Programma",

@@ -12,6 +12,32 @@
       "prayerdimensions": "Prayer Dimensions"
     }
   },
+  "WorkshopsPage": {
+    "title": "Workshops",
+    "loading": "Loading workshops...",
+    "noWorkshops": "No workshops available",
+    "workshopsTitle": "Available Workshops",
+    "workshops": {
+      "title": "Workshop"
+    }
+  },
+  "SyllabusFileList": {
+    "loading": "Loading syllabus documents...",
+    "noDocuments": "No syllabus documents yet",
+    "noDocumentsDetails": "Syllabus documents will appear here once added by administrators.",
+    "headerName": "Name",
+    "headerType": "Type",
+    "headerLang": "Lang",
+    "headerRegion": "Region",
+    "headerCategory": "Category",
+    "headerCreated": "Created",
+    "headerActions": "Actions",
+    "download": "Download",
+    "downloading": "Downloading...",
+    "downloadErrorNoPath": "File path is missing for this document.",
+    "downloadErrorSignUrlFailed": "Failed to create download link.",
+    "downloadErrorGeneric": "Download failed:"
+  },
   "NotFound": {
     "title": "Page Not Found",
     "description": "Sorry, the page you are looking for could not be found. It might have been moved, deleted, or never existed.",

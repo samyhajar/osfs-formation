@@ -4,7 +4,7 @@
 ALTER TYPE public.user_role RENAME TO user_role_old;
 
 -- Step 2: Create the new enum type with the correct roles
-CREATE TYPE public.user_role AS ENUM ('admin', 'formator', 'formee');
+CREATE TYPE public.user_role AS ENUM ('admin', 'editor', 'user');
 
 -- Step 3: Update the profiles table
 -- Change the column type to the new enum and update existing values
@@ -29,10 +29,10 @@ BEGIN
     input_role := NEW.raw_user_meta_data->>'role';
 
     -- Check if the role in metadata is one of the valid enum values
-    IF input_role = 'formator' THEN
-      user_role := 'formator';
-    ELSIF input_role = 'formee' THEN -- Add check for 'formee'
-      user_role := 'formee';
+    IF input_role = 'editor' THEN
+      user_role := 'editor';
+    ELSIF input_role = 'user' THEN -- Add check for 'user'
+      user_role := 'user';
     -- Keep 'admin' if input_role is 'admin', otherwise it defaults to 'admin' anyway
     ELSIF input_role = 'admin' THEN
         user_role := 'admin';

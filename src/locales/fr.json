@@ -24,6 +24,7 @@
   },
   "Sidebar": {
     "dashboard": "Tableau de bord",
+    "documents": "Documents",
     "folders": "Dossiers",
     "commonSyllabus": "Programme commun",
     "workshops": "Ateliers",
@@ -215,6 +216,12 @@
     "deleteErrorGeneric": "Échec de la suppression du document du programme.",
     "pageErrorPrefix": "Erreur :"
   },
+  "WorkshopsPage": {
+    "title": "Ateliers",
+    "loading": "Chargement des ateliers...",
+    "noWorkshops": "Aucun atelier disponible.",
+    "workshopsTitle": "Ateliers Disponibles"
+  },
   "SyllabusUploadForm": {
     "title": "Télécharger un Nouveau Document du Programme",
     "fileRequiredError": "Veuillez sélectionner un fichier à télécharger.",
@@ -270,6 +277,8 @@
     "deleteModalCancel": "Annuler",
     "deleteModalDeleting": "Suppression en cours...",
     "loading": "Chargement des documents du programme...",
+    "noDocuments": "Aucun document de programme pour le moment",
+    "noDocumentsDetails": "Les documents du programme apparaîtront ici une fois ajoutés par les administrateurs.",
     "emptyStateTitle": "Aucun document du programme trouvé",
     "emptyStateSuggestion": "Téléchargez le premier document en utilisant le formulaire ci-dessus.",
     "headerName": "Nom",
@@ -281,9 +290,10 @@
     "headerActions": "Actions",
     "actionDownload": "Télécharger",
     "actionDelete": "Supprimer",
+    "download": "Télécharger",
+    "downloading": "Téléchargement en cours...",
     "optionsButtonLabel": "Options du document",
     "deleting": "Suppression en cours...",
-    "downloading": "Téléchargement en cours...",
     "SyllabusList": {
       "download": "Télécharger",
       "delete": "Supprimer"
@@ -377,6 +387,24 @@
     "uploadFileTitle": "Téléverser un Nouveau Fichier d'Atelier",
     "loading": "Chargement des fichiers...",
     "error": "Erreur lors du chargement des fichiers"
+  },
+  "MemberDetailPage": {
+    "loading": "Chargement des détails du membre...",
+    "backToPersonnel": "Retour au Personnel de Formation",
+    "memberNotFound": "Membre Non Trouvé",
+    "memberNotFoundMessage": "Le membre demandé n'a pas pu être trouvé.",
+    "error": "Erreur",
+    "invalidMemberId": "ID de membre invalide",
+    "memberNotFoundError": "Membre non trouvé",
+    "failedToLoad": "Échec du chargement des détails du membre",
+    "positionsTitle": "Postes et Responsabilités",
+    "formationStatusTitle": "Statut de Formation",
+    "ministryAreasTitle": "Domaines de Ministère",
+    "contactInfoTitle": "Informations de Contact",
+    "contactMessage": "Pour un accompagnement spirituel, des questions de formation ou pour planifier une rencontre, veuillez contacter par l'intermédiaire de votre communauté locale ou bureau provincial.",
+    "contactNote": "📧 Contactez par les canaux officiels pour la confidentialité et les protocoles de communication appropriés.",
+    "guidanceTitle": "Accompagnement de Formation",
+    "guidanceMessage": "Ce membre est disponible pour fournir une direction spirituelle, un accompagnement de formation et un soutien tout au long de votre parcours de discernement et de formation religieuse. N'hésitez pas à le contacter par les canaux appropriés lorsque vous avez besoin d'aide ou avez des questions sur votre parcours de formation."
   },
   "Auth": {
     "signInTitle": "Se Connecter",

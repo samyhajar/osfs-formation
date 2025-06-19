@@ -8,7 +8,7 @@ DROP POLICY IF EXISTS "workshops_authenticated_uploads" ON storage.objects;
 DROP POLICY IF EXISTS "workshops_owner_admin_select" ON storage.objects;
 DROP POLICY IF EXISTS "workshops_owner_admin_update" ON storage.objects;
 DROP POLICY IF EXISTS "workshops_owner_admin_delete" ON storage.objects;
-DROP POLICY IF EXISTS "workshops_formator_read_access" ON storage.objects;
+DROP POLICY IF EXISTS "workshops_editor_read_access" ON storage.objects;
 
 -- Create the standard policies for the workshops bucket with unique names
 CREATE POLICY "workshop_files_upload_policy" ON storage.objects
@@ -37,14 +37,14 @@ CREATE POLICY "workshop_files_admin_owner_delete_policy" ON storage.objects
     (auth.uid() = owner OR public.is_admin(auth.uid()))
   );
 
--- Add formator read access policy with unique name
-CREATE POLICY "workshop_files_formator_read_policy" ON storage.objects
+-- Add editor read access policy with unique name
+CREATE POLICY "workshop_files_editor_read_policy" ON storage.objects
   FOR SELECT
   USING (
     bucket_id = 'workshops' AND
     EXISTS (
       SELECT 1 FROM public.profiles
-      WHERE id = auth.uid() AND role = 'formator'
+      WHERE id = auth.uid() AND role = 'editor'
     )
   );
 

@@ -46,25 +46,8 @@ export default async function Login() {
                 </div>
               </div>
             </div>
-
-            <div className="w-full text-center mt-16 mb-10">
-              <p className="text-slate-700 text-lg font-medium">General Coordinator:<br />
-              Francis W. Danella, OSFS</p>
-            </div>
           </div>
         </main>
-
-        <footer className="w-full py-6 px-4 border-t border-slate-200">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-slate-500">OSFS Formation Office | Tenui Nec Dimittam</p>
-
-            <div className="flex gap-6">
-              <Link href="/about" className="text-sm text-slate-600 hover:text-slate-900 transition">About</Link>
-              <Link href="/resources" className="text-sm text-slate-600 hover:text-slate-900 transition">Resources</Link>
-              <Link href="/contact" className="text-sm text-slate-600 hover:text-slate-900 transition">Contact</Link>
-            </div>
-          </div>
-        </footer>
       </div>
     )
   } catch (error) {

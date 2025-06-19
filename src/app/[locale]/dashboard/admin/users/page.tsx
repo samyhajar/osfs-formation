@@ -6,16 +6,22 @@ import { getTranslations } from 'next-intl/server';
 // Removed dynamic export
 // export const dynamic = 'force-dynamic';
 
-// Define default pagination parameters (still used for fetching first page)
+// Define default pagination parameters
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 20;
 
-// Removed PageProps type definition and helpers
-
-// Revert function signature to not destructure props (as they are not used for now)
-export default async function AdminUsersPage() {
+export default async function AdminUsersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
   const supabase = await createClient();
   const t = await getTranslations('AdminUsersPage');
+
+  // Get current page from search params
+  const resolvedSearchParams = await searchParams;
+  const currentPage = resolvedSearchParams.page ? parseInt(resolvedSearchParams.page) : DEFAULT_PAGE;
+  const limit = DEFAULT_LIMIT;
 
   // Middleware should handle the primary auth & admin role check.
   // This page can assume it's only reached if the user is an authenticated admin.
@@ -44,63 +50,34 @@ export default async function AdminUsersPage() {
   //   return <div className="p-6">{t('errorNotAdmin')}</div>;
   // }
 
-  // Fetch data (assuming user is an admin at this point)
-  const limit = DEFAULT_LIMIT;
-  const formatorPage = DEFAULT_PAGE;
-  const formeePage = DEFAULT_PAGE;
+  // Calculate pagination
+  const from = (currentPage - 1) * limit;
+  const to = from + limit - 1;
 
-  const formatorFrom = (formatorPage - 1) * limit;
-  const formatorTo = formatorFrom + limit - 1;
-
-  const formeeFrom = (formeePage - 1) * limit;
-  const formeeTo = formeeFrom + limit - 1;
-
-  const { data: formators, error: formatorsError } = await supabase
+  // Fetch all users with pagination
+  const { data: users, error: usersError } = await supabase
     .from('profiles')
     .select('id, name, email, role, created_at, avatar_url, approval_date, is_approved, status')
-    .eq('role', 'editor') // Assuming 'editor' is your formator role
-    .range(formatorFrom, formatorTo)
+    .range(from, to)
     .order('created_at', { ascending: false });
 
-  const { count: formatorCount, error: formatorCountError } = await supabase
+  // Get total count
+  const { count: totalCount, error: countError } = await supabase
     .from('profiles')
-    .select('id', { count: 'exact', head: true })
-    .eq('role', 'editor');
+    .select('id', { count: 'exact', head: true });
 
-  const { data: formees, error: formeesError } = await supabase
-    .from('profiles')
-    .select('id, name, email, role, created_at, avatar_url, approval_date, is_approved, status')
-    .eq('role', 'user') // Assuming 'user' is your formee role
-    .range(formeeFrom, formeeTo)
-    .order('created_at', { ascending: false });
-
-  const { count: formeeCount, error: formeeCountError } = await supabase
-    .from('profiles')
-    .select('id', { count: 'exact', head: true })
-    .eq('role', 'user');
-
-  if (formatorsError || formeesError || formatorCountError || formeeCountError) {
-    console.error(
-      'Error fetching users or counts:',
-      formatorsError,
-      formeesError,
-      formatorCountError,
-      formeeCountError
-    );
+  if (usersError || countError) {
+    console.error('Error fetching users or count:', usersError, countError);
     return <div className="p-6">{t('errorLoading')}</div>;
   }
 
-  const formatorUsers = formators ?? [];
-  const formeeUsers = formees ?? [];
+  const allUsers = users ?? [];
 
   return (
     <UserManagementClient
-      initialFormatorUsers={formatorUsers}
-      initialFormeeUsers={formeeUsers}
-      formatorCount={formatorCount ?? 0}
-      formeeCount={formeeCount ?? 0}
-      currentPageFormator={formatorPage}
-      currentPageFormee={formeePage}
+      initialUsers={allUsers}
+      totalCount={totalCount ?? 0}
+      currentPage={currentPage}
       limit={limit}
     />
   );

@@ -1,83 +1,112 @@
+'use client';
+
 import Image from 'next/image'
-import { createClient } from '@/lib/supabase/server-client'
-import LoginForm from '@/components/auth/LoginForm'
 import Link from 'next/link'
+import { useAuth } from '@/contexts/AuthContext'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
-export default async function Home() {
-  try {
-    const supabase = await createClient()
-    const { data: { session: _session } } = await supabase.auth.getSession()
+export default function Welcome() {
+  const { session, loading } = useAuth();
+  const router = useRouter();
 
+  useEffect(() => {
+    // If user is already logged in, redirect to dashboard
+    if (!loading && session) {
+      router.push('/dashboard');
+    }
+  }, [session, loading, router]);
+
+  // Show loading while checking authentication
+  if (loading) {
     return (
-      <div className="min-h-screen flex flex-col bg-white">
-        <main className="flex-grow flex items-center justify-center py-12 px-2 md:px-4">
-          <div className="max-w-7xl w-full">
-            <div className="flex flex-col lg:flex-row w-full">
-              <div className="w-full lg:w-1/2 flex flex-col items-center justify-center py-12 px-4">
-                <h2 className="text-3xl font-bold text-slate-800 mb-10 text-center">Formation</h2>
-                <div className="w-full flex justify-center">
-                  <Image
-                    src="/oblate-logo.svg"
-                    alt="Oblate Logo"
-                    width={800}
-                    height={800}
-                    className="w-[200px] sm:w-[250px] md:w-[280px] lg:w-[300px] h-auto object-contain"
-                    priority
-                  />
-                </div>
-              </div>
-
-              <div className="hidden lg:block w-px bg-slate-200 mx-2 self-stretch"></div>
-
-              <div className="w-full lg:w-1/2 flex items-center justify-center py-12 px-4">
-                <div className="w-full max-w-lg">
-                  <h3 className="text-2xl font-medium text-slate-800 mb-10 text-center">Sign In</h3>
-                  <LoginForm />
-                  <div className="mt-6 text-center">
-                    <p className="text-slate-600">
-                      Don't have an account?{' '}
-                      <Link href="/signup" className="text-blue-600 hover:text-blue-800 transition">
-                        Sign Up
-                      </Link>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="w-full text-center mt-16 mb-10">
-              <p className="text-slate-700 text-lg font-medium">General Coordinator:<br />
-              Francis W. Danella, OSFS</p>
-            </div>
-          </div>
-        </main>
-
-        <footer className="w-full py-6 px-4 border-t border-slate-200">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-slate-500">OSFS Formation Office | Tenui Nec Dimittam</p>
-
-            <div className="flex gap-6">
-              <Link href="/about" className="text-sm text-slate-600 hover:text-slate-900 transition">About</Link>
-              <Link href="/resources" className="text-sm text-slate-600 hover:text-slate-900 transition">Resources</Link>
-              <Link href="/contact" className="text-sm text-slate-600 hover:text-slate-900 transition">Contact</Link>
-            </div>
-          </div>
-        </footer>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-slate-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-slate-600">Loading...</p>
+        </div>
       </div>
-    )
-  } catch (error) {
-    console.error('Error in Home component:', error)
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <h1 className="text-2xl font-bold text-slate-800 mb-4">OSFS Formation</h1>
-        <p className="text-red-600 mb-6">There was an issue loading the page. Please try again later.</p>
-        <Link
-          href="/"
-          className="py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-        >
-          Refresh
-        </Link>
-      </div>
-    )
+    );
   }
+
+  // Don't render the welcome page if user is logged in (redirect is in progress)
+  if (session) {
+    return null;
+  }
+
+  return (
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-slate-50">
+      <main className="flex-grow flex items-center justify-center py-12 px-4">
+        <div className="max-w-4xl w-full text-center">
+          {/* Logo Section */}
+          <div className="mb-12">
+            <div className="flex justify-center mb-8">
+              <Image
+                src="/oblate-logo.svg"
+                alt="Oblate Logo"
+                width={400}
+                height={400}
+                className="w-[150px] sm:w-[180px] md:w-[200px] h-auto object-contain"
+                priority
+              />
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-800 mb-4">
+              Formation
+            </h1>
+            <p className="text-xl md:text-2xl text-slate-600 font-light">
+              OSFS Formation Portal
+            </p>
+          </div>
+
+          {/* Welcome Content */}
+          <div className="mb-12 space-y-6">
+            <h2 className="text-2xl md:text-3xl font-semibold text-slate-700">
+              Welcome to the Formation Portal
+            </h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              Access resources, connect with your formation community, and continue your journey of spiritual growth and development.
+            </p>
+          </div>
+
+          {/* Action Button */}
+          <div className="space-y-4">
+            <Link
+              href="/login"
+              className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+            >
+              Access Portal
+              <svg
+                className="ml-2 w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
+              </svg>
+            </Link>
+
+            <p className="text-sm text-slate-500 mt-4">
+              New to the portal?{' '}
+              <Link href="/signup" className="text-blue-600 hover:text-blue-800 transition font-medium">
+                Create an account
+              </Link>
+            </p>
+          </div>
+
+          {/* Decorative Quote */}
+          <div className="mt-16 pt-8 border-t border-slate-200">
+            <blockquote className="text-slate-600 italic text-lg">
+              "Tenui Nec Dimittam"
+            </blockquote>
+            <p className="text-sm text-slate-500 mt-2">I have held fast and will not let go</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
 }

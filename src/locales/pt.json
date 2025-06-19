@@ -24,6 +24,7 @@
   },
   "Sidebar": {
     "dashboard": "Painel",
+    "documents": "Documentos",
     "folders": "Pastas",
     "commonSyllabus": "Programa Comum",
     "workshops": "Workshops",
@@ -263,6 +264,12 @@
     "deleteStorageErrorPermission": "Você não tem permissão para excluir este arquivo do armazenamento.",
     "deleteErrorGeneric": "Falha ao excluir o documento do programa.",
     "pageErrorPrefix": "Erro:"
+  },
+  "WorkshopsPage": {
+    "title": "Workshops",
+    "loading": "Carregando workshops...",
+    "noWorkshops": "Nenhum workshop disponível.",
+    "workshopsTitle": "Workshops Disponíveis"
   },
   "SyllabusUploadForm": {
     "title": "Carregar Novo Documento do Programa",

@@ -2,21 +2,21 @@
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN
-        CREATE TYPE public.user_role AS ENUM ('admin', 'formator', 'formee');
+        CREATE TYPE public.user_role AS ENUM ('admin', 'editor', 'user');
     END IF;
 END$$;
 
--- Update handle_new_user function to set 'formee' role by default without using metadata
+-- Update handle_new_user function to set 'user' role by default without using metadata
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$
 BEGIN
-  -- Insert new user with formee role by default
+  -- Insert new user with user role by default
   INSERT INTO public.profiles (id, email, name, role, created_at, is_approved)
   VALUES (
     NEW.id,
     NEW.email,
     COALESCE(NEW.raw_user_meta_data->>'name', ''), -- Use name from metadata if available
-    'formee'::public.user_role,                    -- Default role is always formee
+    'user'::public.user_role,                      -- Default role is always user
     NOW(),
     FALSE                                          -- Not approved by default
   );

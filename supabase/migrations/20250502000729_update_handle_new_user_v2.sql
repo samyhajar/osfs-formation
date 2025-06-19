@@ -1,23 +1,23 @@
 -- Update the handle_new_user function to correctly handle roles from metadata
--- Use 'formee' as default and explicitly check for 'admin', 'formator', 'formee'.
+-- Use 'user' as default and explicitly check for 'admin', 'editor', 'user'.
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$
 DECLARE
   user_role_provided text;
   final_user_role user_role; -- Assuming user_role is the enum type
 BEGIN
-  -- Default role is 'formee' (valid enum value)
-  final_user_role := 'formee';
+  -- Default role is 'user' (valid enum value)
+  final_user_role := 'user';
 
   -- Check if role exists in metadata
   IF NEW.raw_user_meta_data ? 'role' THEN
     user_role_provided := NEW.raw_user_meta_data->>'role';
 
     -- Check if the provided role is valid within the enum
-    IF user_role_provided = 'formator' THEN
-      final_user_role := 'formator';
-    ELSIF user_role_provided = 'formee' THEN
-      final_user_role := 'formee';
+    IF user_role_provided = 'editor' THEN
+      final_user_role := 'editor';
+    ELSIF user_role_provided = 'user' THEN
+      final_user_role := 'user';
     ELSIF user_role_provided = 'admin' THEN
       -- Ensure allowing admin creation via signup is intended.
       final_user_role := 'admin';

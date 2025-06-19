@@ -60,26 +60,47 @@ export default function Sidebar() {
     }
   }, [profile?.role]);
 
-  // Define base nav items - Use translation keys for names
-  const allNavItems = useMemo(() => [
-    // Items visible to all roles (adjust paths)
-    { nameKey: 'dashboard', path: `${basePath}`, icon: HomeIcon, roles: ['admin', 'editor', 'user'] },
-    { nameKey: 'folders', path: `${basePath}/folders`, icon: FolderIcon, roles: ['admin', 'editor', 'user'] },
-    { nameKey: 'commonSyllabus', path: `${basePath}/documents/syllabus`, icon: DocumentTextIcon, roles: ['admin', 'editor', 'user'] },
-    { nameKey: 'workshops', path: `${basePath}/workshops`, icon: AcademicCapIcon, roles: ['admin', 'editor', 'user'] },
-    { nameKey: 'formationPersonnel', path: `${basePath}/formation-personnel`, icon: UserGroupIcon, roles: ['admin', 'editor', 'user'] },
+    // Define base nav items - Use translation keys for names
+  const allNavItems = useMemo(() => {
+    const role = profile?.role as UserRole;
+    let effectiveRole = role;
+    if (role === 'formator') effectiveRole = 'editor';
+    if (role === 'formee') effectiveRole = 'user';
 
-    // Items visible only to admin and formator
-    { nameKey: 'users', path: `${basePath}/users`, icon: UsersIcon, roles: ['admin', 'editor'] },
-    { nameKey: 'administration', path: `${basePath}/admin`, icon: Cog6ToothIcon, roles: ['admin'] },
+    // Build navigation items in the correct order
+    const navItems = [];
 
-    // New item for pending user approvals - visible only to admins
-    { nameKey: 'pendingUsers', path: `${basePath}/pending-users`, icon: UserPlusIcon, roles: ['admin'] },
+    // 1. Dashboard (always first)
+    navItems.push({ nameKey: 'dashboard', path: `${basePath}`, icon: HomeIcon, roles: ['admin', 'editor', 'user'] });
 
-    // New item for email notifications - visible only to admins
-    { nameKey: 'email', path: `${basePath}/email`, icon: EnvelopeIcon, roles: ['admin'] },
+    // 2. Role-specific navigation items (Documents for users, Folders for admin/editor)
+    if (effectiveRole === 'user') {
+      // For users: show "Documents" link that goes to the documents page
+      navItems.push({ nameKey: 'documents', path: `${basePath}/documents`, icon: DocumentTextIcon, roles: ['user'] });
+    } else {
+      // For admin and editor: show "Folders" link
+      navItems.push({ nameKey: 'folders', path: `${basePath}/folders`, icon: FolderIcon, roles: ['admin', 'editor'] });
+    }
 
-  ], [basePath]); // Depend on basePath
+    // 3. Common navigation items (in order)
+    navItems.push(
+      { nameKey: 'commonSyllabus', path: `${basePath}/documents/syllabus`, icon: DocumentTextIcon, roles: ['admin', 'editor', 'user'] },
+      { nameKey: 'workshops', path: `${basePath}/workshops`, icon: AcademicCapIcon, roles: ['admin', 'editor', 'user'] },
+      { nameKey: 'formationPersonnel', path: `${basePath}/formation-personnel`, icon: UserGroupIcon, roles: ['admin', 'editor', 'user'] }
+    );
+
+    // 4. Admin/Editor specific items
+    navItems.push({ nameKey: 'users', path: `${basePath}/users`, icon: UsersIcon, roles: ['admin', 'editor'] });
+
+    // 5. Admin only items
+    navItems.push(
+      { nameKey: 'administration', path: `${basePath}/admin`, icon: Cog6ToothIcon, roles: ['admin'] },
+      { nameKey: 'pendingUsers', path: `${basePath}/pending-users`, icon: UserPlusIcon, roles: ['admin'] },
+      { nameKey: 'email', path: `${basePath}/email`, icon: EnvelopeIcon, roles: ['admin'] }
+    );
+
+    return navItems;
+  }, [basePath, profile?.role]); // Depend on basePath
 
   // Filter nav items based on role AFTER loading is complete and profile exists
   const navItems = useMemo(() => {

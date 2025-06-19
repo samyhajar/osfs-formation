@@ -1,5 +1,5 @@
--- Create the formee_introduction table
-CREATE TABLE public.formee_introduction (
+-- Create the user_introduction table
+CREATE TABLE public.user_introduction (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -11,7 +11,7 @@ CREATE TABLE public.formee_introduction (
 
 -- Create a trigger for the updated_at column
 CREATE TRIGGER set_updated_at
-BEFORE UPDATE ON public.formee_introduction
+BEFORE UPDATE ON public.user_introduction
 FOR EACH ROW EXECUTE FUNCTION moddatetime (updated_at);
 
 -- Only one row should be active at a time
@@ -19,7 +19,7 @@ CREATE OR REPLACE FUNCTION public.enforce_single_active_intro()
 RETURNS TRIGGER AS $$
 BEGIN
     IF NEW.active = true THEN
-        UPDATE public.formee_introduction
+        UPDATE public.user_introduction
         SET active = false
         WHERE id != NEW.id;
     END IF;
@@ -28,19 +28,19 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER enforce_single_active_intro
-BEFORE INSERT OR UPDATE OF active ON public.formee_introduction
+BEFORE INSERT OR UPDATE OF active ON public.user_introduction
 FOR EACH ROW
 WHEN (NEW.active = true)
 EXECUTE FUNCTION public.enforce_single_active_intro();
 
 -- Insert initial data
-INSERT INTO public.formee_introduction (
+INSERT INTO public.user_introduction (
     coordinator_name,
     left_column_content,
     right_column_content
 ) VALUES (
     'Francis W. Danella, OSFS',
-    'The formation website is a resource for Oblate formators and Oblates in formation.
+    'The formation website is a resource for Oblate editors and Oblates in formation.
 
 Origins of the Formation Coordinator
 
@@ -51,24 +51,24 @@ In my capacity as the General Formation Coordinator, I want to facilitate a thou
 
 I intend over the next several years to visit all of our houses of formation. I visited the houses of formation in India in March of 2020, but because of the pandemic I will need to reschedule my visits to the houses of formation in the French-West African Province which were due to take place in the fall of 2020.
 
-I want to thank our formators for all that you are doing for our confreres in formation. Your ministry is critical to the ongoing growth and health of our congregation. May all of us continue in our efforts to Live Jesus and may we be a bridge to others who seek Jesus Christ.
+I want to thank our editors for all that you are doing for our confreres in formation. Your ministry is critical to the ongoing growth and health of our congregation. May all of us continue in our efforts to Live Jesus and may we be a bridge to others who seek Jesus Christ.
 
 Fraternally yours, Frank Danella, OSFS General Formation Coordinator'
 );
 
 -- Add RLS
-ALTER TABLE public.formee_introduction ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_introduction ENABLE ROW LEVEL SECURITY;
 
--- Admins can read and write to the formee_introduction table
-CREATE POLICY "Admins can manage formee_introduction"
-ON public.formee_introduction
+-- Admins can read and write to the user_introduction table
+CREATE POLICY "Admins can manage user_introduction"
+ON public.user_introduction
 FOR ALL
 TO authenticated
 USING (is_admin());
 
--- All authenticated users can read the formee_introduction table
-CREATE POLICY "Authenticated users can read formee_introduction"
-ON public.formee_introduction
+-- All authenticated users can read the user_introduction table
+CREATE POLICY "Authenticated users can read user_introduction"
+ON public.user_introduction
 FOR SELECT
 TO authenticated
 USING (true);

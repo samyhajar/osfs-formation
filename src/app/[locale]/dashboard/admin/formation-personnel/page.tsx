@@ -1,179 +1,163 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
-import { fetchPositions, fetchMembersByPosition } from '@/lib/wordpress/api';
-import type { WPMember, WPTerm } from '@/lib/wordpress/types';
-import MemberCard from '@/components/formation/MemberCard';
-import MultiSelect from '@/components/ui/MultiSelect';
+import { fetchLeadershipFormationMembers } from '@/lib/wordpress/api';
+import { getFormationSettings, updateFormationSettings } from '@/lib/supabase/formation-settings';
+import type { WPMember } from '@/lib/wordpress/types';
+import MemberSelectionTable from '@/components/dashboard/admin/MemberSelectionTable';
+import SaveControls from '@/components/dashboard/admin/SaveControls';
 
-// Define the structure for grouping
-interface PersonnelGroup {
-  id: number;
-  title: string;
-  members: WPMember[];
-}
-
-// Key for localStorage to store selected positions
-const SELECTED_POSITIONS_KEY = 'formationPersonnel_selectedPositions';
+const SELECTED_MEMBERS_KEY = 'selectedFormationMembers';
 
 export default function AdminFormationPersonnelPage() {
-  const t = useTranslations('AdminFormationPersonnelPage');
-
-  const [positions, setPositions] = useState<WPTerm[]>([]);
-  const [selectedPositionIds, setSelectedPositionIds] = useState<number[]>([]);
-  const [_members, setMembers] = useState<WPMember[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [allFormationMembers, setAllFormationMembers] = useState<WPMember[]>([]);
+  const [selectedMemberIds, setSelectedMemberIds] = useState<number[]>([]);
+  const [originalSelectedIds, setOriginalSelectedIds] = useState<number[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [groupedPersonnel, setGroupedPersonnel] = useState<PersonnelGroup[]>([]);
+  const [saveMessage, setSaveMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  // Fetch positions on component mount
+  const hasUnsavedChanges = JSON.stringify(selectedMemberIds.sort()) !== JSON.stringify(originalSelectedIds.sort());
+
   useEffect(() => {
-    async function loadPositions() {
+    async function loadData() {
       try {
-        setIsLoading(true);
-        const positionTerms = await fetchPositions();
-        setPositions(positionTerms);
+        console.log('🔄 Loading formation personnel data...');
 
-        // Try to load previously saved positions
-        try {
-          const savedPositions = localStorage.getItem(SELECTED_POSITIONS_KEY);
-          if (savedPositions) {
-            const parsedPositions = JSON.parse(savedPositions) as number[];
-            if (Array.isArray(parsedPositions)) {
-              setSelectedPositionIds(parsedPositions);
-            }
-          }
-        } catch (e) {
-          console.error('Failed to load saved positions:', e);
-        }
+        // Load saved selections from database first
+        const savedMemberIds = await getFormationSettings();
+        console.log(`📋 Found ${savedMemberIds.length} saved member selections in database`);
 
-        setIsLoading(false);
+        setSelectedMemberIds(savedMemberIds);
+        setOriginalSelectedIds([...savedMemberIds]);
+
+        // Load all formation members from WordPress
+        const formationMembers = await fetchLeadershipFormationMembers();
+        console.log(`👥 Loaded ${formationMembers.length} formation members from WordPress API`);
+
+        setAllFormationMembers(formationMembers);
       } catch (err) {
-        console.error('Failed to fetch positions:', err);
-        setError(err instanceof Error ? err.message : 'An unknown error occurred.');
-        setIsLoading(false);
+        console.error('❌ Error loading formation personnel data:', err);
+        setError('Failed to load Leadership Formation personnel data');
+      } finally {
+        setLoading(false);
       }
     }
 
-    void loadPositions();
+    void loadData();
   }, []);
 
-  // Fetch members when positions are selected
-  useEffect(() => {
-    async function loadMembersByPositions() {
-      if (selectedPositionIds.length === 0) {
-        setMembers([]);
-        setGroupedPersonnel([]);
-        return;
+  const handleMemberToggle = (memberId: number) => {
+    const newSelection = selectedMemberIds.includes(memberId)
+      ? selectedMemberIds.filter(id => id !== memberId)
+      : [...selectedMemberIds, memberId];
+
+    console.log(`🔄 Member ${memberId} toggled. New selection count: ${newSelection.length}`);
+    setSelectedMemberIds(newSelection);
+    setSaveMessage(null);
+
+    // Keep localStorage updated as backup
+    localStorage.setItem(SELECTED_MEMBERS_KEY, JSON.stringify(newSelection));
+  };
+
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+      setSaveMessage(null);
+
+      console.log(`💾 Saving ${selectedMemberIds.length} selected members to database...`);
+      const result = await updateFormationSettings(selectedMemberIds);
+
+      if (result.success) {
+        setOriginalSelectedIds([...selectedMemberIds]);
+        setSaveMessage({ type: 'success', text: 'Leadership Formation personnel selection saved successfully!' });
+        console.log('✅ Successfully saved to database');
+
+        // Auto-hide success message after 3 seconds
+        setTimeout(() => {
+          setSaveMessage(null);
+        }, 3000);
+      } else {
+        setSaveMessage({
+          type: 'error',
+          text: result.error || 'Failed to save Leadership Formation personnel selection'
+        });
+        console.error('❌ Failed to save to database:', result.error);
       }
-
-      try {
-        setIsLoading(true);
-        setError(null);
-
-        // Save selected positions to localStorage for user page to access
-        try {
-          localStorage.setItem(SELECTED_POSITIONS_KEY, JSON.stringify(selectedPositionIds));
-        } catch (e) {
-          console.error('Failed to save selected positions:', e);
-        }
-
-        // Create an array to store the grouped personnel in order of selection
-        const orderedGroups: PersonnelGroup[] = [];
-
-        // Process positions in the order they were selected
-        for (const positionId of selectedPositionIds) {
-          // Find the position name
-          const position = positions.find(p => p.id === positionId);
-          if (!position) continue;
-
-          // Fetch members for this position
-          const positionMembers = await fetchMembersByPosition(positionId);
-
-          // Add this group to our ordered array
-          orderedGroups.push({
-            id: positionId,
-            title: position.name,
-            members: positionMembers
-          });
-
-          // Add members to the flat list of all members
-          setMembers(prev => [...prev, ...positionMembers]);
-        }
-
-        setGroupedPersonnel(orderedGroups);
-        setIsLoading(false);
-      } catch (err) {
-        console.error('Failed to fetch members:', err);
-        setError(err instanceof Error ? err.message : 'An unknown error occurred.');
-        setIsLoading(false);
-      }
+    } catch (error) {
+      console.error('❌ Error saving formation personnel:', error);
+      setSaveMessage({
+        type: 'error',
+        text: 'An unexpected error occurred while saving'
+      });
+    } finally {
+      setSaving(false);
     }
+  };
 
-    // Reset members list when reloading
-    setMembers([]);
-    void loadMembersByPositions();
-  }, [selectedPositionIds, positions]);
+  // Get selected members for the second table
+  const selectedMembers = allFormationMembers.filter(member =>
+    selectedMemberIds.includes(member.id)
+  );
 
-  // Transform positions for MultiSelect component
-  const positionOptions = positions.map(position => ({
-    value: position.id,
-    label: position.name
-  }));
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading Leadership Formation personnel...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-red-800 mb-2">Error</h3>
+          <p className="text-red-600">{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <main>
-      <h1 className="text-3xl font-bold mb-8">{t('title')}</h1>
-
+    <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <MultiSelect
-          id="position-select"
-          label={t('selectPosition')}
-          options={positionOptions}
-          selectedValues={selectedPositionIds}
-          onChange={(values) => setSelectedPositionIds(values as number[])}
-          placeholder={t('selectPositionPrompt')}
-          disabled={isLoading || positions.length === 0}
-          className="mb-1"
-        />
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          Leadership Formation Personnel Management
+        </h1>
+        <p className="text-gray-600">
+          Select Leadership Formation members to display in the formation personnel directory. Check console for API response details.
+        </p>
       </div>
 
-      {isLoading && (
-        <div className="flex justify-center items-center h-32">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-        </div>
-      )}
+      <SaveControls
+        onSave={() => void handleSave()}
+        saving={saving}
+        hasUnsavedChanges={hasUnsavedChanges}
+        saveMessage={saveMessage}
+      />
 
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
-          <strong className="font-bold">{t('errorPrefix')}</strong>
-          <span className="block sm:inline"> {t('errorLoading')} {error}</span>
-        </div>
-      )}
+      <div className="space-y-8">
+        <MemberSelectionTable
+          members={allFormationMembers}
+          selectedMemberIds={selectedMemberIds}
+          onMemberToggle={handleMemberToggle}
+          title="All Leadership Formation Members"
+        />
 
-      {!isLoading && !error && selectedPositionIds.length > 0 && groupedPersonnel.length === 0 && (
-        <p className="text-gray-500">{t('emptyState')}</p>
-      )}
-
-      {!isLoading && !error && selectedPositionIds.length === 0 && (
-        <p className="text-gray-500">{t('selectPositionInstruction')}</p>
-      )}
-
-      {!isLoading && !error && groupedPersonnel.length > 0 && (
-        <div className="space-y-10">
-          {groupedPersonnel.map((group) => (
-            <section key={group.id}>
-              <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b border-gray-200 pb-2">{group.title}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {group.members.map((member) => (
-                  <MemberCard key={member.id} member={member} />
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-      )}
-    </main>
+        <MemberSelectionTable
+          members={selectedMembers}
+          selectedMemberIds={selectedMemberIds}
+          onMemberToggle={handleMemberToggle}
+          title="Selected Members (Will Display to Users)"
+        />
+      </div>
+    </div>
   );
 }

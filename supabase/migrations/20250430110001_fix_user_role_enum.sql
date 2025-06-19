@@ -15,7 +15,7 @@ ALTER TABLE public.profiles DROP COLUMN IF EXISTS role;
 DROP TYPE IF EXISTS public.user_role;
 
 -- Recreate the enum type properly
-CREATE TYPE public.user_role AS ENUM ('admin', 'formant', 'formator');
+CREATE TYPE public.user_role AS ENUM ('admin', 'formant', 'editor');
 
 -- Add the role column back to profiles
 ALTER TABLE public.profiles ADD COLUMN role public.user_role DEFAULT 'formant'::public.user_role NOT NULL;

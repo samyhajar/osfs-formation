@@ -1,13 +1,4 @@
--- Rename the formee_introduction table to user_introduction
-ALTER TABLE public.formee_introduction RENAME TO user_introduction;
+-- Migration is no longer needed since the table was already created as user_introduction
+-- due to our earlier formee->user search and replace operations
 
--- Update the trigger names
-ALTER TRIGGER enforce_single_active_intro ON public.user_introduction
-RENAME TO enforce_single_active_intro_user;
-
--- Update the policy names
-ALTER POLICY "Admins can manage formee_introduction" ON public.user_introduction
-RENAME TO "Admins can manage user_introduction";
-
-ALTER POLICY "Authenticated users can read formee_introduction" ON public.user_introduction
-RENAME TO "Authenticated users can read user_introduction";
+-- No operations needed

@@ -2,6 +2,7 @@ import React from 'react';
 import { Database } from '@/types/supabase';
 import { UserAvatar } from '@/components/ui/UserAvatar';
 import { useTranslations } from 'next-intl';
+import RoleDropdown from './RoleDropdown';
 
 // Define the type for a user profile row more explicitly
 type ProfileRow = Database['public']['Tables']['profiles']['Row'];
@@ -56,17 +57,21 @@ export default function FormeeUserTable({ users }: FormeeUserTableProps) {
                   <UserAvatar user={user} size="md" />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap align-middle">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 capitalize">
-                    {user.role}
-                  </span>
+                  <RoleDropdown
+                    userId={user.id}
+                    currentRole={user.role}
+                    onRoleChange={(newRole) => {
+                      console.log(`Role changed for user ${user.id} to ${newRole}`);
+                    }}
+                  />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap align-middle text-sm text-gray-900">
                   {formatDate(user.created_at)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right align-middle">
-                  <button className="text-indigo-600 hover:text-indigo-900 disabled:text-gray-400 disabled:cursor-not-allowed" disabled title={t('actionsComingSoon')}>
-                    ...
-                  </button>
+                  <div className="text-sm text-gray-400">
+                    Role management enabled
+                  </div>
                 </td>
               </tr>
             ))

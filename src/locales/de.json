@@ -24,6 +24,7 @@
   },
   "Sidebar": {
     "dashboard": "Dashboard",
+    "documents": "Dokumente",
     "folders": "Ordner",
     "commonSyllabus": "Gemeinsamer Lehrplan",
     "workshops": "Workshops",
@@ -267,6 +268,12 @@
     "deleteStorageErrorPermission": "Sie haben keine Berechtigung, diese Datei aus dem Speicher zu löschen.",
     "deleteErrorGeneric": "Fehler beim Löschen des Lehrplandokuments.",
     "pageErrorPrefix": "Fehler:"
+  },
+  "WorkshopsPage": {
+    "title": "Workshops",
+    "loading": "Workshops werden geladen...",
+    "noWorkshops": "Keine Workshops verfügbar.",
+    "workshopsTitle": "Verfügbare Workshops"
   },
   "SyllabusUploadForm": {
     "title": "Neues Lehrplandokument hochladen",
