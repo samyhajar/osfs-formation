@@ -16,6 +16,12 @@ const nextConfig = {
         port: '',
         pathname: '/wp-content/uploads/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'khidnpzqnfvmhexierlo.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/**',
+      },
       // Add other allowed hostnames here if needed
     ],
   },

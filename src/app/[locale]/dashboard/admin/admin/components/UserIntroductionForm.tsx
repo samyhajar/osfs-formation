@@ -4,15 +4,31 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
+import { ImageUploadSection } from './ImageUploadSection';
+import { useFormHandlers } from './UserIntroductionFormHandlers';
 
 interface UserIntroduction {
   id: string;
   coordinator_name: string;
   left_column_content: string;
   right_column_content: string;
+  left_column_image_url?: string;
+  left_column_image_position?: 'above' | 'below';
+  right_column_image_url?: string;
+  right_column_image_position?: 'above' | 'below';
   active: boolean;
   created_at: string;
   updated_at: string;
+}
+
+interface UserIntroductionFormData {
+  coordinator_name: string;
+  left_column_content: string;
+  right_column_content: string;
+  left_column_image_url?: string;
+  left_column_image_position?: 'above' | 'below';
+  right_column_image_url?: string;
+  right_column_image_position?: 'above' | 'below';
 }
 
 interface UserIntroductionFormProps {
@@ -20,25 +36,30 @@ interface UserIntroductionFormProps {
 }
 
 export function UserIntroductionForm({ initialData }: UserIntroductionFormProps) {
-  const t = useTranslations('UserIntroduction');
-  const [formData, setFormData] = useState<Partial<UserIntroduction>>(
-    initialData || {
-      coordinator_name: '',
-      left_column_content: '',
-      right_column_content: '',
-      active: true,
-    }
-  );
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const t = useTranslations('Admin.userIntroduction');
+  const [formData, setFormData] = useState<UserIntroductionFormData>({
+    coordinator_name: initialData?.coordinator_name || '',
+    left_column_content: initialData?.left_column_content || '',
+    right_column_content: initialData?.right_column_content || '',
+    left_column_image_url: initialData?.left_column_image_url || '',
+    left_column_image_position: initialData?.left_column_image_position || 'above',
+    right_column_image_url: initialData?.right_column_image_url || '',
+    right_column_image_position: initialData?.right_column_image_position || 'above',
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [uploadingLeft, setUploadingLeft] = useState(false);
+  const [uploadingRight, setUploadingRight] = useState(false);
+
+  const { handleImageUpload, handleImageDelete } = useFormHandlers(
+    formData, setFormData, setError, setUploadingLeft, setUploadingRight
+  );
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -47,7 +68,6 @@ export function UserIntroductionForm({ initialData }: UserIntroductionFormProps)
     setError(null);
     setSuccess(false);
 
-    // Ensure required fields are present
     if (!formData.coordinator_name || !formData.left_column_content || !formData.right_column_content) {
       setError('All fields are required');
       setLoading(false);
@@ -56,25 +76,24 @@ export function UserIntroductionForm({ initialData }: UserIntroductionFormProps)
 
     try {
       const supabase = createClient<Database>();
-
-      let response;
-
-      // Create a properly typed object that matches the Database type
       const dataToSave: Database['public']['Tables']['user_introduction']['Insert'] = {
         coordinator_name: formData.coordinator_name,
         left_column_content: formData.left_column_content,
         right_column_content: formData.right_column_content,
+        left_column_image_url: formData.left_column_image_url || null,
+        left_column_image_position: formData.left_column_image_position || 'above',
+        right_column_image_url: formData.right_column_image_url || null,
+        right_column_image_position: formData.right_column_image_position || 'above',
         active: true
       };
 
+      let response;
       if (initialData?.id) {
-        // Update existing record
         response = await supabase
           .from('user_introduction')
           .update(dataToSave)
           .eq('id', initialData.id);
       } else {
-        // Create new record - insert expects an array of objects
         response = await supabase
           .from('user_introduction')
           .insert([dataToSave]);
@@ -94,13 +113,8 @@ export function UserIntroductionForm({ initialData }: UserIntroductionFormProps)
     }
   };
 
-  // We extract the onSubmit handler to fix the Promise issue
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-    void handleSubmit(e);
-  };
-
   return (
-    <form onSubmit={onSubmit} className="space-y-6">
+    <form onSubmit={(e) => void handleSubmit(e)} className="space-y-6">
       {error && (
         <div className="p-4 bg-red-50 border border-red-200 rounded-md text-red-700">
           {error}
@@ -129,48 +143,71 @@ export function UserIntroductionForm({ initialData }: UserIntroductionFormProps)
           />
         </div>
 
-        <div>
-          <label htmlFor="left_column_content" className="block text-sm font-medium text-gray-700 mb-1">
-            {t('leftColumnLabel', { fallback: 'Left Column Content' })}
-          </label>
-          <textarea
-            id="left_column_content"
-            name="left_column_content"
-            value={formData.left_column_content || ''}
-            onChange={handleChange}
-            rows={8}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent-primary focus:border-accent-primary"
-            required
-          />
-          <p className="mt-1 text-xs text-gray-500">
-            {t('textFormatInfo', { fallback: 'Use double line breaks to create paragraphs.' })}
-          </p>
-        </div>
+        <div className="border border-gray-200 rounded-lg p-4 space-y-4">
+          <h3 className="text-lg font-medium text-gray-900">Left Column</h3>
+          <div>
+            <label htmlFor="left_column_content" className="block text-sm font-medium text-gray-700 mb-1">
+              {t('leftColumnLabel', { fallback: 'Left Column Content' })}
+            </label>
+            <textarea
+              id="left_column_content"
+              name="left_column_content"
+              value={formData.left_column_content || ''}
+              onChange={handleChange}
+              rows={8}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent-primary focus:border-accent-primary"
+              required
+            />
+          </div>
 
-        <div>
-          <label htmlFor="right_column_content" className="block text-sm font-medium text-gray-700 mb-1">
-            {t('rightColumnLabel', { fallback: 'Right Column Content' })}
-          </label>
-          <textarea
-            id="right_column_content"
-            name="right_column_content"
-            value={formData.right_column_content || ''}
-            onChange={handleChange}
-            rows={8}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent-primary focus:border-accent-primary"
-            required
+          <ImageUploadSection
+            imageUrl={formData.left_column_image_url}
+            uploading={uploadingLeft}
+            onUpload={(file) => void handleImageUpload(file, 'left')}
+            onDelete={() => void handleImageDelete('left')}
+            position={formData.left_column_image_position || 'above'}
+            onPositionChange={(value) => setFormData(prev => ({ ...prev, left_column_image_position: value as 'above' | 'below' }))}
+            columnName="Left"
           />
         </div>
-      </div>
 
-      <div className="flex justify-end space-x-4">
-        <button
-          type="submit"
-          disabled={loading}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:opacity-50"
-        >
-          {loading ? t('saving', { fallback: 'Saving...' }) : t('saveButton', { fallback: 'Save' })}
-        </button>
+        <div className="border border-gray-200 rounded-lg p-4 space-y-4">
+          <h3 className="text-lg font-medium text-gray-900">Right Column</h3>
+          <div>
+            <label htmlFor="right_column_content" className="block text-sm font-medium text-gray-700 mb-1">
+              {t('rightColumnLabel', { fallback: 'Right Column Content' })}
+            </label>
+            <textarea
+              id="right_column_content"
+              name="right_column_content"
+              value={formData.right_column_content || ''}
+              onChange={handleChange}
+              rows={8}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent-primary focus:border-accent-primary"
+              required
+            />
+          </div>
+
+          <ImageUploadSection
+            imageUrl={formData.right_column_image_url}
+            uploading={uploadingRight}
+            onUpload={(file) => void handleImageUpload(file, 'right')}
+            onDelete={() => void handleImageDelete('right')}
+            position={formData.right_column_image_position || 'above'}
+            onPositionChange={(value) => setFormData(prev => ({ ...prev, right_column_image_position: value as 'above' | 'below' }))}
+            columnName="Right"
+          />
+        </div>
+
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            disabled={loading}
+            className="py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white rounded-md font-medium transition"
+          >
+            {loading ? 'Saving...' : t('saveButton', { fallback: 'Save Changes' })}
+          </button>
+        </div>
       </div>
     </form>
   );

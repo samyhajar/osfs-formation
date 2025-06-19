@@ -2,12 +2,17 @@
 
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
+import { ColumnContent } from './ColumnContent';
 
 interface UserIntroduction {
   id: string;
   coordinator_name: string;
   left_column_content: string;
   right_column_content: string;
+  left_column_image_url: string | null;
+  right_column_image_url: string | null;
+  left_column_image_position: 'above' | 'below' | null;
+  right_column_image_position: 'above' | 'below' | null;
   active: boolean;
   created_at: string;
   updated_at: string;
@@ -24,7 +29,6 @@ export default function UserIntroductionModal({
   onClose,
   introContent
 }: UserIntroductionModalProps) {
-  // No need to set a cookie anymore
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -37,10 +41,10 @@ export default function UserIntroductionModal({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-75" />
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
         </Transition.Child>
 
-        <div className="fixed inset-0 flex items-center justify-center px-4 sm:px-6 md:px-8">
+        <div className="fixed inset-0 flex items-center justify-center p-6">
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -50,44 +54,48 @@ export default function UserIntroductionModal({
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <Dialog.Panel className="w-full h-[95vh] transform bg-white rounded-lg shadow-xl transition-all flex flex-col">
-              <div className="flex-1 flex flex-col p-6 md:p-8 overflow-hidden">
-                <div className="w-full text-center mb-6">
-                  <p className="text-slate-700 text-xl font-medium">General Coordinator:<br />
-                  {introContent.coordinator_name}</p>
-                </div>
-
-                <div className="flex flex-col lg:flex-row w-full h-full">
-                  <div className="w-full lg:w-1/2 flex items-center justify-center overflow-y-auto py-4 px-4 lg:px-6">
-                    <div className="prose max-w-none text-center">
-                      {introContent.left_column_content.split('\n\n').map((paragraph, index) => (
-                        <p key={index} className="text-slate-700 mb-4">
-                          {paragraph}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="hidden lg:block w-px bg-slate-200 mx-2 self-stretch"></div>
-
-                  <div className="w-full lg:w-1/2 flex items-center justify-center overflow-y-auto py-4 px-4 lg:px-6">
-                    <div className="prose max-w-none text-center">
-                      {introContent.right_column_content.split('\n\n').map((paragraph, index) => (
-                        <p key={index} className="text-slate-700 mb-4">
-                          {paragraph}
-                        </p>
-                      ))}
-                    </div>
+            <Dialog.Panel className="w-full h-full max-w-none transform bg-white rounded-3xl shadow-2xl transition-all flex flex-col overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-8 py-8 text-center border-b border-slate-200">
+                <div className="space-y-2">
+                  <h1 className="text-3xl font-bold text-slate-800">Welcome to OSFS Formation</h1>
+                  <div className="flex items-center justify-center space-x-3">
+                    <div className="h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent flex-1"></div>
+                    <p className="text-slate-600 text-lg font-medium px-4">
+                      General Coordinator: {introContent.coordinator_name}
+                    </p>
+                    <div className="h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent flex-1"></div>
                   </div>
                 </div>
+              </div>
 
-                <div className="mt-auto py-6 flex justify-center">
+              <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+                <div className="flex-1 p-8 lg:p-12">
+                  <ColumnContent
+                    content={introContent.left_column_content}
+                    imageUrl={introContent.left_column_image_url}
+                    imagePosition={introContent.left_column_image_position}
+                  />
+                </div>
+
+                <div className="hidden lg:block w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent mx-8"></div>
+
+                <div className="flex-1 p-8 lg:p-12">
+                  <ColumnContent
+                    content={introContent.right_column_content}
+                    imageUrl={introContent.right_column_image_url}
+                    imagePosition={introContent.right_column_image_position}
+                  />
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-slate-50 to-slate-100 px-8 py-6 border-t border-slate-200">
+                <div className="flex justify-center">
                   <button
                     type="button"
-                    className="py-3 px-8 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium"
+                    className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 border border-blue-600"
                     onClick={onClose}
                   >
-                    Go to Dashboard
+                    Continue to Dashboard
                   </button>
                 </div>
               </div>

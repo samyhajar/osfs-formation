@@ -14,6 +14,10 @@ interface UserIntroduction {
   coordinator_name: string;
   left_column_content: string;
   right_column_content: string;
+  left_column_image_url?: string;
+  left_column_image_position?: 'above' | 'below';
+  right_column_image_url?: string;
+  right_column_image_position?: 'above' | 'below';
   active: boolean;
   created_at: string;
   updated_at: string;
@@ -34,7 +38,19 @@ export default function AdminPage() {
         // Use the proper table name from types
         const { data, error: fetchError } = await supabase
           .from('user_introduction')
-          .select('*')
+          .select(`
+            id,
+            coordinator_name,
+            left_column_content,
+            right_column_content,
+            left_column_image_url,
+            left_column_image_position,
+            right_column_image_url,
+            right_column_image_position,
+            active,
+            created_at,
+            updated_at
+          `)
           .eq('active', true)
           .single();
 
