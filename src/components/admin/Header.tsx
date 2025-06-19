@@ -49,11 +49,11 @@ export default function Header({ isScrolled = false }: HeaderProps) {
         isScrolled ? 'shadow-md' : 'shadow-none' // Apply shadow conditionally
       }`}
     >
-      <div className="container flex h-20 items-center justify-end px-4 py-2 md:px-6">
+      <div className="container flex h-20 items-center justify-end pl-4 pr-0 py-2 md:pl-6 md:pr-0">
         {/* Removed Logo and Title Block */}
         {/* <div className="flex items-center"> ... logo code removed ... </div> */}
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 pr-4 md:pr-6">
           {/* Add LanguageSwitcher here */}
           <LanguageSwitcher />
 
