@@ -6,7 +6,7 @@ import { Document } from '@/types/document';
 import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
 import { useAuth } from '@/contexts/AuthContext';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { DocumentViewer } from '@/components/admin/DocumentViewer/DocumentViewer';
 
 const TARGET_BUCKET = 'common-syllabus';
@@ -16,7 +16,8 @@ export default function SyllabusDocumentViewerPage() {
   const params = useParams();
   const documentId = params?.id as string;
   const router = useRouter();
-  const { supabase } = useAuth();
+  const locale = useLocale();
+  const { supabase, profile } = useAuth();
   const t = useTranslations('DocumentViewer');
 
   const [document, setDocument] = useState<Document | null>(null);
@@ -176,7 +177,13 @@ export default function SyllabusDocumentViewerPage() {
   }, [document, supabase, t]);
 
   // Handle back navigation
-  const handleBack = useCallback(() => router.back(), [router]);
+  const handleBack = useCallback(() => {
+    const userRole = profile?.role || 'user';
+    console.log('Back navigation - Locale:', locale, 'Profile:', profile, 'UserRole:', userRole);
+    const redirectPath = `/${locale}/dashboard/${userRole}/`;
+    console.log('Redirecting to:', redirectPath);
+    router.push(redirectPath);
+  }, [router, locale, profile]);
 
   if (!document && !loading && !error) {
     return (

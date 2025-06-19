@@ -170,7 +170,7 @@ export function DocumentRow({
           >
             <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
               <Link
-                href={`/dashboard/admin/documents/${doc.id}/edit`}
+                href={`/dashboard/editor/documents/${doc.id}/edit`}
                 className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
                 role="menuitem"
                 onClick={() => toggleDropdown(doc.id)}

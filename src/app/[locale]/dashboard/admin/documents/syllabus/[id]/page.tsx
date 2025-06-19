@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, usePathname } from 'next/navigation';
 import { Document } from '@/types/document';
 import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
 import { useAuth } from '@/contexts/AuthContext';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { DocumentViewer } from '@/components/admin/DocumentViewer/DocumentViewer';
 
 const TARGET_BUCKET = 'common-syllabus';
@@ -16,7 +16,9 @@ export default function SyllabusDocumentViewerPage() {
   const params = useParams();
   const documentId = params?.id as string;
   const router = useRouter();
-  const { supabase } = useAuth();
+  const pathname = usePathname();
+  const locale = useLocale();
+  const { supabase, profile } = useAuth();
   const t = useTranslations('DocumentViewer');
 
   const [document, setDocument] = useState<Document | null>(null);
@@ -176,7 +178,22 @@ export default function SyllabusDocumentViewerPage() {
   }, [document, supabase, t]);
 
   // Handle back navigation
-  const handleBack = useCallback(() => router.back(), [router]);
+  const handleBack = useCallback(() => {
+    const userRole = profile?.role || 'user';
+    console.log('Back navigation - Locale:', locale, 'Profile:', profile, 'UserRole:', userRole);
+    console.log('Current pathname:', pathname);
+
+    // Extract locale and role from current pathname as fallback
+    const pathSegments = pathname.split('/').filter(Boolean);
+    const currentLocale = pathSegments[0] || 'en';
+    const currentRole = pathSegments[2] || 'admin'; // dashboard/[role]
+
+    console.log('Path segments:', pathSegments, 'Current locale:', currentLocale, 'Current role:', currentRole);
+
+    const redirectPath = `/${currentLocale}/dashboard/${currentRole}/`;
+    console.log('Redirecting to:', redirectPath);
+    router.push(redirectPath);
+  }, [router, locale, profile, pathname]);
 
   if (!document && !loading && !error) {
     return (

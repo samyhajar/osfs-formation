@@ -2,7 +2,7 @@
 
 import { SyllabusDocument } from '@/types/document';
 import { DocumentArrowDownIcon, TrashIcon } from '@heroicons/react/24/solid';
-import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
+import { EllipsisHorizontalIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { useTranslations, useLocale } from 'next-intl';
 import { LanguageFlag } from './LanguageFlag';
 import { FileIcon } from '@/components/ui/FileIcon';
@@ -121,7 +121,17 @@ export const SyllabusTableRow: React.FC<SyllabusTableRowProps> = ({
               left: `${dropdownPosition.left}px`,
             }}
           >
-            <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                      <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+            {(userRole === 'admin' || userRole === 'editor') && (
+              <Link
+                href={`/dashboard/${userRole}/documents/syllabus/${doc.id}/edit`}
+                className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => toggleDropdown(doc.id)}
+              >
+                <PencilIcon className="mr-3 h-5 w-5 text-gray-400" aria-hidden="true" />
+                {t('SyllabusList.edit', { default: 'Edit' })}
+              </Link>
+            )}
               <button
                 onClick={() => { void handleDownload(doc); }}
                 className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

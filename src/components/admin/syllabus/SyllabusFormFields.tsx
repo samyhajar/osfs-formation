@@ -52,9 +52,12 @@ export interface SyllabusFormFieldsProps {
   uploading: boolean;
   progress: number;
   t: ReturnType<typeof useTranslations>;
+  isEditMode?: boolean;
+  replaceFileLabel?: string;
+  replaceFileHelper?: string;
 }
 
-export default function SyllabusFormFields({
+export function SyllabusFormFields({
   title, setTitle,
   description, setDescription,
   file, handleFileUpdate,
@@ -66,7 +69,10 @@ export default function SyllabusFormFields({
   keywords, setKeywords,
   isPublic, setIsPublic,
   uploading, progress,
-  t
+  t,
+  isEditMode = false,
+  replaceFileLabel: _replaceFileLabel,
+  replaceFileHelper: _replaceFileHelper
 }: SyllabusFormFieldsProps) {
   return (
     <>
@@ -88,7 +94,11 @@ export default function SyllabusFormFields({
         disabled={uploading}
       />
 
-      <FileDropzone file={file} onFileChange={handleFileUpdate} required />
+      <FileDropzone
+        file={file}
+        onFileChange={handleFileUpdate}
+        required={!isEditMode}
+      />
 
       {uploading && progress < 100 && <UploadProgress progress={progress} />}
 
