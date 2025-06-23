@@ -6,9 +6,10 @@ import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
 import { SyllabusDocument } from '@/types/document';
 import SyllabusUploadForm from '@/components/admin/syllabus/SyllabusUploadForm';
-import SyllabusFileList from '@/components/editor/syllabus/SyllabusFileList';
+import SyllabusFileList from '@/components/shared/syllabus/SyllabusFileList';
 import { PlusIcon } from '@heroicons/react/24/solid';
 
+const TARGET_BUCKET = 'common-syllabus';
 const TARGET_TABLE = 'syllabus_documents';
 
 export default function CommonSyllabusPage() {
@@ -41,8 +42,7 @@ export default function CommonSyllabusPage() {
           language,
           topics,
           purpose,
-          keywords,
-          is_public
+          keywords
         `)
         .order('created_at', { ascending: false });
 
@@ -66,6 +66,43 @@ export default function CommonSyllabusPage() {
   useEffect(() => {
     void fetchSyllabusDocuments();
   }, [fetchSyllabusDocuments]);
+
+  const handleDeleteDocument = async (documentId: string, filePath: string) => {
+    setError(null);
+    try {
+      const { error: deleteDbError } = await supabase
+        .from(TARGET_TABLE)
+        .delete()
+        .eq('id', documentId);
+
+      if (deleteDbError) {
+        if (deleteDbError.message.includes('permission denied')) {
+          throw new Error(t('deleteDbErrorPermission', { default: 'You do not have permission to delete this database record.' }));
+        } else {
+          throw deleteDbError;
+        }
+      }
+
+      const { error: deleteStorageError } = await supabase.storage
+        .from(TARGET_BUCKET)
+        .remove([filePath]);
+
+      if (deleteStorageError) {
+        console.error(`Failed to delete file ${filePath} from storage:`, deleteStorageError);
+        if (deleteStorageError.message.includes('permission denied')) {
+          throw new Error(t('deleteStorageErrorPermission', { default: 'You do not have permission to delete this file from storage.' }));
+        } else {
+          throw deleteStorageError;
+        }
+      }
+
+      await fetchSyllabusDocuments();
+    } catch (err: unknown) {
+      console.error('Error deleting syllabus document:', err);
+      setError(err instanceof Error ? err.message : t('deleteErrorGeneric', { default: 'Failed to delete syllabus document.' }));
+      throw err;
+    }
+  };
 
   const handleUploadComplete = () => {
     setShowUploadForm(false);
@@ -101,6 +138,7 @@ export default function CommonSyllabusPage() {
       <SyllabusFileList
         documents={documents}
         isLoading={loading}
+        onDelete={handleDeleteDocument}
       />
     </div>
   );

@@ -248,7 +248,7 @@
     "fieldPurposeLabel": "Scopo",
     "fieldTopicsLabel": "Argomenti (separati da virgole)",
     "fieldKeywordsLabel": "Parole chiave (separate da virgole)",
-    "fieldIsPublicLabel": "Rendi documento pubblico",
+
     "fieldTopicsPlaceholder": "es., Teologia, Spiritualità, Storia",
     "fieldKeywordsPlaceholder": "es., Vocazione, Formazione, Preghiera",
     "categories": {
@@ -289,12 +289,16 @@
     "headerLang": "Lingua",
     "headerRegion": "Regione",
     "headerCategory": "Categoria",
+    "headerAuthor": "Autore",
     "headerCreated": "Creato",
     "headerActions": "Azioni",
     "actionDownload": "Scarica",
     "actionDelete": "Elimina",
-    "optionsButtonLabel": "Opzioni documento",
+    "edit": "Modifica",
+    "delete": "Elimina",
     "deleting": "Eliminazione in corso...",
+    "deleteConfirmation": "Sei sicuro di voler eliminare questo documento? Questa azione non può essere annullata.",
+    "optionsButtonLabel": "Opzioni documento",
     "downloading": "Download in corso...",
     "SyllabusList": {
       "download": "Scarica",
@@ -350,11 +354,69 @@
     "title": "Amministrazione",
     "description": "Gestisci le impostazioni e le configurazioni del sistema",
     "userIntroductionTab": "Introduzione Utente",
+    "homepageSettingsTab": "Impostazioni Homepage",
     "settingsTab": "Impostazioni",
     "userIntroductionTitle": "Messaggio di Introduzione Utente",
+    "homepageSettingsTitle": "Impostazioni Homepage",
+    "homepageSettingsDescription": "Personalizza la homepage pubblica che i visitatori vedono prima di accedere.",
     "systemSettingsTitle": "Impostazioni di Sistema",
     "systemSettingsDescription": "Ulteriori impostazioni di sistema saranno disponibili qui in futuro.",
     "systemSettings": "Impostazioni di Sistema"
+  },
+  "Footer": {
+    "copyright": "© 2024 Ufficio Formazione OSFS | Tenui Nec Dimittam",
+    "backToOsfsWorld": "Torna al Mondo OSFS",
+    "osfsWorld": "Mondo OSFS",
+    "developedBy": "Sviluppato da",
+    "company": "Samy Hajar Development",
+    "location": "Vienna, Austria",
+    "impressum": "Informazioni Legali"
+  },
+  "HomepageSettings": {
+    "mainTitleSection": "Sezione Titolo Principale",
+    "titleLabel": "Titolo Principale",
+    "subtitleLabel": "Sottotitolo",
+    "welcomeSection": "Sezione Benvenuto",
+    "welcomeTitleLabel": "Titolo di Benvenuto",
+    "welcomeMessageLabel": "Messaggio di Benvenuto",
+    "coordinatorSection": "Sezione Coordinatore Formazione",
+    "coordinatorNameLabel": "Nome del Coordinatore",
+    "coordinatorMessageLabel": "Messaggio del Coordinatore",
+    "coordinatorImageLabel": "URL Foto Coordinatore",
+    "quoteSection": "Sezione Citazione",
+    "quoteTextLabel": "Testo Citazione",
+    "quoteTranslationLabel": "Traduzione Citazione",
+    "newsSection": "Sezione Notizie",
+    "newsTitleLabel": "Titolo Sezione Notizie",
+    "newsDescription": "Le notizie mostreranno automaticamente ordinazioni recenti, professioni e altre tappe importanti.",
+    "showSection": "Mostra questa sezione",
+    "saveButton": "Salva Modifiche",
+    "saving": "Salvataggio...",
+    "saveSuccess": "Contenuto homepage salvato con successo!"
+  },
+  "Impressum": {
+    "title": "Informazioni Legali",
+    "subtitle": "Informazioni Legali e Crediti Sviluppatore",
+    "backToHome": "Torna alla Home",
+    "developerInfo": "Informazioni Sviluppatore",
+    "name": "Nome",
+    "company": "Azienda",
+    "address": "Indirizzo",
+    "contact": "Contatto",
+    "email": "Email",
+    "phone": "Telefono",
+    "services": "Servizi Professionali",
+    "webDevelopment": "Sviluppo Web e Design",
+    "fullStackDevelopment": "Sviluppo Applicazioni Full-Stack",
+    "databaseDesign": "Progettazione e Architettura Database",
+    "uiUxDesign": "Design UI/UX ed Esperienza Utente",
+    "consulting": "Consulenza Tecnica e Gestione Progetti",
+    "legalInfo": "Informazioni Legali",
+    "responsibleFor": "Responsabile del contenuto",
+    "responsibleForContent": "Samy Hajar, Beckmanngasse 74/8-9, 1150 Wien, Austria",
+    "disclaimer": "Disclaimer",
+    "disclaimerText": "Nonostante l'attento controllo dei contenuti, non assumiamo alcuna responsabilità per il contenuto dei link esterni. Gli operatori delle pagine collegate sono gli unici responsabili del loro contenuto.",
+    "lastUpdated": "Ultimo aggiornamento"
   },
   "UserIntroduction": {
     "coordinatorNameLabel": "Nome del Coordinatore",
@@ -472,5 +534,16 @@
     "noPositions": "Nessuna posizione elencata",
     "noMinistries": "Nessun ministero elencato",
     "unknown": "Sconosciuto"
+  },
+  "documents": {
+    "categories": {
+      "articles": "Articoli",
+      "presentations": "Presentazioni",
+      "videos": "Video",
+      "miscellaneous": "Vari",
+      "sourcematerials": "Materiali Fonte",
+      "formationprograms": "Programmi di Formazione",
+      "reflections4dimensions": "Riflessioni 4 Dimensioni"
+    }
   }
 }

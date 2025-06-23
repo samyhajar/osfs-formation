@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronLeftIcon } from '@heroicons/react/24/solid';
-import { WorkshopFilesList } from '@/components/admin/workshops/WorkshopFilesList';
+import WorkshopFilesList from '@/components/shared/WorkshopFilesList';
 import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
 import { Workshop } from '@/types/workshop';
@@ -103,8 +103,8 @@ export default function WorkshopFolderPage() {
         {/* Files List */}
         <WorkshopFilesList
           workshopId={workshopId}
-          folderPath={effectiveFolderPath}
-          hideUpload={true} // Users can only view files
+          workshopTitle={workshop.title}
+          userRole="user"
         />
       </main>
     </div>

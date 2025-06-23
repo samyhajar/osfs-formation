@@ -3,37 +3,105 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { FolderComponent } from '@/components/shared/FolderComponent';
+import { WorkshopFolderComponent } from '@/components/shared/WorkshopFolderComponent';
 import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function WorkshopsPage() {
   const basePath = '/dashboard/admin/workshops';
   const t = useTranslations('AdminWorkshopsPage');
   const router = useRouter();
+  const { user, profile } = useAuth();
   const [workshops, setWorkshops] = useState<Database['public']['Tables']['workshops']['Row'][]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchWorkshops = async () => {
+    const fetchAndValidateWorkshops = async () => {
+      if (!user) return;
+
       setLoading(true);
       setError(null);
       try {
         const supabase = createClient<Database>();
-        const { data, error: fetchError } = await supabase
+
+        // Fetch all workshops from database
+        const { data: dbWorkshops, error: fetchError } = await supabase
           .from('workshops')
           .select('*');
+
         if (fetchError) throw fetchError;
-        setWorkshops(data || []);
+
+        if (!dbWorkshops || dbWorkshops.length === 0) {
+          setWorkshops([]);
+          return;
+        }
+
+        // Validate each workshop has files (either in workshop_files table or legacy file_path)
+        const validWorkshops: Database['public']['Tables']['workshops']['Row'][] = [];
+        const invalidWorkshopIds: string[] = [];
+
+        for (const workshop of dbWorkshops) {
+          let hasValidFiles = false;
+
+          // Check for files in workshop_files table (new structure)
+          const { data: workshopFiles, error: filesError } = await supabase
+            .from('workshop_files')
+            .select('id')
+            .eq('workshop_id', workshop.id)
+            .limit(1);
+
+          if (!filesError && workshopFiles && workshopFiles.length > 0) {
+            hasValidFiles = true;
+          } else if (workshop.file_path) {
+            // Check legacy file_path in main workshop record
+            const { data: fileData, error: fileError } = await supabase.storage
+              .from('workshops')
+              .list(workshop.folder_path || '', {
+                limit: 1,
+                search: workshop.file_path.split('/').pop()
+              });
+
+            if (!fileError && fileData && fileData.length > 0) {
+              hasValidFiles = true;
+            }
+          }
+
+          if (hasValidFiles) {
+            validWorkshops.push(workshop);
+          } else {
+            console.warn(`Workshop "${workshop.title}" has no valid files. Marking for cleanup.`);
+            invalidWorkshopIds.push(workshop.id);
+          }
+        }
+
+        // Clean up invalid workshops from database
+        if (invalidWorkshopIds.length > 0) {
+          const { error: deleteError } = await supabase
+            .from('workshops')
+            .delete()
+            .in('id', invalidWorkshopIds);
+
+          if (deleteError) {
+            console.error('Error cleaning up invalid workshops:', deleteError);
+          } else {
+            console.log(`Cleaned up ${invalidWorkshopIds.length} invalid workshops from database`);
+          }
+        }
+
+        setWorkshops(validWorkshops);
       } catch (err: unknown) {
         setError(err instanceof Error ? err.message : 'Failed to load workshops');
       } finally {
         setLoading(false);
       }
     };
-    void fetchWorkshops();
-  }, []);
+
+    void fetchAndValidateWorkshops();
+  }, [user]);
+
+  const userRole = profile?.role || 'user';
 
   return (
     <div className="flex flex-col h-full">
@@ -49,11 +117,16 @@ export default function WorkshopsPage() {
             {t('uploadWorkshop')}
           </button>
         </div>
+
         {/* Workshop Folders Grid */}
         {loading ? (
-          <div className="text-gray-500">{t('loading')}</div>
+          <div className="flex justify-center py-12">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+          </div>
         ) : error ? (
-          <div className="text-red-500">{error}</div>
+          <div className="p-4 bg-red-50 border border-red-200 rounded-md text-red-700">
+            {error}
+          </div>
         ) : workshops.length === 0 ? (
           <div className="text-gray-500 text-center py-12">
             {t('noWorkshops')}
@@ -63,12 +136,12 @@ export default function WorkshopsPage() {
             <h2 className="text-lg font-medium text-gray-800 mb-4">{t('workshopsTitle')}</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6">
               {workshops.map((workshop) => (
-                <FolderComponent
+                <WorkshopFolderComponent
                   key={workshop.id}
-                  basePath={`${basePath}/${workshop.id}/${workshop.folder_path}`}
-                  categoryName={workshop.folder_path || ''}
-                  categoryTranslationNamespace="AdminWorkshopsPage.workshops"
+                  basePath={basePath}
+                  workshopId={workshop.id}
                   title={workshop.title}
+                  userRole={userRole}
                 />
               ))}
             </div>

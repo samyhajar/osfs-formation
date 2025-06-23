@@ -19,7 +19,6 @@ interface UploadWorkshopData {
   language?: string;
   topics?: string[];
   keywords?: string[];
-  isPublic?: boolean;
 }
 
 interface UseWorkshopDocumentUploadResult {
@@ -69,7 +68,6 @@ export function useWorkshopDocumentUpload(): UseWorkshopDocumentUploadResult {
         topics: data.topics && data.topics.length > 0 ? data.topics : null,
         keywords:
           data.keywords && data.keywords.length > 0 ? data.keywords : null,
-        is_public: data.isPublic ?? true,
       };
 
       const { data: workshop, error: insertError } = await supabase

@@ -13,6 +13,10 @@ interface UserIntroduction {
   right_column_image_url: string | null;
   left_column_image_position: 'above' | 'below' | null;
   right_column_image_position: 'above' | 'below' | null;
+  left_column_gallery_urls: string[];
+  right_column_gallery_urls: string[];
+  left_column_gallery_titles: string[];
+  right_column_gallery_titles: string[];
   active: boolean;
   created_at: string;
   updated_at: string;
@@ -44,17 +48,18 @@ export default function UserIntroductionModal({
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
         </Transition.Child>
 
-        <div className="fixed inset-0 flex items-center justify-center p-6">
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <Dialog.Panel className="w-full h-full max-w-none transform bg-white rounded-3xl shadow-2xl transition-all flex flex-col overflow-hidden">
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <Dialog.Panel className="w-full max-w-6xl transform bg-white rounded-3xl shadow-2xl transition-all flex flex-col max-h-[90vh] overflow-hidden">
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-8 py-8 text-center border-b border-slate-200">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold text-slate-800">Welcome to OSFS Formation</h1>
@@ -68,12 +73,13 @@ export default function UserIntroductionModal({
                 </div>
               </div>
 
-              <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-                <div className="flex-1 p-8 lg:p-12">
+              <div className="flex-1 overflow-y-auto">
+                <div className="flex flex-col lg:flex-row min-h-full">
+                                  <div className="flex-1 p-8 lg:p-12">
                   <ColumnContent
                     content={introContent.left_column_content}
-                    imageUrl={introContent.left_column_image_url}
-                    imagePosition={introContent.left_column_image_position}
+                    galleryUrls={introContent.left_column_gallery_urls}
+                    galleryTitles={introContent.left_column_gallery_titles}
                   />
                 </div>
 
@@ -82,9 +88,10 @@ export default function UserIntroductionModal({
                 <div className="flex-1 p-8 lg:p-12">
                   <ColumnContent
                     content={introContent.right_column_content}
-                    imageUrl={introContent.right_column_image_url}
-                    imagePosition={introContent.right_column_image_position}
+                    galleryUrls={introContent.right_column_gallery_urls}
+                    galleryTitles={introContent.right_column_gallery_titles}
                   />
+                </div>
                 </div>
               </div>
 
@@ -99,8 +106,9 @@ export default function UserIntroductionModal({
                   </button>
                 </div>
               </div>
-            </Dialog.Panel>
-          </Transition.Child>
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
         </div>
       </Dialog>
     </Transition>

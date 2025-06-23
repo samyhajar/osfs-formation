@@ -5,11 +5,14 @@ import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { useHomepageContent } from '@/hooks/useHomepageContent'
+import Footer from '@/components/admin/Footer'
 
 export default function Welcome() {
   const { session, loading } = useAuth();
   const router = useRouter();
   const [isHydrated, setIsHydrated] = useState(false);
+  const { content: homepageContent, loading: contentLoading } = useHomepageContent();
 
   // Handle hydration
   useEffect(() => {
@@ -42,8 +45,8 @@ export default function Welcome() {
     }
   }, [session, loading, router, isHydrated]);
 
-  // Show loading while checking authentication or during hydration
-  if (!isHydrated || loading) {
+  // Show loading while checking authentication, during hydration, or loading content
+  if (!isHydrated || loading || contentLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-slate-50">
         <div className="text-center">
@@ -107,22 +110,53 @@ export default function Welcome() {
               />
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-800 mb-4">
-              Formation
+              {homepageContent?.title || 'Formation'}
             </h1>
             <p className="text-xl md:text-2xl text-slate-600 font-light">
-              OSFS Formation Portal
+              {homepageContent?.subtitle || 'OSFS Formation Portal'}
             </p>
           </div>
 
           {/* Welcome Content */}
           <div className="mb-12 space-y-6">
             <h2 className="text-2xl md:text-3xl font-semibold text-slate-700">
-              Welcome to the Formation Portal
+              {homepageContent?.welcome_title || 'Welcome to the Formation Portal'}
             </h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-              Access resources, connect with your formation community, and continue your journey of spiritual growth and development.
+              {homepageContent?.welcome_message || 'Access resources, connect with your formation community, and continue your journey of spiritual growth and development.'}
             </p>
           </div>
+
+          {/* Formation Coordinator Section */}
+          {homepageContent?.show_coordinator_section && (
+            <div className="mb-12 bg-white/60 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/20">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                {homepageContent.coordinator_image_url && (
+                  <div className="flex-shrink-0">
+                    <Image
+                      src={homepageContent.coordinator_image_url}
+                      alt={homepageContent.coordinator_name || 'Formation Coordinator'}
+                      width={120}
+                      height={120}
+                      className="w-24 h-24 md:w-30 md:h-30 rounded-full object-cover border-4 border-white shadow-lg"
+                    />
+                  </div>
+                )}
+                <div className="text-center md:text-left">
+                  {homepageContent.coordinator_name && (
+                    <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                      {homepageContent.coordinator_name}
+                    </h3>
+                  )}
+                  {homepageContent.coordinator_message && (
+                    <p className="text-slate-600 leading-relaxed">
+                      {homepageContent.coordinator_message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Action Button */}
           <div className="space-y-4">
@@ -154,15 +188,30 @@ export default function Welcome() {
             </p>
           </div>
 
+          {/* News Section */}
+          {homepageContent?.show_news_section && homepageContent.news_title && (
+            <div className="mb-12 bg-blue-50/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-blue-100">
+              <h3 className="text-2xl font-semibold text-slate-800 mb-4 text-center">
+                {homepageContent.news_title}
+              </h3>
+              <div className="text-center text-slate-600">
+                <p className="italic">Recent updates will appear here</p>
+              </div>
+            </div>
+          )}
+
           {/* Decorative Quote */}
           <div className="mt-16 pt-8 border-t border-slate-200">
             <blockquote className="text-slate-600 italic text-lg">
-              "Tenui Nec Dimittam"
+              "{homepageContent?.quote_text || 'Tenui Nec Dimittam'}"
             </blockquote>
-            <p className="text-sm text-slate-500 mt-2">I have held fast and will not let go</p>
+            <p className="text-sm text-slate-500 mt-2">
+              {homepageContent?.quote_translation || 'I have held fast and will not let go'}
+            </p>
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

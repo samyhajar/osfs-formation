@@ -9,6 +9,8 @@ interface ConfreresFiltersProps {
   setStatusFilter: (status: string) => void;
   provinceFilter: string;
   setProvinceFilter: (province: string) => void;
+  sortOrder: 'asc' | 'desc';
+  setSortOrder: (order: string) => void;
   uniqueStatuses: string[];
   uniqueProvinces: string[];
 }
@@ -20,6 +22,8 @@ export default function ConfreresFilters({
   setStatusFilter,
   provinceFilter,
   setProvinceFilter,
+  sortOrder,
+  setSortOrder,
   uniqueStatuses,
   uniqueProvinces,
 }: ConfreresFiltersProps) {
@@ -40,7 +44,7 @@ export default function ConfreresFilters({
       </div>
 
       {/* Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {/* Status Filter */}
         <div>
           <label htmlFor="status-filter" className="block text-sm font-medium text-gray-700 mb-1">
@@ -78,6 +82,22 @@ export default function ConfreresFilters({
                 {province}
               </option>
             ))}
+          </select>
+        </div>
+
+        {/* Sort Order */}
+        <div>
+          <label htmlFor="sort-filter" className="block text-sm font-medium text-gray-700 mb-1">
+            Sort by Name
+          </label>
+          <select
+            id="sort-filter"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-accent-primary focus:border-accent-primary"
+          >
+            <option value="asc">A-Z</option>
+            <option value="desc">Z-A</option>
           </select>
         </div>
       </div>

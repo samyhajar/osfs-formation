@@ -60,6 +60,11 @@ export interface WPMember {
   province: number[]; // Holds Term IDs for the 'province' taxonomy
   // Custom fields like acf or meta are not present in the sample
   acf?: Record<string, unknown>; // Use Record<string, unknown> instead of any
+  meta?: {
+    email?: string;
+    contact_email?: string;
+    [key: string]: unknown;
+  };
 
   // Embedded data (available when using ?_embed=true)
   _embedded?: WPEmbeddedData;

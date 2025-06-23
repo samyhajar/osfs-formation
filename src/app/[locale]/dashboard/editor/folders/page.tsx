@@ -38,7 +38,7 @@ export default function FoldersPage() {
                 key={category}
                 basePath={basePath}
                 categoryName={category}
-                categoryTranslationNamespace="documents.categories"
+                categoryTranslationNamespace="DocumentFilters.categories"
               />
             ))}
           </div>

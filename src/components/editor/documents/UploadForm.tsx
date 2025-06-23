@@ -14,7 +14,7 @@ import { UploadProgress } from './UploadProgress';
 import { FormField } from './FormField';
 import { SelectField } from './SelectField';
 import { DatalistField } from './DatalistField';
-import { CheckboxField } from './CheckboxField';
+// import { CheckboxField } from './CheckboxField';
 import { MultiSelectButtons } from './MultiSelectButtons';
 // Import the custom hook
 import { useDocumentUpload } from '@/hooks/useDocumentUpload';
@@ -46,7 +46,7 @@ export default function UploadForm() {
   const [topics, setTopics] = useState<string[]>([]);
   const [purpose, setPurpose] = useState<DocumentPurpose[]>([]);
   const [keywords, setKeywords] = useState<string[]>([]);
-  const [isPublic, setIsPublic] = useState(true);
+
 
   // Use the custom hook for upload logic
   const { uploadDocument, loading, error: uploadError, uploadProgress } = useDocumentUpload();
@@ -86,7 +86,7 @@ export default function UploadForm() {
       topics,
       purpose,
       keywords,
-      isPublic,
+
     });
   };
 
@@ -190,13 +190,7 @@ export default function UploadForm() {
         disabled={loading} // Use loading state from hook
       />
 
-      <CheckboxField
-        id="isPublic"
-        label="Make document public"
-        checked={isPublic}
-        onChange={setIsPublic}
-        disabled={loading} // Use loading state from hook
-      />
+
 
       <div className="pt-4 border-t border-gray-200">
         <button

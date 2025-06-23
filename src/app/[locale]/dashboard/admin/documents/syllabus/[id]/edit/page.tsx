@@ -26,7 +26,6 @@ interface SyllabusDocumentData {
   topics: string[] | null;
   purpose: string[] | null;
   keywords: string[] | null;
-  is_public: boolean | null;
 }
 
 export default function EditSyllabusDocumentPage() {

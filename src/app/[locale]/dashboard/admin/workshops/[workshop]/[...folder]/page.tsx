@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
 import { ChevronLeftIcon } from '@heroicons/react/24/solid';
-import { WorkshopFilesList } from '@/components/admin/workshops/WorkshopFilesList';
+import WorkshopFilesList from '@/components/shared/WorkshopFilesList';
 import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
 
@@ -35,7 +35,7 @@ export default function WorkshopFolderPage() {
   }, [workshopId]);
 
   // Use only the additional path segments beyond the workshop's base folder_path
-  const effectiveFolderPath = workshop?.folder_path && folderPath.startsWith(workshop.folder_path)
+  const _effectiveFolderPath = workshop?.folder_path && folderPath.startsWith(workshop.folder_path)
     ? folderPath.slice(workshop.folder_path.length).replace(/^\/+/, '')
     : '';
 
@@ -59,7 +59,8 @@ export default function WorkshopFolderPage() {
         {/* Files List */}
         <WorkshopFilesList
           workshopId={workshopId}
-          folderPath={effectiveFolderPath}
+          workshopTitle={workshop?.title || 'Workshop Files'}
+          userRole="admin"
         />
       </main>
     </div>

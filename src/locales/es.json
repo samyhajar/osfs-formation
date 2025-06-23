@@ -248,7 +248,7 @@
     "fieldPurposeLabel": "Propósito",
     "fieldTopicsLabel": "Temas (separados por comas)",
     "fieldKeywordsLabel": "Palabras clave (separadas por comas)",
-    "fieldIsPublicLabel": "Hacer documento público",
+
     "fieldTopicsPlaceholder": "ej., Teología, Espiritualidad, Historia",
     "fieldKeywordsPlaceholder": "ej., Vocación, Formación, Oración",
     "categories": {
@@ -289,12 +289,16 @@
     "headerLang": "Idioma",
     "headerRegion": "Región",
     "headerCategory": "Categoría",
+    "headerAuthor": "Autor",
     "headerCreated": "Creado",
     "headerActions": "Acciones",
     "actionDownload": "Descargar",
     "actionDelete": "Eliminar",
-    "optionsButtonLabel": "Opciones del documento",
+    "edit": "Editar",
+    "delete": "Eliminar",
     "deleting": "Eliminando...",
+    "deleteConfirmation": "¿Estás seguro de que deseas eliminar este documento? Esta acción no se puede deshacer.",
+    "optionsButtonLabel": "Opciones del documento",
     "downloading": "Descargando...",
     "SyllabusList": {
       "download": "Descargar",
@@ -350,11 +354,69 @@
     "title": "Administración",
     "description": "Gestionar configuraciones y ajustes del sistema",
     "userIntroductionTab": "Introducción del Usuario",
+    "homepageSettingsTab": "Configuración de Página Principal",
     "settingsTab": "Configuración",
     "userIntroductionTitle": "Mensaje de Introducción del Usuario",
+    "homepageSettingsTitle": "Configuración de Página Principal",
+    "homepageSettingsDescription": "Personalizar la página principal pública que ven los visitantes antes de iniciar sesión.",
     "systemSettingsTitle": "Configuración del Sistema",
     "systemSettingsDescription": "Configuraciones adicionales del sistema estarán disponibles aquí en el futuro.",
     "systemSettings": "Configuración del Sistema"
+  },
+  "Footer": {
+    "copyright": "© 2024 Oficina de Formación OSFS | Tenui Nec Dimittam",
+    "backToOsfsWorld": "Volver al Mundo OSFS",
+    "osfsWorld": "Mundo OSFS",
+    "developedBy": "Desarrollado por",
+    "company": "Samy Hajar Development",
+    "location": "Viena, Austria",
+    "impressum": "Información Legal"
+  },
+  "HomepageSettings": {
+    "mainTitleSection": "Sección Título Principal",
+    "titleLabel": "Título Principal",
+    "subtitleLabel": "Subtítulo",
+    "welcomeSection": "Sección Bienvenida",
+    "welcomeTitleLabel": "Título de Bienvenida",
+    "welcomeMessageLabel": "Mensaje de Bienvenida",
+    "coordinatorSection": "Sección Coordinador de Formación",
+    "coordinatorNameLabel": "Nombre del Coordinador",
+    "coordinatorMessageLabel": "Mensaje del Coordinador",
+    "coordinatorImageLabel": "URL Foto Coordinador",
+    "quoteSection": "Sección Cita",
+    "quoteTextLabel": "Texto de Cita",
+    "quoteTranslationLabel": "Traducción de Cita",
+    "newsSection": "Sección Noticias",
+    "newsTitleLabel": "Título Sección Noticias",
+    "newsDescription": "Las noticias mostrarán automáticamente ordenaciones recientes, profesiones y otros hitos.",
+    "showSection": "Mostrar esta sección",
+    "saveButton": "Guardar Cambios",
+    "saving": "Guardando...",
+    "saveSuccess": "¡Contenido de página principal guardado con éxito!"
+  },
+  "Impressum": {
+    "title": "Información Legal",
+    "subtitle": "Información Legal y Créditos del Desarrollador",
+    "backToHome": "Volver al Inicio",
+    "developerInfo": "Información del Desarrollador",
+    "name": "Nombre",
+    "company": "Empresa",
+    "address": "Dirección",
+    "contact": "Contacto",
+    "email": "Email",
+    "phone": "Teléfono",
+    "services": "Servicios Profesionales",
+    "webDevelopment": "Desarrollo Web y Diseño",
+    "fullStackDevelopment": "Desarrollo de Aplicaciones Full-Stack",
+    "databaseDesign": "Diseño y Arquitectura de Base de Datos",
+    "uiUxDesign": "Diseño UI/UX y Experiencia de Usuario",
+    "consulting": "Consultoría Técnica y Gestión de Proyectos",
+    "legalInfo": "Información Legal",
+    "responsibleFor": "Responsable del contenido",
+    "responsibleForContent": "Samy Hajar, Beckmanngasse 74/8-9, 1150 Wien, Austria",
+    "disclaimer": "Descargo de responsabilidad",
+    "disclaimerText": "A pesar del control cuidadoso del contenido, no asumimos ninguna responsabilidad por el contenido de enlaces externos. Los operadores de las páginas enlazadas son únicamente responsables de su contenido.",
+    "lastUpdated": "Última actualización"
   },
   "UserIntroduction": {
     "coordinatorNameLabel": "Nombre del Coordinador",
@@ -472,5 +534,16 @@
     "noPositions": "No hay posiciones listadas",
     "noMinistries": "No hay ministerios listados",
     "unknown": "Desconocido"
+  },
+  "documents": {
+    "categories": {
+      "articles": "Artículos",
+      "presentations": "Presentaciones",
+      "videos": "Videos",
+      "miscellaneous": "Varios",
+      "sourcematerials": "Materiales Fuente",
+      "formationprograms": "Programas de Formación",
+      "reflections4dimensions": "Reflexiones 4 Dimensiones"
+    }
   }
 }

@@ -27,7 +27,6 @@ interface SyllabusDocumentData {
   topics: string[] | null;
   purpose: string[] | null;
   keywords: string[] | null;
-  is_public: boolean | null;
 }
 
 interface SyllabusEditFormProps {
@@ -50,7 +49,7 @@ export function SyllabusEditForm({ document, onEditComplete, onCancel }: Syllabu
   const [topics, setTopics] = useState<string[]>(document.topics || []);
   const [purpose, setPurpose] = useState<DocumentPurpose[]>(document.purpose as DocumentPurpose[] || []);
   const [keywords, setKeywords] = useState<string[]>(document.keywords || []);
-  const [isPublic, setIsPublic] = useState(document.is_public || false);
+
   const [file, setFile] = useState<File | null>(null);
 
   const { updateDocument, loading, error, success, progress } = useDocumentUpdate({
@@ -86,7 +85,6 @@ export function SyllabusEditForm({ document, onEditComplete, onCancel }: Syllabu
       topics,
       purpose,
       keywords,
-      isPublic,
       file
     });
   };
@@ -154,8 +152,6 @@ export function SyllabusEditForm({ document, onEditComplete, onCancel }: Syllabu
         handlePurposeChange={handlePurposeChange}
         keywords={keywords}
         setKeywords={setKeywords}
-        isPublic={isPublic}
-        setIsPublic={setIsPublic}
         uploading={loading}
         progress={progress}
         t={t}

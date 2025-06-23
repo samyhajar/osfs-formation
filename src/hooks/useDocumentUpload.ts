@@ -23,7 +23,6 @@ interface UploadData {
   topics: string[];
   purpose: DocumentPurpose[];
   keywords: string[];
-  isPublic: boolean;
 }
 
 interface UseDocumentUploadResult {
@@ -97,7 +96,6 @@ export function useDocumentUpload(): UseDocumentUploadResult {
         topics: data.topics.length > 0 ? data.topics : null,
         purpose: data.purpose.length > 0 ? data.purpose : null,
         keywords: data.keywords.length > 0 ? data.keywords : null,
-        is_public: data.isPublic,
       };
 
       console.log('Inserting document metadata:', documentData);

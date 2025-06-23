@@ -5,18 +5,37 @@ import { Document } from '@/types/document';
 
 // Helper component to render flags dynamically
 const LanguageFlag = ({ code }: { code: string | null }) => {
-  if (!code || code.length !== 2) {
-    return <span className="text-gray-500 text-xs">{code || 'N/A'}</span>; // Fallback for invalid/missing codes
+  if (!code) {
+    return <span className="text-gray-500 text-xs">N/A</span>;
+  }
+
+  // Map full language names to country codes
+  const languageToCountryCode: { [key: string]: string } = {
+    'english': 'US',
+    'french': 'FR',
+    'spanish': 'ES',
+    'german': 'DE',
+    'italian': 'IT',
+    'portuguese': 'BR',
+  };
+
+  // Convert language name to country code
+  const normalizedLanguage = code.toLowerCase();
+  const countryCode = languageToCountryCode[normalizedLanguage] || code.toUpperCase();
+
+  // If it's not a 2-letter code, show text fallback
+  if (countryCode.length !== 2) {
+    return <span className="text-gray-500 text-xs">{code}</span>;
   }
 
   const FlagComponent = React.lazy(() =>
-    import(`country-flag-icons/react/3x2/${code.toUpperCase()}`)
+    import(`country-flag-icons/react/3x2/${countryCode}`)
       .catch(() => ({ default: () => <span className="text-gray-500 text-xs">{code}</span> })) // Fallback if import fails
   );
 
   return (
-    <Suspense fallback={<div className="h-4 w-6 bg-gray-200 rounded-sm animate-pulse"></div>}> {/* Loading state */}
-      <FlagComponent title={code.toUpperCase()} className="h-4 w-6 rounded-sm shadow-sm" />
+    <Suspense fallback={<div className="h-4 w-6 bg-gray-200 rounded-sm animate-pulse"></div>}>
+      <FlagComponent title={code} className="h-4 w-6 rounded-sm shadow-sm" />
     </Suspense>
   );
 };

@@ -3,7 +3,6 @@
 import { FormField } from '@/components/admin/documents/FormField';
 import { SelectField } from '@/components/admin/documents/SelectField';
 import { DatalistField } from '@/components/admin/documents/DatalistField';
-import { CheckboxField } from '@/components/admin/documents/CheckboxField';
 import { MultiSelectButtons } from '@/components/admin/documents/MultiSelectButtons';
 import { FileDropzone } from '@/components/admin/documents/FileDropzone';
 import { UploadProgress } from '@/components/admin/documents/UploadProgress';
@@ -49,8 +48,6 @@ export interface SyllabusFormFieldsProps {
   handlePurposeChange: (purpose: DocumentPurpose) => void;
   keywords: string[];
   setKeywords: (keywords: string[]) => void;
-  isPublic: boolean;
-  setIsPublic: (isPublic: boolean) => void;
   uploading: boolean;
   progress: number;
   t: ReturnType<typeof useTranslations>;
@@ -70,7 +67,6 @@ export function SyllabusFormFields({
   topics, setTopics,
   purpose, handlePurposeChange,
   keywords, setKeywords,
-  isPublic, setIsPublic,
   uploading, progress,
   t,
   isEditMode = false,
@@ -176,13 +172,7 @@ export function SyllabusFormFields({
         disabled={uploading}
       />
 
-      <CheckboxField
-        id="isPublic"
-        label={t('fieldIsPublicLabel', { default: 'Make document public' })}
-        checked={isPublic}
-        onChange={setIsPublic}
-        disabled={uploading}
-      />
+
     </>
   );
 }

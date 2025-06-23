@@ -32,7 +32,7 @@ export default function SyllabusUploadForm({ onUploadComplete }: SyllabusUploadF
   const [topics, setTopics] = useState<string[]>([]);
   const [purpose, setPurpose] = useState<DocumentPurpose[]>([]);
   const [keywords, setKeywords] = useState<string[]>([]);
-  const [isPublic, setIsPublic] = useState(true);
+
 
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +62,7 @@ export default function SyllabusUploadForm({ onUploadComplete }: SyllabusUploadF
     setTopics([]);
     setPurpose([]);
     setKeywords([]);
-    setIsPublic(true);
+
     setError(null);
     setFormError(null);
     setProgress(0);
@@ -121,7 +121,7 @@ export default function SyllabusUploadForm({ onUploadComplete }: SyllabusUploadF
         topics: topics.length > 0 ? topics : null,
         purpose: purpose.length > 0 ? purpose : null,
         keywords: keywords.length > 0 ? keywords : null,
-        is_public: isPublic,
+
       };
 
       const { error: insertError } = await supabase
@@ -186,8 +186,6 @@ export default function SyllabusUploadForm({ onUploadComplete }: SyllabusUploadF
         handlePurposeChange={handlePurposeChange}
         keywords={keywords}
         setKeywords={setKeywords}
-        isPublic={isPublic}
-        setIsPublic={setIsPublic}
         uploading={uploading}
         progress={progress}
         t={t}

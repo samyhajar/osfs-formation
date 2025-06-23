@@ -436,31 +436,167 @@ export async function fetchProvinces(): Promise<WPTerm[]> {
  */
 export async function fetchFormationUsers(): Promise<WPMember[]> {
   try {
-    // First, try to fetch all members and then filter
-    // This is more reliable than trying to filter by unknown categories
-    console.log('Fetching all members to filter for formation users...');
+    console.log('Fetching all members to filter for formation personnel...');
     const allMembers = await fetchMembers();
+    console.log(`✅ Fetched ${allMembers.length} total members from WordPress`);
 
-    // For now, return all members since we don't know the exact filtering criteria
-    // You can modify the filtering logic based on your specific requirements
+    // Define the formation positions we want to include
+    const formationPositions = [
+      'General Formation Coordinator',
+      'Novice Master',
+      'Assistant Novice Master',
+      'Master Of Scholastics',
+      'Formation Assistant',
+      'Formation Director',
+      'Postulant Director',
+      'Vocation Director',
+      'Co-Vocation Director',
+    ];
+
+    // Filter members by formation positions and active status
+    const filteredMembers = allMembers.filter((member) => {
+      // Check if member has embedded taxonomy data
+      if (!member._embedded?.['wp:term']) {
+        return false;
+      }
+
+      // Get all terms and find position terms
+      const terms = member._embedded['wp:term'].flat();
+      const positionTerms = terms.filter(
+        (term) => term.taxonomy === 'position',
+      );
+
+      // Check if any of the member's positions match our formation positions
+      const hasFormationPosition = positionTerms.some((positionTerm) => {
+        const positionName = positionTerm.name.toLowerCase().trim();
+
+        // Use exact matching or very specific partial matching for formation positions
+        return formationPositions.some((formationPos) => {
+          const normalizedFormationPos = formationPos.toLowerCase().trim();
+
+          // Exact match first
+          if (positionName === normalizedFormationPos) {
+            return true;
+          }
+
+          // Specific formation position matching
+          if (
+            normalizedFormationPos.includes('general formation coordinator') &&
+            positionName.includes('general') &&
+            positionName.includes('formation') &&
+            positionName.includes('coordinator')
+          ) {
+            return true;
+          }
+          if (
+            normalizedFormationPos.includes('novice master') &&
+            positionName.includes('novice') &&
+            positionName.includes('master') &&
+            !positionName.includes('assistant')
+          ) {
+            return true;
+          }
+          if (
+            normalizedFormationPos.includes('assistant novice master') &&
+            positionName.includes('assistant') &&
+            positionName.includes('novice') &&
+            positionName.includes('master')
+          ) {
+            return true;
+          }
+          if (
+            normalizedFormationPos.includes('master of scholastics') &&
+            positionName.includes('master') &&
+            positionName.includes('scholastic')
+          ) {
+            return true;
+          }
+          if (
+            normalizedFormationPos.includes('formation assistant') &&
+            positionName.includes('formation') &&
+            positionName.includes('assistant')
+          ) {
+            return true;
+          }
+          if (
+            normalizedFormationPos.includes('formation director') &&
+            positionName.includes('formation') &&
+            positionName.includes('director')
+          ) {
+            return true;
+          }
+          if (
+            normalizedFormationPos.includes('postulant director') &&
+            positionName.includes('postulant') &&
+            positionName.includes('director')
+          ) {
+            return true;
+          }
+          if (
+            normalizedFormationPos.includes('vocation director') &&
+            positionName.includes('vocation') &&
+            positionName.includes('director') &&
+            !positionName.includes('co-')
+          ) {
+            return true;
+          }
+          if (
+            normalizedFormationPos.includes('co-vocation director') &&
+            positionName.includes('co') &&
+            positionName.includes('vocation') &&
+            positionName.includes('director')
+          ) {
+            return true;
+          }
+
+          return false;
+        });
+      });
+
+      // Check if member is currently active (not former/retired)
+      // Look for state terms that indicate active status
+      const stateTerms = terms.filter((term) => term.taxonomy === 'state');
+      const isActive =
+        stateTerms.length === 0 ||
+        stateTerms.some((term) => {
+          const stateName = term.name.toLowerCase();
+          // Exclude former/retired members
+          return (
+            !stateName.includes('former') &&
+            !stateName.includes('retired') &&
+            !stateName.includes('emeritus') &&
+            !stateName.includes('deceased')
+          );
+        });
+
+      return hasFormationPosition && isActive;
+    });
+
     console.log(
-      `Fetched ${allMembers.length} total members as formation users.`,
+      `✅ Filtered to ${filteredMembers.length} formation personnel with formation positions`,
     );
-    return allMembers;
 
-    // Alternative approaches you can uncomment and try:
+    // Log the positions found for debugging
+    const foundPositions = new Set<string>();
+    const memberPositions: Array<{ name: string; positions: string[] }> = [];
 
-    // Option 1: Filter by category if you know the category slug
-    // const url = `${WP_MEMBERS_BASE_ENDPOINT}&categories=formation`;
+    filteredMembers.forEach((member) => {
+      const terms = member._embedded?.['wp:term']?.flat() || [];
+      const positionTerms = terms.filter(
+        (term) => term.taxonomy === 'position',
+      );
+      const positions = positionTerms.map((term) => term.name);
+      memberPositions.push({
+        name: member.title.rendered,
+        positions: positions,
+      });
+      positionTerms.forEach((term) => foundPositions.add(term.name));
+    });
 
-    // Option 2: Filter by custom field
-    // const url = `${WP_MEMBERS_BASE_ENDPOINT}&meta_key=formation&meta_value=true`;
+    console.log(`📊 Found positions: ${Array.from(foundPositions).join(', ')}`);
+    console.log(`👥 Members with their positions:`, memberPositions);
 
-    // Option 3: Filter by specific tag
-    // const url = `${WP_MEMBERS_BASE_ENDPOINT}&tags=formation`;
-
-    // Option 4: Search by keyword
-    // const url = `${WP_MEMBERS_BASE_ENDPOINT}&search=formation`;
+    return filteredMembers;
   } catch (error) {
     console.error('Error fetching formation users:', error);
     throw error; // Re-throw after logging
@@ -856,8 +992,14 @@ export async function fetchConfreresInFormation(): Promise<WPMember[]> {
     console.log(`✅ Fetched ${allMembers.length} total members from WordPress`);
 
     // Filter members by status (state taxonomy)
-    // We only want members with status: Novice, Scholastic, or Brother
-    const allowedStatuses = ['Novice', 'Scholastic', 'Brother'];
+    // We only want members with status: Postulant, Novice, Bro. Novice, Scholastic, Deacon
+    const allowedStatuses = [
+      'Postulant',
+      'Novice',
+      'Bro. Novice',
+      'Scholastic',
+      'Deacon',
+    ];
 
     const filteredMembers = allMembers.filter((member) => {
       // Check if member has embedded taxonomy data
@@ -876,11 +1018,39 @@ export async function fetchConfreresInFormation(): Promise<WPMember[]> {
         allowedStatuses.includes(term.name),
       );
 
-      return hasAllowedStatus;
+      // Debug logging for included members
+      if (hasAllowedStatus) {
+        const memberStatuses = stateTerms.map((term) => term.name).join(', ');
+        console.log(
+          `✅ Including member: ${member.title.rendered} (statuses: ${memberStatuses})`,
+        );
+      }
+
+      // Check if member is living (not deceased)
+      const isLiving = stateTerms.every((term) => {
+        const stateName = term.name.toLowerCase();
+        const isDeceased =
+          stateName.includes('deceased') ||
+          stateName.includes('dead') ||
+          stateName.includes('†') ||
+          stateName.includes('rip') ||
+          stateName.includes('former') ||
+          stateName.includes('retired');
+
+        if (isDeceased) {
+          console.log(
+            `⚰️ Filtering out deceased/former member: ${member.title.rendered} (status: ${term.name})`,
+          );
+        }
+
+        return !isDeceased;
+      });
+
+      return hasAllowedStatus && isLiving;
     });
 
     console.log(
-      `✅ Filtered to ${filteredMembers.length} confreres in formation (Novice, Scholastic, Brother)`,
+      `✅ Filtered to ${filteredMembers.length} confreres in formation (Postulant, Novice, Bro. Novice, Scholastic, Deacon)`,
     );
 
     // Log the statuses found for debugging

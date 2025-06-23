@@ -163,6 +163,7 @@
   },
   "AdminFormationPersonnelPage": {
     "title": "Ausbildungspersonal",
+    "description": "Durchsuchen und verwalten Sie Ausbildungspersonal, das die geistliche und akademische Entwicklung unserer Seminaristen und Kandidaten leitet und unterstützt. Umfasst Generalkoordinatoren der Ausbildung, Novizen-Meister, Assistenten der Novizen-Meister, Meister der Scholastiker, Ausbildungsassistenten, Ausbildungsleiter, Postulat-Direktoren, Berufungsdirektoren und Co-Berufungsdirektoren.",
     "errorPrefix": "Fehler:",
     "errorLoading": "Mitglieder konnten nicht geladen werden.",
     "emptyState": "Keine angegebenen Mitglieder gefunden.",
@@ -295,7 +296,7 @@
     "fieldPurposeLabel": "Zweck",
     "fieldTopicsLabel": "Themen (durch Komma getrennt)",
     "fieldKeywordsLabel": "Schlüsselwörter (durch Komma getrennt)",
-    "fieldIsPublicLabel": "Dokument öffentlich machen",
+
     "fieldTopicsPlaceholder": "z.B., Theologie, Spiritualität, Geschichte",
     "fieldKeywordsPlaceholder": "z.B., Berufung, Formation, Gebet",
     "categories": {
@@ -336,12 +337,16 @@
     "headerLang": "Sprache",
     "headerRegion": "Region",
     "headerCategory": "Kategorie",
+    "headerAuthor": "Autor",
     "headerCreated": "Erstellt",
     "headerActions": "Aktionen",
     "actionDownload": "Herunterladen",
     "actionDelete": "Löschen",
-    "optionsButtonLabel": "Dokumentoptionen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
     "deleting": "Wird gelöscht...",
+    "deleteConfirmation": "Sind Sie sicher, dass Sie dieses Dokument löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "optionsButtonLabel": "Dokumentoptionen",
     "downloading": "Wird heruntergeladen...",
     "SyllabusList": {
       "download": "Herunterladen",
@@ -402,11 +407,36 @@
     "title": "Administration",
     "description": "Systemeinstellungen und Konfigurationen verwalten",
     "userIntroductionTab": "Benutzereinführung",
+    "homepageSettingsTab": "Startseiten-Einstellungen",
     "settingsTab": "Einstellungen",
     "userIntroductionTitle": "Benutzereinführungsnachricht",
+    "homepageSettingsTitle": "Startseiten-Einstellungen",
+    "homepageSettingsDescription": "Anpassen der öffentlichen Startseite, die Besucher vor der Anmeldung sehen.",
     "systemSettingsTitle": "Systemeinstellungen",
     "systemSettingsDescription": "Zusätzliche Systemeinstellungen werden hier in Zukunft verfügbar sein.",
     "systemSettings": "Systemeinstellungen"
+  },
+  "HomepageSettings": {
+    "mainTitleSection": "Haupttitel-Bereich",
+    "titleLabel": "Haupttitel",
+    "subtitleLabel": "Untertitel",
+    "welcomeSection": "Willkommens-Bereich",
+    "welcomeTitleLabel": "Willkommenstitel",
+    "welcomeMessageLabel": "Willkommensnachricht",
+    "coordinatorSection": "Formationskoordinator-Bereich",
+    "coordinatorNameLabel": "Koordinatorname",
+    "coordinatorMessageLabel": "Koordinatornachricht",
+    "coordinatorImageLabel": "Koordinator-Foto URL",
+    "quoteSection": "Zitat-Bereich",
+    "quoteTextLabel": "Zitattext",
+    "quoteTranslationLabel": "Zitatübersetzung",
+    "newsSection": "Nachrichten-Bereich",
+    "newsTitleLabel": "Nachrichten-Bereichstitel",
+    "newsDescription": "Nachrichten zeigen automatisch kürzliche Ordinationen, Profess und andere Meilensteine an.",
+    "showSection": "Diesen Bereich anzeigen",
+    "saveButton": "Änderungen Speichern",
+    "saving": "Speichern...",
+    "saveSuccess": "Startseiten-Inhalt erfolgreich gespeichert!"
   },
   "UserIntroduction": {
     "coordinatorNameLabel": "Name des Koordinators",
@@ -504,7 +534,7 @@
   },
   "ConfreresInFormation": {
     "title": "Mitbrüder in Ausbildung",
-    "description": "Durchsuchen Sie Mitbrüder in Ausbildung: Novizen, Scholastiker und Brüder.",
+    "description": "Durchsuchen Sie Mitbrüder in Ausbildung: Postulanten, Novizen, Br. Novizen, Scholastiker und Diakone.",
     "loading": "Lade Mitbrüder in Ausbildung...",
     "error": "Fehler beim Laden der Daten der Mitbrüder in Ausbildung",
     "tryAgain": "Erneut versuchen",
@@ -541,5 +571,49 @@
     "noPositions": "Keine Positionen aufgelistet",
     "noMinistries": "Keine Dienste aufgelistet",
     "unknown": "Unbekannt"
+  },
+  "documents": {
+    "categories": {
+      "articles": "Artikel",
+      "presentations": "Präsentationen",
+      "videos": "Videos",
+      "miscellaneous": "Verschiedenes",
+      "sourcematerials": "Quellmaterialien",
+      "formationprograms": "Ausbildungsprogramme",
+      "reflections4dimensions": "Reflektionen 4 Dimensionen"
+    }
+  },
+  "Footer": {
+    "copyright": "© 2024 OSFS Formationsbüro | Tenui Nec Dimittam",
+    "backToOsfsWorld": "Zurück zu OSFS World",
+    "osfsWorld": "OSFS World",
+    "developedBy": "Entwickelt von",
+    "company": "Samy Hajar Development",
+    "location": "Wien, Österreich",
+    "impressum": "Impressum"
+  },
+  "Impressum": {
+    "title": "Impressum",
+    "subtitle": "Rechtliche Informationen & Entwickler-Credits",
+    "backToHome": "Zurück zur Startseite",
+    "developerInfo": "Entwickler-Informationen",
+    "name": "Name",
+    "company": "Unternehmen",
+    "address": "Adresse",
+    "contact": "Kontakt",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "services": "Professionelle Dienstleistungen",
+    "webDevelopment": "Webentwicklung & Design",
+    "fullStackDevelopment": "Full-Stack Anwendungsentwicklung",
+    "databaseDesign": "Datenbankdesign & Architektur",
+    "uiUxDesign": "UI/UX Design & Benutzererfahrung",
+    "consulting": "Technische Beratung & Projektmanagement",
+    "legalInfo": "Rechtliche Informationen",
+    "responsibleFor": "Verantwortlich für den Inhalt",
+    "responsibleForContent": "Samy Hajar, Beckmanngasse 74/8-9, 1150 Wien, Österreich",
+    "disclaimer": "Haftungsausschluss",
+    "disclaimerText": "Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.",
+    "lastUpdated": "Zuletzt aktualisiert"
   }
 }

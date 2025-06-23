@@ -10,6 +10,19 @@
       "reflectionsdimensions": "Réflexions & Dimensions"
     }
   },
+  "documents": {
+    "categories": {
+      "articles": "Articles",
+      "presentations": "Présentations",
+      "videos": "Vidéos",
+      "miscellaneous": "Divers",
+      "sourcematerials": "Matériaux Sources",
+      "formationprograms": "Programmes de Formation",
+      "reflectionsdimensions": "Réflexions & Dimensions",
+      "reflections4dimensions": "Réflexions 4 Dimensions",
+      "prayerdimensions": "Dimensions de la Prière"
+    }
+  },
   "WorkshopsPage": {
     "title": "Ateliers",
     "loading": "Chargement des ateliers...",
@@ -27,14 +40,21 @@
     "headerType": "Type",
     "headerLang": "Langue",
     "headerRegion": "Région",
-    "headerCategory": "Catégorie",
+    "headerAuthor": "Auteur",
     "headerCreated": "Créé le",
     "headerActions": "Actions",
     "download": "Télécharger",
     "downloading": "Téléchargement...",
     "downloadErrorNoPath": "Le chemin du fichier est manquant pour ce document.",
     "downloadErrorSignUrlFailed": "Échec de la création du lien de téléchargement.",
-    "downloadErrorGeneric": "Échec du téléchargement :"
+    "downloadErrorGeneric": "Échec du téléchargement :",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "deleting": "Suppression...",
+    "optionsButtonLabel": "Options du document",
+    "deleteConfirmation": "Êtes-vous sûr de vouloir supprimer ce document ? Cette action ne peut pas être annulée.",
+    "deleteErrorNoPath": "Impossible de supprimer : le chemin du fichier est manquant.",
+    "deleteErrorGeneric": "Échec de la suppression :"
   },
   "NotFound": {
     "title": "Page Non Trouvée",
@@ -68,7 +88,7 @@
     "headerType": "Type",
     "headerLang": "Langue",
     "headerRegion": "Région",
-    "headerCategory": "Catégorie",
+    "headerAuthor": "Auteur",
     "headerCreated": "Créé le",
     "selectedDocuments": "Documents Sélectionnés",
     "change": "Modifier",
@@ -129,5 +149,21 @@
     "publicLabel": "Public",
     "cancelButton": "Annuler",
     "updateButton": "Mettre à Jour le Document"
+  },
+  "AdminWorkshopsPage": {
+    "title": "Ateliers",
+    "uploadWorkshop": "Téléverser un atelier",
+    "uploadWorkshopTitle": "Téléverser un atelier",
+    "uploadWorkshopDescription": "Téléverser un nouveau fichier d'atelier sur la plateforme",
+    "loading": "Chargement des ateliers...",
+    "noWorkshops": "Aucun atelier disponible. Créez un atelier pour commencer.",
+    "workshopsTitle": "Ateliers disponibles",
+    "workshops": {
+      "general": "Général",
+      "prayer": "Prière",
+      "community": "Communauté",
+      "mission": "Mission",
+      "default": "Atelier"
+    }
   }
 }

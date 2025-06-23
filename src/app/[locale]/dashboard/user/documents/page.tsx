@@ -72,10 +72,9 @@ export default function DocumentsPage() {
             updated_at,
             region,
             language,
-            topics,
-            purpose,
-            keywords,
-            is_public
+                      topics,
+          purpose,
+          keywords
           `);
 
         // Apply filters

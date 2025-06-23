@@ -5,45 +5,9 @@ import { FileDropzone } from '@/components/admin/documents/FileDropzone';
 import { UploadProgress } from '@/components/admin/documents/UploadProgress';
 import { FormField } from '@/components/admin/documents/FormField';
 import { DatalistField } from '@/components/admin/documents/DatalistField';
-import { CheckboxField } from '@/components/admin/documents/CheckboxField';
+// import { CheckboxField } from '@/components/admin/documents/CheckboxField';
 import { useWorkshopDocumentUpload } from '@/hooks/useWorkshopDocumentUpload';
-
-// Common data arrays for form fields
-const commonRegions = ['Global', 'Africa', 'Asia', 'Europe', 'North America', 'South America'];
-const commonLanguages = ['English', 'French', 'Spanish', 'German', 'Italian', 'Portuguese'];
-
-const allowedMimeTypes = [
-  // Documents
-  'application/pdf',
-  'application/msword',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  'application/vnd.ms-powerpoint',
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-  'application/vnd.ms-excel',
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  'text/plain',
-  'application/rtf',
-  'text/csv',
-  'application/vnd.oasis.opendocument.text',
-  'application/vnd.oasis.opendocument.spreadsheet',
-  'application/vnd.oasis.opendocument.presentation',
-  'application/epub+zip',
-  'text/html',
-  // Images
-  'image/png',
-  'image/jpeg',
-  'image/gif',
-  // Video
-  'video/mp4',
-  'video/quicktime',
-  'video/x-msvideo',
-  // Audio
-  'audio/mpeg',
-  'audio/wav',
-  // Archives
-  'application/zip',
-  'application/x-zip-compressed',
-];
+import { commonRegions, commonLanguages, allowedMimeTypes } from './constants';
 
 interface WorkshopUploadFormProps {
   onUploadComplete?: () => void;
@@ -58,7 +22,6 @@ export default function WorkshopUploadForm({ onUploadComplete }: WorkshopUploadF
   const [language, setLanguage] = useState<string>('');
   const [topics, setTopics] = useState<string[]>([]);
   const [keywords, setKeywords] = useState<string[]>([]);
-  const [isPublic, setIsPublic] = useState(true);
 
   // Use the custom hook for upload logic
   const { uploadWorkshopDocument, loading, error: uploadError, uploadProgress } = useWorkshopDocumentUpload();
@@ -96,7 +59,6 @@ export default function WorkshopUploadForm({ onUploadComplete }: WorkshopUploadF
         language,
         topics,
         keywords,
-        isPublic,
       });
 
       // Reset form on successful upload
@@ -190,14 +152,6 @@ export default function WorkshopUploadForm({ onUploadComplete }: WorkshopUploadF
         disabled={loading}
       />
 
-      <CheckboxField
-        id="isPublic"
-        label="Make workshop public"
-        checked={isPublic}
-        onChange={setIsPublic}
-        disabled={loading}
-      />
-
       <div className="pt-4 border-t border-gray-200">
         <button
           type="submit"
@@ -208,7 +162,7 @@ export default function WorkshopUploadForm({ onUploadComplete }: WorkshopUploadF
               : 'bg-indigo-600 hover:bg-indigo-700'
           } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
         >
-          {loading ? 'Creating Workshop...' : 'Create Workshop'}
+          {loading ? 'Uploading...' : 'Upload Workshop File'}
         </button>
       </div>
     </form>

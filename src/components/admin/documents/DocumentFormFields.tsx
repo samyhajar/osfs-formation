@@ -4,7 +4,6 @@ import React from 'react';
 import { FormField } from './FormField';
 import { SelectField } from './SelectField';
 import { DatalistField } from './DatalistField';
-import { CheckboxField } from './CheckboxField';
 import { MultiSelectButtons } from './MultiSelectButtons';
 import { FileDropzone } from './FileDropzone';
 import { DocumentCategory, DocumentPurpose } from '@/types/document';
@@ -30,8 +29,6 @@ interface DocumentFormFieldsProps {
   handlePurposeChange: (purpose: DocumentPurpose) => void;
   keywords: string[];
   setKeywords: (keywords: string[]) => void;
-  isPublic: boolean;
-  setIsPublic: (isPublic: boolean) => void;
   disabled: boolean;
   t: ReturnType<typeof import('next-intl').useTranslations>;
   documentCategories: DocumentCategory[];
@@ -57,7 +54,6 @@ export function DocumentFormFields({
   topics, setTopics,
   purpose, handlePurposeChange,
   keywords, setKeywords,
-  isPublic, setIsPublic,
   disabled,
   t,
   documentCategories,
@@ -183,13 +179,7 @@ export function DocumentFormFields({
         disabled={disabled}
       />
 
-      <CheckboxField
-        id="isPublic"
-        label={t('publicLabel', { fallback: 'Make document public' })}
-        checked={isPublic}
-        onChange={setIsPublic}
-        disabled={disabled}
-      />
+
     </>
   );
 }

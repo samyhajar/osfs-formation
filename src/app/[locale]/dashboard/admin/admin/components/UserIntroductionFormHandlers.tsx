@@ -9,6 +9,10 @@ interface UserIntroductionFormData {
   left_column_image_position?: 'above' | 'below';
   right_column_image_url?: string;
   right_column_image_position?: 'above' | 'below';
+  left_column_gallery_urls: string[];
+  left_column_gallery_titles: string[];
+  right_column_gallery_urls: string[];
+  right_column_gallery_titles: string[];
 }
 
 export const useFormHandlers = (
@@ -38,7 +42,7 @@ export const useFormHandlers = (
 
       const { data: signedUrlData, error: signedUrlError } = await supabase.storage
         .from('images')
-        .createSignedUrl(filePath, 31536000);
+        .createSignedUrl(filePath, 31536000); // 1 year expiry
 
       if (signedUrlError) {
         throw new Error(`Failed to create signed URL: ${signedUrlError.message}`);
@@ -65,8 +69,7 @@ export const useFormHandlers = (
 
       if (imageUrl) {
         const urlParts = imageUrl.split('/');
-        const fileName = urlParts[urlParts.length - 1];
-        const filePath = `user-introduction/${fileName}`;
+        const filePath = `user-introduction/${urlParts[urlParts.length - 1]}`;
 
         const { error: deleteError } = await supabase.storage
           .from('images')

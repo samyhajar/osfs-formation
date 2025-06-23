@@ -52,7 +52,6 @@ export type Database = {
           file_size: number | null
           file_type: string | null
           id: string
-          is_public: boolean | null
           keywords: string[] | null
           language: string | null
           purpose: Database["public"]["Enums"]["document_purpose"][] | null
@@ -71,7 +70,6 @@ export type Database = {
           file_size?: number | null
           file_type?: string | null
           id?: string
-          is_public?: boolean | null
           keywords?: string[] | null
           language?: string | null
           purpose?: Database["public"]["Enums"]["document_purpose"][] | null
@@ -90,7 +88,6 @@ export type Database = {
           file_size?: number | null
           file_type?: string | null
           id?: string
-          is_public?: boolean | null
           keywords?: string[] | null
           language?: string | null
           purpose?: Database["public"]["Enums"]["document_purpose"][] | null
@@ -122,6 +119,63 @@ export type Database = {
           selected_member_ids?: Json
           updated_at?: string
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      homepage_content: {
+        Row: {
+          active: boolean | null
+          coordinator_image_url: string | null
+          coordinator_message: string | null
+          coordinator_name: string | null
+          created_at: string | null
+          id: string
+          news_title: string | null
+          quote_text: string | null
+          quote_translation: string | null
+          show_coordinator_section: boolean | null
+          show_news_section: boolean | null
+          subtitle: string
+          title: string
+          updated_at: string | null
+          welcome_message: string
+          welcome_title: string
+        }
+        Insert: {
+          active?: boolean | null
+          coordinator_image_url?: string | null
+          coordinator_message?: string | null
+          coordinator_name?: string | null
+          created_at?: string | null
+          id?: string
+          news_title?: string | null
+          quote_text?: string | null
+          quote_translation?: string | null
+          show_coordinator_section?: boolean | null
+          show_news_section?: boolean | null
+          subtitle?: string
+          title?: string
+          updated_at?: string | null
+          welcome_message?: string
+          welcome_title?: string
+        }
+        Update: {
+          active?: boolean | null
+          coordinator_image_url?: string | null
+          coordinator_message?: string | null
+          coordinator_name?: string | null
+          created_at?: string | null
+          id?: string
+          news_title?: string | null
+          quote_text?: string | null
+          quote_translation?: string | null
+          show_coordinator_section?: boolean | null
+          show_news_section?: boolean | null
+          subtitle?: string
+          title?: string
+          updated_at?: string | null
+          welcome_message?: string
+          welcome_title?: string
         }
         Relationships: []
       }
@@ -267,11 +321,11 @@ export type Database = {
           created_at: string
           id: string
           left_column_content: string
-          left_column_image_position: string | null
-          left_column_image_url: string | null
+          left_column_gallery_titles: string[] | null
+          left_column_gallery_urls: string[] | null
           right_column_content: string
-          right_column_image_position: string | null
-          right_column_image_url: string | null
+          right_column_gallery_titles: string[] | null
+          right_column_gallery_urls: string[] | null
           updated_at: string
         }
         Insert: {
@@ -280,11 +334,11 @@ export type Database = {
           created_at?: string
           id?: string
           left_column_content: string
-          left_column_image_position?: string | null
-          left_column_image_url?: string | null
+          left_column_gallery_titles?: string[] | null
+          left_column_gallery_urls?: string[] | null
           right_column_content: string
-          right_column_image_position?: string | null
-          right_column_image_url?: string | null
+          right_column_gallery_titles?: string[] | null
+          right_column_gallery_urls?: string[] | null
           updated_at?: string
         }
         Update: {
@@ -293,14 +347,76 @@ export type Database = {
           created_at?: string
           id?: string
           left_column_content?: string
-          left_column_image_position?: string | null
-          left_column_image_url?: string | null
+          left_column_gallery_titles?: string[] | null
+          left_column_gallery_urls?: string[] | null
           right_column_content?: string
-          right_column_image_position?: string | null
-          right_column_image_url?: string | null
+          right_column_gallery_titles?: string[] | null
+          right_column_gallery_urls?: string[] | null
           updated_at?: string
         }
         Relationships: []
+      }
+      workshop_files: {
+        Row: {
+          author: string | null
+          created_at: string
+          description: string | null
+          file_path: string
+          file_size: number | null
+          file_type: string | null
+          file_url: string | null
+          id: string
+          keywords: string[] | null
+          language: string | null
+          region: string | null
+          title: string
+          topics: string[] | null
+          updated_at: string
+          workshop_id: string
+        }
+        Insert: {
+          author?: string | null
+          created_at?: string
+          description?: string | null
+          file_path: string
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          keywords?: string[] | null
+          language?: string | null
+          region?: string | null
+          title: string
+          topics?: string[] | null
+          updated_at?: string
+          workshop_id: string
+        }
+        Update: {
+          author?: string | null
+          created_at?: string
+          description?: string | null
+          file_path?: string
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          keywords?: string[] | null
+          language?: string | null
+          region?: string | null
+          title?: string
+          topics?: string[] | null
+          updated_at?: string
+          workshop_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workshop_files_workshop_id_fkey"
+            columns: ["workshop_id"]
+            isOneToOne: false
+            referencedRelation: "workshops"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       workshops: {
         Row: {
@@ -312,7 +428,6 @@ export type Database = {
           file_url: string | null
           folder_path: string | null
           id: string
-          is_public: boolean | null
           keywords: string[] | null
           language: string | null
           region: string | null
@@ -329,7 +444,6 @@ export type Database = {
           file_url?: string | null
           folder_path?: string | null
           id?: string
-          is_public?: boolean | null
           keywords?: string[] | null
           language?: string | null
           region?: string | null
@@ -346,7 +460,6 @@ export type Database = {
           file_url?: string | null
           folder_path?: string | null
           id?: string
-          is_public?: boolean | null
           keywords?: string[] | null
           language?: string | null
           region?: string | null

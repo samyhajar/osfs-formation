@@ -23,7 +23,6 @@ interface DocumentUpdateData {
   topics: string[];
   purpose: DocumentPurpose[];
   keywords: string[];
-  isPublic: boolean;
   file: File | null;
 }
 
@@ -59,7 +58,6 @@ export function useDocumentUpdate({
       topics,
       purpose,
       keywords,
-      isPublic,
       file,
     } = data;
 
@@ -138,7 +136,6 @@ export function useDocumentUpdate({
               topics: topics.length > 0 ? topics : null,
               purpose: purpose.length > 0 ? purpose : null,
               keywords: keywords.length > 0 ? keywords : null,
-              is_public: isPublic,
               updated_at: new Date().toISOString(),
             }
           : {
@@ -154,7 +151,6 @@ export function useDocumentUpdate({
               topics: topics.length > 0 ? topics : null,
               purpose: purpose.length > 0 ? purpose : null,
               keywords: keywords.length > 0 ? keywords : null,
-              is_public: isPublic,
               updated_at: new Date().toISOString(),
             };
 

@@ -51,8 +51,7 @@ export function useDocuments(filters: FilterState, authLoading: boolean) {
             language,
             topics,
             purpose,
-            keywords,
-            is_public
+            keywords
           `);
 
         // Apply filters

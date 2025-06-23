@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { SWRProvider } from "@/components/providers/SWRProvider";
 import { Toaster } from 'react-hot-toast';
 import { ReactNode } from 'react';
 // Imports for next-intl
@@ -57,10 +58,12 @@ export default async function LocaleLayout({
       <body className="antialiased font-sans">
         {/* NextIntlClientProvider now receives server-fetched messages */}
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <AuthProvider>
-            {children}
-            <Toaster position="bottom-center" />
-          </AuthProvider>
+          <SWRProvider>
+            <AuthProvider>
+              {children}
+              <Toaster position="bottom-center" />
+            </AuthProvider>
+          </SWRProvider>
         </NextIntlClientProvider>
       </body>
     </html>

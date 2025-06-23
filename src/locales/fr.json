@@ -244,7 +244,7 @@
     "fieldPurposeLabel": "Objectif",
     "fieldTopicsLabel": "Sujets (séparés par des virgules)",
     "fieldKeywordsLabel": "Mots-clés (séparés par des virgules)",
-    "fieldIsPublicLabel": "Rendre le document public",
+
     "fieldTopicsPlaceholder": "ex., Théologie, Spiritualité, Histoire",
     "fieldKeywordsPlaceholder": "ex., Vocation, Formation, Prière",
     "categories": {
@@ -287,14 +287,18 @@
     "headerLang": "Langue",
     "headerRegion": "Région",
     "headerCategory": "Catégorie",
+    "headerAuthor": "Auteur",
     "headerCreated": "Créé",
     "headerActions": "Actions",
     "actionDownload": "Télécharger",
     "actionDelete": "Supprimer",
     "download": "Télécharger",
     "downloading": "Téléchargement en cours...",
-    "optionsButtonLabel": "Options du document",
+    "edit": "Modifier",
+    "delete": "Supprimer",
     "deleting": "Suppression en cours...",
+    "deleteConfirmation": "Êtes-vous sûr de vouloir supprimer ce document ? Cette action ne peut pas être annulée.",
+    "optionsButtonLabel": "Options du document",
     "SyllabusList": {
       "download": "Télécharger",
       "delete": "Supprimer"
@@ -354,11 +358,69 @@
     "title": "Administration",
     "description": "Gérer les paramètres et configurations du système",
     "userIntroductionTab": "Introduction Utilisateur",
+    "homepageSettingsTab": "Paramètres de Page d'Accueil",
     "settingsTab": "Paramètres",
     "userIntroductionTitle": "Message d'Introduction Utilisateur",
+    "homepageSettingsTitle": "Paramètres de Page d'Accueil",
+    "homepageSettingsDescription": "Personnaliser la page d'accueil publique que les visiteurs voient avant de se connecter.",
     "systemSettingsTitle": "Paramètres Système",
     "systemSettingsDescription": "Des paramètres système supplémentaires seront disponibles ici à l'avenir.",
     "systemSettings": "Paramètres Système"
+  },
+  "Footer": {
+    "copyright": "© 2024 Bureau de Formation OSFS | Tenui Nec Dimittam",
+    "backToOsfsWorld": "Retour au Monde OSFS",
+    "osfsWorld": "Monde OSFS",
+    "developedBy": "Développé par",
+    "company": "Samy Hajar Development",
+    "location": "Vienne, Autriche",
+    "impressum": "Mentions Légales"
+  },
+  "HomepageSettings": {
+    "mainTitleSection": "Section Titre Principal",
+    "titleLabel": "Titre Principal",
+    "subtitleLabel": "Sous-titre",
+    "welcomeSection": "Section Bienvenue",
+    "welcomeTitleLabel": "Titre de Bienvenue",
+    "welcomeMessageLabel": "Message de Bienvenue",
+    "coordinatorSection": "Section Coordinateur de Formation",
+    "coordinatorNameLabel": "Nom du Coordinateur",
+    "coordinatorMessageLabel": "Message du Coordinateur",
+    "coordinatorImageLabel": "URL Photo du Coordinateur",
+    "quoteSection": "Section Citation",
+    "quoteTextLabel": "Texte de Citation",
+    "quoteTranslationLabel": "Traduction de Citation",
+    "newsSection": "Section Actualités",
+    "newsTitleLabel": "Titre Section Actualités",
+    "newsDescription": "Les actualités afficheront automatiquement les ordinations récentes, professions et autres jalons.",
+    "showSection": "Afficher cette section",
+    "saveButton": "Enregistrer les Modifications",
+    "saving": "Enregistrement...",
+    "saveSuccess": "Contenu de la page d'accueil enregistré avec succès !"
+  },
+  "Impressum": {
+    "title": "Mentions Légales",
+    "subtitle": "Informations Légales et Crédits Développeur",
+    "backToHome": "Retour à l'Accueil",
+    "developerInfo": "Informations Développeur",
+    "name": "Nom",
+    "company": "Entreprise",
+    "address": "Adresse",
+    "contact": "Contact",
+    "email": "Email",
+    "phone": "Téléphone",
+    "services": "Services Professionnels",
+    "webDevelopment": "Développement Web et Design",
+    "fullStackDevelopment": "Développement d'Applications Full-Stack",
+    "databaseDesign": "Conception et Architecture de Base de Données",
+    "uiUxDesign": "Design UI/UX et Expérience Utilisateur",
+    "consulting": "Conseil Technique et Gestion de Projet",
+    "legalInfo": "Informations Légales",
+    "responsibleFor": "Responsable du contenu",
+    "responsibleForContent": "Samy Hajar, Beckmanngasse 74/8-9, 1150 Wien, Austria",
+    "disclaimer": "Clause de non-responsabilité",
+    "disclaimerText": "Malgré un contrôle minutieux du contenu, nous déclinons toute responsabilité pour le contenu des liens externes. Les opérateurs des pages liées sont seuls responsables de leur contenu.",
+    "lastUpdated": "Dernière mise à jour"
   },
   "UserIntroduction": {
     "coordinatorNameLabel": "Nom du Coordinateur",
@@ -371,6 +433,8 @@
   "AdminWorkshopsPage": {
     "title": "Ateliers",
     "uploadWorkshop": "Téléverser un Atelier",
+    "uploadWorkshopTitle": "Téléverser un atelier",
+    "uploadWorkshopDescription": "Téléverser un nouveau fichier d'atelier sur la plateforme",
     "loading": "Chargement des ateliers...",
     "noWorkshops": "Aucun atelier disponible. Créez un atelier pour commencer.",
     "workshopsTitle": "Ateliers Disponibles",
@@ -509,5 +573,16 @@
     "noPositions": "Aucune position listée",
     "noMinistries": "Aucun ministère listé",
     "unknown": "Inconnu"
+  },
+  "documents": {
+    "categories": {
+      "articles": "Articles",
+      "presentations": "Présentations",
+      "videos": "Vidéos",
+      "miscellaneous": "Divers",
+      "sourcematerials": "Matériaux Sources",
+      "formationprograms": "Programmes de Formation",
+      "reflections4dimensions": "Réflexions 4 Dimensions"
+    }
   }
 }

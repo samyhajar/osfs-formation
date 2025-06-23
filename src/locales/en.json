@@ -207,6 +207,7 @@
   },
   "AdminFormationPersonnelPage": {
     "title": "Formation Personnel",
+    "description": "Browse and manage formation personnel who guide and support the spiritual and academic development of our seminarians and candidates. Includes General Formation Coordinators, Novice Masters, Assistant Novice Masters, Masters of Scholastics, Formation Assistants, Formation Directors, Postulant Directors, Vocation Directors, and Co-Vocation Directors.",
     "errorPrefix": "Error:",
     "errorLoading": "Failed to load members.",
     "emptyState": "No specified members found.",
@@ -306,6 +307,39 @@
     "of": "of",
     "rowsPerPage": "Rows per page:",
     "all": "All"
+  },
+  "Footer": {
+    "copyright": "© 2024 OSFS Formation Office | Tenui Nec Dimittam",
+    "backToOsfsWorld": "Back to OSFS World",
+    "osfsWorld": "OSFS World",
+    "developedBy": "Developed by",
+    "company": "Samy Hajar Development",
+    "location": "Vienna, Austria",
+    "impressum": "Impressum"
+  },
+  "Impressum": {
+    "title": "Impressum",
+    "subtitle": "Legal Information & Developer Credits",
+    "backToHome": "Back to Home",
+    "developerInfo": "Developer Information",
+    "name": "Name",
+    "company": "Company",
+    "address": "Address",
+    "contact": "Contact",
+    "email": "Email",
+    "phone": "Phone",
+    "services": "Professional Services",
+    "webDevelopment": "Web Development & Design",
+    "fullStackDevelopment": "Full-Stack Application Development",
+    "databaseDesign": "Database Design & Architecture",
+    "uiUxDesign": "UI/UX Design & User Experience",
+    "consulting": "Technical Consulting & Project Management",
+    "legalInfo": "Legal Information",
+    "responsibleFor": "Responsible for content",
+    "responsibleForContent": "Samy Hajar, Beckmanngasse 74/8-9, 1150 Wien, Austria",
+    "disclaimer": "Disclaimer",
+    "disclaimerText": "Despite careful content control, we assume no liability for the content of external links. The operators of the linked pages are solely responsible for their content.",
+    "lastUpdated": "Last updated"
   },
   "Auth": {
     "signInTitle": "Sign In",
@@ -513,7 +547,7 @@
     "fieldPurposeLabel": "Purpose",
     "fieldTopicsLabel": "Topics (comma-separated)",
     "fieldKeywordsLabel": "Keywords (comma-separated)",
-    "fieldIsPublicLabel": "Make document public",
+
     "fieldTopicsPlaceholder": "e.g., Theology, Spirituality, History",
     "fieldKeywordsPlaceholder": "e.g., Vocation, Formation, Prayer",
     "categories": {
@@ -556,14 +590,18 @@
     "headerLang": "Lang",
     "headerRegion": "Region",
     "headerCategory": "Category",
+    "headerAuthor": "Author",
     "headerCreated": "Created",
     "headerActions": "Actions",
     "actionDownload": "Download",
     "actionDelete": "Delete",
     "download": "Download",
     "downloading": "Downloading...",
-    "optionsButtonLabel": "Document options",
+    "edit": "Edit",
+    "delete": "Delete",
     "deleting": "Deleting...",
+    "deleteConfirmation": "Are you sure you want to delete this document? This action cannot be undone.",
+    "optionsButtonLabel": "Document options",
     "SyllabusList": {
       "download": "Download",
       "delete": "Delete"
@@ -618,11 +656,36 @@
     "title": "Administration",
     "description": "Manage system settings and configurations",
     "userIntroductionTab": "User Introduction",
+    "homepageSettingsTab": "Homepage Settings",
     "settingsTab": "Settings",
     "userIntroductionTitle": "User Introduction Message",
+    "homepageSettingsTitle": "Homepage Settings",
+    "homepageSettingsDescription": "Customize the public homepage that visitors see before logging in.",
     "systemSettingsTitle": "System Settings",
     "systemSettingsDescription": "Additional system settings will be available here in the future.",
     "systemSettings": "System Settings"
+  },
+  "HomepageSettings": {
+    "mainTitleSection": "Main Title Section",
+    "titleLabel": "Main Title",
+    "subtitleLabel": "Subtitle",
+    "welcomeSection": "Welcome Section",
+    "welcomeTitleLabel": "Welcome Title",
+    "welcomeMessageLabel": "Welcome Message",
+    "coordinatorSection": "Formation Coordinator Section",
+    "coordinatorNameLabel": "Coordinator Name",
+    "coordinatorMessageLabel": "Coordinator Message",
+    "coordinatorImageLabel": "Coordinator Photo URL",
+    "quoteSection": "Quote Section",
+    "quoteTextLabel": "Quote Text",
+    "quoteTranslationLabel": "Quote Translation",
+    "newsSection": "News Section",
+    "newsTitleLabel": "News Section Title",
+    "newsDescription": "News will automatically display recent ordinations, professions, and other milestones.",
+    "showSection": "Show this section",
+    "saveButton": "Save Changes",
+    "saving": "Saving...",
+    "saveSuccess": "Homepage content saved successfully!"
   },
   "UserIntroduction": {
     "coordinatorNameLabel": "Coordinator Name",
@@ -635,6 +698,8 @@
   "AdminWorkshopsPage": {
     "title": "Workshops",
     "uploadWorkshop": "Upload Workshop",
+    "uploadWorkshopTitle": "Upload Workshop",
+    "uploadWorkshopDescription": "Upload a new workshop file to the platform",
     "loading": "Loading workshops...",
     "noWorkshops": "No workshops available. Create a workshop to get started.",
     "workshopsTitle": "Available Workshops",
@@ -691,7 +756,7 @@
     "fieldKeywordsLabel": "Keywords",
     "fieldKeywordsPlaceholder": "Type a keyword and press Enter",
     "fieldPublicLabel": "Public",
-    "fieldPublicHelper": "Make this document publicly accessible",
+
     "currentFileLabel": "Current File",
     "replaceFileLabel": "Replace File",
     "replaceFileHelper": "Upload a new file to replace the current one",
@@ -721,7 +786,7 @@
   },
   "ConfreresInFormation": {
     "title": "Confreres in Formation",
-    "description": "Browse confreres in formation: novices, scholastics, and brothers.",
+    "description": "Browse confreres in formation: postulants, novices, bro. novices, scholastics, and deacons.",
     "loading": "Loading confreres in formation...",
     "error": "Failed to load confreres in formation data",
     "tryAgain": "Try Again",
@@ -758,5 +823,16 @@
     "noPositions": "No positions listed",
     "noMinistries": "No ministries listed",
     "unknown": "Unknown"
+  },
+  "documents": {
+    "categories": {
+      "articles": "Articles",
+      "presentations": "Presentations",
+      "videos": "Videos",
+      "miscellaneous": "Miscellaneous",
+      "sourcematerials": "Source Materials",
+      "formationprograms": "Formation Programs",
+      "reflections4dimensions": "Reflections 4 Dimensions"
+    }
   }
 }

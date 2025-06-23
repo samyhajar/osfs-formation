@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronLeftIcon } from '@heroicons/react/24/solid';
-import { WorkshopFilesList } from '@/components/admin/workshops/WorkshopFilesList';
+import WorkshopFilesList from '@/components/shared/WorkshopFilesList';
 import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
 import { Workshop } from '@/types/workshop';
@@ -43,10 +43,6 @@ export default function WorkshopPage() {
           throw new Error('Workshop not found');
         }
 
-        if (!data.folder_path) {
-          throw new Error('Workshop folder path not found');
-        }
-
         setWorkshop(data);
       } catch (err) {
         console.error('Error fetching workshop:', err);
@@ -67,7 +63,7 @@ export default function WorkshopPage() {
     );
   }
 
-  if (error || !workshop || !workshop.folder_path) {
+  if (error || !workshop) {
     return (
       <div className="p-6">
         <div className="bg-red-50 border border-red-200 rounded-md p-4 text-red-700">
@@ -80,7 +76,7 @@ export default function WorkshopPage() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <main className="flex-1 p-6">
-        {/* Back link and Title */}
+        {/* Back link */}
         <div className="mb-6 flex items-center gap-3">
           <Link
             href={basePath}
@@ -89,29 +85,14 @@ export default function WorkshopPage() {
           >
             <ChevronLeftIcon className="h-5 w-5" />
           </Link>
-          <h1 className="text-2xl font-semibold text-gray-900">
-            {workshop.title}
-          </h1>
         </div>
 
-        {/* Workshop Description */}
-        {workshop.description && (
-          <div className="mb-8 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-            <p className="text-gray-600">{workshop.description}</p>
-          </div>
-        )}
-
-        {/* Workshop Files */}
-        <div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Workshop Files</h2>
-          <div className="bg-white rounded-lg shadow-md border border-gray-100 p-4">
-            <WorkshopFilesList
-              workshopId={workshopId}
-              folderPath={workshop.folder_path}
-              hideUpload={true} // Users can only view files
-            />
-          </div>
-        </div>
+        {/* Workshop Files List (Read-only for users) */}
+        <WorkshopFilesList
+          workshopId={workshopId}
+          workshopTitle={workshop.title}
+          userRole="user"
+        />
       </main>
     </div>
   );

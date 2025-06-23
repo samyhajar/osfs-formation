@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
 import { SyllabusDocument } from '@/types/document';
-import SyllabusFileList from '@/components/user/syllabus/SyllabusFileList';
+import SyllabusFileList from '@/components/shared/syllabus/SyllabusFileList';
 
 const TARGET_TABLE = 'syllabus_documents';
 
@@ -38,8 +38,7 @@ export default function CommonSyllabusPage() {
           language,
           topics,
           purpose,
-          keywords,
-          is_public
+          keywords
         `)
         .order('created_at', { ascending: false });
 

@@ -13,7 +13,7 @@ import {
 import FR from 'country-flag-icons/react/3x2/FR';
 import ES from 'country-flag-icons/react/3x2/ES';
 import DE from 'country-flag-icons/react/3x2/DE';
-import GB from 'country-flag-icons/react/3x2/GB';
+import US from 'country-flag-icons/react/3x2/US'; // Use US for English/USA flag
 import IT from 'country-flag-icons/react/3x2/IT';
 import BR from 'country-flag-icons/react/3x2/BR';
 
@@ -22,14 +22,14 @@ const flagComponents: Record<string, React.ComponentType<{ title?: string; class
   FR: FR as React.ComponentType<{ title?: string; className?: string }>,
   ES: ES as React.ComponentType<{ title?: string; className?: string }>,
   DE: DE as React.ComponentType<{ title?: string; className?: string }>,
-  GB: GB as React.ComponentType<{ title?: string; className?: string }>,
+  US: US as React.ComponentType<{ title?: string; className?: string }>,
   IT: IT as React.ComponentType<{ title?: string; className?: string }>,
   BR: BR as React.ComponentType<{ title?: string; className?: string }>,
 };
 
 // Map full language names (lowercase) to country codes
 const languageNameToCodeMap: { [key: string]: string } = {
-  english: 'GB',
+  english: 'US',
   french: 'FR',
   spanish: 'ES',
   german: 'DE',
@@ -92,7 +92,7 @@ export function DocumentRow({
           </div>
           <div>
             <div className="text-sm font-medium text-gray-900">
-              <Link href={`/dashboard/documents/${doc.id}`} className="hover:text-accent-primary transition-colors">
+              <Link href={`/dashboard/user/documents/${doc.id}`} className="hover:text-accent-primary transition-colors">
                 {doc.title}
               </Link>
             </div>

@@ -21,6 +21,8 @@ export type SortKey =
   | 'created_at'
   | 'language'
   | 'region'
+  | 'author_name'
+  | 'author'
   | null;
 
 export type SortDirection = 'asc' | 'desc' | null;
@@ -63,5 +65,4 @@ export interface SyllabusDocument {
   topics?: string[] | null;
   purpose?: DocumentPurpose[] | null;
   keywords?: string[] | null;
-  is_public?: boolean | null;
 }

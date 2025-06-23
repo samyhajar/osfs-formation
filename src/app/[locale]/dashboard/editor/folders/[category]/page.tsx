@@ -1,14 +1,13 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { ChevronLeftIcon, ArrowPathIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
+import { ChevronLeftIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import { createClient } from '@/lib/supabase/browser-client';
-import { Database } from '@/types/supabase';
-import { Document, DocumentCategory } from '@/types/document';
-import { SimpleDocumentCard } from '@/components/shared/SimpleDocumentCard';
+import { Document, DocumentCategory, SortKey, SortDirection } from '@/types/document';
 import { convertToDocuments } from '@/lib/utils/document-utils';
+import FolderDocumentList from '@/components/shared/FolderDocumentList';
 
 export default function CategoryDocumentsPage() {
   const params = useParams();
@@ -18,6 +17,10 @@ export default function CategoryDocumentsPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // --- Sorting State ---
+  const [sortKey, setSortKey] = useState<SortKey>('created_at');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
   const fetchCategoryDocuments = useCallback(async () => {
     if (!category) {
@@ -31,12 +34,12 @@ export default function CategoryDocumentsPage() {
     setError(null);
 
     try {
-      const supabase = createClient<Database>();
+      const supabase = createClient();
       const { data, error: fetchError } = await supabase
         .from('documents')
-        .select('*') // Select all columns for the card
+        .select('*')
         .eq('category', category)
-        .order('created_at', { ascending: false }); // Example order
+        .order('created_at', { ascending: false });
 
       if (fetchError) {
         console.error('Supabase fetch error:', fetchError);
@@ -49,15 +52,75 @@ export default function CategoryDocumentsPage() {
     } catch (err: unknown) {
       console.error('Error fetching documents:', err);
       setError(`Failed to load documents: ${err instanceof Error ? err.message : 'Unknown error'}`);
-      setDocuments([]); // Clear documents on error
+      setDocuments([]);
     } finally {
       setLoading(false);
     }
-  }, [category]); // Dependency on category
+  }, [category]);
 
   useEffect(() => {
     void fetchCategoryDocuments();
   }, [fetchCategoryDocuments]);
+
+  // --- Sort Handler ---
+  const handleSort = (key: SortKey) => {
+    if (key === null) {
+      // Clear sorting
+      setSortKey(null);
+      setSortDirection(null);
+    } else if (sortKey === key) {
+      // Toggle direction
+      setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      // New key, set default direction
+      setSortKey(key);
+      setSortDirection(key === 'created_at' ? 'desc' : 'asc');
+    }
+  };
+
+  // --- Memoized Sorted Documents ---
+  const sortedDocuments = useMemo(() => {
+    if (!sortKey || !sortDirection) {
+      return documents;
+    }
+
+    return [...documents].sort((a, b) => {
+      const sortKeyAsserted = sortKey as keyof Document;
+      const valA = a[sortKeyAsserted];
+      const valB = b[sortKeyAsserted];
+
+      // Handle null/undefined
+      if (valA == null && valB != null) return sortDirection === 'asc' ? -1 : 1;
+      if (valA != null && valB == null) return sortDirection === 'asc' ? 1 : -1;
+      if (valA == null && valB == null) return 0;
+
+      let comparison = 0;
+      if (sortKey === 'created_at' && typeof valA === 'string' && typeof valB === 'string') {
+        comparison = new Date(valA).getTime() - new Date(valB).getTime();
+      } else if (typeof valA === 'string' && typeof valB === 'string') {
+        comparison = valA.localeCompare(valB);
+      } else {
+        const strA = String(valA);
+        const strB = String(valB);
+        comparison = strA.localeCompare(strB);
+      }
+
+      return sortDirection === 'desc' ? comparison * -1 : comparison;
+    });
+  }, [documents, sortKey, sortDirection]);
+
+  if (!category) {
+    return (
+      <div className="flex flex-col h-full">
+        <main className="flex-1 p-6 bg-gray-50">
+          <div className="p-4 mb-4 bg-red-50 border border-red-200 rounded-md text-red-700 flex items-center gap-2">
+            <ExclamationTriangleIcon className="h-5 w-5" />
+            Invalid category specified.
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-full">
@@ -72,47 +135,28 @@ export default function CategoryDocumentsPage() {
             <ChevronLeftIcon className="h-5 w-5" />
           </Link>
           <h1 className="text-2xl font-semibold text-gray-900">
-            {category ? (
-              <>
-                Documents in: <span className="text-blue-600">{category}</span>
-              </>
-            ) : (
-              'Invalid Category'
-            )}
+            Documents in: <span className="text-blue-600">{category}</span>
           </h1>
         </div>
 
-        {/* Document Grid Area */}
-        <div>
-          {loading && (
-            <div className="flex justify-center items-center p-10">
-              <ArrowPathIcon className="h-8 w-8 text-gray-500 animate-spin" />
-              <span className="ml-2 text-gray-600">Loading documents...</span>
-            </div>
-          )}
+        {/* Error Display */}
+        {error && (
+          <div className="p-4 mb-4 bg-red-50 border border-red-200 rounded-md text-red-700 flex items-center gap-2">
+            <ExclamationTriangleIcon className="h-5 w-5" />
+            {error}
+          </div>
+        )}
 
-          {error && (
-            <div className="p-4 mb-4 bg-red-50 border border-red-200 rounded-md text-red-700 flex items-center gap-2">
-               <ExclamationTriangleIcon className="h-5 w-5" />
-              {error}
-            </div>
-          )}
-
-          {!loading && !error && documents.length === 0 && (
-            <div className="text-center p-8 border border-gray-200 rounded-lg bg-white">
-              <h3 className="text-lg font-medium text-gray-700">No Documents Found</h3>
-              <p className="text-gray-500 mt-1">There are currently no documents in the "{category}" category.</p>
-            </div>
-          )}
-
-          {!loading && !error && documents.length > 0 && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-x-1 gap-y-3">
-              {documents.map((doc) => (
-                <SimpleDocumentCard key={doc.id} document={doc} />
-              ))}
-            </div>
-          )}
-        </div>
+        {/* Document Table */}
+        <FolderDocumentList
+          documents={sortedDocuments}
+          isLoading={loading}
+          categoryName={category}
+          userRole="editor"
+          sortKey={sortKey}
+          sortDirection={sortDirection}
+          onSort={handleSort}
+        />
       </main>
     </div>
   );

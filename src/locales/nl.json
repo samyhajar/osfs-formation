@@ -248,7 +248,7 @@
     "fieldPurposeLabel": "Doel",
     "fieldTopicsLabel": "Onderwerpen (gescheiden door komma's)",
     "fieldKeywordsLabel": "Trefwoorden (gescheiden door komma's)",
-    "fieldIsPublicLabel": "Document openbaar maken",
+
     "fieldTopicsPlaceholder": "bijv., Theologie, Spiritualiteit, Geschiedenis",
     "fieldKeywordsPlaceholder": "bijv., Roeping, Vorming, Gebed",
     "categories": {
@@ -289,12 +289,16 @@
     "headerLang": "Taal",
     "headerRegion": "Regio",
     "headerCategory": "Categorie",
+    "headerAuthor": "Auteur",
     "headerCreated": "Aangemaakt",
     "headerActions": "Acties",
     "actionDownload": "Downloaden",
     "actionDelete": "Verwijderen",
-    "optionsButtonLabel": "Documentopties",
+    "edit": "Bewerken",
+    "delete": "Verwijderen",
     "deleting": "Verwijderen...",
+    "deleteConfirmation": "Weet u zeker dat u dit document wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+    "optionsButtonLabel": "Documentopties",
     "downloading": "Downloaden...",
     "SyllabusList": {
       "download": "Downloaden",
@@ -350,11 +354,69 @@
     "title": "Administratie",
     "description": "Beheer systeeminstellingen en configuraties",
     "userIntroductionTab": "Gebruikersintroductie",
+    "homepageSettingsTab": "Homepage Instellingen",
     "settingsTab": "Instellingen",
     "userIntroductionTitle": "Gebruikersintroductiebericht",
+    "homepageSettingsTitle": "Homepage Instellingen",
+    "homepageSettingsDescription": "Pas de publieke homepage aan die bezoekers zien voordat ze inloggen.",
     "systemSettingsTitle": "Systeeminstellingen",
     "systemSettingsDescription": "Extra systeeminstellingen zullen hier in de toekomst beschikbaar zijn.",
     "systemSettings": "Systeeminstellingen"
+  },
+  "Footer": {
+    "copyright": "© 2024 OSFS Vormingsbureau | Tenui Nec Dimittam",
+    "backToOsfsWorld": "Terug naar OSFS Wereld",
+    "osfsWorld": "OSFS Wereld",
+    "developedBy": "Ontwikkeld door",
+    "company": "Samy Hajar Development",
+    "location": "Wenen, Oostenrijk",
+    "impressum": "Wettelijke Informatie"
+  },
+  "HomepageSettings": {
+    "mainTitleSection": "Hoofdtitel Sectie",
+    "titleLabel": "Hoofdtitel",
+    "subtitleLabel": "Ondertitel",
+    "welcomeSection": "Welkomst Sectie",
+    "welcomeTitleLabel": "Welkomsttitel",
+    "welcomeMessageLabel": "Welkomstbericht",
+    "coordinatorSection": "Vormingscoördinator Sectie",
+    "coordinatorNameLabel": "Naam Coördinator",
+    "coordinatorMessageLabel": "Bericht Coördinator",
+    "coordinatorImageLabel": "Foto URL Coördinator",
+    "quoteSection": "Citaat Sectie",
+    "quoteTextLabel": "Citaattekst",
+    "quoteTranslationLabel": "Citaatvertaling",
+    "newsSection": "Nieuws Sectie",
+    "newsTitleLabel": "Nieuws Sectie Titel",
+    "newsDescription": "Nieuws toont automatisch recente wijdingen, professies en andere mijlpalen.",
+    "showSection": "Toon deze sectie",
+    "saveButton": "Wijzigingen Opslaan",
+    "saving": "Opslaan...",
+    "saveSuccess": "Homepage inhoud succesvol opgeslagen!"
+  },
+  "Impressum": {
+    "title": "Wettelijke Informatie",
+    "subtitle": "Wettelijke Informatie & Ontwikkelaar Credits",
+    "backToHome": "Terug naar Home",
+    "developerInfo": "Ontwikkelaar Informatie",
+    "name": "Naam",
+    "company": "Bedrijf",
+    "address": "Adres",
+    "contact": "Contact",
+    "email": "Email",
+    "phone": "Telefoon",
+    "services": "Professionele Diensten",
+    "webDevelopment": "Web Ontwikkeling & Design",
+    "fullStackDevelopment": "Full-Stack Applicatie Ontwikkeling",
+    "databaseDesign": "Database Design & Architectuur",
+    "uiUxDesign": "UI/UX Design & Gebruikerservaring",
+    "consulting": "Technische Consultancy & Projectmanagement",
+    "legalInfo": "Wettelijke Informatie",
+    "responsibleFor": "Verantwoordelijk voor inhoud",
+    "responsibleForContent": "Samy Hajar, Beckmanngasse 74/8-9, 1150 Wien, Austria",
+    "disclaimer": "Disclaimer",
+    "disclaimerText": "Ondanks zorgvuldige controle van de inhoud, nemen wij geen verantwoordelijkheid voor de inhoud van externe links. De operators van de gelinkte pagina's zijn uitsluitend verantwoordelijk voor hun inhoud.",
+    "lastUpdated": "Laatst bijgewerkt"
   },
   "UserIntroduction": {
     "coordinatorNameLabel": "Naam Coördinator",
@@ -472,5 +534,16 @@
     "noPositions": "Geen posities vermeld",
     "noMinistries": "Geen ministeries vermeld",
     "unknown": "Onbekend"
+  },
+  "documents": {
+    "categories": {
+      "articles": "Artikelen",
+      "presentations": "Presentaties",
+      "videos": "Video's",
+      "miscellaneous": "Diverse",
+      "sourcematerials": "Bronmateriaal",
+      "formationprograms": "Vormingsprogramma's",
+      "reflections4dimensions": "Reflecties 4 Dimensies"
+    }
   }
 }

@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
 import { SyllabusDocument } from '@/types/document';
 import SyllabusUploadForm from '@/components/admin/syllabus/SyllabusUploadForm';
-import SyllabusFileList from '@/components/admin/syllabus/SyllabusFileList';
+import SyllabusFileList from '@/components/shared/syllabus/SyllabusFileList';
 import { PlusIcon } from '@heroicons/react/24/solid';
 
 const TARGET_BUCKET = 'common-syllabus';
@@ -42,8 +42,7 @@ export default function CommonSyllabusPage() {
           language,
           topics,
           purpose,
-          keywords,
-          is_public
+          keywords
         `)
         .order('created_at', { ascending: false });
 

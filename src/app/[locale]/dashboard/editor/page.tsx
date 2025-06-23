@@ -75,10 +75,9 @@ export default function DashboardPage() {
             updated_at,
             region,
             language,
-            topics,
-            purpose,
-            keywords,
-            is_public
+                      topics,
+          purpose,
+          keywords
           `); // Remove default order, sorting will be handled client-side
           // .order('created_at', { ascending: false });
 

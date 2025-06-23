@@ -3,6 +3,7 @@
 import { ReactNode, useRef, useState, useEffect } from 'react';
 import Sidebar from '@/components/admin/Sidebar';
 import Header from '@/components/admin/Header';
+import Footer from '@/components/admin/Footer';
 
 export default function DashboardClient({ children }: { children: ReactNode }) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -40,6 +41,7 @@ export default function DashboardClient({ children }: { children: ReactNode }) {
         <main className="flex-1 p-6 bg-gray-100">
           {children}
         </main>
+        <Footer />
       </div>
     </div>
   );

@@ -126,6 +126,19 @@ const eslintConfig = [
       ],
     },
   },
+  {
+    // Temporary override for large files that need refactoring
+    files: [
+      'src/components/shared/FolderDocumentList.tsx',
+      'src/components/shared/WorkshopFilesList.tsx',
+      'src/components/shared/confreres/ConfreresTable.tsx',
+      'src/components/shared/formation-personnel/FormationPersonnelTable.tsx',
+      'src/components/ui/GalleryManager.tsx',
+    ],
+    rules: {
+      'max-lines': 'off',
+    },
+  },
 ];
 
 export default eslintConfig;

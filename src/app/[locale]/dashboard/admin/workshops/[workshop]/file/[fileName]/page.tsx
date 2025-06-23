@@ -49,27 +49,34 @@ export default function WorkshopFileDetailPage() {
       setLoading(true);
       setError(null);
       try {
-        // Fetch the workshop to get the folder_path and title
+        // Fetch the workshop to get title
         const { data: workshop, error: workshopError } = await supabase
           .from("workshops")
-          .select("folder_path, title")
+          .select("title")
           .eq("id", workshopId)
           .single();
         if (workshopError || !workshop) {
           throw new Error(t("documentNotFound"));
         }
         setWorkshopTitle(workshop.title);
-        // The file path is folder_path + '/' + fileName
-        const filePath = `${workshop.folder_path}/${decodeURIComponent(fileName)}`;
-        // Extract file type
-        const fileType = fileName.split(".").pop()?.toLowerCase() || "unknown";
+
+        // The fileName parameter is now the actual file path from storage
+        const filePath = decodeURIComponent(fileName);
+
+        // Extract file type from the file path
+        const fileType = filePath.split(".").pop()?.toLowerCase() || "unknown";
+
+        // Extract display name from file path (remove folder and metadata)
+        const fileNameOnly = filePath.split('/').pop() || filePath;
+        const displayName = workshop.title; // Use workshop title as display name
+
         // Create a document object
         const documentData: Document = {
           id: filePath,
-          title: fileName,
+          title: displayName,
           description: undefined,
           category: "Miscellaneous" as DocumentCategory,
-          file_name: fileName,
+          file_name: fileNameOnly,
           file_type: fileType,
           file_size: 0,
           file_path: filePath,

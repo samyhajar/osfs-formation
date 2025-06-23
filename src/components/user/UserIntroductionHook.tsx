@@ -13,6 +13,10 @@ interface UserIntroduction {
   right_column_image_url: string | null;
   left_column_image_position: 'above' | 'below' | null;
   right_column_image_position: 'above' | 'below' | null;
+  left_column_gallery_urls: string[];
+  right_column_gallery_urls: string[];
+  left_column_gallery_titles: string[];
+  right_column_gallery_titles: string[];
   active: boolean;
   created_at: string;
   updated_at: string;
@@ -32,15 +36,21 @@ export function useUserIntroduction(authLoading: boolean) {
         // Use the consistent browser client creator
         const supabase = createClient<Database>();
 
-        // Fetch active introduction content including image fields
+        // Fetch active introduction content including image and gallery fields
         const { data, error } = await supabase
           .from('user_introduction')
           .select(`
-            *,
-            left_column_image_url,
-            right_column_image_url,
-            left_column_image_position,
-            right_column_image_position
+            id,
+            coordinator_name,
+            left_column_content,
+            right_column_content,
+            left_column_gallery_urls,
+            right_column_gallery_urls,
+            left_column_gallery_titles,
+            right_column_gallery_titles,
+            active,
+            created_at,
+            updated_at
           `)
           .eq('active', true)
           .single();
@@ -51,11 +61,22 @@ export function useUserIntroduction(authLoading: boolean) {
         }
 
         if (data) {
-          // Type cast the position fields to ensure they match our interface
           const typedData: UserIntroduction = {
-            ...data,
-            left_column_image_position: data.left_column_image_position as 'above' | 'below' | null,
-            right_column_image_position: data.right_column_image_position as 'above' | 'below' | null,
+            id: data.id,
+            coordinator_name: data.coordinator_name,
+            left_column_content: data.left_column_content,
+            right_column_content: data.right_column_content,
+            left_column_image_url: null,
+            right_column_image_url: null,
+            left_column_image_position: null,
+            right_column_image_position: null,
+            left_column_gallery_urls: data.left_column_gallery_urls || [],
+            right_column_gallery_urls: data.right_column_gallery_urls || [],
+            left_column_gallery_titles: data.left_column_gallery_titles || [],
+            right_column_gallery_titles: data.right_column_gallery_titles || [],
+            active: data.active,
+            created_at: data.created_at,
+            updated_at: data.updated_at,
           };
           setIntroContent(typedData);
           setIntroModalOpen(true);

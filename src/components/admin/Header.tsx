@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { useEffect, useState } from 'react';
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher'; // Import the LanguageSwitcher
+import { useTranslations } from 'next-intl';
 
 // Add isScrolled prop to expected props
 interface HeaderProps {
@@ -19,6 +20,7 @@ export default function Header({ isScrolled = false }: HeaderProps) {
   const [isSigningOut, setIsSigningOut] = useState(false);
   // Initial state from server auth status, if available
   const [optimisticIsLoggedIn, setOptimisticIsLoggedIn] = useState<boolean | null>(null);
+  const t = useTranslations('Footer');
 
   // Read the server-side auth status as soon as component mounts
   useEffect(() => {
@@ -49,9 +51,31 @@ export default function Header({ isScrolled = false }: HeaderProps) {
         isScrolled ? 'shadow-md' : 'shadow-none' // Apply shadow conditionally
       }`}
     >
-      <div className="container flex h-20 items-center justify-end pl-4 pr-0 py-2 md:pl-6 md:pr-0">
-        {/* Removed Logo and Title Block */}
-        {/* <div className="flex items-center"> ... logo code removed ... </div> */}
+      <div className="container flex h-20 items-center justify-between pl-4 pr-0 py-2 md:pl-6 md:pr-0">
+        {/* Navigation to OSFS World */}
+        <div className="flex items-center">
+          <Link
+            href="https://osfs.world/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-accent-primary hover:text-accent-primary/80 transition-colors duration-200 text-sm font-medium"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+{t('backToOsfsWorld')}
+          </Link>
+        </div>
 
         <div className="flex items-center gap-4 pr-4 md:pr-6">
           {/* Add LanguageSwitcher here */}
