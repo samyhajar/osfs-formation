@@ -42,7 +42,6 @@ export function SyllabusEditForm({ document, onEditComplete, onCancel }: Syllabu
   // Form state
   const [title, setTitle] = useState(document.title);
   const [description, setDescription] = useState(document.description || '');
-  const [category, setCategory] = useState<DocumentCategory>(document.category as DocumentCategory);
   const [authorName, setAuthorName] = useState(document.author_name || '');
   const [region, setRegion] = useState(document.region || '');
   const [language, setLanguage] = useState(document.language || '');
@@ -78,7 +77,7 @@ export function SyllabusEditForm({ document, onEditComplete, onCancel }: Syllabu
     await updateDocument(document.id, document.file_path, {
       title,
       description,
-      category,
+      category: document.category as DocumentCategory, // Preserve existing category
       authorName,
       region,
       language,
@@ -138,8 +137,6 @@ export function SyllabusEditForm({ document, onEditComplete, onCancel }: Syllabu
         setDescription={setDescription}
         file={file}
         handleFileUpdate={handleFileUpdate}
-        category={category}
-        setCategory={setCategory}
         authorName={authorName}
         setAuthorName={setAuthorName}
         region={region}
@@ -156,6 +153,7 @@ export function SyllabusEditForm({ document, onEditComplete, onCancel }: Syllabu
         progress={progress}
         t={t}
         isEditMode={true}
+        showCategory={false}
         replaceFileLabel={t('replaceFileLabel', { fallback: 'Replace File (Optional)' })}
         replaceFileHelper={t('replaceFileHelper', { fallback: 'Upload a new file to replace the current one, or leave empty to keep the existing file' })}
       />

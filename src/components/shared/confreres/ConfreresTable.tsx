@@ -42,18 +42,79 @@ export default function ConfreresTable({ members }: ConfreresTableProps) {
     return member._embedded['wp:featuredmedia'][0].source_url || null;
   };
 
+  // Helper function to format name as "Last Name, First Name"
+  const formatNameLastFirst = (fullName: string): string => {
+    const nameParts = fullName.trim().split(/\s+/);
+
+    if (nameParts.length <= 1) {
+      // If only one name part, return as is
+      return fullName;
+    }
+
+    // Extract last name (last word) and first name(s) (everything else)
+    const lastName = nameParts[nameParts.length - 1];
+    const firstNames = nameParts.slice(0, -1).join(' ');
+
+    return `${lastName}, ${firstNames}`;
+  };
+
+  // Helper function to extract last name for sorting
+  const getLastName = (fullName: string): string => {
+    const nameParts = fullName.trim().split(/\s+/);
+    return nameParts[nameParts.length - 1] || fullName;
+  };
+
   // Note: getMemberEmail is now imported from utils
 
   // Get unique values for filters
   const { uniqueStatuses, orderedProvinces } = useMemo(() => {
-    const statuses = new Set<string>();
-    const memberProvinces = new Set<string>();
+    // Define the exact formation statuses in the specified order
+    const formationStatuses = [
+      'Postulant',
+      'Novice',
+      'Bro.Novice',
+      'Scholastic',
+      'Deacon',
+    ];
 
+    // Count members for each formation status
+    const statusCounts: Record<string, number> = {};
+
+    // Initialize all formation statuses with 0 count
+    formationStatuses.forEach(status => {
+      statusCounts[status] = 0;
+    });
+
+    // Count actual members for each status
     members.forEach(member => {
-      const status = getTermName(member, 'state', member.state);
-      const province = getTermName(member, 'province', member.province);
+      const memberStatus = getTermName(member, 'state', member.state);
 
-      if (status !== 'Unknown') statuses.add(status);
+      // Check for exact matches and variations
+      if (memberStatus === 'Postulant') {
+        statusCounts['Postulant']++;
+      } else if (memberStatus === 'Novice') {
+        statusCounts['Novice']++;
+      } else if (memberStatus === 'Bro.Novice' || memberStatus === 'Bro. Novice') {
+        statusCounts['Bro.Novice']++;
+      } else if (memberStatus === 'Scholastic') {
+        statusCounts['Scholastic']++;
+      } else if (memberStatus === 'Deacon') {
+        statusCounts['Deacon']++;
+      }
+    });
+
+    // Create status options with counts in the specified order
+    const statusesWithCounts = formationStatuses.map(status => ({
+      value: status,
+      label: `${status} (${statusCounts[status]})`,
+      count: statusCounts[status]
+    }));
+
+    console.log('📊 Formation Status Counts:', statusCounts);
+
+    const memberProvinces = new Set<string>();
+    members.forEach(member => {
+      const province = getTermName(member, 'province', member.province);
       if (province !== 'Unknown') memberProvinces.add(province);
     });
 
@@ -107,13 +168,23 @@ export default function ConfreresTable({ members }: ConfreresTableProps) {
     });
 
     return {
-      uniqueStatuses: Array.from(statuses).sort(),
+      uniqueStatuses: statusesWithCounts,
       orderedProvinces: filteredProvinces,
     };
   }, [members]);
 
   // Filter, sort and paginate members
   const { filteredMembers, totalPages, totalItems } = useMemo(() => {
+    // Define the exact formation statuses we want to show
+    const allowedFormationStatuses = [
+      'Postulant',
+      'Novice',
+      'Bro.Novice',
+      'Bro. Novice', // Include space variation
+      'Scholastic',
+      'Deacon',
+    ];
+
     // Province variations mapping (same as above)
     const provinceVariations: Record<string, string> = {
       'Austrian/South-German Province': 'German Speaking Province',
@@ -131,8 +202,24 @@ export default function ConfreresTable({ members }: ConfreresTableProps) {
     };
 
     const filtered = members.filter(member => {
+      // First check if member has one of our allowed formation statuses
+      const memberStatus = getTermName(member, 'state', member.state);
+      const hasFormationStatus = allowedFormationStatuses.includes(memberStatus);
+
+      // If member doesn't have a formation status, exclude them
+      if (!hasFormationStatus) {
+        return false;
+      }
+
+      // Apply other filters
       const matchesSearch = member.title.rendered.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = !statusFilter || getTermName(member, 'state', member.state) === statusFilter;
+
+      // For status filtering, normalize "Bro. Novice" to "Bro.Novice" for comparison
+      let matchesStatus = true;
+      if (statusFilter) {
+        const normalizedMemberStatus = memberStatus === 'Bro. Novice' ? 'Bro.Novice' : memberStatus;
+        matchesStatus = normalizedMemberStatus === statusFilter;
+      }
 
       // Handle province filtering with normalization
       let matchesProvince = true;
@@ -147,7 +234,7 @@ export default function ConfreresTable({ members }: ConfreresTableProps) {
 
     // Sort alphabetically by name
     const sorted = [...filtered].sort((a, b) => {
-      const comparison = a.title.rendered.localeCompare(b.title.rendered, 'en', { sensitivity: 'base' });
+      const comparison = getLastName(a.title.rendered).localeCompare(getLastName(b.title.rendered), 'en', { sensitivity: 'base' });
       return sortOrder === 'asc' ? comparison : -comparison;
     });
 
@@ -296,7 +383,7 @@ export default function ConfreresTable({ members }: ConfreresTableProps) {
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm font-medium text-gray-900 truncate">
-                            {member.title.rendered}
+                            {formatNameLastFirst(member.title.rendered)}
                           </p>
                           <p className="text-sm text-gray-500">
                             {status} • {province}

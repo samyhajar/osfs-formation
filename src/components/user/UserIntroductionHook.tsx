@@ -33,6 +33,30 @@ export function useUserIntroduction(authLoading: boolean) {
 
       try {
         setLoading(true);
+
+                // Check if user has already seen the introduction modal recently (with 1-hour expiry)
+        const hasSeenIntroKey = 'osfs_user_intro_seen_session';
+        const timestampKey = 'osfs_user_intro_timestamp';
+        const hasSeenIntro = sessionStorage.getItem(hasSeenIntroKey);
+        const timestamp = sessionStorage.getItem(timestampKey);
+
+        // Check if the flag exists and is still valid (less than 1 hour old)
+        if (hasSeenIntro === 'true' && timestamp) {
+          const oneHourInMs = 60 * 60 * 1000; // 1 hour in milliseconds
+          const flagAge = Date.now() - parseInt(timestamp, 10);
+
+          if (flagAge < oneHourInMs) {
+            console.log(`User has seen introduction modal recently (${Math.round(flagAge / 1000 / 60)} minutes ago), skipping...`);
+            setLoading(false);
+            return;
+          } else {
+            console.log(`Introduction modal flag expired (${Math.round(flagAge / 1000 / 60)} minutes old), showing modal again`);
+            // Clear expired flag
+            sessionStorage.removeItem(hasSeenIntroKey);
+            sessionStorage.removeItem(timestampKey);
+          }
+        }
+
         // Use the consistent browser client creator
         const supabase = createClient<Database>();
 
@@ -80,6 +104,8 @@ export function useUserIntroduction(authLoading: boolean) {
           };
           setIntroContent(typedData);
           setIntroModalOpen(true);
+
+          console.log('Showing user introduction modal for the first time this session');
         }
       } catch (error) {
         console.error('Error in introduction hook:', error);
@@ -91,8 +117,18 @@ export function useUserIntroduction(authLoading: boolean) {
     void fetchIntroductionContent();
   }, [authLoading]);
 
-  const handleCloseIntroModal = () => {
+    const handleCloseIntroModal = () => {
     setIntroModalOpen(false);
+
+    // Mark that user has seen the introduction modal with timestamp
+    const hasSeenIntroKey = 'osfs_user_intro_seen_session';
+    const timestampKey = 'osfs_user_intro_timestamp';
+    const currentTime = Date.now().toString();
+
+    sessionStorage.setItem(hasSeenIntroKey, 'true');
+    sessionStorage.setItem(timestampKey, currentTime);
+
+    console.log('User introduction modal closed, marked as seen with 1-hour expiry');
   };
 
   return {

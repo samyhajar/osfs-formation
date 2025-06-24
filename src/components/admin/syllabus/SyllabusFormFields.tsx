@@ -34,8 +34,8 @@ export interface SyllabusFormFieldsProps {
   setDescription: (value: string) => void;
   file: File | null;
   handleFileUpdate: (file: File | null) => void;
-  category: DocumentCategory;
-  setCategory: (category: DocumentCategory) => void;
+  category?: DocumentCategory;
+  setCategory?: (category: DocumentCategory) => void;
   authorName: string;
   setAuthorName: (authorName: string) => void;
   region: string;
@@ -54,6 +54,7 @@ export interface SyllabusFormFieldsProps {
   isEditMode?: boolean;
   replaceFileLabel?: string;
   replaceFileHelper?: string;
+  showCategory?: boolean;
 }
 
 export function SyllabusFormFields({
@@ -71,7 +72,8 @@ export function SyllabusFormFields({
   t,
   isEditMode = false,
   replaceFileLabel: _replaceFileLabel,
-  replaceFileHelper: _replaceFileHelper
+  replaceFileHelper: _replaceFileHelper,
+  showCategory = true
 }: SyllabusFormFieldsProps) {
   return (
     <>
@@ -116,15 +118,17 @@ export function SyllabusFormFields({
         </div>
       )}
 
-      <SelectField
-        id="category"
-        label={t('fieldCategoryLabel', { default: 'Category' })}
-        value={category}
-        onChange={(value) => setCategory(value)}
-        options={documentCategories.map(cat => ({ value: cat, label: t(`categories.${cat}`, { default: cat }) }))}
-        required
-        disabled={uploading}
-      />
+      {showCategory && category && setCategory && (
+        <SelectField
+          id="category"
+          label={t('fieldCategoryLabel', { default: 'Category' })}
+          value={category}
+          onChange={(value) => setCategory(value)}
+          options={documentCategories.map(cat => ({ value: cat, label: t(`categories.${cat}`, { default: cat }) }))}
+          required
+          disabled={uploading}
+        />
+      )}
 
       <DatalistField
         id="region"
@@ -158,7 +162,7 @@ export function SyllabusFormFields({
         id="topics-input"
         label={t('fieldTopicsLabel', { default: 'Topics (comma-separated)' })}
         value={topics.join(', ')}
-        onChange={(value) => setTopics(value.split(',').map(t => t.trim()).filter(Boolean))}
+        onChange={(value) => setTopics(value.split(',').map(topic => topic.trim()).filter(Boolean))}
         placeholder={t('fieldTopicsPlaceholder', { default: 'e.g., Theology, Spirituality, History' })}
         disabled={uploading}
       />

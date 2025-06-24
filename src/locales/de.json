@@ -399,9 +399,11 @@
     "testMessage": "Test Nachricht DE"
   },
   "NotFound": {
-    "title": "Seite Nicht Gefunden",
-    "description": "Entschuldigung, die gesuchte Seite konnte nicht gefunden werden. Sie wurde möglicherweise verschoben, gelöscht oder hat nie existiert.",
-    "returnHome": "Zurück zur Startseite"
+    "title": "Ups! Seite Nicht Gefunden",
+    "description": "Wir entschuldigen uns aufrichtig, aber die von Ihnen gesuchte Seite scheint verschwunden zu sein. Sie wurde möglicherweise verschoben, gelöscht oder die URL ist falsch.",
+    "returnHome": "Zurück zur Startseite",
+    "reloadPage": "Seite Neu Laden",
+    "supportMessage": "Wenn Sie weiterhin Probleme haben, wenden Sie sich bitte an unser Support-Team."
   },
   "Administration": {
     "title": "Administration",
@@ -484,13 +486,13 @@
     "signInLink": "Anmelden",
     "signUpLink": "Registrieren"
   },
-  "SyllabusEditForm": {
-    "title": "Lehrplan-Dokument bearbeiten",
-    "validationErrorRequired": "Titel, Kategorie und Datei sind erforderlich.",
-    "validationErrorAuth": "Sie müssen angemeldet sein, um zu bearbeiten.",
-    "updateSuccess": "Dokument erfolgreich aktualisiert!",
-    "updatingButton": "Wird aktualisiert...",
-    "updateButton": "Dokument Aktualisieren",
+  "SyllabusEdit": {
+    "backToSyllabus": "Zurück zum Syllabus",
+    "editSyllabusDocument": "Syllabus-Dokument bearbeiten",
+    "editSyllabusTitle": "Syllabus-Dokument bearbeiten",
+    "editSyllabusSubtitle": "Syllabus-Dokumentinformationen aktualisieren und optional die Datei ersetzen",
+    "currentFileLabel": "Aktuelle Datei",
+    "validationError": "Titel ist erforderlich",
     "fieldTitleLabel": "Titel",
     "fieldDescriptionLabel": "Beschreibung",
     "fieldAuthorLabel": "Autor",
@@ -498,18 +500,23 @@
     "fieldCategoryLabel": "Kategorie",
     "fieldRegionLabel": "Region",
     "fieldLanguageLabel": "Sprache",
-    "fieldTopicsLabel": "Themen",
-    "fieldTopicsPlaceholder": "Thema eingeben und Enter drücken",
     "fieldPurposeLabel": "Zweck",
+    "fieldTopicsLabel": "Themen",
+    "fieldTopicsPlaceholder": "z.B. Theologie, Spiritualität, Geschichte",
     "fieldKeywordsLabel": "Schlüsselwörter",
-    "fieldKeywordsPlaceholder": "Schlüsselwort eingeben und Enter drücken",
-    "fieldPublicLabel": "Öffentlich",
-    "fieldPublicHelper": "Dieses Dokument öffentlich zugänglich machen",
-    "currentFileLabel": "Aktuelle Datei",
-    "replaceFileLabel": "Datei Ersetzen",
-    "replaceFileHelper": "Neue Datei hochladen, um die aktuelle zu ersetzen",
+    "fieldKeywordsPlaceholder": "z.B. Berufung, Ausbildung, Gebet",
+    "replaceFileLabel": "Datei ersetzen",
+    "replaceFileHelper": "Laden Sie eine neue Datei hoch, um die aktuelle zu ersetzen",
     "cancelButton": "Abbrechen",
-    "backToDocuments": "Zurück zu Dokumenten"
+    "updateButton": "Aktualisieren",
+    "uploadSuccess": "Datei erfolgreich hochgeladen!",
+    "categories": {
+      "Presentations": "Präsentationen",
+      "Formation Programs": "Ausbildungsprogramme",
+      "Miscellaneous": "Verschiedenes",
+      "Videos": "Videos",
+      "Reflections 4 Dimensions": "Reflexionen 4 Dimensionen"
+    }
   },
   "DocumentEdit": {
     "backToDocuments": "Zurück zu Dokumenten",

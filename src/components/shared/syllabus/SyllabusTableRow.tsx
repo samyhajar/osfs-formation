@@ -46,6 +46,8 @@ export default function SyllabusTableRow({
   const userRole = profile?.role || 'user';
   const dropdownRef = useRef<HTMLButtonElement>(null);
 
+
+
   const handleDropdownToggle = () => {
     onToggleDropdown(doc.id, dropdownRef.current || undefined);
   };
@@ -59,6 +61,8 @@ export default function SyllabusTableRow({
       void onDelete(doc);
     }
   };
+
+
 
   return (
     <tr
@@ -147,7 +151,7 @@ export default function SyllabusTableRow({
 
             {activeDropdown === doc.id && typeof document !== 'undefined' && createPortal(
               <div
-                className="fixed shadow-lg bg-white rounded-md ring-1 ring-black ring-opacity-5 z-50"
+                className="fixed syllabus-dropdown shadow-lg bg-white rounded-md ring-1 ring-black ring-opacity-5 z-50"
                 style={{
                   top: `${dropdownPosition.top}px`,
                   left: `${dropdownPosition.left}px`,
@@ -159,10 +163,11 @@ export default function SyllabusTableRow({
                     <Link
                       href={`/dashboard/${userRole}/documents/syllabus/${doc.id}/edit`}
                       as={`/${locale}/dashboard/${userRole}/documents/syllabus/${doc.id}/edit`}
-                      className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => onToggleDropdown('')}
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                      role="menuitem"
+                      onClick={() => onToggleDropdown(doc.id)}
                     >
-                      <PencilIcon className="mr-3 h-5 w-5 text-gray-400" aria-hidden="true" />
+                      <PencilIcon className="h-4 w-4" />
                       {t('edit', { default: 'Edit' })}
                     </Link>
                   )}

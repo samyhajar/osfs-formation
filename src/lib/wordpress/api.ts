@@ -31,6 +31,16 @@ interface WPCategoryTerm extends WPTerm {
 }
 
 /**
+ * Helper function to extract last name from full name
+ * @param fullName - The full name string
+ * @returns The last name portion
+ */
+function getLastName(fullName: string): string {
+  const nameParts = fullName.trim().split(/\s+/);
+  return nameParts[nameParts.length - 1] || fullName;
+}
+
+/**
  * Fetches members from a specific page of the WordPress REST API.
  */
 async function fetchMembersPage(
@@ -436,9 +446,31 @@ export async function fetchProvinces(): Promise<WPTerm[]> {
  */
 export async function fetchFormationUsers(): Promise<WPMember[]> {
   try {
-    console.log('Fetching all members to filter for formation personnel...');
+    console.log('👥 Fetching formation personnel...');
+
+    // Step 1: Get all members
+    console.log('🔄 STEP 1: Fetching all members...');
     const allMembers = await fetchMembers();
     console.log(`✅ Fetched ${allMembers.length} total members from WordPress`);
+
+    // Step 2: Get deceased members
+    console.log('🔄 STEP 2: Fetching deceased members...');
+    const deceasedMembers = await fetchDeceasedMembers();
+    const deceasedIds = new Set(deceasedMembers.map((member) => member.id));
+    console.log(`⚰️ Deceased members to exclude: ${deceasedIds.size}`);
+
+    // Step 3: Filter out deceased members first
+    const livingMembers = allMembers.filter((member) => {
+      const isDeceased = deceasedIds.has(member.id);
+      if (isDeceased) {
+        console.log(`⚰️ Excluding deceased: ${member.title.rendered}`);
+      }
+      return !isDeceased;
+    });
+
+    console.log(
+      `💚 Living members after deceased filter: ${livingMembers.length}`,
+    );
 
     // Define the formation positions we want to include
     const formationPositions = [
@@ -453,8 +485,8 @@ export async function fetchFormationUsers(): Promise<WPMember[]> {
       'Co-Vocation Director',
     ];
 
-    // Filter members by formation positions and active status
-    const filteredMembers = allMembers.filter((member) => {
+    // Step 4: Filter members by formation positions
+    const membersWithFormationPositions = livingMembers.filter((member) => {
       // Check if member has embedded taxonomy data
       if (!member._embedded?.['wp:term']) {
         return false;
@@ -553,34 +585,72 @@ export async function fetchFormationUsers(): Promise<WPMember[]> {
         });
       });
 
-      // Check if member is currently active (not former/retired)
-      // Look for state terms that indicate active status
-      const stateTerms = terms.filter((term) => term.taxonomy === 'state');
-      const isActive =
-        stateTerms.length === 0 ||
-        stateTerms.some((term) => {
-          const stateName = term.name.toLowerCase();
-          // Exclude former/retired members
-          return (
-            !stateName.includes('former') &&
-            !stateName.includes('retired') &&
-            !stateName.includes('emeritus') &&
-            !stateName.includes('deceased')
-          );
-        });
-
-      return hasFormationPosition && isActive;
+      return hasFormationPosition;
     });
 
     console.log(
-      `✅ Filtered to ${filteredMembers.length} formation personnel with formation positions`,
+      `👥 Members with formation positions: ${membersWithFormationPositions.length}`,
     );
+
+    // Step 5: Filter for active positions only (exclude positions with end dates)
+    console.log('🔄 STEP 5: Filtering for active positions...');
+
+    const activeFormationPersonnelPromises = membersWithFormationPositions.map(
+      async (member) => {
+        const terms = member._embedded?.['wp:term']?.flat() || [];
+        const positionTerms = terms.filter(
+          (term) => term.taxonomy === 'position',
+        );
+
+        // Check if any position is active
+        const activePositionChecks = await Promise.all(
+          positionTerms.map(async (position) => {
+            const isActive = await isPositionActive(position.name);
+            if (!isActive) {
+              console.log(
+                `📅 Inactive position found: ${member.title.rendered} - ${position.name}`,
+              );
+            }
+            return isActive;
+          }),
+        );
+
+        // Include member if they have at least one active position
+        const hasActivePosition = activePositionChecks.some(
+          (isActive) => isActive,
+        );
+
+        if (!hasActivePosition) {
+          console.log(`📅 Excluding inactive: ${member.title.rendered}`);
+        }
+
+        return hasActivePosition ? member : null;
+      },
+    );
+
+    const activeFormationPersonnelResults = await Promise.all(
+      activeFormationPersonnelPromises,
+    );
+    const activeFormationPersonnel = activeFormationPersonnelResults.filter(
+      (member): member is WPMember => member !== null,
+    );
+
+    console.log(
+      `✅ Active formation personnel: ${activeFormationPersonnel.length}`,
+    );
+
+    // Step 6: Sort by last name
+    const sortedPersonnel = activeFormationPersonnel.sort((a, b) => {
+      const lastNameA = getLastName(a.title.rendered);
+      const lastNameB = getLastName(b.title.rendered);
+      return lastNameA.localeCompare(lastNameB, 'en', { sensitivity: 'base' });
+    });
 
     // Log the positions found for debugging
     const foundPositions = new Set<string>();
     const memberPositions: Array<{ name: string; positions: string[] }> = [];
 
-    filteredMembers.forEach((member) => {
+    sortedPersonnel.forEach((member) => {
       const terms = member._embedded?.['wp:term']?.flat() || [];
       const positionTerms = terms.filter(
         (term) => term.taxonomy === 'position',
@@ -593,12 +663,19 @@ export async function fetchFormationUsers(): Promise<WPMember[]> {
       positionTerms.forEach((term) => foundPositions.add(term.name));
     });
 
-    console.log(`📊 Found positions: ${Array.from(foundPositions).join(', ')}`);
-    console.log(`👥 Members with their positions:`, memberPositions);
+    console.log('📋 FINAL ACTIVE FORMATION PERSONNEL:');
+    memberPositions.forEach((member, index) => {
+      console.log(
+        `  ${index + 1}. ${member.name} - ${member.positions.join(', ')}`,
+      );
+    });
 
-    return filteredMembers;
+    console.log(`📊 Found positions: ${Array.from(foundPositions).join(', ')}`);
+    console.log('✅ Formation personnel fetch completed successfully!');
+
+    return sortedPersonnel;
   } catch (error) {
-    console.error('Error fetching formation users:', error);
+    console.error('❌ Error fetching formation users:', error);
     throw error; // Re-throw after logging
   }
 }
@@ -980,93 +1057,401 @@ export async function fetchMemberBySlug(
 
 /**
  * Fetches all members for the "Confreres in Formation" feature with filtering capabilities.
- * This includes members with statuses: NOVICE, SCHOLASTIC, and Brothers.
- * @returns {Promise<WPMember[]>} A promise resolving to an array of filtered members.
+ * This includes members with statuses: Postulant, Novice, Bro.Novice, Scholastic, and Deacon.
+ * Excludes deceased members by cross-referencing with the deceased members endpoint.
+ * @returns {Promise<WPMember[]>} A promise resolving to an array of filtered and sorted members.
  */
 export async function fetchConfreresInFormation(): Promise<WPMember[]> {
   try {
-    console.log('Fetching all confreres in formation from WordPress API...');
+    console.log('🔄 Fetching confreres in formation using correct approach...');
 
-    // Fetch all members with embedded data
+    // Step 1: Fetch ALL members from WordPress
+    console.log('📥 STEP 1: Fetching ALL members from WordPress...');
     const allMembers = await fetchMembers();
     console.log(`✅ Fetched ${allMembers.length} total members from WordPress`);
 
-    // Filter members by status (state taxonomy)
-    // We only want members with status: Postulant, Novice, Bro. Novice, Scholastic, Deacon
-    const allowedStatuses = [
+    // Step 2: Filter members by formation statuses
+    console.log('🎯 STEP 2: Filtering members by formation statuses...');
+    const formationStatuses = [
       'Postulant',
       'Novice',
-      'Bro. Novice',
+      'Bro.Novice',
+      'Bro. Novice', // Also check for space variation
       'Scholastic',
       'Deacon',
     ];
 
-    const filteredMembers = allMembers.filter((member) => {
-      // Check if member has embedded taxonomy data
+    console.log('🎯 Target formation statuses:', formationStatuses);
+
+    const membersWithFormationStatus = allMembers.filter((member) => {
       if (!member._embedded?.['wp:term'] || member.state.length === 0) {
         return false;
       }
 
-      // Get all terms and find state terms
       const terms = member._embedded['wp:term'].flat();
       const stateTerms = terms.filter(
         (term) => member.state.includes(term.id) && term.taxonomy === 'state',
       );
 
-      // Check if any of the member's state terms match our allowed statuses
-      const hasAllowedStatus = stateTerms.some((term) =>
-        allowedStatuses.includes(term.name),
+      // Check if any state term matches our formation statuses
+      const hasFormationStatus = stateTerms.some((term) =>
+        formationStatuses.includes(term.name),
       );
 
-      // Debug logging for included members
-      if (hasAllowedStatus) {
-        const memberStatuses = stateTerms.map((term) => term.name).join(', ');
-        console.log(
-          `✅ Including member: ${member.title.rendered} (statuses: ${memberStatuses})`,
-        );
-      }
-
-      // Check if member is living (not deceased)
-      const isLiving = stateTerms.every((term) => {
-        const stateName = term.name.toLowerCase();
-        const isDeceased =
-          stateName.includes('deceased') ||
-          stateName.includes('dead') ||
-          stateName.includes('†') ||
-          stateName.includes('rip') ||
-          stateName.includes('former') ||
-          stateName.includes('retired');
-
-        if (isDeceased) {
-          console.log(
-            `⚰️ Filtering out deceased/former member: ${member.title.rendered} (status: ${term.name})`,
-          );
-        }
-
-        return !isDeceased;
-      });
-
-      return hasAllowedStatus && isLiving;
+      return hasFormationStatus;
     });
 
     console.log(
-      `✅ Filtered to ${filteredMembers.length} confreres in formation (Postulant, Novice, Bro. Novice, Scholastic, Deacon)`,
+      `✅ Found ${membersWithFormationStatus.length} members with formation statuses`,
     );
 
-    // Log the statuses found for debugging
-    const foundStatuses = new Set<string>();
-    filteredMembers.forEach((member) => {
+    // Log breakdown by status for debugging
+    const formationStatusBreakdown: Record<string, string[]> = {};
+    membersWithFormationStatus.forEach((member) => {
+      if (member._embedded?.['wp:term']) {
+        const terms = member._embedded['wp:term'].flat();
+        const stateTerms = terms.filter(
+          (term) => member.state.includes(term.id) && term.taxonomy === 'state',
+        );
+
+        stateTerms.forEach((term) => {
+          if (formationStatuses.includes(term.name)) {
+            if (!formationStatusBreakdown[term.name]) {
+              formationStatusBreakdown[term.name] = [];
+            }
+            formationStatusBreakdown[term.name].push(member.title.rendered);
+          }
+        });
+      }
+    });
+
+    console.log('📊 FORMATION STATUS BREAKDOWN:');
+    Object.entries(formationStatusBreakdown).forEach(([status, members]) => {
+      console.log(`  ${status}: ${members.length} members`);
+      if (members.length <= 10) {
+        members.forEach((name) => console.log(`    - ${name}`));
+      } else {
+        members.slice(0, 5).forEach((name) => console.log(`    - ${name}`));
+        console.log(`    ... and ${members.length - 5} more`);
+      }
+    });
+
+    // Step 3: Fetch deceased members from dedicated endpoint
+    console.log(
+      '⚰️ STEP 3: Fetching deceased members from dedicated endpoint...',
+    );
+    let deceasedMembers: WPMember[] = [];
+
+    try {
+      const deceasedUrl = `${WP_API_URL}/deceased?_embed=true&per_page=100`;
+      console.log(`🔍 Fetching from: ${deceasedUrl}`);
+
+      const deceasedResponse = await fetch(deceasedUrl, {
+        headers: {
+          Authorization: `Basic ${basicAuth}`,
+          'Content-Type': 'application/json',
+        },
+        next: { revalidate: 3600, tags: ['wordpress', 'deceased'] }, // Cache for 1 hour
+      });
+
+      if (deceasedResponse.ok) {
+        deceasedMembers = (await deceasedResponse.json()) as WPMember[];
+        console.log(`✅ Found ${deceasedMembers.length} deceased members`);
+
+        // Log deceased members for debugging
+        console.log('⚰️ DECEASED MEMBERS LIST:');
+        deceasedMembers.forEach((member) => {
+          console.log(`  - ${member.title.rendered} (ID: ${member.id})`);
+        });
+      } else {
+        console.log(
+          `❌ Failed to fetch deceased members: ${deceasedResponse.status} ${deceasedResponse.statusText}`,
+        );
+
+        // Try alternative endpoint structure
+        const altDeceasedUrl = `${WP_API_URL}/member?category=deceased&_embed=true&per_page=100`;
+        console.log(`🔍 Trying alternative endpoint: ${altDeceasedUrl}`);
+
+        const altResponse = await fetch(altDeceasedUrl, {
+          headers: {
+            Authorization: `Basic ${basicAuth}`,
+            'Content-Type': 'application/json',
+          },
+          next: { revalidate: 3600, tags: ['wordpress', 'deceased-alt'] },
+        });
+
+        if (altResponse.ok) {
+          deceasedMembers = (await altResponse.json()) as WPMember[];
+          console.log(
+            `✅ Found ${deceasedMembers.length} deceased members via alternative endpoint`,
+          );
+        } else {
+          console.log(
+            `❌ Alternative endpoint also failed: ${altResponse.status} ${altResponse.statusText}`,
+          );
+        }
+      }
+    } catch (error) {
+      console.error('❌ Error fetching deceased members:', error);
+    }
+
+    // Step 4: Cross-reference and exclude deceased members
+    console.log('🔄 STEP 4: Cross-referencing to exclude deceased members...');
+
+    const deceasedMemberIds = new Set(
+      deceasedMembers.map((member) => member.id),
+    );
+    console.log(
+      `🔍 Deceased member IDs: [${Array.from(deceasedMemberIds).join(', ')}]`,
+    );
+
+    const livingFormationMembers = membersWithFormationStatus.filter(
+      (member) => {
+        const isDeceased = deceasedMemberIds.has(member.id);
+        if (isDeceased) {
+          console.log(
+            `⚰️ Excluding deceased member: ${member.title.rendered} (ID: ${member.id})`,
+          );
+          return false;
+        }
+        return true;
+      },
+    );
+
+    console.log(
+      `💚 Living formation members after deceased filter: ${livingFormationMembers.length}`,
+    );
+    console.log(
+      `📊 Excluded: ${
+        membersWithFormationStatus.length - livingFormationMembers.length
+      } deceased members`,
+    );
+
+    // Step 5: Filter for active positions only (exclude positions with end dates)
+    console.log('🔄 STEP 5: Filtering for active positions...');
+
+    const activeFormationMembersPromises = livingFormationMembers.map(
+      async (member) => {
+        const terms = member._embedded?.['wp:term']?.flat() || [];
+        const positionTerms = terms.filter(
+          (term) => term.taxonomy === 'position',
+        );
+
+        // If member has no positions, they're still considered active (formation status only)
+        if (positionTerms.length === 0) {
+          return member;
+        }
+
+        // Check if any position is active
+        const activePositionChecks = await Promise.all(
+          positionTerms.map(async (position) => {
+            const isActive = await isPositionActive(position.name);
+            if (!isActive) {
+              console.log(
+                `📅 Inactive position found: ${member.title.rendered} - ${position.name}`,
+              );
+            }
+            return isActive;
+          }),
+        );
+
+        // Include member if they have at least one active position OR no positions at all
+        const hasActivePosition = activePositionChecks.some(
+          (isActive) => isActive,
+        );
+
+        if (!hasActivePosition) {
+          console.log(`📅 Excluding inactive: ${member.title.rendered}`);
+        }
+
+        return hasActivePosition ? member : null;
+      },
+    );
+
+    const activeFormationMembersResults = await Promise.all(
+      activeFormationMembersPromises,
+    );
+    const activeFormationMembers = activeFormationMembersResults.filter(
+      (member): member is WPMember => member !== null,
+    );
+
+    console.log(
+      `✅ Active formation members: ${activeFormationMembers.length}`,
+    );
+
+    // Step 6: Sort by status order and last name
+    console.log('🔄 STEP 6: Sorting by status and last name...');
+
+    const statusOrder = [
+      'Postulant',
+      'Novice',
+      'Bro.Novice',
+      'Bro. Novice',
+      'Scholastic',
+      'Deacon',
+    ];
+
+    // Helper function to get member's primary status
+    const getMemberStatus = (member: WPMember): string => {
       const terms = member._embedded?.['wp:term']?.flat() || [];
       const stateTerms = terms.filter(
         (term) => member.state.includes(term.id) && term.taxonomy === 'state',
       );
-      stateTerms.forEach((term) => foundStatuses.add(term.name));
-    });
-    console.log(`📊 Found statuses: ${Array.from(foundStatuses).join(', ')}`);
 
-    return filteredMembers;
+      // Find the first status that matches our formation statuses
+      for (const status of statusOrder) {
+        if (stateTerms.some((term) => term.name === status)) {
+          return status;
+        }
+      }
+      return 'Unknown';
+    };
+
+    const sortedMembers = activeFormationMembers.sort((a, b) => {
+      const statusA = getMemberStatus(a);
+      const statusB = getMemberStatus(b);
+
+      // First sort by status order
+      const statusIndexA = statusOrder.indexOf(statusA);
+      const statusIndexB = statusOrder.indexOf(statusB);
+
+      if (statusIndexA !== statusIndexB) {
+        return statusIndexA - statusIndexB;
+      }
+
+      // If same status, sort by last name alphabetically
+      const lastNameA = getLastName(a.title.rendered);
+      const lastNameB = getLastName(b.title.rendered);
+
+      return lastNameA.localeCompare(lastNameB, 'en', { sensitivity: 'base' });
+    });
+
+    // Log final results by status
+    const finalStatusGroups: Record<string, string[]> = {};
+    sortedMembers.forEach((member) => {
+      const status = getMemberStatus(member);
+      if (!finalStatusGroups[status]) {
+        finalStatusGroups[status] = [];
+      }
+      finalStatusGroups[status].push(member.title.rendered);
+    });
+
+    console.log('🎯 FINAL RESULTS - ACTIVE LIVING CONFRERES IN FORMATION:');
+    statusOrder.forEach((status) => {
+      if (finalStatusGroups[status]) {
+        console.log(
+          `📋 ${status}: ${finalStatusGroups[status].length} members`,
+        );
+        finalStatusGroups[status].forEach((name) => {
+          console.log(`   - ${name}`);
+        });
+      }
+    });
+
+    console.log(
+      `✅ Final result: ${sortedMembers.length} active, living confreres in formation`,
+    );
+    console.log(
+      `📊 Total excluded: ${
+        allMembers.length - sortedMembers.length
+      } members (deceased + inactive positions)`,
+    );
+    console.log('✅ Confreres in Formation fetch completed successfully!');
+    return sortedMembers;
   } catch (error) {
-    console.error('Error fetching confreres in formation:', error);
+    console.error('❌ Error fetching confreres in formation:', error);
     throw error;
   }
+}
+
+/**
+ * Fetches deceased members from the dedicated WordPress endpoint
+ * @returns {Promise<WPMember[]>} A promise resolving to an array of deceased members
+ */
+export async function fetchDeceasedMembers(): Promise<WPMember[]> {
+  try {
+    console.log('⚰️ Fetching deceased members from dedicated endpoint...');
+
+    const deceasedUrl = `${WP_API_URL}/deceased?_embed=true&per_page=100`;
+    console.log(`🔍 Fetching from: ${deceasedUrl}`);
+
+    const deceasedResponse = await fetch(deceasedUrl, {
+      headers: {
+        Authorization: `Basic ${basicAuth}`,
+        'Content-Type': 'application/json',
+      },
+      next: { revalidate: 3600, tags: ['wordpress', 'deceased'] }, // Cache for 1 hour
+    });
+
+    if (deceasedResponse.ok) {
+      const deceasedMembers = (await deceasedResponse.json()) as WPMember[];
+      console.log(`✅ Found ${deceasedMembers.length} deceased members`);
+
+      // Log deceased members for debugging
+      console.log('⚰️ DECEASED MEMBERS LIST:');
+      deceasedMembers.forEach((member) => {
+        console.log(`  - ${member.title.rendered} (ID: ${member.id})`);
+      });
+
+      return deceasedMembers;
+    } else {
+      console.log(
+        `❌ Failed to fetch deceased members: ${deceasedResponse.status} ${deceasedResponse.statusText}`,
+      );
+
+      // Try alternative endpoint structure
+      const altDeceasedUrl = `${WP_API_URL}/member?category=deceased&_embed=true&per_page=100`;
+      console.log(`🔍 Trying alternative endpoint: ${altDeceasedUrl}`);
+
+      const altResponse = await fetch(altDeceasedUrl, {
+        headers: {
+          Authorization: `Basic ${basicAuth}`,
+          'Content-Type': 'application/json',
+        },
+        next: { revalidate: 3600, tags: ['wordpress', 'deceased-alt'] },
+      });
+
+      if (altResponse.ok) {
+        const deceasedMembers = (await altResponse.json()) as WPMember[];
+        console.log(
+          `✅ Found ${deceasedMembers.length} deceased members via alternative endpoint`,
+        );
+        return deceasedMembers;
+      } else {
+        console.log(
+          `❌ Alternative endpoint also failed: ${altResponse.status} ${altResponse.statusText}`,
+        );
+        return [];
+      }
+    }
+  } catch (error) {
+    console.error('❌ Error fetching deceased members:', error);
+    return [];
+  }
+}
+
+/**
+ * Checks if a position is currently active (no end date specified)
+ * Active positions have format: "Position From YYYY – To" (no end year)
+ * Inactive positions have format: "Position From YYYY – To YYYY" (with end year)
+ * @param positionName - The position name to check
+ * @returns boolean indicating if the position is active
+ */
+export async function isPositionActive(positionName: string): Promise<boolean> {
+  // Look for patterns like "From YYYY – To YYYY" (inactive) vs "From YYYY – To" (active)
+  const inactivePattern = /from\s+\d{4}\s*[–-]\s*to\s+\d{4}/i;
+  const activePattern = /from\s+\d{4}\s*[–-]\s*to\s*$/i;
+
+  // If it matches the inactive pattern (has end year), it's not active
+  if (inactivePattern.test(positionName)) {
+    return false;
+  }
+
+  // If it matches the active pattern (no end year), it's active
+  if (activePattern.test(positionName)) {
+    return true;
+  }
+
+  // If no date pattern is found, assume it's active (current position)
+  return true;
 }

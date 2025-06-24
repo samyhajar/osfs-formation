@@ -11,7 +11,11 @@ interface ConfreresFiltersProps {
   setProvinceFilter: (province: string) => void;
   sortOrder: 'asc' | 'desc';
   setSortOrder: (order: string) => void;
-  uniqueStatuses: string[];
+  uniqueStatuses: Array<{
+    value: string;
+    label: string;
+    count: number;
+  }>;
   uniqueProvinces: string[];
 }
 
@@ -58,8 +62,8 @@ export default function ConfreresFilters({
           >
             <option value="">All Statuses</option>
             {uniqueStatuses.map((status) => (
-              <option key={status} value={status}>
-                {status}
+              <option key={status.value} value={status.value}>
+                {status.label}
               </option>
             ))}
           </select>

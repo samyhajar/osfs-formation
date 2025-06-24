@@ -47,7 +47,12 @@ export default function SyllabusFileList({
   // Add global click handler to close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (activeDropdown && !(event.target as Element).closest('.dropdown-button')) {
+      // Close only when the click is outside BOTH the button and the dropdown menu
+      const target = event.target as Element;
+      const clickedTrigger = target.closest('.dropdown-button');
+      const clickedMenu = target.closest('.syllabus-dropdown');
+
+      if (!clickedTrigger && !clickedMenu) {
         setActiveDropdown(null);
       }
     };

@@ -105,6 +105,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         if (event === 'SIGNED_OUT') {
           setProfile(null);
           setLoading(false);
+
+          // Clear user introduction modal flag and timestamp so it shows again on next login
+          try {
+            sessionStorage.removeItem('osfs_user_intro_seen_session');
+            sessionStorage.removeItem('osfs_user_intro_timestamp');
+            console.log('[AuthContext] Cleared user introduction flag and timestamp on logout');
+          } catch (error) {
+            // sessionStorage might not be available in some environments
+            console.warn('[AuthContext] Could not clear user introduction flag:', error);
+          }
         }
       }
     );
@@ -149,6 +159,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const signOut = async () => {
     console.log('[AuthContext] signOut function called.');
     try {
+      // Clear user introduction modal flag and timestamp immediately on signout
+      try {
+        sessionStorage.removeItem('osfs_user_intro_seen_session');
+        sessionStorage.removeItem('osfs_user_intro_timestamp');
+        console.log('[AuthContext] Cleared user introduction flag and timestamp on signOut call');
+      } catch (error) {
+        console.warn('[AuthContext] Could not clear user introduction flag in signOut:', error);
+      }
+
       const { error } = await supabase.auth.signOut();
       if (error) {
         console.error("[AuthContext] Error during supabase.auth.signOut:", error);

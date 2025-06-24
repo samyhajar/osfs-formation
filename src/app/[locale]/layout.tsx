@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { SWRProvider } from "@/components/providers/SWRProvider";
 import { Toaster } from 'react-hot-toast';
+import LogoutHandler from "@/components/shared/LogoutHandler";
 import { ReactNode } from 'react';
 // Imports for next-intl
 import { NextIntlClientProvider } from 'next-intl';
@@ -60,6 +61,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider locale={locale} messages={messages}>
           <SWRProvider>
             <AuthProvider>
+              <LogoutHandler />
               {children}
               <Toaster position="bottom-center" />
             </AuthProvider>

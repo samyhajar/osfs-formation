@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, usePathname } from 'next/navigation';
 import { Document } from '@/types/document';
 import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
@@ -16,6 +16,7 @@ export default function SyllabusDocumentViewerPage() {
   const params = useParams();
   const documentId = params?.id as string;
   const router = useRouter();
+  const pathname = usePathname();
   const locale = useLocale();
   const { supabase, profile } = useAuth();
   const t = useTranslations('DocumentViewer');
@@ -180,10 +181,19 @@ export default function SyllabusDocumentViewerPage() {
   const handleBack = useCallback(() => {
     const userRole = profile?.role || 'user';
     console.log('Back navigation - Locale:', locale, 'Profile:', profile, 'UserRole:', userRole);
-    const redirectPath = `/${locale}/dashboard/${userRole}/`;
+    console.log('Current pathname:', pathname);
+
+    // Extract locale and role from current pathname as fallback
+    const pathSegments = pathname.split('/').filter(Boolean);
+    const currentLocale = pathSegments[0] || 'en';
+    const currentRole = pathSegments[2] || 'editor'; // dashboard/[role]
+
+    console.log('Path segments:', pathSegments, 'Current locale:', currentLocale, 'Current role:', currentRole);
+
+    const redirectPath = `/${currentLocale}/dashboard/${currentRole}/`;
     console.log('Redirecting to:', redirectPath);
     router.push(redirectPath);
-  }, [router, locale, profile]);
+  }, [router, locale, profile, pathname]);
 
   if (!document && !loading && !error) {
     return (

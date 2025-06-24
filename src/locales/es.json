@@ -208,9 +208,11 @@
     "actionsComingSoon": "Acciones disponibles pronto"
   },
   "NotFound": {
-    "title": "Página No Encontrada",
-    "description": "Lo sentimos, la página que estás buscando no se pudo encontrar. Es posible que haya sido movida, eliminada o nunca haya existido.",
-    "returnHome": "Volver a la Página Principal"
+    "title": "¡Ups! Página No Encontrada",
+    "description": "Nos disculpamos sinceramente, pero la página que buscas parece haber desaparecido. Es posible que haya sido movida, eliminada o que la URL sea incorrecta.",
+    "returnHome": "Volver a la Página Principal",
+    "reloadPage": "Recargar Página",
+    "supportMessage": "Si continúas experimentando problemas, por favor contacta nuestro equipo de soporte."
   },
   "CommonSyllabusPage": {
     "title": "Documentos del Programa Común",
@@ -544,6 +546,38 @@
       "sourcematerials": "Materiales Fuente",
       "formationprograms": "Programas de Formación",
       "reflections4dimensions": "Reflexiones 4 Dimensiones"
+    }
+  },
+  "SyllabusEdit": {
+    "backToSyllabus": "Volver al syllabus",
+    "editSyllabusDocument": "Editar documento del syllabus",
+    "editSyllabusTitle": "Editar documento del syllabus",
+    "editSyllabusSubtitle": "Actualizar la información del documento del syllabus y opcionalmente reemplazar el archivo",
+    "currentFileLabel": "Archivo actual",
+    "validationError": "El título es requerido",
+    "fieldTitleLabel": "Título",
+    "fieldDescriptionLabel": "Descripción",
+    "fieldAuthorLabel": "Autor",
+    "fieldAuthorPlaceholder": "Ingrese el nombre del autor (opcional)",
+    "fieldCategoryLabel": "Categoría",
+    "fieldRegionLabel": "Región",
+    "fieldLanguageLabel": "Idioma",
+    "fieldPurposeLabel": "Propósito",
+    "fieldTopicsLabel": "Temas",
+    "fieldTopicsPlaceholder": "ej. Teología, Espiritualidad, Historia",
+    "fieldKeywordsLabel": "Palabras clave",
+    "fieldKeywordsPlaceholder": "ej. Vocación, Formación, Oración",
+    "replaceFileLabel": "Reemplazar archivo",
+    "replaceFileHelper": "Sube un nuevo archivo para reemplazar el actual",
+    "cancelButton": "Cancelar",
+    "updateButton": "Actualizar",
+    "uploadSuccess": "¡Archivo subido con éxito!",
+    "categories": {
+      "Presentations": "Presentaciones",
+      "Formation Programs": "Programas de formación",
+      "Miscellaneous": "Misceláneos",
+      "Videos": "Videos",
+      "Reflections 4 Dimensions": "Reflexiones 4 Dimensiones"
     }
   }
 }

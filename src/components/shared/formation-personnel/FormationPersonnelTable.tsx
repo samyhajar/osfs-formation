@@ -4,14 +4,14 @@ import { useState, useMemo } from 'react';
 import type { WPMember } from '@/lib/wordpress/types';
 import Image from 'next/image';
 import { getMemberEmail, openEmailClient, getMemberEmails } from '@/lib/utils/email';
+import ConfreresPagination from '@/components/shared/confreres/ConfreresPagination';
 
 interface FormationPersonnelTableProps {
   members: WPMember[];
   onEmailSelected: (emails: string[]) => void;
 }
 
-type SortField = 'name' | 'province' | 'position';
-type SortDirection = 'asc' | 'desc';
+const ITEMS_PER_PAGE = 20;
 
 // Define the formation position hierarchy as specified by the user
 const POSITION_HIERARCHY = [
@@ -26,8 +26,8 @@ const POSITION_HIERARCHY = [
   'Co-Vocation Director',
 ];
 
-// Province order as specified
-const PROVINCE_ORDER = [
+// Province order as specified - only show these provinces in this exact order
+const ALLOWED_PROVINCES = [
   'France-West Africa Province',
   'Italian Province',
   'German Speaking Province',
@@ -37,6 +37,14 @@ const PROVINCE_ORDER = [
   'Southern African Region',
   'Indian Region',
 ];
+
+// Provinces to exclude from the dropdown (currently unused but kept for reference)
+// const EXCLUDED_PROVINCES = [
+//   'German Province',
+//   'Keetmanshoop Region',
+//   'No Province',
+//   'The Swiss Province',
+// ];
 
 // Province name variations mapping
 const provinceVariations: Record<string, string> = {
@@ -52,11 +60,11 @@ export default function FormationPersonnelTable({
   onEmailSelected
 }: FormationPersonnelTableProps) {
   const [selectedMembers, setSelectedMembers] = useState<Set<number>>(new Set());
-  const [sortField, setSortField] = useState<SortField>('province');
-  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
   const [provinceFilter, setProvinceFilter] = useState<string>('all');
   const [positionFilter, setPositionFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nameSort, setNameSort] = useState<'asc' | 'desc'>('asc');
 
   // Helper function to get member info
   const getMemberInfo = (member: WPMember) => {
@@ -88,65 +96,90 @@ export default function FormationPersonnelTable({
     };
   };
 
-  // Get unique provinces for filter
+  // Helper function to format name as "Last Name, First Name"
+  const formatNameLastFirst = (fullName: string): string => {
+    const nameParts = fullName.trim().split(/\s+/);
+
+    if (nameParts.length <= 1) {
+      // If only one name part, return as is
+      return fullName;
+    }
+
+    // Extract last name (last word) and first name(s) (everything else)
+    const lastName = nameParts[nameParts.length - 1];
+    const firstNames = nameParts.slice(0, -1).join(' ');
+
+    return `${lastName}, ${firstNames}`;
+  };
+
+  // Helper function to extract last name for sorting
+  const getLastName = (fullName: string): string => {
+    const nameParts = fullName.trim().split(/\s+/);
+    return nameParts[nameParts.length - 1] || fullName;
+  };
+
+  // Get provinces for filter with member counts - show ALL allowed provinces regardless of current members
   const availableProvinces = useMemo(() => {
-    const provinces = new Set<string>();
+    // Count members per province
+    const provinceCounts: Record<string, number> = {};
+
+    // Initialize all allowed provinces with 0 count
+    ALLOWED_PROVINCES.forEach(province => {
+      provinceCounts[province] = 0;
+    });
+
+    // Count actual members per province
     members.forEach(member => {
       const { province } = getMemberInfo(member);
-      provinces.add(province);
+      if (ALLOWED_PROVINCES.includes(province)) {
+        provinceCounts[province] = (provinceCounts[province] || 0) + 1;
+      }
     });
 
-    // Sort provinces according to specified order
-    return Array.from(provinces).sort((a, b) => {
-      const indexA = PROVINCE_ORDER.indexOf(a);
-      const indexB = PROVINCE_ORDER.indexOf(b);
-
-      if (indexA === -1 && indexB === -1) return a.localeCompare(b);
-      if (indexA === -1) return 1;
-      if (indexB === -1) return -1;
-
-      return indexA - indexB;
-    });
+    // Return provinces with their counts
+    return ALLOWED_PROVINCES.map(province => ({
+      value: province,
+      label: province,
+      count: provinceCounts[province]
+    }));
   }, [members]);
 
-  // Get unique formation positions for filter
+  // Get formation positions for filter with member counts - show ALL positions with counts
   const availablePositions = useMemo(() => {
-    const positions = new Set<string>();
+    // Count members per position
+    const positionCounts: Record<string, number> = {};
+
+    // Initialize all positions with 0 count
+    POSITION_HIERARCHY.forEach(position => {
+      positionCounts[position] = 0;
+    });
+
+    // Count actual members per position
     members.forEach(member => {
       const { positions: memberPositions } = getMemberInfo(member);
-      // Only add positions that match our formation hierarchy
       memberPositions.forEach(position => {
-        const isFormationPosition = POSITION_HIERARCHY.some(hierarchyPos =>
+        // Find matching hierarchy position
+        const matchingHierarchyPos = POSITION_HIERARCHY.find(hierarchyPos =>
           position.toLowerCase().includes(hierarchyPos.toLowerCase()) ||
           hierarchyPos.toLowerCase().includes(position.toLowerCase())
         );
-        if (isFormationPosition) {
-          positions.add(position);
+
+        if (matchingHierarchyPos) {
+          positionCounts[matchingHierarchyPos] = (positionCounts[matchingHierarchyPos] || 0) + 1;
         }
       });
     });
 
-    // Sort positions according to hierarchy
-    return Array.from(positions).sort((a, b) => {
-      const indexA = POSITION_HIERARCHY.findIndex(pos =>
-        a.toLowerCase().includes(pos.toLowerCase()) ||
-        pos.toLowerCase().includes(a.toLowerCase())
-      );
-      const indexB = POSITION_HIERARCHY.findIndex(pos =>
-        b.toLowerCase().includes(pos.toLowerCase()) ||
-        pos.toLowerCase().includes(b.toLowerCase())
-      );
-
-      if (indexA === -1 && indexB === -1) return a.localeCompare(b);
-      if (indexA === -1) return 1;
-      if (indexB === -1) return -1;
-
-      return indexA - indexB;
-    });
+    // Return positions with their counts in hierarchy order
+    return POSITION_HIERARCHY.map(position => ({
+      value: position,
+      label: position,
+      count: positionCounts[position]
+    }));
   }, [members]);
 
   // Filter and sort members
-  const filteredAndSortedMembers = useMemo(() => {
+  const { filteredMembers, totalPages, totalItems } = useMemo(() => {
     let filtered = members;
 
     // Apply search filter
@@ -177,66 +210,33 @@ export default function FormationPersonnelTable({
       });
     }
 
-    // Sort members
-    return filtered.sort((a, b) => {
-      const infoA = getMemberInfo(a);
-      const infoB = getMemberInfo(b);
-
-      let comparison = 0;
-
-      switch (sortField) {
-        case 'name':
-          comparison = a.title.rendered.localeCompare(b.title.rendered);
-          break;
-        case 'province':
-          const provinceIndexA = PROVINCE_ORDER.indexOf(infoA.province);
-          const provinceIndexB = PROVINCE_ORDER.indexOf(infoB.province);
-
-          if (provinceIndexA === -1 && provinceIndexB === -1) {
-            comparison = infoA.province.localeCompare(infoB.province);
-          } else if (provinceIndexA === -1) {
-            comparison = 1;
-          } else if (provinceIndexB === -1) {
-            comparison = -1;
-          } else {
-            comparison = provinceIndexA - provinceIndexB;
-          }
-          break;
-        case 'position':
-          const positionA = infoA.positions[0] || '';
-          const positionB = infoB.positions[0] || '';
-
-          const hierarchyIndexA = POSITION_HIERARCHY.findIndex(pos =>
-            positionA.toLowerCase().includes(pos.toLowerCase()) ||
-            pos.toLowerCase().includes(positionA.toLowerCase())
-          );
-          const hierarchyIndexB = POSITION_HIERARCHY.findIndex(pos =>
-            positionB.toLowerCase().includes(pos.toLowerCase()) ||
-            pos.toLowerCase().includes(positionB.toLowerCase())
-          );
-
-          if (hierarchyIndexA === -1 && hierarchyIndexB === -1) {
-            comparison = positionA.localeCompare(positionB);
-          } else if (hierarchyIndexA === -1) {
-            comparison = 1;
-          } else if (hierarchyIndexB === -1) {
-            comparison = -1;
-          } else {
-            comparison = hierarchyIndexA - hierarchyIndexB;
-          }
-          break;
-      }
-
-      return sortDirection === 'asc' ? comparison : -comparison;
+    // Sort members by name using the dropdown sort order
+    const sorted = filtered.sort((a, b) => {
+      const comparison = getLastName(a.title.rendered).localeCompare(getLastName(b.title.rendered));
+      return nameSort === 'asc' ? comparison : -comparison;
     });
-  }, [members, searchTerm, provinceFilter, positionFilter, sortField, sortDirection]);
 
-  const handleSort = (field: SortField) => {
-    if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    // Calculate pagination
+    const totalPages = Math.ceil(sorted.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const paginatedMembers = sorted.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+    return {
+      filteredMembers: paginatedMembers,
+      totalPages,
+      totalItems: sorted.length,
+    };
+  }, [members, searchTerm, provinceFilter, positionFilter, nameSort, currentPage]);
+
+  const handleSelectAll = () => {
+    if (selectedMembers.size === filteredMembers.length) {
+      setSelectedMembers(new Set());
+      onEmailSelected([]);
     } else {
-      setSortField(field);
-      setSortDirection('asc');
+      const allIds = new Set(filteredMembers.map(m => m.id));
+      setSelectedMembers(allIds);
+      const selectedEmails = getMemberEmails(filteredMembers);
+      onEmailSelected(selectedEmails);
     }
   };
 
@@ -257,38 +257,6 @@ export default function FormationPersonnelTable({
     onEmailSelected(selectedEmails);
   };
 
-  const handleSelectAll = () => {
-    if (selectedMembers.size === filteredAndSortedMembers.length) {
-      setSelectedMembers(new Set());
-      onEmailSelected([]);
-    } else {
-      const allIds = new Set(filteredAndSortedMembers.map(m => m.id));
-      setSelectedMembers(allIds);
-      const selectedEmails = getMemberEmails(filteredAndSortedMembers);
-      onEmailSelected(selectedEmails);
-    }
-  };
-
-  const getSortIcon = (field: SortField) => {
-    if (sortField !== field) {
-      return (
-        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-        </svg>
-      );
-    }
-
-    return sortDirection === 'asc' ? (
-      <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-      </svg>
-    ) : (
-      <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-      </svg>
-    );
-  };
-
   const handleEmailSelected = () => {
     const selectedMemberObjects = Array.from(selectedMembers)
       .map(id => members.find(m => m.id === id))
@@ -298,11 +266,35 @@ export default function FormationPersonnelTable({
     openEmailClient(selectedEmails, 'Message from OSFS Formation');
   };
 
+  // Reset page when filters change
+  const handleFilterChange = (filterType: string, value: string) => {
+    setCurrentPage(1);
+    switch (filterType) {
+      case 'search':
+        setSearchTerm(value);
+        break;
+      case 'province':
+        setProvinceFilter(value);
+        break;
+      case 'position':
+        setPositionFilter(value);
+        break;
+      case 'nameSort':
+        setNameSort(value as 'asc' | 'desc');
+        break;
+    }
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="space-y-6">
       {/* Filters and Search */}
       <div className="bg-white p-6 rounded-lg shadow">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Search */}
           <div>
             <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">
@@ -313,7 +305,7 @@ export default function FormationPersonnelTable({
               id="search"
               placeholder="Search by name or position..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleFilterChange('search', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
@@ -326,13 +318,13 @@ export default function FormationPersonnelTable({
             <select
               id="province-filter"
               value={provinceFilter}
-              onChange={(e) => setProvinceFilter(e.target.value)}
+              onChange={(e) => handleFilterChange('province', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             >
               <option value="all">All Provinces</option>
               {availableProvinces.map((province) => (
-                <option key={province} value={province}>
-                  {province}
+                <option key={province.value} value={province.value}>
+                  {province.label} ({province.count})
                 </option>
               ))}
             </select>
@@ -346,15 +338,31 @@ export default function FormationPersonnelTable({
             <select
               id="position-filter"
               value={positionFilter}
-              onChange={(e) => setPositionFilter(e.target.value)}
+              onChange={(e) => handleFilterChange('position', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             >
               <option value="all">All Positions</option>
               {availablePositions.map((position) => (
-                <option key={position} value={position}>
-                  {position}
+                <option key={position.value} value={position.value}>
+                  {position.label} ({position.count})
                 </option>
               ))}
+            </select>
+          </div>
+
+          {/* Name Sort Order */}
+          <div>
+            <label htmlFor="name-sort" className="block text-sm font-medium text-gray-700 mb-1">
+              Sort by Name
+            </label>
+            <select
+              id="name-sort"
+              value={nameSort}
+              onChange={(e) => handleFilterChange('nameSort', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            >
+              <option value="asc">A-Z</option>
+              <option value="desc">Z-A</option>
             </select>
           </div>
 
@@ -365,7 +373,7 @@ export default function FormationPersonnelTable({
                 onClick={handleSelectAll}
                 className="px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                {selectedMembers.size === filteredAndSortedMembers.length ? 'Unselect All' : 'Select All'}
+                {selectedMembers.size === filteredMembers.length ? 'Unselect All' : 'Select All'}
               </button>
               {selectedMembers.size > 0 && (
                 <button
@@ -383,7 +391,15 @@ export default function FormationPersonnelTable({
       {/* Results Count */}
       <div className="flex justify-between items-center">
         <p className="text-sm text-gray-700">
-          Showing <span className="font-medium">{filteredAndSortedMembers.length}</span> formation personnel
+          {totalItems > 0 ? (
+            <>
+              Showing <span className="font-medium">{(currentPage - 1) * ITEMS_PER_PAGE + 1}</span> to{' '}
+              <span className="font-medium">{Math.min(currentPage * ITEMS_PER_PAGE, totalItems)}</span> of{' '}
+              <span className="font-medium">{totalItems}</span> formation personnel
+            </>
+          ) : (
+            'No formation personnel found'
+          )}
           {selectedMembers.size > 0 && (
             <span className="ml-2 text-blue-600">
               ({selectedMembers.size} selected)
@@ -399,43 +415,25 @@ export default function FormationPersonnelTable({
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                     <input
-                       type="checkbox"
-                       checked={selectedMembers.size === filteredAndSortedMembers.length && filteredAndSortedMembers.length > 0}
-                       ref={(el) => {
-                         if (el) el.indeterminate = selectedMembers.size > 0 && selectedMembers.size < filteredAndSortedMembers.length;
-                       }}
-                       onChange={handleSelectAll}
-                       className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                     />
-                   </th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    <button
-                      onClick={() => handleSort('name')}
-                      className="flex items-center space-x-1 hover:text-gray-700"
-                    >
-                      <span>Name</span>
-                      {getSortIcon('name')}
-                    </button>
+                    <input
+                      type="checkbox"
+                      checked={selectedMembers.size === filteredMembers.length && filteredMembers.length > 0}
+                      ref={(el) => {
+                        if (el) el.indeterminate = selectedMembers.size > 0 && selectedMembers.size < filteredMembers.length;
+                      }}
+                      onChange={handleSelectAll}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
                   </th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    <button
-                      onClick={() => handleSort('province')}
-                      className="flex items-center space-x-1 hover:text-gray-700"
-                    >
-                      <span>Province</span>
-                      {getSortIcon('province')}
-                    </button>
+                    Name
                   </th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    <button
-                      onClick={() => handleSort('position')}
-                      className="flex items-center space-x-1 hover:text-gray-700"
-                    >
-                      <span>Position</span>
-                      {getSortIcon('position')}
-                    </button>
+                    Province
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Position
                   </th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
@@ -443,7 +441,7 @@ export default function FormationPersonnelTable({
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredAndSortedMembers.map((member) => {
+                {filteredMembers.map((member) => {
                   const { positions, province, profileImage, altText, email } = getMemberInfo(member);
                   const isSelected = selectedMembers.has(member.id);
 
@@ -481,7 +479,7 @@ export default function FormationPersonnelTable({
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
-                              {member.title.rendered}
+                              {formatNameLastFirst(member.title.rendered)}
                             </div>
                             {email && (
                               <div className="text-sm text-gray-500">
@@ -527,7 +525,7 @@ export default function FormationPersonnelTable({
         </div>
       </div>
 
-      {filteredAndSortedMembers.length === 0 && (
+      {filteredMembers.length === 0 && (
         <div className="text-center py-12">
           <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -538,6 +536,15 @@ export default function FormationPersonnelTable({
           </p>
         </div>
       )}
+
+      {/* Pagination */}
+      <ConfreresPagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={totalItems}
+        itemsPerPage={ITEMS_PER_PAGE}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 }

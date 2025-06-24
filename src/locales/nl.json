@@ -208,9 +208,11 @@
     "actionsComingSoon": "Acties binnenkort beschikbaar"
   },
   "NotFound": {
-    "title": "Pagina Niet Gevonden",
-    "description": "Sorry, de pagina die je zoekt kon niet worden gevonden. Mogelijk is deze verplaatst, verwijderd of heeft nooit bestaan.",
-    "returnHome": "Terug naar Startpagina"
+    "title": "Oeps! Pagina Niet Gevonden",
+    "description": "We verontschuldigen ons oprecht, maar de pagina die u zoekt lijkt verdwenen te zijn. Deze is mogelijk verplaatst, verwijderd of de URL is onjuist.",
+    "returnHome": "Terug naar Startpagina",
+    "reloadPage": "Pagina Herladen",
+    "supportMessage": "Als u problemen blijft ondervinden, neem dan contact op met ons supportteam."
   },
   "CommonSyllabusPage": {
     "title": "Gemeenschappelijke Syllabus Documenten",
@@ -544,6 +546,38 @@
       "sourcematerials": "Bronmateriaal",
       "formationprograms": "Vormingsprogramma's",
       "reflections4dimensions": "Reflecties 4 Dimensies"
+    }
+  },
+  "SyllabusEdit": {
+    "backToSyllabus": "Terug naar syllabus",
+    "editSyllabusDocument": "Syllabus document bewerken",
+    "editSyllabusTitle": "Syllabus document bewerken",
+    "editSyllabusSubtitle": "Syllabus documentinformatie bijwerken en optioneel het bestand vervangen",
+    "currentFileLabel": "Huidig bestand",
+    "validationError": "Titel is verplicht",
+    "fieldTitleLabel": "Titel",
+    "fieldDescriptionLabel": "Beschrijving",
+    "fieldAuthorLabel": "Auteur",
+    "fieldAuthorPlaceholder": "Voer auteursnaam in (optioneel)",
+    "fieldCategoryLabel": "Categorie",
+    "fieldRegionLabel": "Regio",
+    "fieldLanguageLabel": "Taal",
+    "fieldPurposeLabel": "Doel",
+    "fieldTopicsLabel": "Onderwerpen",
+    "fieldTopicsPlaceholder": "bijv. Theologie, Spiritualiteit, Geschiedenis",
+    "fieldKeywordsLabel": "Trefwoorden",
+    "fieldKeywordsPlaceholder": "bijv. Roeping, Vorming, Gebed",
+    "replaceFileLabel": "Bestand vervangen",
+    "replaceFileHelper": "Upload een nieuw bestand om het huidige te vervangen",
+    "cancelButton": "Annuleren",
+    "updateButton": "Bijwerken",
+    "uploadSuccess": "Bestand succesvol geüpload!",
+    "categories": {
+      "Presentations": "Presentaties",
+      "Formation Programs": "Vormingsprogramma's",
+      "Miscellaneous": "Diversen",
+      "Videos": "Video's",
+      "Reflections 4 Dimensions": "Reflecties 4 Dimensies"
     }
   }
 }

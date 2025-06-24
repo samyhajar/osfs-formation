@@ -208,9 +208,11 @@
     "actionsComingSoon": "Azioni disponibili a breve"
   },
   "NotFound": {
-    "title": "Pagina Non Trovata",
-    "description": "Ci dispiace, la pagina che stai cercando non è stata trovata. Potrebbe essere stata spostata, eliminata o non essere mai esistita.",
-    "returnHome": "Torna alla Pagina Iniziale"
+    "title": "Ops! Pagina Non Trovata",
+    "description": "Ci scusiamo sinceramente, ma la pagina che stai cercando sembra essere scomparsa. Potrebbe essere stata spostata, eliminata o l'URL potrebbe essere errato.",
+    "returnHome": "Torna alla Pagina Iniziale",
+    "reloadPage": "Ricarica Pagina",
+    "supportMessage": "Se continui ad avere problemi, contatta il nostro team di supporto."
   },
   "CommonSyllabusPage": {
     "title": "Documenti del Programma Comune",
@@ -544,6 +546,38 @@
       "sourcematerials": "Materiali Fonte",
       "formationprograms": "Programmi di Formazione",
       "reflections4dimensions": "Riflessioni 4 Dimensioni"
+    }
+  },
+  "SyllabusEdit": {
+    "backToSyllabus": "Torna al syllabus",
+    "editSyllabusDocument": "Modifica documento del syllabus",
+    "editSyllabusTitle": "Modifica documento del syllabus",
+    "editSyllabusSubtitle": "Aggiorna le informazioni del documento del syllabus e opzionalmente sostituisci il file",
+    "currentFileLabel": "File attuale",
+    "validationError": "Il titolo è richiesto",
+    "fieldTitleLabel": "Titolo",
+    "fieldDescriptionLabel": "Descrizione",
+    "fieldAuthorLabel": "Autore",
+    "fieldAuthorPlaceholder": "Inserisci il nome dell'autore (opzionale)",
+    "fieldCategoryLabel": "Categoria",
+    "fieldRegionLabel": "Regione",
+    "fieldLanguageLabel": "Lingua",
+    "fieldPurposeLabel": "Scopo",
+    "fieldTopicsLabel": "Argomenti",
+    "fieldTopicsPlaceholder": "es. Teologia, Spiritualità, Storia",
+    "fieldKeywordsLabel": "Parole chiave",
+    "fieldKeywordsPlaceholder": "es. Vocazione, Formazione, Preghiera",
+    "replaceFileLabel": "Sostituisci file",
+    "replaceFileHelper": "Carica un nuovo file per sostituire quello attuale",
+    "cancelButton": "Annulla",
+    "updateButton": "Aggiorna",
+    "uploadSuccess": "File caricato con successo!",
+    "categories": {
+      "Presentations": "Presentazioni",
+      "Formation Programs": "Programmi di formazione",
+      "Miscellaneous": "Varie",
+      "Videos": "Video",
+      "Reflections 4 Dimensions": "Riflessioni 4 Dimensioni"
     }
   }
 }

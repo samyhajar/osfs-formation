@@ -42,10 +42,16 @@ export async function GET(request: Request) {
       });
     });
 
-    // Also try to clear localStorage in client-side via script
+    // Also try to clear localStorage and sessionStorage in client-side via script
     response.headers.set(
       'Set-Cookie',
       'supabase-logout=true; path=/; max-age=5;',
+    );
+
+    // Add script to clear sessionStorage for user introduction flag
+    response.headers.set(
+      'Set-Cookie',
+      'clear-intro-flag=true; path=/; max-age=5;',
     );
 
     return response;

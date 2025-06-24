@@ -26,3 +26,35 @@ export const getInitials = (name?: string | null): string => {
 
   return initials.toUpperCase();
 };
+
+/**
+ * Extracts the last name from a full name string
+ * @param fullName - The full name string
+ * @returns The last name portion
+ */
+export const getLastName = (fullName: string): string => {
+  const nameParts = fullName.trim().split(/\s+/);
+  return nameParts[nameParts.length - 1] || fullName;
+};
+
+/**
+ * Formats a full name to "Last, First" format
+ * @param fullName - The full name string
+ * @returns The formatted name as "Last, First"
+ */
+export const formatNameLastFirst = (fullName: string): string => {
+  if (!fullName || !fullName.trim()) return fullName;
+
+  const nameParts = fullName.trim().split(/\s+/);
+
+  // If only one name part, return as is
+  if (nameParts.length <= 1) {
+    return fullName;
+  }
+
+  // Extract last name and first names
+  const lastName = nameParts[nameParts.length - 1];
+  const firstNames = nameParts.slice(0, -1).join(' ');
+
+  return `${lastName}, ${firstNames}`;
+};

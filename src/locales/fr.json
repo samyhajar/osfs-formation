@@ -350,9 +350,11 @@
     "testMessage": "Message de Test FR"
   },
   "NotFound": {
-    "title": "Page Non Trouvée",
-    "description": "Désolé, la page que vous recherchez est introuvable. Elle a peut-être été déplacée, supprimée ou n'a jamais existé.",
-    "returnHome": "Retour à l'Accueil"
+    "title": "Oups ! Page Non Trouvée",
+    "description": "Nous nous excusons sincèrement, mais la page que vous recherchez semble avoir disparu. Elle a peut-être été déplacée, supprimée ou l'URL pourrait être incorrecte.",
+    "returnHome": "Retour à l'Accueil",
+    "reloadPage": "Recharger la Page",
+    "supportMessage": "Si vous continuez à rencontrer des problèmes, veuillez contacter notre équipe de support."
   },
   "Administration": {
     "title": "Administration",
@@ -486,13 +488,13 @@
     "alreadyAccountPrompt": "Vous avez déjà un compte ?",
     "nameLabel": "Nom complet"
   },
-  "SyllabusEditForm": {
-    "title": "Modifier le Document du Programme",
-    "validationErrorRequired": "Le titre, la catégorie et le fichier sont obligatoires.",
-    "validationErrorAuth": "Vous devez être connecté pour modifier.",
-    "updateSuccess": "Document mis à jour avec succès !",
-    "updatingButton": "Mise à jour en cours...",
-    "updateButton": "Mettre à Jour le Document",
+  "SyllabusEdit": {
+    "backToSyllabus": "Retour au syllabus",
+    "editSyllabusDocument": "Modifier le document du syllabus",
+    "editSyllabusTitle": "Modifier le document du syllabus",
+    "editSyllabusSubtitle": "Mettre à jour les informations du document du syllabus et optionnellement remplacer le fichier",
+    "currentFileLabel": "Fichier actuel",
+    "validationError": "Le titre est requis",
     "fieldTitleLabel": "Titre",
     "fieldDescriptionLabel": "Description",
     "fieldAuthorLabel": "Auteur",
@@ -500,18 +502,23 @@
     "fieldCategoryLabel": "Catégorie",
     "fieldRegionLabel": "Région",
     "fieldLanguageLabel": "Langue",
-    "fieldTopicsLabel": "Sujets",
-    "fieldTopicsPlaceholder": "Tapez un sujet et appuyez sur Entrée",
     "fieldPurposeLabel": "Objectif",
+    "fieldTopicsLabel": "Sujets",
+    "fieldTopicsPlaceholder": "ex. Théologie, Spiritualité, Histoire",
     "fieldKeywordsLabel": "Mots-clés",
-    "fieldKeywordsPlaceholder": "Tapez un mot-clé et appuyez sur Entrée",
-    "fieldPublicLabel": "Public",
-    "fieldPublicHelper": "Rendre ce document accessible au public",
-    "currentFileLabel": "Fichier Actuel",
-    "replaceFileLabel": "Remplacer le Fichier",
+    "fieldKeywordsPlaceholder": "ex. Vocation, Formation, Prière",
+    "replaceFileLabel": "Remplacer le fichier",
     "replaceFileHelper": "Téléchargez un nouveau fichier pour remplacer l'actuel",
     "cancelButton": "Annuler",
-    "backToDocuments": "Retour aux Documents"
+    "updateButton": "Mettre à jour",
+    "uploadSuccess": "Fichier téléchargé avec succès !",
+    "categories": {
+      "Presentations": "Présentations",
+      "Formation Programs": "Programmes de formation",
+      "Miscellaneous": "Divers",
+      "Videos": "Vidéos",
+      "Reflections 4 Dimensions": "Réflexions 4 Dimensions"
+    }
   },
   "DocumentEdit": {
     "backToDocuments": "Retour aux Documents",

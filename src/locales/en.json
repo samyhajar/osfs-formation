@@ -483,9 +483,11 @@
     "noNotifications": "No new notifications."
   },
   "NotFound": {
-    "title": "Page Not Found",
-    "description": "Sorry, the page you are looking for could not be found. It might have been moved, deleted, or never existed.",
-    "returnHome": "Return to Home"
+    "title": "Oops! Page Not Found",
+    "description": "We sincerely apologize, but the page you're looking for seems to have gone missing. It might have been moved, deleted, or the URL might be incorrect.",
+    "returnHome": "Return Home",
+    "reloadPage": "Reload Page",
+    "supportMessage": "If you continue to experience issues, please contact our support team."
   },
   "FormationManagement": {
     "title": "Formation Management",
@@ -833,6 +835,38 @@
       "sourcematerials": "Source Materials",
       "formationprograms": "Formation Programs",
       "reflections4dimensions": "Reflections 4 Dimensions"
+    }
+  },
+  "SyllabusEdit": {
+    "backToSyllabus": "Back to Syllabus",
+    "editSyllabusDocument": "Edit Syllabus Document",
+    "editSyllabusTitle": "Edit Syllabus Document",
+    "editSyllabusSubtitle": "Update syllabus document information and optionally replace the file",
+    "currentFileLabel": "Current File",
+    "validationError": "Title is required",
+    "fieldTitleLabel": "Title",
+    "fieldDescriptionLabel": "Description",
+    "fieldAuthorLabel": "Author",
+    "fieldAuthorPlaceholder": "Enter author name (optional)",
+    "fieldCategoryLabel": "Category",
+    "fieldRegionLabel": "Region",
+    "fieldLanguageLabel": "Language",
+    "fieldPurposeLabel": "Purpose",
+    "fieldTopicsLabel": "Topics",
+    "fieldTopicsPlaceholder": "e.g., Theology, Spirituality, History",
+    "fieldKeywordsLabel": "Keywords",
+    "fieldKeywordsPlaceholder": "e.g., Vocation, Formation, Prayer",
+    "replaceFileLabel": "Replace File",
+    "replaceFileHelper": "Upload a new file to replace the current one",
+    "cancelButton": "Cancel",
+    "updateButton": "Update",
+    "uploadSuccess": "File uploaded successfully!",
+    "categories": {
+      "Presentations": "Presentations",
+      "Formation Programs": "Formation Programs",
+      "Miscellaneous": "Miscellaneous",
+      "Videos": "Videos",
+      "Reflections 4 Dimensions": "Reflections 4 Dimensions"
     }
   }
 }
