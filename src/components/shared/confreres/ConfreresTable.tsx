@@ -25,8 +25,13 @@ export default function ConfreresTable({ members }: ConfreresTableProps) {
   const [selectedMembers, setSelectedMembers] = useState<Set<number>>(new Set());
 
   // Helper function to get term name by ID from embedded data
-  const getTermName = (member: WPMember, taxonomyType: string, termIds: number[]): string => {
-    if (!member._embedded?.['wp:term'] || termIds.length === 0) return 'Unknown';
+  const getTermName = (
+    member: WPMember,
+    taxonomyType: string,
+    termIds: number[] | undefined,
+  ): string => {
+    if (!member._embedded?.['wp:term'] || !termIds || termIds.length === 0)
+      return 'Unknown';
 
     const terms = member._embedded['wp:term'].flat();
     const matchingTerm = terms.find(term =>

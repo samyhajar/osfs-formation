@@ -1,0 +1,14 @@
+{
+  "cron": {
+    "formationSync": {
+      "schedule": "0 * * * *",
+      "path": "/api/sync/formation-personnel",
+      "method": "POST"
+    },
+    "confrereSync": {
+      "schedule": "5 * * * *",
+      "path": "/api/sync/confreres-in-formation",
+      "method": "POST"
+    }
+  }
+}

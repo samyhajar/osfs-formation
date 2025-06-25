@@ -1,212 +1,88 @@
 import useSWR from 'swr';
+import { createClient } from '@/lib/supabase/browser-client';
+import type { Tables } from '@/types/supabase';
 import type { WPMember } from '@/lib/wordpress/types';
 
-const CONFRERES_IN_FORMATION_ENDPOINT = '/api/confreres-in-formation';
+type ConfrereRow = Tables<'confreres_in_formation'>;
 
-interface APIResponse {
-  success: boolean;
-  data: WPMember[];
-  count: number;
-  durationMs: number;
-  timestamp: string;
-}
+const supabase = createClient();
 
 /**
- * Custom hook for fetching confreres in formation with SWR caching
- * Provides stale-while-revalidate functionality for better UX
+ * Hook to fetch confreres in formation from cached Supabase table.
+ * WordPress scraping now handled by hourly server-side cron.
  */
 export function useConfreresInFormation() {
-  const { data, error, isLoading, isValidating, mutate } = useSWR<APIResponse>(
-    CONFRERES_IN_FORMATION_ENDPOINT,
+  const { data, error, isLoading, isValidating, mutate } = useSWR<WPMember[]>(
+    'confreres_in_formation' as const,
     async () => {
-      const res = await fetch(CONFRERES_IN_FORMATION_ENDPOINT);
-      if (!res.ok) throw new Error('Failed to fetch confreres in formation');
-      return res.json();
+      const { data, error } = await supabase
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore – table might not yet exist in generated types after fresh migration
+        .from('confreres_in_formation')
+        .select('*')
+        .order('name');
+
+      if (error) throw error;
+
+      // Map rows to minimal WPMember-like objects consumed by ConfreresTable
+      const rows = (data ?? []) as ConfrereRow[];
+      const mapped = rows.map((row, idx) => {
+        const positionsArr = row.positions as unknown as
+          | { province: string }[]
+          | null;
+        const provinceName =
+          positionsArr && positionsArr.length > 0
+            ? positionsArr[0].province
+            : 'Unknown Province';
+
+        const stateId = idx * 2 + 1; // fake unique ids per row
+        const provinceId = idx * 2 + 2;
+
+        return {
+          id: row.wp_id,
+          slug: row.slug,
+          // mimic WP shape
+          title: { rendered: row.name },
+          state: [stateId],
+          province: [provinceId],
+          meta: { email: row.email || '' },
+          _embedded: {
+            'wp:term': [
+              [{ id: stateId, name: row.status, taxonomy: 'state' }],
+              [{ id: provinceId, name: provinceName, taxonomy: 'province' }],
+            ],
+            'wp:featuredmedia': row.profile_image
+              ? [
+                  {
+                    source_url: row.profile_image,
+                  },
+                ]
+              : [],
+          },
+        } as unknown as WPMember;
+      });
+
+      return mapped;
     },
     {
-      // Cache for 5 minutes, then revalidate in background
-      dedupingInterval: 5 * 60 * 1000,
-      // Revalidate every 10 minutes
-      refreshInterval: 10 * 60 * 1000,
-      // Revalidate when window gets focus
-      revalidateOnFocus: true,
-      // Revalidate when network reconnects
-      revalidateOnReconnect: true,
-      // Keep previous data while loading new data
+      dedupingInterval: 60 * 1000,
+      refreshInterval: 0,
+      revalidateOnFocus: false,
       keepPreviousData: true,
-      // Fallback to cache when offline
-      fallbackData: undefined,
-      // Error retry configuration
       errorRetryCount: 3,
       errorRetryInterval: 5000,
       onError: (err) => {
         console.error('❌ Confreres in Formation fetch error:', err);
       },
-      onSuccess: (response) => {
-        console.log(
-          `✅ Confreres in Formation loaded: ${
-            response?.data?.length || 0
-          } members`,
-        );
-
-        // 🔍 CLIENT-SIDE DEBUG: Analyze the received data
-        if (response && response.data && response.data.length > 0) {
-          console.log(
-            '🔍 CLIENT-SIDE DEBUG: Analyzing received member data...',
-          );
-
-          // Sample first few members to understand structure
-          console.log('📋 Sample members (first 3):');
-          response.data.slice(0, 3).forEach((member, index) => {
-            console.log(
-              `--- Member ${index + 1}: ${member.title.rendered} ---`,
-            );
-            console.log('Member ID:', member.id);
-            console.log('State IDs:', member.state);
-            console.log('Province IDs:', member.province);
-
-            if (member._embedded?.['wp:term']) {
-              const allTerms = member._embedded['wp:term'].flat();
-              const stateTerms = allTerms.filter(
-                (term) =>
-                  (member.state ?? []).includes(term.id) &&
-                  term.taxonomy === 'state',
-              );
-
-              console.log(
-                'State terms for this member:',
-                stateTerms.map((term) => ({
-                  id: term.id,
-                  name: term.name,
-                  taxonomy: term.taxonomy,
-                })),
-              );
-            }
-            console.log('---');
-          });
-
-          // Analyze all status terms found
-          const allStatusTerms = new Set<string>();
-          const statusBreakdown: Record<string, string[]> = {};
-
-          response.data.forEach((member) => {
-            if (member._embedded?.['wp:term']) {
-              const allTerms = member._embedded['wp:term'].flat();
-              const stateTerms = allTerms.filter(
-                (term) =>
-                  (member.state ?? []).includes(term.id) &&
-                  term.taxonomy === 'state',
-              );
-
-              stateTerms.forEach((term) => {
-                allStatusTerms.add(term.name);
-
-                if (!statusBreakdown[term.name]) {
-                  statusBreakdown[term.name] = [];
-                }
-                statusBreakdown[term.name].push(member.title.rendered);
-              });
-            }
-          });
-
-          console.log(
-            '📊 ALL STATUS TERMS FOUND:',
-            Array.from(allStatusTerms).sort(),
-          );
-          console.log('📈 STATUS BREAKDOWN:');
-          Object.entries(statusBreakdown).forEach(([status, members]) => {
-            console.log(`  ${status}: ${members.length} members`);
-            if (members.length <= 5) {
-              members.forEach((name) => console.log(`    - ${name}`));
-            } else {
-              members
-                .slice(0, 3)
-                .forEach((name) => console.log(`    - ${name}`));
-              console.log(`    ... and ${members.length - 3} more`);
-            }
-          });
-
-          // Check for potentially deceased members
-          const potentiallyDeceasedTerms = Array.from(allStatusTerms).filter(
-            (term) => {
-              const lowerTerm = term.toLowerCase();
-              return (
-                lowerTerm.includes('deceased') ||
-                lowerTerm.includes('dead') ||
-                lowerTerm.includes('†') ||
-                lowerTerm.includes('rip') ||
-                lowerTerm.includes('former') ||
-                lowerTerm.includes('retired')
-              );
-            },
-          );
-
-          if (potentiallyDeceasedTerms.length > 0) {
-            console.log(
-              '⚰️ POTENTIALLY DECEASED STATUS TERMS FOUND:',
-              potentiallyDeceasedTerms,
-            );
-            potentiallyDeceasedTerms.forEach((term) => {
-              if (statusBreakdown[term]) {
-                console.log(
-                  `  ${term}: ${statusBreakdown[term].length} members`,
-                );
-                statusBreakdown[term]
-                  .slice(0, 5)
-                  .forEach((name) => console.log(`    - ${name}`));
-              }
-            });
-          } else {
-            console.log(
-              '✅ No obviously deceased status terms found in current data',
-            );
-          }
-
-          // Check for our target statuses
-          const targetStatuses = [
-            'Postulant',
-            'Novice',
-            'Bro. Novice',
-            'Scholastic',
-            'Deacon',
-          ];
-          const foundTargetStatuses = targetStatuses.filter((status) =>
-            allStatusTerms.has(status),
-          );
-          const missingTargetStatuses = targetStatuses.filter(
-            (status) => !allStatusTerms.has(status),
-          );
-
-          console.log('🎯 TARGET STATUS CHECK:');
-          console.log('  Found:', foundTargetStatuses);
-          console.log('  Missing:', missingTargetStatuses);
-
-          // Look for similar status terms that might be variations
-          const similarTerms = Array.from(allStatusTerms).filter((term) => {
-            const lowerTerm = term.toLowerCase();
-            return (
-              lowerTerm.includes('postulant') ||
-              lowerTerm.includes('novice') ||
-              lowerTerm.includes('scholastic') ||
-              lowerTerm.includes('deacon') ||
-              lowerTerm.includes('brother')
-            );
-          });
-
-          if (similarTerms.length > 0) {
-            console.log('🔍 SIMILAR FORMATION-RELATED TERMS:', similarTerms);
-          }
-        }
-      },
     },
   );
 
   return {
-    members: data?.data || [],
+    members: data ?? [],
     loading: isLoading,
-    error: error ? 'Failed to load confreres in formation data' : null,
+    error: error ? 'Failed to load confreres in formation' : null,
     refetch: mutate,
-    isEmpty: !isLoading && (!data?.data || data.data.length === 0),
-    isRefreshing: isValidating && !isLoading, // Background refresh indicator
+    isEmpty: !isLoading && (data?.length ?? 0) === 0,
+    isRefreshing: isValidating && !isLoading,
   };
 }

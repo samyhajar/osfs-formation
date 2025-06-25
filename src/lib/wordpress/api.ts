@@ -1084,13 +1084,13 @@ export async function fetchConfreresInFormation(): Promise<WPMember[]> {
     console.log('🎯 Target formation statuses:', formationStatuses);
 
     const membersWithFormationStatus = allMembers.filter((member) => {
-      if (!member._embedded?.['wp:term'] || member.state.length === 0) {
+      if (!member._embedded?.['wp:term'] || !member.state?.length) {
         return false;
       }
 
       const terms = member._embedded['wp:term'].flat();
       const stateTerms = terms.filter(
-        (term) => member.state.includes(term.id) && term.taxonomy === 'state',
+        (term) => member.state?.includes(term.id) && term.taxonomy === 'state',
       );
 
       // Check if any state term matches our formation statuses
@@ -1111,7 +1111,8 @@ export async function fetchConfreresInFormation(): Promise<WPMember[]> {
       if (member._embedded?.['wp:term']) {
         const terms = member._embedded['wp:term'].flat();
         const stateTerms = terms.filter(
-          (term) => member.state.includes(term.id) && term.taxonomy === 'state',
+          (term) =>
+            member.state?.includes(term.id) && term.taxonomy === 'state',
         );
 
         stateTerms.forEach((term) => {
@@ -1295,7 +1296,7 @@ export async function fetchConfreresInFormation(): Promise<WPMember[]> {
     const getMemberStatus = (member: WPMember): string => {
       const terms = member._embedded?.['wp:term']?.flat() || [];
       const stateTerms = terms.filter(
-        (term) => member.state.includes(term.id) && term.taxonomy === 'state',
+        (term) => member.state?.includes(term.id) && term.taxonomy === 'state',
       );
 
       // Find the first status that matches our formation statuses

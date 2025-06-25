@@ -19,8 +19,8 @@ export default function ConfrereAdditionalInfo({ member }: ConfrereAdditionalInf
     return matchingTerms.map(term => term.name);
   };
 
-  const positions = getAllTermNames('position', member.position);
-  const ministries = getAllTermNames('ministry', member.ministry);
+  const positions = getAllTermNames('position', member.position ?? []);
+  const ministries = getAllTermNames('ministry', member.ministry ?? []);
 
   return (
     <>
@@ -84,7 +84,7 @@ export default function ConfrereAdditionalInfo({ member }: ConfrereAdditionalInf
           <div>
             <span className="font-medium text-gray-500">Last Modified:</span>
             <span className="ml-2 text-gray-900">
-              {new Date(member.modified).toLocaleDateString()}
+              {member.modified ? new Date(member.modified).toLocaleDateString() : '—'}
             </span>
           </div>
         </div>

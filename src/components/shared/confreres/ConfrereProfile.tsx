@@ -28,8 +28,8 @@ export default function ConfrereProfile({ member }: ConfrereProfileProps) {
   };
 
   const imageUrl = getFeaturedImageUrl();
-  const status = getTermName('state', member.state);
-  const province = getTermName('province', member.province);
+  const status = getTermName('state', member.state ?? []);
+  const province = getTermName('province', member.province ?? []);
 
   return (
     <div className="flex items-start space-x-6">

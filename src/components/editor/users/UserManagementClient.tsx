@@ -1,11 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import FormatorUserTable from './FormatorUserTable';
 import FormeeUserTable from './FormeeUserTable';
-import AddUserModal from './AddUserModal';
-import { Button } from '@/components/ui/Button';
 import { Database } from '@/types/supabase';
 import PaginationControls from '@/components/shared/PaginationControls';
 
@@ -30,8 +27,6 @@ export default function UserManagementClient({
   currentPageFormee,
   limit,
 }: UserManagementClientProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [roleToAdd, setRoleToAdd] = useState<'formator' | 'formee'>('formee');
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -41,20 +36,6 @@ export default function UserManagementClient({
 
   const totalFormatorPages = Math.ceil(formatorCount / limit);
   const totalFormeePages = Math.ceil(formeeCount / limit);
-
-  const openModal = (role: 'formator' | 'formee') => {
-    setRoleToAdd(role);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleUserAdded = () => {
-    router.refresh();
-    console.log(`Successfully added ${roleToAdd}`);
-  };
 
   const handlePageChange = (role: 'formator' | 'formee', newPage: number) => {
     const currentParams = new URLSearchParams(searchParams.toString());
@@ -74,17 +55,14 @@ export default function UserManagementClient({
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold text-gray-900">User Management (Formant)</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">User Management</h1>
         <p className="text-sm text-gray-600 mt-1">Manage formator and formee user accounts.</p>
       </div>
 
       {/* Formator Users Section */}
       <div className="bg-white shadow-sm rounded-lg overflow-hidden">
         <div className="px-4 py-5 sm:px-6 flex justify-between items-center border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">Formators ({formatorCount})</h2>
-          <Button onClick={() => openModal('formator')} variant="primary">
-            + Add Formator
-          </Button>
+          <h2 className="text-lg font-medium text-gray-900">Editors</h2>
         </div>
         <div className="p-4 sm:p-6 space-y-4">
          <FormatorUserTable users={formatorUsers} />
@@ -101,10 +79,7 @@ export default function UserManagementClient({
       {/* Formee Users Section */}
       <div className="bg-white shadow-sm rounded-lg overflow-hidden">
         <div className="px-4 py-5 sm:px-6 flex justify-between items-center border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">Formees ({formeeCount})</h2>
-          <Button onClick={() => openModal('formee')} variant="primary">
-            + Add Formee
-          </Button>
+          <h2 className="text-lg font-medium text-gray-900">Users</h2>
         </div>
         <div className="p-4 sm:p-6 space-y-4">
           <FormeeUserTable users={formeeUsers} />
@@ -117,15 +92,6 @@ export default function UserManagementClient({
           )}
         </div>
       </div>
-
-      {isModalOpen && (
-        <AddUserModal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          role={roleToAdd}
-          onUserAdded={handleUserAdded}
-        />
-      )}
     </div>
   );
 }

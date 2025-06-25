@@ -1,10 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import AllUsersTable from './AllUsersTable';
-import AddUserModal from './AddUserModal';
-import { Button } from '@/components/ui/Button';
 import { Database } from '@/types/supabase';
 import PaginationControls from '@/components/shared/PaginationControls';
 import { useTranslations } from 'next-intl';
@@ -26,26 +23,12 @@ export default function UserManagementClient({
 }: UserManagementClientProps) {
   const t = useTranslations('AdminUsersPage');
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const users = initialUsers;
   const totalPages = Math.ceil(totalCount / limit);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleUserAdded = () => {
-    router.refresh();
-    console.log('Successfully added user');
-  };
 
   const handlePageChange = (newPage: number) => {
     const currentParams = new URLSearchParams(searchParams.toString());
@@ -62,10 +45,7 @@ export default function UserManagementClient({
 
       <div className="bg-white shadow-sm rounded-lg overflow-hidden">
         <div className="px-4 py-5 sm:px-6 flex justify-between items-center border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">All Users ({totalCount})</h2>
-          <Button onClick={openModal} variant="primary">
-            Add New User
-          </Button>
+          <h2 className="text-lg font-medium text-gray-900">All Users</h2>
         </div>
         <div className="p-4 sm:p-6 space-y-4">
           <AllUsersTable users={users} />
@@ -78,15 +58,6 @@ export default function UserManagementClient({
           )}
         </div>
       </div>
-
-      {isModalOpen && (
-        <AddUserModal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          defaultRole="user" // Default role for new users
-          onUserAdded={handleUserAdded}
-        />
-      )}
     </div>
   );
 }

@@ -9,6 +9,48 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      confreres_in_formation: {
+        Row: {
+          bio: string | null
+          deceased: boolean
+          email: string | null
+          last_synced: string
+          name: string
+          positions: Json
+          profile_image: string | null
+          slug: string
+          status: string | null
+          total_active: number
+          wp_id: number
+        }
+        Insert: {
+          bio?: string | null
+          deceased?: boolean
+          email?: string | null
+          last_synced?: string
+          name: string
+          positions: Json
+          profile_image?: string | null
+          slug: string
+          status?: string | null
+          total_active?: number
+          wp_id: number
+        }
+        Update: {
+          bio?: string | null
+          deceased?: boolean
+          email?: string | null
+          last_synced?: string
+          name?: string
+          positions?: Json
+          profile_image?: string | null
+          slug?: string
+          status?: string | null
+          total_active?: number
+          wp_id?: number
+        }
+        Relationships: []
+      }
       document_notifications: {
         Row: {
           created_at: string
@@ -95,6 +137,48 @@ export type Database = {
           title?: string
           topics?: string[] | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      formation_personnel: {
+        Row: {
+          active_positions: Json
+          bio: string | null
+          deceased: boolean
+          email: string | null
+          last_synced: string
+          name: string
+          positions: Json
+          profile_image: string | null
+          slug: string
+          total_active: number
+          wp_id: number
+        }
+        Insert: {
+          active_positions: Json
+          bio?: string | null
+          deceased?: boolean
+          email?: string | null
+          last_synced?: string
+          name: string
+          positions: Json
+          profile_image?: string | null
+          slug: string
+          total_active: number
+          wp_id: number
+        }
+        Update: {
+          active_positions?: Json
+          bio?: string | null
+          deceased?: boolean
+          email?: string | null
+          last_synced?: string
+          name?: string
+          positions?: Json
+          profile_image?: string | null
+          slug?: string
+          total_active?: number
+          wp_id?: number
         }
         Relationships: []
       }

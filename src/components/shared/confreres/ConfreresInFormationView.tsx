@@ -11,12 +11,17 @@ interface ConfreresInFormationViewProps {
 export default function ConfreresInFormationView({ userRole }: ConfreresInFormationViewProps) {
   const { members, loading, error, refetch, isRefreshing, isEmpty } = useConfreresInFormation();
   const [hasFetchedOnce, setHasFetchedOnce] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     if (!loading) setHasFetchedOnce(true);
   }, [loading]);
 
-  if (loading) {
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated || loading) {
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">

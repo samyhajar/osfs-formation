@@ -55,6 +55,15 @@ export interface WPMember {
   _embedded?: WPEmbeddedData;
   state?: number[];
   province?: number[];
+  // Taxonomy term ID arrays used in frontend helpers
+  position?: number[];
+  ministry?: number[];
+  /** Post status string (e.g., 'publish', 'draft') */
+  status?: string;
+  /** ISO date string indicating last modification time */
+  modified?: string;
+  /** Full permalink to the post in WordPress */
+  link?: string;
   // Fields from the API response
   name?: string;
   email?: string;

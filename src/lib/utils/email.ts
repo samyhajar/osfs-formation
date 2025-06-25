@@ -6,11 +6,11 @@ import type { WPMember } from '@/lib/wordpress/types';
  */
 export function getMemberEmail(member: WPMember): string {
   // Try to get email from meta fields
-  if (member.meta?.email) {
+  if (typeof member.meta?.email === 'string') {
     return member.meta.email;
   }
 
-  if (member.meta?.contact_email) {
+  if (typeof member.meta?.contact_email === 'string') {
     return member.meta.contact_email;
   }
 

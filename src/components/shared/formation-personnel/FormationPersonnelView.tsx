@@ -12,6 +12,7 @@ export default function FormationPersonnelView({ userRole }: FormationPersonnelV
   const { formationPersonnel, loading, error, isEmpty, refetch, isRefreshing } = useFormationPersonnel();
   const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
   const [hasFetchedOnce, setHasFetchedOnce] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     if (!loading) {
@@ -19,11 +20,15 @@ export default function FormationPersonnelView({ userRole }: FormationPersonnelV
     }
   }, [loading]);
 
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
   const handleEmailSelected = (emails: string[]) => {
     setSelectedEmails(emails);
   };
 
-  if (loading) {
+  if (!hydrated || loading) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
