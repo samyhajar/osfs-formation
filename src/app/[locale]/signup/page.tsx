@@ -4,6 +4,8 @@ import SignUpForm from '@/components/auth/SignUpForm'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 
+export const dynamic = 'force-dynamic'
+
 export default async function SignUp() {
   try {
     const supabase = await createClient()

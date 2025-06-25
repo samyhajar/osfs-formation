@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server-client'
 import LoginFormNoIntl from '@/components/auth/LoginFormNoIntl'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic';
+
 export default async function Login() {
   try {
     const supabase = await createClient()

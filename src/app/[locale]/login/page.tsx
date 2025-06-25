@@ -4,6 +4,8 @@ import LoginForm from '@/components/auth/LoginForm'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Login() {
   try {
     const supabase = await createClient()
