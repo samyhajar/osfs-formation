@@ -165,5 +165,14 @@
       "mission": "Mission",
       "default": "Atelier"
     }
+  },
+  "FormationPersonnel": {
+    "title": "Personnel de Formation",
+    "loading": "Chargement...",
+    "error": {
+      "title": "Erreur",
+      "default": "Échec du chargement du personnel de formation"
+    },
+    "noData": "Aucun personnel de formation trouvé"
   }
 }

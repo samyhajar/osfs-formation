@@ -1,17 +1,28 @@
 import useSWR from 'swr';
-import { fetchConfreresInFormation } from '@/lib/wordpress/api';
 import type { WPMember } from '@/lib/wordpress/types';
 
-const CONFRERES_IN_FORMATION_KEY = '/wordpress/confreres-in-formation';
+const CONFRERES_IN_FORMATION_ENDPOINT = '/api/confreres-in-formation';
+
+interface APIResponse {
+  success: boolean;
+  data: WPMember[];
+  count: number;
+  durationMs: number;
+  timestamp: string;
+}
 
 /**
  * Custom hook for fetching confreres in formation with SWR caching
  * Provides stale-while-revalidate functionality for better UX
  */
 export function useConfreresInFormation() {
-  const { data, error, isLoading, isValidating, mutate } = useSWR<WPMember[]>(
-    CONFRERES_IN_FORMATION_KEY,
-    fetchConfreresInFormation,
+  const { data, error, isLoading, isValidating, mutate } = useSWR<APIResponse>(
+    CONFRERES_IN_FORMATION_ENDPOINT,
+    async () => {
+      const res = await fetch(CONFRERES_IN_FORMATION_ENDPOINT);
+      if (!res.ok) throw new Error('Failed to fetch confreres in formation');
+      return res.json();
+    },
     {
       // Cache for 5 minutes, then revalidate in background
       dedupingInterval: 5 * 60 * 1000,
@@ -28,23 +39,25 @@ export function useConfreresInFormation() {
       // Error retry configuration
       errorRetryCount: 3,
       errorRetryInterval: 5000,
-      onError: (error) => {
-        console.error('❌ Confreres in Formation fetch error:', error);
+      onError: (err) => {
+        console.error('❌ Confreres in Formation fetch error:', err);
       },
-      onSuccess: (data) => {
+      onSuccess: (response) => {
         console.log(
-          `✅ Confreres in Formation loaded: ${data?.length || 0} members`,
+          `✅ Confreres in Formation loaded: ${
+            response?.data?.length || 0
+          } members`,
         );
 
         // 🔍 CLIENT-SIDE DEBUG: Analyze the received data
-        if (data && data.length > 0) {
+        if (response && response.data && response.data.length > 0) {
           console.log(
             '🔍 CLIENT-SIDE DEBUG: Analyzing received member data...',
           );
 
           // Sample first few members to understand structure
           console.log('📋 Sample members (first 3):');
-          data.slice(0, 3).forEach((member, index) => {
+          response.data.slice(0, 3).forEach((member, index) => {
             console.log(
               `--- Member ${index + 1}: ${member.title.rendered} ---`,
             );
@@ -56,7 +69,8 @@ export function useConfreresInFormation() {
               const allTerms = member._embedded['wp:term'].flat();
               const stateTerms = allTerms.filter(
                 (term) =>
-                  member.state.includes(term.id) && term.taxonomy === 'state',
+                  (member.state ?? []).includes(term.id) &&
+                  term.taxonomy === 'state',
               );
 
               console.log(
@@ -75,12 +89,13 @@ export function useConfreresInFormation() {
           const allStatusTerms = new Set<string>();
           const statusBreakdown: Record<string, string[]> = {};
 
-          data.forEach((member) => {
+          response.data.forEach((member) => {
             if (member._embedded?.['wp:term']) {
               const allTerms = member._embedded['wp:term'].flat();
               const stateTerms = allTerms.filter(
                 (term) =>
-                  member.state.includes(term.id) && term.taxonomy === 'state',
+                  (member.state ?? []).includes(term.id) &&
+                  term.taxonomy === 'state',
               );
 
               stateTerms.forEach((term) => {
@@ -187,11 +202,11 @@ export function useConfreresInFormation() {
   );
 
   return {
-    members: data || [],
+    members: data?.data || [],
     loading: isLoading,
     error: error ? 'Failed to load confreres in formation data' : null,
     refetch: mutate,
-    isEmpty: !isLoading && (!data || data.length === 0),
+    isEmpty: !isLoading && (!data?.data || data.data.length === 0),
     isRefreshing: isValidating && !isLoading, // Background refresh indicator
   };
 }

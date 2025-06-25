@@ -28,13 +28,15 @@ export default function MemberSelectionTable({
 
     // Get profile picture URL
     const profileImage = member._embedded?.['wp:featuredmedia']?.[0]?.source_url || null;
-    const altText = member._embedded?.['wp:featuredmedia']?.[0]?.alt_text || member.title.rendered;
+    const memberName = member.title?.rendered || member.name || `Member ${member.id}`;
+    const altText = member._embedded?.['wp:featuredmedia']?.[0]?.alt_text || memberName;
 
     return {
       positions: positions.join(', '),
       province,
       profileImage,
-      altText
+      altText,
+      memberName
     };
   };
 
@@ -67,7 +69,7 @@ export default function MemberSelectionTable({
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {members.map((member) => {
-                const { positions, province, profileImage, altText } = getMemberInfo(member);
+                const { positions, province, profileImage, altText, memberName } = getMemberInfo(member);
                 const isSelected = selectedMemberIds.includes(member.id);
 
                 return (
@@ -101,13 +103,13 @@ export default function MemberSelectionTable({
                           className={`w-full h-full flex items-center justify-center text-sm font-medium text-gray-600 ${profileImage ? 'hidden' : 'flex'}`}
                           style={{ display: profileImage ? 'none' : 'flex' }}
                         >
-                          {member.title.rendered.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+                          {memberName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
-                        {member.title.rendered}
+                        {memberName}
                       </div>
                       <div className="text-sm text-gray-500">
                         ID: {member.id}

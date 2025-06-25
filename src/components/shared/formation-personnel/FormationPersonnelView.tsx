@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useFormationPersonnel } from '@/hooks/useFormationPersonnel';
 import FormationPersonnelTable from './FormationPersonnelTable';
 
@@ -11,6 +11,13 @@ interface FormationPersonnelViewProps {
 export default function FormationPersonnelView({ userRole }: FormationPersonnelViewProps) {
   const { formationPersonnel, loading, error, isEmpty, refetch, isRefreshing } = useFormationPersonnel();
   const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
+  const [hasFetchedOnce, setHasFetchedOnce] = useState(false);
+
+  useEffect(() => {
+    if (!loading) {
+      setHasFetchedOnce(true);
+    }
+  }, [loading]);
 
   const handleEmailSelected = (emails: string[]) => {
     setSelectedEmails(emails);
@@ -22,7 +29,10 @@ export default function FormationPersonnelView({ userRole }: FormationPersonnelV
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading formation personnel...</p>
+            <p className="text-gray-600 mb-1">Loading formation personnel...</p>
+            <p className="text-sm text-gray-500 max-w-sm mx-auto">
+              Warming up the cache—this may take a moment, but future visits will be faster.
+            </p>
           </div>
         </div>
       </div>
@@ -64,22 +74,10 @@ export default function FormationPersonnelView({ userRole }: FormationPersonnelV
             : 'Meet our dedicated formation leaders who guide and support the spiritual and academic development of our seminarians and candidates throughout their journey of discernment and preparation for religious life.'
           }
         </p>
-
-        {/* Role-specific notifications */}
-        {userRole === 'editor' && (
-          <div className="mt-4 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg inline-block">
-            <p className="text-sm text-blue-700">
-              <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Editor View - Same interface as users with browsing capabilities
-            </p>
-          </div>
-        )}
       </div>
 
       {/* Formation Personnel Table */}
-      {isEmpty ? (
+      {isEmpty && hasFetchedOnce ? (
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-12 text-center">
           <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -99,7 +97,7 @@ export default function FormationPersonnelView({ userRole }: FormationPersonnelV
       )}
 
       {/* Footer Note */}
-      {!isEmpty && (
+      {!isEmpty && hasFetchedOnce && (
         <div className="mt-12 text-center">
           <p className="text-sm text-gray-500">
             For more information about our formation programs or to contact any of our formation personnel,

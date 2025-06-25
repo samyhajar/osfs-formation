@@ -11,6 +11,15 @@ export interface WPTerm {
 }
 
 /**
+ * Represents a position in the formation personnel
+ */
+export interface TargetPosition {
+  position: string;
+  startYear?: number;
+  endYear?: number;
+}
+
+/**
  * Represents the _embedded field structure.
  */
 interface WPEmbeddedData {
@@ -37,37 +46,25 @@ interface WPEmbeddedData {
  */
 export interface WPMember {
   id: number;
-  date: string;
-  date_gmt: string;
-  guid: {
+  title: {
     rendered: string;
   };
-  modified: string;
-  modified_gmt: string;
   slug: string;
-  status: 'publish' | 'draft' | 'pending' | 'private';
-  type: 'member';
-  link: string;
-  title: {
-    rendered: string; // Member's name
-  };
-  featured_media: number; // ID of the featured media (0 if none)
-  template: string;
-  // Taxonomy IDs (actual names/details are in _embedded['wp:term'])
-  position: number[];
-  ministry: number[];
-  state: number[]; // Holds Term IDs for the 'state' taxonomy (e.g., Postulant, Novice)
-  province: number[]; // Holds Term IDs for the 'province' taxonomy
-  // Custom fields like acf or meta are not present in the sample
-  acf?: Record<string, unknown>; // Use Record<string, unknown> instead of any
+  acf?: Record<string, unknown>;
+  featured_media?: number;
+  _embedded?: WPEmbeddedData;
+  state?: number[];
+  province?: number[];
+  // Fields from the API response
+  name?: string;
+  email?: string;
+  bio?: string;
+  imageUrl?: string;
   meta?: {
+    'e-mail'?: string;
     email?: string;
-    contact_email?: string;
+    about_his_life?: string;
+    deceased?: string;
     [key: string]: unknown;
   };
-
-  // Embedded data (available when using ?_embed=true)
-  _embedded?: WPEmbeddedData;
-
-  // We are omitting _links and class_list for simplicity unless needed
 }

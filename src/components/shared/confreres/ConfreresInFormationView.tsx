@@ -2,20 +2,29 @@
 
 import { useConfreresInFormation } from '@/hooks/useConfreresInFormation';
 import ConfreresTable from '@/components/shared/confreres/ConfreresTable';
+import { useState, useEffect } from 'react';
 
 interface ConfreresInFormationViewProps {
   userRole: 'admin' | 'editor' | 'user';
 }
 
 export default function ConfreresInFormationView({ userRole }: ConfreresInFormationViewProps) {
-  const { members, loading, error, refetch, isRefreshing } = useConfreresInFormation();
+  const { members, loading, error, refetch, isRefreshing, isEmpty } = useConfreresInFormation();
+  const [hasFetchedOnce, setHasFetchedOnce] = useState(false);
+
+  useEffect(() => {
+    if (!loading) setHasFetchedOnce(true);
+  }, [loading]);
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading confreres in formation...</p>
+          <p className="mt-4 text-gray-600 mb-1">Loading confreres in formation...</p>
+          <p className="text-sm text-gray-500 max-w-sm mx-auto">
+            Warming up the cache—this may take a moment, but future visits will be faster.
+          </p>
         </div>
       </div>
     );
@@ -59,7 +68,11 @@ export default function ConfreresInFormationView({ userRole }: ConfreresInFormat
         </p>
       </div>
 
-      <ConfreresTable members={members} />
+      {isEmpty && hasFetchedOnce ? (
+        <p className="text-gray-600">No confreres found.</p>
+      ) : (
+        <ConfreresTable members={members} />
+      )}
     </div>
   );
 }

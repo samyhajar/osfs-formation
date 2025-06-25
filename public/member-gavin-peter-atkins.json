@@ -1,0 +1,202 @@
+{
+  "id": 14742,
+  "name": "Gavin Peter Atkins",
+  "slug": "gavin-peter-atkins",
+  "link": "https://wordpress-635146-5283628.cloudwaysapps.com/member/gavin-peter-atkins/",
+  "bio": "",
+  "email": "gavinatkins1966@gmail.com",
+  "deceased": false,
+  "currentPositions": [
+    {
+      "position": "Regional Councillor/Assistant",
+      "province": "Southern African Region",
+      "from": "",
+      "to": "",
+      "isActive": true,
+      "source": "current_taxonomy"
+    },
+    {
+      "position": "Novice Master",
+      "province": "Southern African Region",
+      "from": "",
+      "to": "",
+      "isActive": true,
+      "source": "current_taxonomy"
+    },
+    {
+      "position": "Master of Scholastics",
+      "province": "Southern African Region",
+      "from": "",
+      "to": "",
+      "isActive": true,
+      "source": "current_taxonomy"
+    }
+  ],
+  "formationHistory": [
+    {
+      "position": "Regional Councillor/Assistant",
+      "province": "Southern African Region",
+      "from": "2010",
+      "to": "2016",
+      "isActive": false,
+      "source": "acf_history"
+    },
+    {
+      "position": "Novice Master",
+      "province": "Southern African Region",
+      "from": "2016",
+      "to": "2017",
+      "isActive": false,
+      "source": "acf_history"
+    },
+    {
+      "position": "Master of Scholastics",
+      "province": "Southern African Region",
+      "from": "2016",
+      "to": "2017",
+      "isActive": false,
+      "source": "acf_history"
+    },
+    {
+      "position": "Master of Scholastics",
+      "province": "Southern African Region",
+      "from": "2021",
+      "to": "",
+      "isActive": true,
+      "source": "acf_history"
+    }
+  ],
+  "allPositions": [
+    {
+      "position": "Regional Councillor/Assistant",
+      "province": "Southern African Region",
+      "from": "",
+      "to": "",
+      "isActive": true,
+      "source": "current_taxonomy"
+    },
+    {
+      "position": "Novice Master",
+      "province": "Southern African Region",
+      "from": "",
+      "to": "",
+      "isActive": true,
+      "source": "current_taxonomy"
+    },
+    {
+      "position": "Master of Scholastics",
+      "province": "Southern African Region",
+      "from": "",
+      "to": "",
+      "isActive": true,
+      "source": "current_taxonomy"
+    },
+    {
+      "position": "Regional Councillor/Assistant",
+      "province": "Southern African Region",
+      "from": "2010",
+      "to": "2016",
+      "isActive": false,
+      "source": "acf_history"
+    },
+    {
+      "position": "Novice Master",
+      "province": "Southern African Region",
+      "from": "2016",
+      "to": "2017",
+      "isActive": false,
+      "source": "acf_history"
+    },
+    {
+      "position": "Master of Scholastics",
+      "province": "Southern African Region",
+      "from": "2016",
+      "to": "2017",
+      "isActive": false,
+      "source": "acf_history"
+    },
+    {
+      "position": "Master of Scholastics",
+      "province": "Southern African Region",
+      "from": "2021",
+      "to": "",
+      "isActive": true,
+      "source": "acf_history"
+    }
+  ],
+  "activePositions": [
+    {
+      "position": "Regional Councillor/Assistant",
+      "province": "Southern African Region",
+      "from": "",
+      "to": "",
+      "isActive": true,
+      "source": "current_taxonomy"
+    },
+    {
+      "position": "Novice Master",
+      "province": "Southern African Region",
+      "from": "",
+      "to": "",
+      "isActive": true,
+      "source": "current_taxonomy"
+    },
+    {
+      "position": "Master of Scholastics",
+      "province": "Southern African Region",
+      "from": "",
+      "to": "",
+      "isActive": true,
+      "source": "current_taxonomy"
+    },
+    {
+      "position": "Master of Scholastics",
+      "province": "Southern African Region",
+      "from": "2021",
+      "to": "",
+      "isActive": true,
+      "source": "acf_history"
+    }
+  ],
+  "originalData": {
+    "featured_media": 15147,
+    "rawACF": [],
+    "foundACF": {
+      "positions": [
+        {
+          "position": 1236,
+          "province": 1126,
+          "from": "2010",
+          "to": "2016"
+        },
+        {
+          "position": 1244,
+          "province": 1126,
+          "from": "2016",
+          "to": "2017"
+        },
+        {
+          "position": 1246,
+          "province": 1126,
+          "from": "2016",
+          "to": "2017"
+        },
+        {
+          "position": 1246,
+          "province": 1126,
+          "from": "2021",
+          "to": ""
+        }
+      ],
+      "bio": "",
+      "email": "gavinatkins1966@gmail.com",
+      "deceased": false
+    },
+    "taxonomyPositions": [
+      1236,
+      1244,
+      1246
+    ],
+    "taxonomyProvince": 1126
+  }
+}

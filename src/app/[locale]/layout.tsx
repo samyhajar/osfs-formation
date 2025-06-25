@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { SWRProvider } from "@/components/providers/SWRProvider";
@@ -17,16 +16,6 @@ import { routing } from '@/i18n/routing';
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "OSFS Formation Resources",
@@ -55,19 +44,14 @@ export default async function LocaleLayout({
 
   // Add the font variables to the body instead of html
   return (
-    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="antialiased font-sans">
-        {/* NextIntlClientProvider now receives server-fetched messages */}
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <SWRProvider>
-            <AuthProvider>
-              <LogoutHandler />
-              {children}
-              <Toaster position="bottom-center" />
-            </AuthProvider>
-          </SWRProvider>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <SWRProvider>
+        <AuthProvider>
+          <LogoutHandler />
+          {children}
+          <Toaster position="bottom-center" />
+        </AuthProvider>
+      </SWRProvider>
+    </NextIntlClientProvider>
   );
 }

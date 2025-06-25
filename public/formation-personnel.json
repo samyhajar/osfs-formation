@@ -1,0 +1,754 @@
+[
+  {
+    "id": 15094,
+    "name": "Fabrice Emmanuel Sèdjro GANYE",
+    "slug": "fabrice-emmanuel-sedjro-ganye",
+    "email": "ganyee9@gmail.com",
+    "bio": "",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/m_808.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Novice Master",
+        "province": "France-West Africa Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Novice Master",
+        "province": "France-West Africa Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "totalActivePositions": 1
+  },
+  {
+    "id": 15071,
+    "name": "Luis Paul Muñoz Célleri",
+    "slug": "luis-paul-munoz-celleri",
+    "email": "luispaul89@hotmail.com",
+    "bio": "",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/celleri_munos_luispaul.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Novice Master",
+        "province": "South American and Caribbean Province",
+        "from": "2023",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Provincial Councillor",
+        "province": "South American and Caribbean Province",
+        "from": "20190222",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": false
+      },
+      {
+        "position": "Master of Scholastics",
+        "province": "South American and Caribbean Province",
+        "from": "2020",
+        "to": "2023",
+        "isActive": false,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Provincial Treasurer",
+        "province": "South American and Caribbean Province",
+        "from": "20230217",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": false
+      },
+      {
+        "position": "Novice Master",
+        "province": "South American and Caribbean Province",
+        "from": "2023",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "totalActivePositions": 3
+  },
+  {
+    "id": 15061,
+    "name": "Jacob Anil Akkutte",
+    "slug": "jacob-anil-akkutte",
+    "email": "devasia.anil@yahoo.com",
+    "bio": "",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/WhatsApp-Image-2025-02-06-at-17.01.57_502fdd0e.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Master of Scholastics",
+        "province": "Indian Region",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Master of Scholastics",
+        "province": "Indian Region",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "totalActivePositions": 1
+  },
+  {
+    "id": 15052,
+    "name": "Daniel P. Wisniewski",
+    "slug": "daniel-p-wisniewski",
+    "email": "brodpw@hotmail.com",
+    "bio": "",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/m_567.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Master of Scholastics",
+        "province": "Wilmington/Philadelphia Province",
+        "from": "2023",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      },
+      {
+        "position": "General Formation Coordinator",
+        "province": "Wilmington/Philadelphia Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Provincial Councillor",
+        "province": "Wilmington/Philadelphia Province",
+        "from": "2010",
+        "to": "2018",
+        "isActive": false,
+        "isTargetPosition": false
+      },
+      {
+        "position": "Provincial Councillor/Assistant",
+        "province": "Wilmington/Philadelphia Province",
+        "from": "20220623",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": false
+      },
+      {
+        "position": "Master of Scholastics",
+        "province": "Wilmington/Philadelphia Province",
+        "from": "2023",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      },
+      {
+        "position": "General Councillor",
+        "province": "Wilmington/Philadelphia Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": false
+      },
+      {
+        "position": "General Council Secretary",
+        "province": "Wilmington/Philadelphia Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": false
+      },
+      {
+        "position": "General Formation Coordinator",
+        "province": "Wilmington/Philadelphia Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "totalActivePositions": 5
+  },
+  {
+    "id": 15045,
+    "name": "Nixon Jean",
+    "slug": "nixon-jean",
+    "email": null,
+    "bio": "",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/m_841.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Master of Scholastics",
+        "province": "South American and Caribbean Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Master of Scholastics",
+        "province": "South American and Caribbean Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "totalActivePositions": 1
+  },
+  {
+    "id": 14959,
+    "name": "Dominik Viet Hien Nguyen",
+    "slug": "dominik-viet-hien-nguyen",
+    "email": "nguyen@osfs.eu",
+    "bio": "Geboren: 5.9.1982 in Dong Nai, Vietnam, Diözese Xuan Loc\r\nGrundschule: Windheim 1990-1991, Friedewalde 1991-1993\r\nHauptschule: Petershagen mit Fachoberschulreife 1993-1999\r\nGymnasium: Fockenfeld 1999-2003\r\nNoviziat: Ried-Riedberg 2003/04\r\nErste Profess: Ried-Riedberg 27.9.2004\r\nEwige Profess: Eichstätt 31.1.2009\r\nPhilosophie: Eichstätt 2004-2006\r\nTheologie: Toronto, Kanada 2006/07; Eichstätt 2007-2009\r\nDiakonweihe: Fockenfeld, 24.1.2011\r\nPriesterweihe: Haus Overbach, 28.10.2012\r\n\r\nAufgaben:\r\nMering-St. Michael: Pastoralzeit und Pastoralkurs (bei den Pallotinern in Friedberg) 16.10.2009-Dezember 2010\r\nChemnitz-St. Antonius / Don-Bosco-Haus: Pastoralzeit - Diakonat 1.2.2011-31.8.2011\r\nHaus Overbach als Religionslehrer und Schulseelsorger 1.9.2011-31.8.2020\r\n- zusätzl. als Hochschulseelsorger an der Fachhochschule Jülich 1.9.2013-31.8.2020\r\n- zuätzl. Lehrgang für Verantwortliche in der Ordensausbildung November 2017-31.8.2020\r\nDachsberg als Religionslehrer und Jugend- und Berufepastoral seit 1.9.2020\r\n- zusätzl. Koordinator der Region Oberösterreich seit 1.9.2020\r\n- zusätzl. Novizenmeister und Ausbildungsleiter seit 1.1.2022\r\n- zusätzl. Kurat der Pfarre EferdingerLand mit Schwerpunkt Pfarrteilgemeinde Aschach an der Donau seit 1.1.2023\r\nProvinzialrat seit 1.7.2017",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/m_400.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Vocation Director",
+        "province": "German-speaking Province",
+        "from": "2017",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Novice Master",
+        "province": "German-speaking Province",
+        "from": "2022",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Formation Director",
+        "province": "German-speaking Province",
+        "from": "2022",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Provincial Councillor",
+        "province": "German-speaking Province",
+        "from": "2017",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": false
+      },
+      {
+        "position": "Vocation Director",
+        "province": "German-speaking Province",
+        "from": "2017",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Novice Master",
+        "province": "German-speaking Province",
+        "from": "2022",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Formation Director",
+        "province": "German-speaking Province",
+        "from": "2022",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "totalActivePositions": 4
+  },
+  {
+    "id": 14954,
+    "name": "Jean Degbegnon SOGBEGNON",
+    "slug": "jean-degbegnon-sogbegnon",
+    "email": "jeanolucesogbgnon@yahoo.fr",
+    "bio": "",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/m_759.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Master of Scholastics",
+        "province": "France-West Africa Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Master of Scholastics",
+        "province": "France-West Africa Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "totalActivePositions": 1
+  },
+  {
+    "id": 14947,
+    "name": "Jan Mostert",
+    "slug": "jan-mostert",
+    "email": "jmostertosfs@gmail.com",
+    "bio": "",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/m_385.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Novice Master",
+        "province": "Southern African Region",
+        "from": "2020",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Novice Master",
+        "province": "Southern African Region",
+        "from": "2008",
+        "to": "2016",
+        "isActive": false,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Regional Superior",
+        "province": "Southern African Region",
+        "from": "2008",
+        "to": "2016",
+        "isActive": false,
+        "isTargetPosition": false
+      },
+      {
+        "position": "Novice Master",
+        "province": "Southern African Region",
+        "from": "2008",
+        "to": "2016",
+        "isActive": false,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Master of Scholastics",
+        "province": "Southern African Region",
+        "from": "2008",
+        "to": "2016",
+        "isActive": false,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Novice Master",
+        "province": "Southern African Region",
+        "from": "2020",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Regional Treasurer",
+        "province": "Southern African Region",
+        "from": "2022",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": false
+      },
+      {
+        "position": "Advisory Council Member",
+        "province": "Southern African Region",
+        "from": "2022",
+        "to": "2023",
+        "isActive": false,
+        "isTargetPosition": false
+      },
+      {
+        "position": "Regional Councillor",
+        "province": "Southern African Region",
+        "from": "2023",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": false
+      }
+    ],
+    "totalActivePositions": 3
+  },
+  {
+    "id": 14937,
+    "name": "Fernando Miguel Adams",
+    "slug": "fernando-miguel-adams",
+    "email": null,
+    "bio": "",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/m_821.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Vocation Director",
+        "province": "South American and Caribbean Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Vocation Director",
+        "province": "South American and Caribbean Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "totalActivePositions": 1
+  },
+  {
+    "id": 14934,
+    "name": "Thambi Joseph Mekala",
+    "slug": "thambi-joseph-mekala",
+    "email": "thambiosfs@rediffmail.com",
+    "bio": "",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/m_370.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Novice Master",
+        "province": "Indian Region",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Regional Councillor",
+        "province": "Indian Region",
+        "from": "2017",
+        "to": "2018",
+        "isActive": false,
+        "isTargetPosition": false
+      },
+      {
+        "position": "Novice Master",
+        "province": "Indian Region",
+        "from": "2017",
+        "to": "2020",
+        "isActive": false,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Regional Councillor",
+        "province": "Indian Region",
+        "from": "2020",
+        "to": "2024",
+        "isActive": false,
+        "isTargetPosition": false
+      },
+      {
+        "position": "Master of Scholastics",
+        "province": "Indian Region",
+        "from": "2020",
+        "to": "2024",
+        "isActive": false,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Novice Master",
+        "province": "Indian Region",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "totalActivePositions": 1
+  },
+  {
+    "id": 14932,
+    "name": "Kenneth N. McKenna",
+    "slug": "kenneth-n-mckenna",
+    "email": "mckenna@desales.org",
+    "bio": "",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/m_365.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Vocation Director",
+        "province": "Toledo/Detroit Province",
+        "from": "2022",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Provincial",
+        "province": "Toledo/Detroit Province",
+        "from": "2010",
+        "to": "2019",
+        "isActive": false,
+        "isTargetPosition": false
+      },
+      {
+        "position": "Novice Master",
+        "province": "Toledo/Detroit Province",
+        "from": "2021",
+        "to": "2022",
+        "isActive": false,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Vocation Director",
+        "province": "Toledo/Detroit Province",
+        "from": "2022",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "totalActivePositions": 1
+  },
+  {
+    "id": 14889,
+    "name": "Patrick J. Kifolo",
+    "slug": "patrick-j-kifolo",
+    "email": "pjkif@hotmail.com",
+    "bio": "",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/m_289.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Vocation Director",
+        "province": "Wilmington/Philadelphia Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Vocation Director",
+        "province": "Wilmington/Philadelphia Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "totalActivePositions": 1
+  },
+  {
+    "id": 14823,
+    "name": "John I. Extejt",
+    "slug": "john-i-extejt",
+    "email": "jextejt@sfstoledo.org",
+    "bio": "",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/m_166.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Formation Assistant",
+        "province": "Toledo/Detroit Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Master of Scholastics",
+        "province": "Wilmington/Philadelphia Province",
+        "from": "2020",
+        "to": "2024",
+        "isActive": false,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Master of Scholastics",
+        "province": "Toledo/Detroit Province",
+        "from": "2020",
+        "to": "2024",
+        "isActive": false,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Formation Assistant",
+        "province": "Toledo/Detroit Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "totalActivePositions": 1
+  },
+  {
+    "id": 14760,
+    "name": "Alberto Benavides Vergara",
+    "slug": "alberto-benavides-vergara",
+    "email": "albertoosfs@hotmail.com",
+    "bio": "",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/m_039.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Postulant Director",
+        "province": "South American and Caribbean Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Provincial",
+        "province": "South American and Caribbean Province",
+        "from": "2010",
+        "to": "2015",
+        "isActive": false,
+        "isTargetPosition": false
+      },
+      {
+        "position": "Provincial Councillor",
+        "province": "South American and Caribbean Province",
+        "from": "2015",
+        "to": "2019",
+        "isActive": false,
+        "isTargetPosition": false
+      },
+      {
+        "position": "Postulant Director",
+        "province": "South American and Caribbean Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "totalActivePositions": 1
+  },
+  {
+    "id": 14742,
+    "name": "Gavin Peter Atkins",
+    "slug": "gavin-peter-atkins",
+    "email": "gavinatkins1966@gmail.com",
+    "bio": "",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/m_018.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Master of Scholastics",
+        "province": "Southern African Region",
+        "from": "2021",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Regional Councillor/Assistant",
+        "province": "Southern African Region",
+        "from": "2010",
+        "to": "2016",
+        "isActive": false,
+        "isTargetPosition": false
+      },
+      {
+        "position": "Novice Master",
+        "province": "Southern African Region",
+        "from": "2016",
+        "to": "2017",
+        "isActive": false,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Master of Scholastics",
+        "province": "Southern African Region",
+        "from": "2016",
+        "to": "2017",
+        "isActive": false,
+        "isTargetPosition": true
+      },
+      {
+        "position": "Master of Scholastics",
+        "province": "Southern African Region",
+        "from": "2021",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "totalActivePositions": 1
+  },
+  {
+    "id": 14733,
+    "name": "Ronald Pontier",
+    "slug": "ronald-pontier",
+    "email": null,
+    "bio": "",
+    "deceased": false,
+    "profileImage": "https://wordpress-635146-5283628.cloudwaysapps.com/wp-content/uploads/2023/09/m_752.jpg",
+    "activeTargetPositions": [
+      {
+        "position": "Postulant Director",
+        "province": "South American and Caribbean Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "allPositions": [
+      {
+        "position": "Postulant Director",
+        "province": "South American and Caribbean Province",
+        "from": "2024",
+        "to": "",
+        "isActive": true,
+        "isTargetPosition": true
+      }
+    ],
+    "totalActivePositions": 1
+  }
+]

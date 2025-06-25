@@ -1,50 +1,67 @@
 import useSWR from 'swr';
-import { fetchFormationUsers } from '@/lib/wordpress/api';
-import type { WPMember } from '@/lib/wordpress/types';
+import type { FormationPersonnelMember } from '@/types/formation-personnel';
 
-const FORMATION_PERSONNEL_KEY = '/wordpress/formation-personnel';
+const FORMATION_PERSONNEL_ENDPOINT = '/api/formation-personnel';
+
+interface APIResponse {
+  success: boolean;
+  data: FormationPersonnelMember[];
+  summary: {
+    totalMembers: number;
+    membersWithTargetPositions: number;
+    aliveWithActivePositions: number;
+    targetPositions: string[];
+  };
+  file: string;
+  durationMs: number;
+  timestamp: string;
+}
 
 /**
- * Custom hook for fetching formation personnel with SWR caching
- * Provides stale-while-revalidate functionality for better UX
+ * React hook to fetch the simplified "Formation Personnel" list that is
+ * served from the local Next.js API route (`/api/formation-personnel`).
+ *
+ * The API route already performs all heavy WordPress filtering – the hook only
+ * needs to retrieve the JSON and expose loading / error state through SWR.
  */
 export function useFormationPersonnel() {
-  const { data, error, isLoading, isValidating, mutate } = useSWR<WPMember[]>(
-    FORMATION_PERSONNEL_KEY,
-    fetchFormationUsers,
+  const { data, error, isLoading, isValidating, mutate } = useSWR<APIResponse>(
+    FORMATION_PERSONNEL_ENDPOINT,
+    async () => {
+      const res = await fetch(FORMATION_PERSONNEL_ENDPOINT);
+      if (!res.ok) {
+        throw new Error('Failed to fetch formation personnel');
+      }
+      return res.json();
+    },
     {
-      // Cache for 5 minutes, then revalidate in background
+      // cache 5 min, refresh 10 min (same rhythm as before)
       dedupingInterval: 5 * 60 * 1000,
-      // Revalidate every 10 minutes
       refreshInterval: 10 * 60 * 1000,
-      // Revalidate when window gets focus
       revalidateOnFocus: true,
-      // Revalidate when network reconnects
       revalidateOnReconnect: true,
-      // Keep previous data while loading new data
       keepPreviousData: true,
-      // Fallback to cache when offline
-      fallbackData: undefined,
-      // Error retry configuration
       errorRetryCount: 3,
       errorRetryInterval: 5000,
-      onError: (error) => {
-        console.error('❌ Formation Personnel fetch error:', error);
+      onError: (err) => {
+        console.error('❌ Formation Personnel fetch error:', err);
       },
-      onSuccess: (data) => {
+      onSuccess: (response) => {
         console.log(
-          `✅ Formation Personnel loaded: ${data?.length || 0} members`,
+          `✅ Formation Personnel loaded: ${response.data.length} members`,
         );
+        console.log('📊 Summary:', response.summary);
       },
     },
   );
 
   return {
-    formationPersonnel: data || [],
+    formationPersonnel: data?.data ?? [],
     loading: isLoading,
     error: error ? 'Failed to load formation personnel' : null,
     refetch: mutate,
-    isEmpty: !isLoading && (!data || data.length === 0),
-    isRefreshing: isValidating && !isLoading, // Background refresh indicator
+    isEmpty: !isLoading && (!data?.data || data.data.length === 0),
+    isRefreshing: isValidating && !isLoading,
+    summary: data?.summary,
   };
 }

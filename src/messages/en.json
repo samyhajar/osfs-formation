@@ -167,5 +167,14 @@
       "mission": "Mission",
       "default": "Workshop"
     }
+  },
+  "FormationPersonnel": {
+    "title": "Formation Personnel",
+    "loading": "Loading...",
+    "error": {
+      "title": "Error",
+      "default": "Failed to load formation personnel"
+    },
+    "noData": "No formation personnel found"
   }
 }

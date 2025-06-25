@@ -8,6 +8,9 @@ interface MemberProfileProps {
 export default function MemberProfile({ member }: MemberProfileProps) {
   // Helper function to get member info including profile picture
   const getMemberInfo = (member: WPMember) => {
+    // Get member name
+    const memberName = member.title?.rendered || member.name || `Member ${member.id}`;
+
     const positions = member._embedded?.['wp:term']
       ?.flat()
       .filter(term => term.taxonomy === 'position')
@@ -30,19 +33,24 @@ export default function MemberProfile({ member }: MemberProfileProps) {
 
     // Get profile picture URL
     const profileImage = member._embedded?.['wp:featuredmedia']?.[0]?.source_url || null;
-    const altText = member._embedded?.['wp:featuredmedia']?.[0]?.alt_text || member.title.rendered;
+    const altText = member._embedded?.['wp:featuredmedia']?.[0]?.alt_text || memberName;
+
+    // Get initials
+    const initials = memberName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
 
     return {
+      memberName,
       positions,
       provinces,
       ministries,
       states,
       profileImage,
-      altText
+      altText,
+      initials
     };
   };
 
-  const { positions, provinces, ministries, states, profileImage, altText } = getMemberInfo(member);
+  const { memberName, positions, provinces, ministries, states, profileImage, altText, initials } = getMemberInfo(member);
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -67,19 +75,19 @@ export default function MemberProfile({ member }: MemberProfileProps) {
                       if (fallback) fallback.style.display = 'flex';
                     }}
                   />
-                ) : null}
-                <div
-                  className={`absolute inset-0 flex items-center justify-center text-2xl md:text-3xl font-semibold text-gray-600 ${profileImage ? 'hidden' : 'flex'}`}
-                  style={{ display: profileImage ? 'none' : 'flex' }}
-                >
-                  {member.title.rendered.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
-                </div>
+                ) : (
+                  <div className="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-500 text-2xl font-medium">
+                      {initials}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Basic Info */}
             <div className="text-center md:text-left flex-1">
-              <h1 className="text-3xl md:text-4xl font-light text-gray-900 mb-3">{member.title.rendered}</h1>
+              <h1 className="text-3xl md:text-4xl font-light text-gray-900 mb-3">{memberName}</h1>
               {positions.length > 0 && (
                 <p className="text-lg text-gray-600 mb-4 font-medium">{positions[0]}</p>
               )}
@@ -167,17 +175,18 @@ export default function MemberProfile({ member }: MemberProfileProps) {
               <div className="border border-gray-200 rounded-lg p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                   <svg className="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  Contact Information
+                  Contact
                 </h3>
                 <div className="text-gray-600 space-y-4">
                   <p>
-                    For spiritual guidance, formation questions, or to schedule a meeting, please contact through your local community or provincial office.
+                    For inquiries or to schedule a meeting, please contact through your local community or provincial office.
                   </p>
                   <div className="p-4 bg-gray-50 rounded-md border border-gray-200">
                     <p className="text-sm text-gray-700 font-medium">
-                      📧 Contact through official channels for privacy and proper communication protocols.
+                      Contact through official channels for proper communication protocols.
                     </p>
                   </div>
                 </div>

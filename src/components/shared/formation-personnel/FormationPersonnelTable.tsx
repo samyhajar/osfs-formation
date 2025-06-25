@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import type { WPMember } from '@/lib/wordpress/types';
-import Image from 'next/image';
-import { getMemberEmail, openEmailClient, getMemberEmails } from '@/lib/utils/email';
+import type { FormationPersonnelMember } from '@/types/formation-personnel';
+import { openEmailClient } from '@/lib/utils/email';
 import ConfreresPagination from '@/components/shared/confreres/ConfreresPagination';
+import Image from 'next/image';
 
 interface FormationPersonnelTableProps {
-  members: WPMember[];
+  members: FormationPersonnelMember[];
   onEmailSelected: (emails: string[]) => void;
 }
 
@@ -66,33 +66,22 @@ export default function FormationPersonnelTable({
   const [currentPage, setCurrentPage] = useState(1);
   const [nameSort, setNameSort] = useState<'asc' | 'desc'>('asc');
 
-  // Helper function to get member info
-  const getMemberInfo = (member: WPMember) => {
-    const positions = member._embedded?.['wp:term']
-      ?.flat()
-      .filter(term => term.taxonomy === 'position')
-      .map(term => term.name) || ['Formation Personnel'];
+  // Extract core information we need for display & filtering
+  const getMemberInfo = (member: FormationPersonnelMember) => {
+    const positions = member.activeTargetPositions.map((p) => p.position);
 
-    const province = member._embedded?.['wp:term']
-      ?.flat()
-      .filter(term => term.taxonomy === 'province')
-      .map(term => term.name)[0] || 'No province';
+    // The simplified API already normalises provinces – use the first active position
+    const provinceRaw = member.activeTargetPositions[0]?.province ?? 'No province';
+    const normalizedProvince = provinceVariations[provinceRaw] || provinceRaw;
 
-    // Normalize province name
-    const normalizedProvince = provinceVariations[province] || province;
-
-    const profileImage = member._embedded?.['wp:featuredmedia']?.[0]?.source_url || null;
-    const altText = member._embedded?.['wp:featuredmedia']?.[0]?.alt_text || member.title.rendered;
-
-    // Extract email using utility function
-    const email = getMemberEmail(member);
+    const email = member.email ?? '';
+    const profileImage = member.profileImage ?? null;
 
     return {
       positions,
       province: normalizedProvince,
+      email,
       profileImage,
-      altText,
-      email
     };
   };
 
@@ -156,8 +145,8 @@ export default function FormationPersonnelTable({
 
     // Count actual members per position
     members.forEach(member => {
-      const { positions: memberPositions } = getMemberInfo(member);
-      memberPositions.forEach(position => {
+      const { positions } = getMemberInfo(member);
+      positions.forEach(position => {
         // Find matching hierarchy position
         const matchingHierarchyPos = POSITION_HIERARCHY.find(hierarchyPos =>
           position.toLowerCase().includes(hierarchyPos.toLowerCase()) ||
@@ -188,7 +177,7 @@ export default function FormationPersonnelTable({
         const { positions } = getMemberInfo(member);
         const searchLower = searchTerm.toLowerCase();
         return (
-          member.title.rendered.toLowerCase().includes(searchLower) ||
+          member.name.toLowerCase().includes(searchLower) ||
           positions.some(position => position.toLowerCase().includes(searchLower))
         );
       });
@@ -212,7 +201,7 @@ export default function FormationPersonnelTable({
 
     // Sort members by name using the dropdown sort order
     const sorted = filtered.sort((a, b) => {
-      const comparison = getLastName(a.title.rendered).localeCompare(getLastName(b.title.rendered));
+      const comparison = getLastName(a.name).localeCompare(getLastName(b.name));
       return nameSort === 'asc' ? comparison : -comparison;
     });
 
@@ -227,6 +216,9 @@ export default function FormationPersonnelTable({
       totalItems: sorted.length,
     };
   }, [members, searchTerm, provinceFilter, positionFilter, nameSort, currentPage]);
+
+  const getMemberEmails = (membersArray: FormationPersonnelMember[]): string[] =>
+    membersArray.map((m) => m.email).filter((e): e is string => Boolean(e));
 
   const handleSelectAll = () => {
     if (selectedMembers.size === filteredMembers.length) {
@@ -252,7 +244,7 @@ export default function FormationPersonnelTable({
     // Update parent component with selected emails
     const selectedMemberObjects = Array.from(newSelection)
       .map(id => members.find(m => m.id === id))
-      .filter(Boolean) as WPMember[];
+      .filter(Boolean) as FormationPersonnelMember[];
     const selectedEmails = getMemberEmails(selectedMemberObjects);
     onEmailSelected(selectedEmails);
   };
@@ -260,7 +252,7 @@ export default function FormationPersonnelTable({
   const handleEmailSelected = () => {
     const selectedMemberObjects = Array.from(selectedMembers)
       .map(id => members.find(m => m.id === id))
-      .filter(Boolean) as WPMember[];
+      .filter(Boolean) as FormationPersonnelMember[];
 
     const selectedEmails = getMemberEmails(selectedMemberObjects);
     openEmailClient(selectedEmails, 'Message from OSFS Formation');
@@ -442,7 +434,7 @@ export default function FormationPersonnelTable({
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredMembers.map((member) => {
-                  const { positions, province, profileImage, altText, email } = getMemberInfo(member);
+                  const { positions, province, email, profileImage } = getMemberInfo(member);
                   const isSelected = selectedMembers.has(member.id);
 
                   return (
@@ -464,7 +456,7 @@ export default function FormationPersonnelTable({
                             {profileImage ? (
                               <Image
                                 src={profileImage}
-                                alt={altText}
+                                alt={member.name}
                                 width={40}
                                 height={40}
                                 className="h-10 w-10 rounded-full object-cover"
@@ -479,7 +471,7 @@ export default function FormationPersonnelTable({
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
-                              {formatNameLastFirst(member.title.rendered)}
+                              {formatNameLastFirst(member.name)}
                             </div>
                             {email && (
                               <div className="text-sm text-gray-500">
@@ -494,8 +486,8 @@ export default function FormationPersonnelTable({
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          {positions.map((position, index) => (
-                            <span key={index} className="block">
+                          {positions.map((position, idx) => (
+                            <span key={idx} className="block">
                               {position}
                             </span>
                           ))}
