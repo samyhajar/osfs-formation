@@ -10,8 +10,9 @@ export default function usePendingApprovals() {
   const fetcher = async () => {
     const supabase = createClient<Database>();
     const { count, error } = await supabase
-      .from('pending_users' as never)
-      .select('*', { count: 'exact', head: true });
+      .from('profiles')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_approved', false);
 
     if (error) throw error;
     return count ?? 0;

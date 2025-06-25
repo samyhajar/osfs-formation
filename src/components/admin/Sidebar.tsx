@@ -184,14 +184,18 @@ export default function Sidebar() {
                     <Icon className={`h-5 w-5 ${item.isActive ? 'text-accent-primary' : 'text-gray-700'}`} />
                     {/* Use translation function t() with the nameKey */}
                     <span>{t(item.nameKey)}</span>
+                    {/* Badge for pending approvals – positioned before label */}
+                    {item.nameKey === 'pendingUsers' && pendingCount > 0 && (
+                      <span
+                        className="ml-1 mr-2 inline-flex items-center justify-center h-5 min-w-5 px-1.5 text-xs font-semibold leading-none text-red-800 bg-red-100 rounded-full ring-1 ring-red-300"
+                        aria-label={`${pendingCount} ${t('pendingApprovals')}`}
+                      >
+                        {pendingCount > 99 ? '99+' : pendingCount}
+                      </span>
+                    )}
                     {/* Active indicator */}
                     {item.isActive && (
                       <span className="ml-auto w-1.5 h-1.5 rounded-full bg-accent-primary" aria-hidden="true" />
-                    )}
-
-                    {/* Pending approvals badge */}
-                    {item.nameKey === 'pendingUsers' && pendingCount > 0 && (
-                      <span className="ml-2 inline-flex h-2 w-2 rounded-full bg-red-500" aria-label={t('pendingApprovals')} />
                     )}
                   </Link>
                 </li>
