@@ -18,6 +18,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useMemo } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl'; // Import useTranslations
+import usePendingApprovals from '@/hooks/usePendingApprovals';
 
 // Add a proper role type at the top of the file
 type UserRole = 'admin' | 'editor' | 'user' | 'formator' | 'formee';
@@ -36,6 +37,7 @@ export default function Sidebar() {
   const pathname = usePathname(); // Still use next/navigation usePathname for checks
   const { profile, loading } = useAuth();
   const t = useTranslations('Sidebar'); // Initialize translations
+  const { count: pendingCount } = usePendingApprovals();
 
   // Dynamically determine the base path prefix based on the user's role
   const basePath = useMemo(() => {
@@ -109,7 +111,7 @@ export default function Sidebar() {
       return []; // Return empty array while loading or if role is unavailable
     }
     // Use the pathname from next/navigation which includes the locale prefix for isActive check
-    const currentPathWithoutLocale = pathname.replace(/^\/(en|fr)/, '') || '/';
+    const currentPathWithoutLocale = (pathname ?? '').replace(/^\/(en|fr)/, '') || '/';
 
     // Map old role names to new ones for compatibility
     const role = profile.role as UserRole;
@@ -182,8 +184,14 @@ export default function Sidebar() {
                     <Icon className={`h-5 w-5 ${item.isActive ? 'text-accent-primary' : 'text-gray-700'}`} />
                     {/* Use translation function t() with the nameKey */}
                     <span>{t(item.nameKey)}</span>
+                    {/* Active indicator */}
                     {item.isActive && (
                       <span className="ml-auto w-1.5 h-1.5 rounded-full bg-accent-primary" aria-hidden="true" />
+                    )}
+
+                    {/* Pending approvals badge */}
+                    {item.nameKey === 'pendingUsers' && pendingCount > 0 && (
+                      <span className="ml-2 inline-flex h-2 w-2 rounded-full bg-red-500" aria-label={t('pendingApprovals')} />
                     )}
                   </Link>
                 </li>
