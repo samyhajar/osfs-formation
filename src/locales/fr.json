@@ -33,6 +33,7 @@
     "users": "Utilisateurs",
     "administration": "Administration",
     "pendingUsers": "Approbations en attente",
+    "pendingApprovals": "Approbations en attente",
     "email": "E-mail",
     "noSections": "Aucune section disponible pour votre rôle.",
     "profileLoadError": "Impossible de charger le profil utilisateur.",
@@ -367,7 +368,8 @@
     "homepageSettingsDescription": "Personnaliser la page d'accueil publique que les visiteurs voient avant de se connecter.",
     "systemSettingsTitle": "Paramètres Système",
     "systemSettingsDescription": "Des paramètres système supplémentaires seront disponibles ici à l'avenir.",
-    "systemSettings": "Paramètres Système"
+    "systemSettings": "Paramètres Système",
+    "userIntroduction": "Présentation de l'utilisateur"
   },
   "Footer": {
     "copyright": "© 2024 Bureau de Formation OSFS | Tenui Nec Dimittam",

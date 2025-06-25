@@ -627,5 +627,12 @@
       "Videos": "Vídeos",
       "Reflections 4 Dimensions": "Reflexões 4 Dimensões"
     }
+  },
+  "Admin": {
+    "userIntroduction": "Introdução do usuário"
+  },
+  "Sidebar": {
+    "pendingUsers": "Aprovações pendentes",
+    "pendingApprovals": "Aprovações pendentes"
   }
 }

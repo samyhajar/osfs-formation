@@ -32,7 +32,7 @@
     "confreresInFormation": "Cofrades en formación",
     "users": "Usuarios",
     "administration": "Administración",
-    "pendingUsers": "Aprobaciones Pendientes",
+    "pendingUsers": "Aprobaciones pendientes",
     "email": "Correo Electrónico",
     "noSections": "No hay secciones disponibles para tu rol.",
     "profileLoadError": "No se pudo cargar el perfil de usuario.",
@@ -579,5 +579,8 @@
       "Videos": "Videos",
       "Reflections 4 Dimensions": "Reflexiones 4 Dimensiones"
     }
+  },
+  "Admin": {
+    "userIntroduction": "Introducción del usuario"
   }
 }

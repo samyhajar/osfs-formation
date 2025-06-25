@@ -33,6 +33,7 @@
     "users": "Gebruikers",
     "administration": "Administratie",
     "pendingUsers": "Wachtende goedkeuringen",
+    "pendingApprovals": "In afwachting van goedkeuring",
     "email": "E-mail",
     "noSections": "Geen secties beschikbaar voor uw rol.",
     "profileLoadError": "Kon gebruikersprofiel niet laden.",
@@ -579,5 +580,8 @@
       "Videos": "Video's",
       "Reflections 4 Dimensions": "Reflecties 4 Dimensies"
     }
+  },
+  "Admin": {
+    "userIntroduction": "Gebruikersintroductie"
   }
 }

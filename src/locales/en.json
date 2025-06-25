@@ -33,6 +33,7 @@
     "users": "Users",
     "administration": "Administration",
     "pendingUsers": "Pending Approvals",
+    "pendingApprovals": "Pending Approvals",
     "email": "Email",
     "noSections": "No sections available for your role.",
     "profileLoadError": "Could not load user profile.",
@@ -469,7 +470,8 @@
       "confirmDelete": "Are you sure you want to delete this document?",
       "deleteSuccess": "Document deleted successfully.",
       "updateSuccess": "Document updated successfully."
-    }
+    },
+    "userIntroduction": "User Introduction"
   },
   "Dashboard": {
     "title": "Dashboard",

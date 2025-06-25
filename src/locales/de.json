@@ -33,6 +33,7 @@
     "users": "Benutzer",
     "administration": "Verwaltung",
     "pendingUsers": "Ausstehende Genehmigungen",
+    "pendingApprovals": "Ausstehende Genehmigungen",
     "email": "E-Mail",
     "noSections": "Keine Bereiche für Ihre Rolle verfügbar.",
     "profileLoadError": "Benutzerprofil konnte nicht geladen werden.",
@@ -416,7 +417,8 @@
     "homepageSettingsDescription": "Anpassen der öffentlichen Startseite, die Besucher vor der Anmeldung sehen.",
     "systemSettingsTitle": "Systemeinstellungen",
     "systemSettingsDescription": "Zusätzliche Systemeinstellungen werden hier in Zukunft verfügbar sein.",
-    "systemSettings": "Systemeinstellungen"
+    "systemSettings": "Systemeinstellungen",
+    "userIntroduction": "Benutzer-Einführung"
   },
   "HomepageSettings": {
     "mainTitleSection": "Haupttitel-Bereich",

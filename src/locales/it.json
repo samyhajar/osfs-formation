@@ -32,7 +32,8 @@
     "confreresInFormation": "Confratelli in formazione",
     "users": "Utenti",
     "administration": "Amministrazione",
-    "pendingUsers": "Approvazioni in Sospeso",
+    "pendingUsers": "Approvazioni in sospeso",
+    "pendingApprovals": "Approvazioni in sospeso",
     "email": "E-mail",
     "noSections": "Nessuna sezione disponibile per il tuo ruolo.",
     "profileLoadError": "Impossibile caricare il profilo utente.",
@@ -579,5 +580,8 @@
       "Videos": "Video",
       "Reflections 4 Dimensions": "Riflessioni 4 Dimensioni"
     }
+  },
+  "Admin": {
+    "userIntroduction": "Introduzione utente"
   }
 }
