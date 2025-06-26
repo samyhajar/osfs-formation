@@ -320,7 +320,7 @@ export default function ConfreresTable({ members }: ConfreresTableProps) {
         sortOrder={sortOrder}
         setSortOrder={(value) => handleFilterChange('sort', value)}
         uniqueStatuses={uniqueStatuses}
-        uniqueProvinces={orderedProvinces}
+        uniqueProvinces={orderedProvinces.filter(p => !p.toLowerCase().includes('unknown'))}
       />
 
       {/* Email Selection Controls */}
