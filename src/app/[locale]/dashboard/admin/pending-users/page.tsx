@@ -2,6 +2,9 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server-client';
 import PendingUsersList from '@/components/admin/PendingUsersList';
 
+// Force dynamic rendering so authentication cookies are considered on each request
+export const dynamic = 'force-dynamic';
+
 export default async function PendingUsersPage() {
   // Check if the user is an admin
   const supabase = await createClient();
@@ -31,6 +34,3 @@ export default async function PendingUsersPage() {
     </div>
   );
 }
-
-// Force dynamic rendering so authentication cookies are considered on each request
-export const dynamic = 'force-dynamic';
