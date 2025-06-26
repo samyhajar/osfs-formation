@@ -31,3 +31,6 @@ export default async function PendingUsersPage() {
     </div>
   );
 }
+
+// Force dynamic rendering so authentication cookies are considered on each request
+export const dynamic = 'force-dynamic';
