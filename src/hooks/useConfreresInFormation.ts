@@ -26,48 +26,53 @@ export function useConfreresInFormation() {
 
       // Map rows to minimal WPMember-like objects consumed by ConfreresTable
       const rows = (data ?? []) as ConfrereRow[];
-      const mapped = rows.map((row, idx) => {
-        // Prefer the new `province` column if it exists (column was added 2025-06-26).
-        // Fallback to the previous logic of reading the first province in the positions JSON.
-        const provinceNameFromColumn = (row as Record<string, unknown>)
-          .province as string | undefined;
+      const mapped = rows
+        .map((row, idx) => {
+          // Prefer the new `province` column if it exists (column was added 2025-06-26).
+          // Fallback to the previous logic of reading the first province in the positions JSON.
+          const provinceNameFromColumn = (row as Record<string, unknown>)
+            .province as string | undefined;
 
-        const positionsArr = row.positions as unknown as
-          | { province: string }[]
-          | null;
+          const positionsArr = row.positions as unknown as
+            | { province: string }[]
+            | null;
 
-        const provinceName = provinceNameFromColumn
-          ? provinceNameFromColumn
-          : positionsArr && positionsArr.length > 0
-          ? positionsArr[0].province
-          : 'Unknown Province';
+          const provinceName = provinceNameFromColumn
+            ? provinceNameFromColumn
+            : positionsArr && positionsArr.length > 0
+            ? positionsArr[0].province
+            : 'Unknown Province';
 
-        const stateId = idx * 2 + 1; // fake unique ids per row
-        const provinceId = idx * 2 + 2;
+          const stateId = idx * 2 + 1; // fake unique ids per row
+          const provinceId = idx * 2 + 2;
 
-        return {
-          id: row.wp_id,
-          slug: row.slug,
-          // mimic WP shape
-          title: { rendered: row.name },
-          state: [stateId],
-          province: [provinceId],
-          meta: { email: row.email || '' },
-          _embedded: {
-            'wp:term': [
-              [{ id: stateId, name: row.status, taxonomy: 'state' }],
-              [{ id: provinceId, name: provinceName, taxonomy: 'province' }],
-            ],
-            'wp:featuredmedia': row.profile_image
-              ? [
-                  {
-                    source_url: row.profile_image,
-                  },
-                ]
-              : [],
-          },
-        } as unknown as WPMember;
-      });
+          // Exclude rows where province could not be determined
+          if (provinceName === 'Unknown Province') return null;
+
+          return {
+            id: row.wp_id,
+            slug: row.slug,
+            // mimic WP shape
+            title: { rendered: row.name },
+            state: [stateId],
+            province: [provinceId],
+            meta: { email: row.email || '' },
+            _embedded: {
+              'wp:term': [
+                [{ id: stateId, name: row.status, taxonomy: 'state' }],
+                [{ id: provinceId, name: provinceName, taxonomy: 'province' }],
+              ],
+              'wp:featuredmedia': row.profile_image
+                ? [
+                    {
+                      source_url: row.profile_image,
+                    },
+                  ]
+                : [],
+            },
+          } as unknown as WPMember;
+        })
+        .filter(Boolean) as WPMember[];
 
       return mapped;
     },
