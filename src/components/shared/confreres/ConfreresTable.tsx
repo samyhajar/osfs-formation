@@ -162,7 +162,9 @@ export default function ConfreresTable({ members }: ConfreresTableProps) {
     const memberProvinces = new Set<string>();
     members.forEach(member => {
       const province = getTermName(member, 'province', member.province);
-      if (province !== 'Unknown') memberProvinces.add(province);
+      if (!province.toLowerCase().includes('unknown')) {
+        memberProvinces.add(province);
+      }
     });
 
     // Normalize province names and collect existing ones
@@ -180,7 +182,7 @@ export default function ConfreresTable({ members }: ConfreresTableProps) {
     // Add any provinces that exist in data but aren't in our main list (for debugging)
     memberProvinces.forEach(province => {
       const normalizedName = PROVINCE_VARIATIONS[province] || province;
-      if (!PROVINCE_ORDER.includes(normalizedName) && !filteredProvinces.includes(province)) {
+      if (!normalizedName.toLowerCase().includes('unknown') && !PROVINCE_ORDER.includes(normalizedName) && !filteredProvinces.includes(province)) {
         console.log(`📍 Found unmapped province: "${province}" -> normalized: "${normalizedName}"`);
         filteredProvinces.push(province); // Add at the end for now
       }

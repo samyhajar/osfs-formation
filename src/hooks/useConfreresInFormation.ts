@@ -47,7 +47,7 @@ export function useConfreresInFormation() {
           const provinceId = idx * 2 + 2;
 
           // Exclude rows where province could not be determined
-          if (provinceName === 'Unknown Province') return null;
+          if (provinceName.toLowerCase().includes('unknown')) return null;
 
           return {
             id: row.wp_id,
