@@ -1,30 +1,26 @@
-import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server-client';
+'use client';
+
+import { useEffect } from 'react';
 import PendingUsersList from '@/components/admin/PendingUsersList';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from '@/i18n/navigation';
 
-// Force dynamic rendering so authentication cookies are considered on each request
-export const dynamic = 'force-dynamic';
+export default function PendingUsersPage() {
+  const { profile, loading } = useAuth();
+  const router = useRouter();
 
-export default async function PendingUsersPage() {
-  // Check if the user is an admin
-  const supabase = await createClient();
+  // Redirect non-admins to dashboard
+  useEffect(() => {
+    if (!loading) {
+      if (!profile || profile.role !== 'admin') {
+        router.replace('/dashboard/admin');
+      }
+    }
+  }, [loading, profile, router]);
 
-  // Use getUser() instead of getSession() for better security
-  const { data: { user }, error } = await supabase.auth.getUser();
-
-  if (error || !user) {
-    redirect('/');
-  }
-
-  // Get the user's profile
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single();
-
-  if (!profile || profile.role !== 'admin') {
-    redirect('/dashboard/admin');
+  // Optionally show a loader while we verify role
+  if (loading || !profile || profile.role !== 'admin') {
+    return null;
   }
 
   return (
@@ -34,3 +30,6 @@ export default async function PendingUsersPage() {
     </div>
   );
 }
+
+// Page needs to be dynamic to avoid static generation
+export const dynamic = 'force-dynamic';
