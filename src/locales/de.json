@@ -610,9 +610,9 @@
       "presentations": "Präsentationen",
       "videos": "Videos",
       "miscellaneous": "Verschiedenes",
-      "sourcematerials": "Quellmaterialien",
+      "sourcematerials": "Quellenmaterialien",
       "formationprograms": "Ausbildungsprogramme",
-      "reflections4dimensions": "Reflektionen 4 Dimensionen"
+      "reflections4dimensions": "Reflexionen 4 Dimensionen"
     }
   },
   "Footer": {
@@ -673,5 +673,57 @@
       "saveButton": "Speichern",
       "footer": "© 2024 OSFS Ausbildungsbüro | Tenui Nec Dimittam"
     }
+  },
+  "UserMenu": {
+    "profile": "Profil",
+    "settings": "Einstellungen",
+    "admin": "Admin-Bereich",
+    "signOut": "Abmelden"
+  },
+  "Common": {
+    "loading": "Lädt...",
+    "error": "Ein Fehler ist aufgetreten.",
+    "noData": "Keine Daten verfügbar.",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "confirm": "Bestätigen",
+    "edit": "Bearbeiten",
+    "view": "Ansehen",
+    "close": "Schließen",
+    "search": "Suche...",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "page": "Seite",
+    "of": "von",
+    "rowsPerPage": "Zeilen pro Seite:",
+    "all": "Alle"
+  },
+  "SyllabusEditForm": {
+    "title": "Syllabus-Dokument bearbeiten",
+    "validationErrorRequired": "Titel, Kategorie und Datei sind erforderlich.",
+    "validationErrorAuth": "Sie müssen angemeldet sein, um zu bearbeiten.",
+    "updateSuccess": "Dokument erfolgreich aktualisiert!",
+    "updatingButton": "Aktualisiere...",
+    "updateButton": "Dokument aktualisieren",
+    "fieldTitleLabel": "Titel",
+    "fieldDescriptionLabel": "Beschreibung",
+    "fieldAuthorLabel": "Autor",
+    "fieldAuthorPlaceholder": "Autorname eingeben (optional)",
+    "fieldCategoryLabel": "Kategorie",
+    "fieldRegionLabel": "Region",
+    "fieldLanguageLabel": "Sprache",
+    "fieldTopicsLabel": "Themen",
+    "fieldTopicsPlaceholder": "Geben Sie ein Thema ein und drücken Sie Enter",
+    "fieldPurposeLabel": "Zweck",
+    "fieldKeywordsLabel": "Schlüsselwörter",
+    "fieldKeywordsPlaceholder": "Geben Sie ein Schlüsselwort ein und drücken Sie Enter",
+    "fieldPublicLabel": "Öffentlich",
+    "currentFileLabel": "Aktuelle Datei",
+    "replaceFileLabel": "Datei ersetzen",
+    "replaceFileHelper": "Laden Sie eine neue Datei hoch, um die aktuelle zu ersetzen",
+    "cancelButton": "Abbrechen",
+    "backToDocuments": "Zurück zu Dokumenten"
   }
 }

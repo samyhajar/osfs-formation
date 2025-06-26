@@ -511,7 +511,9 @@
     "forgotPasswordLink": "Mot de passe oublié ?",
     "noAccountPrompt": "Vous n'avez pas de compte ?",
     "alreadyAccountPrompt": "Vous avez déjà un compte ?",
-    "nameLabel": "Nom complet"
+    "nameLabel": "Nom complet",
+    "signInLink": "Se Connecter",
+    "signUpLink": "S'inscrire"
   },
   "SyllabusEdit": {
     "backToSyllabus": "Retour au syllabus",
@@ -616,5 +618,87 @@
       "formationprograms": "Programmes de Formation",
       "reflections4dimensions": "Réflexions 4 Dimensions"
     }
+  },
+  "UserMenu": {
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "admin": "Espace Admin",
+    "signOut": "Se Déconnecter"
+  },
+  "Common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue.",
+    "noData": "Aucune donnée disponible.",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "confirm": "Confirmer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "close": "Fermer",
+    "search": "Recherche...",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "page": "Page",
+    "of": "de",
+    "rowsPerPage": "Lignes par page:",
+    "all": "Tous"
+  },
+  "UploadForm": {
+    "title": "Téléverser un Nouveau Document",
+    "labels": {
+      "title": "Titre",
+      "description": "Description",
+      "category": "Catégorie",
+      "language": "Langue",
+      "tags": "Tags (séparés par des virgules)",
+      "file": "Sélectionner le Fichier"
+    },
+    "placeholders": {
+      "title": "Entrez le titre du document",
+      "description": "Fournissez une brève description",
+      "tags": "ex.: spiritualité, communauté, mission"
+    },
+    "buttons": {
+      "upload": "Téléverser le Document",
+      "uploading": "Téléversement...",
+      "selectFile": "Choisir le Fichier"
+    },
+    "validation": {
+      "titleRequired": "Le titre est requis.",
+      "fileRequired": "Veuillez sélectionner un fichier à téléverser.",
+      "fileTooLarge": "La taille du fichier dépasse la limite.",
+      "invalidFileType": "Type de fichier invalide."
+    },
+    "uploadSuccess": "Document téléversé avec succès !",
+    "uploadError": "Échec du téléversement. Veuillez réessayer.",
+    "dragDrop": "Glissez & déposez les fichiers ici ou cliquez pour sélectionner"
+  },
+  "SyllabusEditForm": {
+    "title": "Modifier le document du syllabus",
+    "validationErrorRequired": "Le titre, la catégorie et le fichier sont obligatoires.",
+    "validationErrorAuth": "Vous devez être connecté pour modifier.",
+    "updateSuccess": "Document mis à jour avec succès !",
+    "updatingButton": "Mise à jour...",
+    "updateButton": "Mettre à jour le document",
+    "fieldTitleLabel": "Titre",
+    "fieldDescriptionLabel": "Description",
+    "fieldAuthorLabel": "Auteur",
+    "fieldAuthorPlaceholder": "Entrez le nom de l'auteur (optionnel)",
+    "fieldCategoryLabel": "Catégorie",
+    "fieldRegionLabel": "Région",
+    "fieldLanguageLabel": "Langue",
+    "fieldTopicsLabel": "Sujets",
+    "fieldTopicsPlaceholder": "Tapez un sujet et appuyez sur Entrée",
+    "fieldPurposeLabel": "Objectif",
+    "fieldKeywordsLabel": "Mots-clés",
+    "fieldKeywordsPlaceholder": "Tapez un mot-clé et appuyez sur Entrée",
+    "fieldPublicLabel": "Public",
+    "currentFileLabel": "Fichier actuel",
+    "replaceFileLabel": "Remplacer le fichier",
+    "replaceFileHelper": "Téléchargez un nouveau fichier pour remplacer l'actuel",
+    "cancelButton": "Annuler",
+    "backToDocuments": "Retour aux documents"
   }
 }

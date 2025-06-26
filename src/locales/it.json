@@ -567,9 +567,9 @@
       "articles": "Articoli",
       "presentations": "Presentazioni",
       "videos": "Video",
-      "miscellaneous": "Vari",
-      "sourcematerials": "Materiali Fonte",
-      "formationprograms": "Programmi di Formazione",
+      "miscellaneous": "Varie",
+      "sourcematerials": "Materiali fonte",
+      "formationprograms": "Programmi di formazione",
       "reflections4dimensions": "Riflessioni 4 Dimensioni"
     }
   },
@@ -630,5 +630,65 @@
       "saveButton": "Salva",
       "footer": "© 2024 Ufficio Formazione OSFS | Tenui Nec Dimittam"
     }
+  },
+  "UserMenu": {
+    "profile": "Profilo",
+    "settings": "Impostazioni",
+    "admin": "Area Admin",
+    "signOut": "Esci"
+  },
+  "Common": {
+    "loading": "Caricamento...",
+    "error": "Si è verificato un errore.",
+    "noData": "Nessun dato disponibile.",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "confirm": "Conferma",
+    "edit": "Modifica",
+    "view": "Visualizza",
+    "close": "Chiudi",
+    "search": "Cerca...",
+    "back": "Indietro",
+    "next": "Avanti",
+    "previous": "Precedente",
+    "page": "Pagina",
+    "of": "di",
+    "rowsPerPage": "Righe per pagina:",
+    "all": "Tutti"
+  },
+  "UploadForm": {
+    "title": "Carica Nuovo Documento",
+    "labels": {
+      "title": "Titolo",
+      "description": "Descrizione",
+      "category": "Categoria",
+      "language": "Lingua",
+      "tags": "Tag (separati da virgole)",
+      "file": "Seleziona File"
+    },
+    "placeholders": {
+      "title": "Inserisci il titolo del documento",
+      "description": "Fornisci una breve descrizione",
+      "tags": "es.: spiritualità, comunità, missione"
+    },
+    "buttons": {
+      "upload": "Carica Documento",
+      "uploading": "Caricamento...",
+      "selectFile": "Scegli File"
+    },
+    "validation": {
+      "titleRequired": "Il titolo è obbligatorio.",
+      "fileRequired": "Seleziona un file da caricare.",
+      "fileTooLarge": "La dimensione del file supera il limite.",
+      "invalidFileType": "Tipo di file non valido."
+    },
+    "uploadSuccess": "Documento caricato con successo!",
+    "uploadError": "Caricamento fallito. Riprova.",
+    "dragDrop": "Trascina e rilascia i file qui o clicca per selezionare"
+  },
+  "Auth": {
+    "signInLink": "Accedi",
+    "signUpLink": "Registrati"
   }
 }

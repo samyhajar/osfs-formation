@@ -24,6 +24,7 @@
   },
   "Sidebar": {
     "dashboard": "Dashboard",
+    "documents": "Documenten",
     "folders": "Mappen",
     "commonSyllabus": "Gemeenschappelijk programma",
     "workshops": "Workshops",
@@ -566,8 +567,8 @@
       "articles": "Artikelen",
       "presentations": "Presentaties",
       "videos": "Video's",
-      "miscellaneous": "Diverse",
-      "sourcematerials": "Bronmateriaal",
+      "miscellaneous": "Diversen",
+      "sourcematerials": "Bronmaterialen",
       "formationprograms": "Vormingsprogramma's",
       "reflections4dimensions": "Reflecties 4 Dimensies"
     }
@@ -629,5 +630,65 @@
       "saveButton": "Opslaan",
       "footer": "© 2024 OSFS Vormingsbureau | Tenui Nec Dimittam"
     }
+  },
+  "UserMenu": {
+    "profile": "Profiel",
+    "settings": "Instellingen",
+    "admin": "Admin-gebied",
+    "signOut": "Afmelden"
+  },
+  "Common": {
+    "loading": "Laden...",
+    "error": "Er is een fout opgetreden.",
+    "noData": "Geen gegevens beschikbaar.",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "confirm": "Bevestigen",
+    "edit": "Bewerken",
+    "view": "Bekijken",
+    "close": "Sluiten",
+    "search": "Zoeken...",
+    "back": "Terug",
+    "next": "Volgende",
+    "previous": "Vorige",
+    "page": "Pagina",
+    "of": "van",
+    "rowsPerPage": "Rijen per pagina:",
+    "all": "Alle"
+  },
+  "UploadForm": {
+    "title": "Nieuw Document Uploaden",
+    "labels": {
+      "title": "Titel",
+      "description": "Beschrijving",
+      "category": "Categorie",
+      "language": "Taal",
+      "tags": "Tags (komma-gescheiden)",
+      "file": "Selecteer Bestand"
+    },
+    "placeholders": {
+      "title": "Voer de titel van het document in",
+      "description": "Geef een korte beschrijving",
+      "tags": "bijv. spiritualiteit, gemeenschap, missie"
+    },
+    "buttons": {
+      "upload": "Document Uploaden",
+      "uploading": "Bezig met uploaden...",
+      "selectFile": "Kies Bestand"
+    },
+    "validation": {
+      "titleRequired": "Titel is verplicht.",
+      "fileRequired": "Selecteer een bestand om te uploaden.",
+      "fileTooLarge": "Bestandsgrootte overschrijdt de limiet.",
+      "invalidFileType": "Ongeldig bestandstype."
+    },
+    "uploadSuccess": "Document succesvol geüpload!",
+    "uploadError": "Upload mislukt. Probeer opnieuw.",
+    "dragDrop": "Sleep bestanden hierheen of klik om te selecteren"
+  },
+  "Auth": {
+    "signInLink": "Inloggen",
+    "signUpLink": "Registreren"
   }
 }

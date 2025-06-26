@@ -542,10 +542,10 @@
     "categories": {
       "articles": "Artículos",
       "presentations": "Presentaciones",
-      "videos": "Videos",
-      "miscellaneous": "Varios",
-      "sourcematerials": "Materiales Fuente",
-      "formationprograms": "Programas de Formación",
+      "videos": "Vídeos",
+      "miscellaneous": "Miscelánea",
+      "sourcematerials": "Materiales fuente",
+      "formationprograms": "Programas de formación",
       "reflections4dimensions": "Reflexiones 4 Dimensiones"
     }
   },
@@ -606,5 +606,65 @@
       "saveButton": "Guardar",
       "footer": "© 2024 Oficina de Formación OSFS | Tenui Nec Dimittam"
     }
+  },
+  "UserMenu": {
+    "profile": "Perfil",
+    "settings": "Configuración",
+    "admin": "Área de Admin",
+    "signOut": "Cerrar Sesión"
+  },
+  "Common": {
+    "loading": "Cargando...",
+    "error": "Ocurrió un error.",
+    "noData": "No hay datos disponibles.",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "confirm": "Confirmar",
+    "edit": "Editar",
+    "view": "Ver",
+    "close": "Cerrar",
+    "search": "Buscar...",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "page": "Página",
+    "of": "de",
+    "rowsPerPage": "Filas por página:",
+    "all": "Todos"
+  },
+  "UploadForm": {
+    "title": "Subir Nuevo Documento",
+    "labels": {
+      "title": "Título",
+      "description": "Descripción",
+      "category": "Categoría",
+      "language": "Idioma",
+      "tags": "Etiquetas (separadas por comas)",
+      "file": "Seleccionar Archivo"
+    },
+    "placeholders": {
+      "title": "Ingrese el título del documento",
+      "description": "Proporcione una breve descripción",
+      "tags": "p.ej., espiritualidad, comunidad, misión"
+    },
+    "buttons": {
+      "upload": "Subir Documento",
+      "uploading": "Subiendo...",
+      "selectFile": "Elegir Archivo"
+    },
+    "validation": {
+      "titleRequired": "El título es obligatorio.",
+      "fileRequired": "Seleccione un archivo para subir.",
+      "fileTooLarge": "El archivo excede el tamaño máximo.",
+      "invalidFileType": "Tipo de archivo inválido."
+    },
+    "uploadSuccess": "¡Documento subido con éxito!",
+    "uploadError": "La subida ha fallado. Inténtelo de nuevo.",
+    "dragDrop": "Arrastra y suelta archivos aquí o haz clic para seleccionar"
+  },
+  "Auth": {
+    "signInLink": "Iniciar Sesión",
+    "signUpLink": "Regístrate"
   }
 }

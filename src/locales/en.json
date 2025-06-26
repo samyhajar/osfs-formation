@@ -24,6 +24,7 @@
   },
   "Sidebar": {
     "dashboard": "Dashboard",
+    "documents": "Documents",
     "folders": "Folders",
     "commonSyllabus": "Common Syllabus",
     "workshops": "Workshops",

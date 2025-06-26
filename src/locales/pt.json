@@ -634,8 +634,8 @@
       "presentations": "Apresentações",
       "videos": "Vídeos",
       "miscellaneous": "Diversos",
-      "sourcematerials": "Materiais Fonte",
-      "formationprograms": "Programas de Formação",
+      "sourcematerials": "Materiais fonte",
+      "formationprograms": "Programas de formação",
       "reflections4dimensions": "Reflexões 4 Dimensões"
     }
   },
@@ -670,5 +670,35 @@
       "Videos": "Vídeos",
       "Reflections 4 Dimensions": "Reflexões 4 Dimensões"
     }
+  },
+  "UserMenu": {
+    "profile": "Perfil",
+    "settings": "Configurações",
+    "admin": "Área Admin",
+    "signOut": "Sair"
+  },
+  "Common": {
+    "loading": "Carregando...",
+    "error": "Ocorreu um erro.",
+    "noData": "Nenhum dado disponível.",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "confirm": "Confirmar",
+    "edit": "Editar",
+    "view": "Visualizar",
+    "close": "Fechar",
+    "search": "Pesquisar...",
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "page": "Página",
+    "of": "de",
+    "rowsPerPage": "Linhas por página:",
+    "all": "Todos"
+  },
+  "Auth": {
+    "signInLink": "Entrar",
+    "signUpLink": "Cadastrar-se"
   }
 }
