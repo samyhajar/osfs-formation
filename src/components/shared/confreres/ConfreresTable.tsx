@@ -24,6 +24,47 @@ export default function ConfreresTable({ members }: ConfreresTableProps) {
   const [selectedMember, setSelectedMember] = useState<WPMember | null>(null);
   const [selectedMembers, setSelectedMembers] = useState<Set<number>>(new Set());
 
+  // Canonical order and normalization maps for provinces
+  const provinceOrder = [
+    'France-West Africa Province',
+    'Italian Province',
+    'German Speaking Province',
+    'Willmington/Philadelphia Province',
+    'Toledo/Detroit Province',
+    'South American And Caribbean Province',
+    'Southern African Region',
+    'Indian Region',
+  ];
+
+  const provinceVariations: Record<string, string> = {
+    // German
+    'Austrian/South-German Province': 'German Speaking Province',
+    'South-German Province': 'German Speaking Province',
+    'Austrian Province': 'German Speaking Province',
+    'German Province': 'German Speaking Province',
+    'German-speaking Province': 'German Speaking Province',
+
+    // Willmington / Philadelphia spelling variants
+    'Philadelphia Province': 'Willmington/Philadelphia Province',
+    'Wilmington Province': 'Willmington/Philadelphia Province',
+    'Willmington Province': 'Willmington/Philadelphia Province',
+    'Wilmington/Philadelphia Province': 'Willmington/Philadelphia Province',
+
+    // Toledo / Detroit
+    'Detroit Province': 'Toledo/Detroit Province',
+    'Toledo Province': 'Toledo/Detroit Province',
+
+    // South American and Caribbean
+    'South American Province': 'South American And Caribbean Province',
+    'South America Province': 'South American And Caribbean Province',
+    'Caribbean Province': 'South American And Caribbean Province',
+    'Caribbean Region': 'South American And Caribbean Province',
+    'South American and Caribbean Province': 'South American And Caribbean Province',
+
+    // France-West Africa common typo
+    'France West Africa Province': 'France-West Africa Province',
+  };
+
   // Helper function to get term name by ID from embedded data
   const getTermName = (
     member: WPMember,
@@ -72,6 +113,7 @@ export default function ConfreresTable({ members }: ConfreresTableProps) {
   // Note: getMemberEmail is now imported from utils
 
   // Get unique values for filters
+   
   const { uniqueStatuses, orderedProvinces } = useMemo(() => {
     // Define the exact formation statuses in the specified order
     const formationStatuses = [
@@ -123,34 +165,6 @@ export default function ConfreresTable({ members }: ConfreresTableProps) {
       if (province !== 'Unknown') memberProvinces.add(province);
     });
 
-    // Define the specific province order as requested with possible variations
-    const provinceOrder = [
-      'France-West Africa Province',
-      'Italian Province',
-      'German Speaking Province',
-      'Willmington/Philadelphia Province',
-      'Toledo/Detroit Province',
-      'South American And Caribbean Province',
-      'Southern African Region',
-      'Indian Region',
-    ];
-
-    // Create mappings for common variations in province names
-    const provinceVariations: Record<string, string> = {
-      'Austrian/South-German Province': 'German Speaking Province',
-      'South-German Province': 'German Speaking Province',
-      'Austrian Province': 'German Speaking Province',
-      'German Province': 'German Speaking Province',
-      'Philadelphia Province': 'Willmington/Philadelphia Province',
-      'Willmington Province': 'Willmington/Philadelphia Province',
-      'Detroit Province': 'Toledo/Detroit Province',
-      'Toledo Province': 'Toledo/Detroit Province',
-      'South American Province': 'South American And Caribbean Province',
-      'Caribbean Province': 'South American And Caribbean Province',
-      'South America Province': 'South American And Caribbean Province',
-      'Caribbean Region': 'South American And Caribbean Province',
-    };
-
     // Normalize province names and collect existing ones
     const normalizedProvinces = new Set<string>();
     memberProvinces.forEach(province => {
@@ -179,6 +193,7 @@ export default function ConfreresTable({ members }: ConfreresTableProps) {
   }, [members]);
 
   // Filter, sort and paginate members
+   
   const { filteredMembers, totalPages, totalItems } = useMemo(() => {
     // Define the exact formation statuses we want to show
     const allowedFormationStatuses = [
@@ -189,22 +204,6 @@ export default function ConfreresTable({ members }: ConfreresTableProps) {
       'Scholastic',
       'Deacon',
     ];
-
-    // Province variations mapping (same as above)
-    const provinceVariations: Record<string, string> = {
-      'Austrian/South-German Province': 'German Speaking Province',
-      'South-German Province': 'German Speaking Province',
-      'Austrian Province': 'German Speaking Province',
-      'German Province': 'German Speaking Province',
-      'Philadelphia Province': 'Willmington/Philadelphia Province',
-      'Willmington Province': 'Willmington/Philadelphia Province',
-      'Detroit Province': 'Toledo/Detroit Province',
-      'Toledo Province': 'Toledo/Detroit Province',
-      'South American Province': 'South American And Caribbean Province',
-      'Caribbean Province': 'South American And Caribbean Province',
-      'South America Province': 'South American And Caribbean Province',
-      'Caribbean Region': 'South American And Caribbean Province',
-    };
 
     const filtered = members.filter(member => {
       // First check if member has one of our allowed formation statuses

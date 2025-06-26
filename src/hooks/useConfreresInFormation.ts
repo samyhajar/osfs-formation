@@ -27,13 +27,20 @@ export function useConfreresInFormation() {
       // Map rows to minimal WPMember-like objects consumed by ConfreresTable
       const rows = (data ?? []) as ConfrereRow[];
       const mapped = rows.map((row, idx) => {
+        // Prefer the new `province` column if it exists (column was added 2025-06-26).
+        // Fallback to the previous logic of reading the first province in the positions JSON.
+        const provinceNameFromColumn = (row as Record<string, unknown>)
+          .province as string | undefined;
+
         const positionsArr = row.positions as unknown as
           | { province: string }[]
           | null;
-        const provinceName =
-          positionsArr && positionsArr.length > 0
-            ? positionsArr[0].province
-            : 'Unknown Province';
+
+        const provinceName = provinceNameFromColumn
+          ? provinceNameFromColumn
+          : positionsArr && positionsArr.length > 0
+          ? positionsArr[0].province
+          : 'Unknown Province';
 
         const stateId = idx * 2 + 1; // fake unique ids per row
         const provinceId = idx * 2 + 2;

@@ -6,7 +6,6 @@ import {
   fetchPositions,
   fetchProvinces,
 } from '@/lib/wordpress/api';
-import type { WPTerm } from '@/lib/wordpress/types';
 import type { Json } from '@/types/supabase';
 
 const WP_API_USER = process.env.WORDPRESS_API_USER;
@@ -24,7 +23,6 @@ const FORMATION_STATUSES = [
   'Deacon',
 ];
 
-/** WordPress meta response shape */
 interface MemberMetaResponse {
   meta: Record<string, unknown>;
   image: string | null;
@@ -33,39 +31,23 @@ interface MemberMetaResponse {
   id: number;
 }
 
-/** Parse raw meta to structured fields */
 function parseMeta(meta: Record<string, unknown>) {
-  const positionsCount = meta.positions
-    ? parseInt(meta.positions as string)
-    : 0;
-  const positions: Array<{
-    position: number | null;
-    province: number | null;
-    from: string;
-    to: string;
-  }> = [];
-  for (let i = 0; i < positionsCount; i++) {
-    positions.push({
-      position: meta[`positions_${i}_position`]
-        ? parseInt(meta[`positions_${i}_position`] as string)
-        : null,
-      province: meta[`positions_${i}_province`]
-        ? parseInt(meta[`positions_${i}_province`] as string)
-        : null,
-      from: (meta[`positions_${i}_from`] as string) || '',
-      to: (meta[`positions_${i}_to`] as string) || '',
-    });
-  }
-
   const deceasedRaw = meta['deceased'];
   const deceasedFlag = Array.isArray(deceasedRaw)
     ? deceasedRaw[0] === '1'
     : deceasedRaw === '1';
 
+  const provinceId = Array.isArray(meta['province_of_residence'])
+    ? parseInt(meta['province_of_residence'][0])
+    : meta['province_of_residence']
+    ? parseInt(meta['province_of_residence'] as string)
+    : null;
+
   return {
     email: (meta['e-mail'] as string) || '',
     deceased: deceasedFlag,
-    positions,
+    provinceId,
+    positions: [], // leave empty or extend later
   };
 }
 
@@ -90,20 +72,12 @@ async function fetchMeta(memberId: number) {
   }
 }
 
-interface PositionDetailed {
-  position: string;
-  province: string;
-  from: string;
-  to: string;
-  isActive: boolean;
-}
-
 export async function POST() {
   const start = Date.now();
 
-  const [members, allPositions, allProvinces] = await Promise.all([
+  const [members, , allProvinces] = await Promise.all([
     fetchMembers(),
-    fetchPositions(),
+    fetchPositions(), // Still fetched in case needed later
     fetchProvinces(),
   ]);
 
@@ -116,6 +90,7 @@ export async function POST() {
     bio: string;
     deceased: boolean;
     status: string;
+    province: string | null;
     positions: Json;
     total_active: number;
     last_synced: string;
@@ -124,7 +99,6 @@ export async function POST() {
   const rows: ConfrereInFormationRow[] = [];
 
   for (const member of members) {
-    // Determine if member has a formation status taxonomy term
     const terms = member._embedded?.['wp:term']?.flat() || [];
     const formationTerm = terms.find(
       (t) =>
@@ -135,20 +109,14 @@ export async function POST() {
     if (!formationTerm) continue;
 
     const meta = await fetchMeta(member.id);
-    if (!meta || meta.deceased) continue; // skip if failed or deceased
+    if (!meta || meta.deceased) continue;
 
-    const positionsDetailed: PositionDetailed[] = (meta.positions || []).map(
-      (p) => {
-        const pos = allPositions.find((x: WPTerm) => x.id === p.position);
-        const prov = allProvinces.find((x: WPTerm) => x.id === p.province);
-        return {
-          position: pos?.name || `Unknown Position (${p.position})`,
-          province: prov?.name || `Unknown Province (${p.province})`,
-          from: p.from,
-          to: p.to,
-          isActive: !p.to || p.to.trim() === '',
-        };
-      },
+    const currentProvince = meta.provinceId
+      ? allProvinces.find((p) => p.id === meta.provinceId)?.name ?? null
+      : null;
+
+    console.log(
+      `📝 Preparing row for WP member ${member.id} – "${member.title?.rendered}" | Province: ${currentProvince}`,
     );
 
     rows.push({
@@ -160,8 +128,9 @@ export async function POST() {
       bio: '',
       deceased: meta.deceased,
       status: formationTerm.name,
-      positions: positionsDetailed as unknown as Json,
-      total_active: positionsDetailed.filter((p) => p.isActive).length,
+      province: currentProvince,
+      positions: [], // Optional: if needed later
+      total_active: 0,
       last_synced: new Date().toISOString(),
     });
   }
