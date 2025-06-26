@@ -33,6 +33,7 @@
     "users": "Usuarios",
     "administration": "Administración",
     "pendingUsers": "Aprobaciones pendientes",
+    "pendingApprovals": "Aprobaciones pendientes",
     "email": "Correo Electrónico",
     "noSections": "No hay secciones disponibles para tu rol.",
     "profileLoadError": "No se pudo cargar el perfil de usuario.",
@@ -581,6 +582,29 @@
     }
   },
   "Admin": {
-    "userIntroduction": "Introducción del usuario"
+    "userIntroduction": {
+      "title": "Introducción del usuario",
+      "homepageSettings": "Configuración de la página de inicio",
+      "settings": "Configuraciones",
+      "userIntroductionMessage": "Mensaje de introducción del usuario",
+      "generalInformation": "Información general",
+      "coordinatorNameLabel": "Hno. Daniel Wisniewski, OSFS - Coordinador General de Formación",
+      "leftColumnLabel": "Oblatos de San Francisco de Sales en formación en todo el mundo",
+      "leftColumnGallery": "Galería de la columna izquierda",
+      "manageGallery": "Gestionar galería",
+      "galleryFeatures": "Características de la galería:",
+      "uploadMultipleImages": "Sube varias imágenes a la vez",
+      "dragAndDrop": "Arrastra y suelta para reordenar imágenes",
+      "addTitlesCaptions": "Agrega títulos/descripciones a las imágenes",
+      "clickToView": "Haz clic en cualquier imagen para verla en tamaño completo",
+      "responsiveGrid": "Las imágenes se muestran en una cuadrícula receptiva para los usuarios",
+      "rightColumnLabel": "Metas futuras",
+      "rightColumnGallery": "Galería de la columna derecha",
+      "addImages": "Agregar imágenes",
+      "noImagesInGallery": "No hay imágenes en la galería",
+      "clickAddImages": "Haz clic en \"Agregar imágenes\" para subir y organizar imágenes para esta columna",
+      "saveButton": "Guardar",
+      "footer": "© 2024 Oficina de Formación OSFS | Tenui Nec Dimittam"
+    }
   }
 }

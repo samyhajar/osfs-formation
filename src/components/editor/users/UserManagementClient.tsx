@@ -38,7 +38,7 @@ export default function UserManagementClient({
   const totalFormeePages = Math.ceil(formeeCount / limit);
 
   const handlePageChange = (role: 'formator' | 'formee', newPage: number) => {
-    const currentParams = new URLSearchParams(searchParams.toString());
+    const currentParams = new URLSearchParams(searchParams?.toString() ?? '');
     if (role === 'formator') {
       currentParams.set('formatorPage', String(newPage));
     } else {

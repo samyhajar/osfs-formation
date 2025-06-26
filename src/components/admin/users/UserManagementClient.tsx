@@ -31,7 +31,7 @@ export default function UserManagementClient({
   const totalPages = Math.ceil(totalCount / limit);
 
   const handlePageChange = (newPage: number) => {
-    const currentParams = new URLSearchParams(searchParams.toString());
+    const currentParams = new URLSearchParams(searchParams?.toString() ?? '');
     currentParams.set('page', String(newPage));
     router.push(`${pathname}?${currentParams.toString()}`);
   };

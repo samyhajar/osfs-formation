@@ -23,18 +23,18 @@
     "es": "Spagnolo"
   },
   "Sidebar": {
-    "dashboard": "Dashboard",
+    "dashboard": "Cruscotto",
     "documents": "Documenti",
     "folders": "Cartelle",
-    "commonSyllabus": "Programma Comune",
+    "commonSyllabus": "Programma comune",
     "workshops": "Workshop",
-    "formationPersonnel": "Personale di Formazione",
+    "formationPersonnel": "Personale di formazione",
     "confreresInFormation": "Confratelli in formazione",
     "users": "Utenti",
     "administration": "Amministrazione",
     "pendingUsers": "Approvazioni in sospeso",
     "pendingApprovals": "Approvazioni in sospeso",
-    "email": "E-mail",
+    "email": "Email",
     "noSections": "Nessuna sezione disponibile per il tuo ruolo.",
     "profileLoadError": "Impossibile caricare il profilo utente.",
     "needHelp": "Hai bisogno di aiuto?",
@@ -364,7 +364,31 @@
     "homepageSettingsDescription": "Personalizza la homepage pubblica che i visitatori vedono prima di accedere.",
     "systemSettingsTitle": "Impostazioni di Sistema",
     "systemSettingsDescription": "Ulteriori impostazioni di sistema saranno disponibili qui in futuro.",
-    "systemSettings": "Impostazioni di Sistema"
+    "systemSettings": "Impostazioni di Sistema",
+    "userIntroduction": {
+      "title": "Introduzione utente",
+      "homepageSettings": "Impostazioni della Home page",
+      "settings": "Impostazioni",
+      "userIntroductionMessage": "Messaggio di introduzione dell'utente",
+      "generalInformation": "Informazioni generali",
+      "coordinatorNameLabel": "Fr. Daniel Wisniewski, OSFS - Coordinatore Generale della Formazione",
+      "leftColumnLabel": "Oblati di San Francesco di Sales in formazione in tutto il mondo",
+      "leftColumnGallery": "Galleria colonna sinistra",
+      "manageGallery": "Gestisci galleria",
+      "galleryFeatures": "Funzionalità della galleria:",
+      "uploadMultipleImages": "Carica più immagini alla volta",
+      "dragAndDrop": "Trascina e rilascia per riordinare le immagini",
+      "addTitlesCaptions": "Aggiungi titoli/didascalie alle immagini",
+      "clickToView": "Fai clic su un'immagine per vederla a grandezza intera",
+      "responsiveGrid": "Le immagini sono visualizzate in una griglia reattiva per gli utenti",
+      "rightColumnLabel": "Obiettivi futuri",
+      "rightColumnGallery": "Galleria colonna destra",
+      "addImages": "Aggiungi immagini",
+      "noImagesInGallery": "Nessuna immagine in galleria",
+      "clickAddImages": "Clicca \"Aggiungi immagini\" per caricare e organizzare le immagini per questa colonna",
+      "saveButton": "Salva",
+      "footer": "© 2024 Ufficio Formazione OSFS | Tenui Nec Dimittam"
+    }
   },
   "Footer": {
     "copyright": "© 2024 Ufficio Formazione OSFS | Tenui Nec Dimittam",
@@ -582,6 +606,29 @@
     }
   },
   "Admin": {
-    "userIntroduction": "Introduzione utente"
+    "userIntroduction": {
+      "title": "Introduzione utente",
+      "homepageSettings": "Impostazioni della Home page",
+      "settings": "Impostazioni",
+      "userIntroductionMessage": "Messaggio di introduzione dell'utente",
+      "generalInformation": "Informazioni generali",
+      "coordinatorNameLabel": "Fr. Daniel Wisniewski, OSFS - Coordinatore Generale della Formazione",
+      "leftColumnLabel": "Oblati di San Francesco di Sales in formazione in tutto il mondo",
+      "leftColumnGallery": "Galleria colonna sinistra",
+      "manageGallery": "Gestisci galleria",
+      "galleryFeatures": "Funzionalità della galleria:",
+      "uploadMultipleImages": "Carica più immagini alla volta",
+      "dragAndDrop": "Trascina e rilascia per riordinare le immagini",
+      "addTitlesCaptions": "Aggiungi titoli/didascalie alle immagini",
+      "clickToView": "Fai clic su un'immagine per vederla a grandezza intera",
+      "responsiveGrid": "Le immagini sono visualizzate in una griglia reattiva per gli utenti",
+      "rightColumnLabel": "Obiettivi futuri",
+      "rightColumnGallery": "Galleria colonna destra",
+      "addImages": "Aggiungi immagini",
+      "noImagesInGallery": "Nessuna immagine in galleria",
+      "clickAddImages": "Clicca \"Aggiungi immagini\" per caricare e organizzare le immagini per questa colonna",
+      "saveButton": "Salva",
+      "footer": "© 2024 Ufficio Formazione OSFS | Tenui Nec Dimittam"
+    }
   }
 }

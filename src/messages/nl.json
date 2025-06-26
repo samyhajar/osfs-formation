@@ -1,0 +1,30 @@
+"Admin": {
+  "userIntroduction": {
+    "title": "Gebruikersintroductie",
+    "homepageSettings": "Startpagina-instellingen",
+    "settings": "Instellingen",
+    "userIntroductionMessage": "Bericht voor gebruikersintroductie",
+    "generalInformation": "Algemene informatie",
+    "coordinatorNameLabel": "Bro. Daniel Wisniewski, OSFS - Algemeen Vormingscoördinator",
+    "leftColumnLabel": "Oblaten van de Heilige Franciscus van Sales in opleiding over de hele wereld",
+    "leftColumnGallery": "Galerij van de linkerkolom",
+    "manageGallery": "Galerij beheren",
+    "galleryFeatures": "Galerijfuncties:",
+    "uploadMultipleImages": "Upload meerdere afbeeldingen tegelijk",
+    "dragAndDrop": "Sleep en zet neer om afbeeldingen opnieuw te rangschikken",
+    "addTitlesCaptions": "Voeg titels/bijschriften toe aan afbeeldingen",
+    "clickToView": "Klik op een afbeelding om deze op ware grootte te bekijken",
+    "responsiveGrid": "Afbeeldingen worden weergegeven in een responsief raster voor gebruikers",
+    "rightColumnLabel": "Toekomstige doelen",
+    "rightColumnGallery": "Galerij van de rechterkolom",
+    "addImages": "Afbeeldingen toevoegen",
+    "noImagesInGallery": "Geen afbeeldingen in de galerij",
+    "clickAddImages": "Klik op \"Afbeeldingen toevoegen\" om afbeeldingen voor deze kolom te uploaden en te organiseren",
+    "saveButton": "Opslaan",
+    "footer": "© 2024 OSFS Vormingsbureau | Tenui Nec Dimittam"
+  }
+}
+
+"EmailPage": {
+  "noDocumentsFound": "Geen documenten gevonden"
+}

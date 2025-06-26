@@ -23,17 +23,18 @@
     "pt": "Português"
   },
   "Sidebar": {
-    "dashboard": "Painel",
+    "dashboard": "Painel de controle",
     "documents": "Documentos",
     "folders": "Pastas",
-    "commonSyllabus": "Programa Comum",
-    "workshops": "Workshops",
-    "formationPersonnel": "Pessoal de Formação",
-    "confreresInFormation": "Confrades em Formação",
+    "commonSyllabus": "Programa comum",
+    "workshops": "Oficinas",
+    "formationPersonnel": "Pessoal de formação",
+    "confreresInFormation": "Confrades em formação",
     "users": "Usuários",
     "administration": "Administração",
-    "pendingUsers": "Aprovações Pendentes",
-    "email": "E-mail",
+    "pendingApprovals": "Aprovações pendentes",
+    "pendingUsers": "Aprovações pendentes",
+    "email": "Email",
     "noSections": "Nenhuma seção disponível para seu papel.",
     "profileLoadError": "Não foi possível carregar o perfil do usuário.",
     "needHelp": "Precisa de ajuda?",
@@ -411,7 +412,57 @@
     "homepageSettingsDescription": "Personalizar a página inicial pública que os visitantes veem antes de fazer login.",
     "systemSettingsTitle": "Configurações do Sistema",
     "systemSettingsDescription": "Configurações adicionais do sistema estarão disponíveis aqui no futuro.",
-    "systemSettings": "Configurações do Sistema"
+    "systemSettings": "Configurações do Sistema",
+    "userIntroduction": {
+      "title": "Introdução do Usuário",
+      "homepageSettings": "Configurações da Página Inicial",
+      "settings": "Configurações",
+      "userIntroductionMessage": "Mensagem de Introdução do Usuário",
+      "generalInformation": "Informações Gerais",
+      "coordinatorNameLabel": "Irmão Daniel Wisniewski, OSFS - Coordenador Geral de Formação",
+      "leftColumnLabel": "Mensagem de Boas-vindas (Coluna Esquerda)",
+      "leftColumnGallery": "Galeria da Coluna Esquerda",
+      "manageGallery": "Gerenciar Galeria",
+      "galleryFeatures": "Recursos da Galeria:",
+      "uploadMultipleImages": "Envie várias imagens de uma vez",
+      "dragAndDrop": "Arraste e solte para reordenar as imagens",
+      "addTitlesCaptions": "Adicione títulos/legendas às imagens",
+      "clickToView": "Clique em qualquer imagem para visualizá-la em tamanho real",
+      "responsiveGrid": "As imagens são exibidas em uma grade responsiva para os usuários",
+      "rightColumnLabel": "Informações Adicionais (Coluna Direita)",
+      "rightColumnGallery": "Galeria da Coluna Direita",
+      "addImages": "Adicionar Imagens",
+      "noImagesInGallery": "Nenhuma imagem na galeria",
+      "clickAddImages": "Clique em \"Adicionar Imagens\" para enviar e organizar imagens para esta coluna",
+      "saveButton": "Salvar Alterações",
+      "footer": "© 2024 Escritório de Formação OSFS | Tenui Nec Dimittam"
+    }
+  },
+  "Admin": {
+    "userIntroduction": {
+      "title": "Introdução do Usuário",
+      "homepageSettings": "Configurações da Página Inicial",
+      "settings": "Configurações",
+      "userIntroductionMessage": "Mensagem de Introdução do Usuário",
+      "generalInformation": "Informações Gerais",
+      "coordinatorNameLabel": "Irmão Daniel Wisniewski, OSFS - Coordenador Geral de Formação",
+      "leftColumnLabel": "Mensagem de Boas-vindas (Coluna Esquerda)",
+      "leftColumnGallery": "Galeria da Coluna Esquerda",
+      "manageGallery": "Gerenciar Galeria",
+      "galleryFeatures": "Recursos da Galeria:",
+      "uploadMultipleImages": "Envie várias imagens de uma vez",
+      "dragAndDrop": "Arraste e solte para reordenar as imagens",
+      "addTitlesCaptions": "Adicione títulos/legendas às imagens",
+      "clickToView": "Clique em qualquer imagem para visualizá-la em tamanho real",
+      "responsiveGrid": "As imagens são exibidas em uma grade responsiva para os usuários",
+      "rightColumnLabel": "Informações Adicionais (Coluna Direita)",
+      "rightColumnGallery": "Galeria da Coluna Direita",
+      "addImages": "Adicionar Imagens",
+      "noImagesInGallery": "Nenhuma imagem na galeria",
+      "clickAddImages": "Clique em \"Adicionar Imagens\" para enviar e organizar imagens para esta coluna",
+      "saveButton": "Salvar Alterações",
+      "footer": "© 2024 Escritório de Formação OSFS | Tenui Nec Dimittam"
+    }
   },
   "Footer": {
     "copyright": "© 2024 Escritório de Formação OSFS | Tenui Nec Dimittam",
@@ -467,14 +518,6 @@
     "disclaimer": "Disclaimer",
     "disclaimerText": "Apesar do controle cuidadoso do conteúdo, não assumimos nenhuma responsabilidade pelo conteúdo de links externos. Os operadores das páginas vinculadas são os únicos responsáveis pelo seu conteúdo.",
     "lastUpdated": "Última atualização"
-  },
-  "UserIntroduction": {
-    "coordinatorNameLabel": "Nome do Coordenador",
-    "leftColumnLabel": "Mensagem de Boas-vindas (Coluna Esquerda)",
-    "textFormatInfo": "O texto pode incluir formatação básica",
-    "rightColumnLabel": "Informações Adicionais (Coluna Direita)",
-    "saveButton": "Salvar Alterações",
-    "saveSuccess": "Conteúdo salvo com sucesso!"
   },
   "AdminWorkshopsPage": {
     "title": "Workshops",
@@ -627,12 +670,5 @@
       "Videos": "Vídeos",
       "Reflections 4 Dimensions": "Reflexões 4 Dimensões"
     }
-  },
-  "Admin": {
-    "userIntroduction": "Introdução do usuário"
-  },
-  "Sidebar": {
-    "pendingUsers": "Aprovações pendentes",
-    "pendingApprovals": "Aprovações pendentes"
   }
 }

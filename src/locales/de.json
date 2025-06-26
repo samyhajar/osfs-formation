@@ -23,7 +23,7 @@
     "es": "Spanisch"
   },
   "Sidebar": {
-    "dashboard": "Dashboard",
+    "dashboard": "Armaturenbrett",
     "documents": "Dokumente",
     "folders": "Ordner",
     "commonSyllabus": "Gemeinsamer Lehrplan",
@@ -34,7 +34,7 @@
     "administration": "Verwaltung",
     "pendingUsers": "Ausstehende Genehmigungen",
     "pendingApprovals": "Ausstehende Genehmigungen",
-    "email": "E-Mail",
+    "email": "Email",
     "noSections": "Keine Bereiche für Ihre Rolle verfügbar.",
     "profileLoadError": "Benutzerprofil konnte nicht geladen werden.",
     "needHelp": "Brauchen Sie Hilfe?",
@@ -418,7 +418,30 @@
     "systemSettingsTitle": "Systemeinstellungen",
     "systemSettingsDescription": "Zusätzliche Systemeinstellungen werden hier in Zukunft verfügbar sein.",
     "systemSettings": "Systemeinstellungen",
-    "userIntroduction": "Benutzer-Einführung"
+    "userIntroduction": {
+      "title": "Benutzereinführung",
+      "homepageSettings": "Startseiteneinstellungen",
+      "settings": "Einstellungen",
+      "userIntroductionMessage": "Benutzereinführungsnachricht",
+      "generalInformation": "Allgemeine Informationen",
+      "coordinatorNameLabel": "Br. Daniel Wisniewski, OSFS - Generaler Ausbildungskoodinator",
+      "leftColumnLabel": "Oblaten des heiligen Franz von Sales in Ausbildung weltweit",
+      "leftColumnGallery": "Galerie der linken Spalte",
+      "manageGallery": "Galerie verwalten",
+      "galleryFeatures": "Galeriefunktionen:",
+      "uploadMultipleImages": "Laden Sie mehrere Bilder gleichzeitig hoch",
+      "dragAndDrop": "Ziehen und ablegen, um Bilder neu anzuordnen",
+      "addTitlesCaptions": "Fügen Sie Titeln/Beschriftungen zu Bildern hinzu",
+      "clickToView": "Klicken Sie auf ein Bild, um es in voller Größe anzuzeigen",
+      "responsiveGrid": "Bilder werden in einem reaktionsfähigen Raster für Benutzer angezeigt",
+      "rightColumnLabel": "Zukünftige Ziele",
+      "rightColumnGallery": "Galerie der rechten Spalte",
+      "addImages": "Bilder hinzufügen",
+      "noImagesInGallery": "Keine Bilder in der Galerie",
+      "clickAddImages": "Klicken Sie auf \"Bilder hinzufügen\", um Bilder für diese Spalte hochzuladen und zu organisieren",
+      "saveButton": "Speichern",
+      "footer": "© 2024 OSFS Ausbildungsbüro | Tenui Nec Dimittam"
+    }
   },
   "HomepageSettings": {
     "mainTitleSection": "Haupttitel-Bereich",
@@ -624,5 +647,31 @@
     "disclaimer": "Haftungsausschluss",
     "disclaimerText": "Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.",
     "lastUpdated": "Zuletzt aktualisiert"
+  },
+  "Admin": {
+    "userIntroduction": {
+      "title": "Benutzereinführung",
+      "homepageSettings": "Startseiteneinstellungen",
+      "settings": "Einstellungen",
+      "userIntroductionMessage": "Benutzereinführungsnachricht",
+      "generalInformation": "Allgemeine Informationen",
+      "coordinatorNameLabel": "Br. Daniel Wisniewski, OSFS - Generaler Ausbildungskoodinator",
+      "leftColumnLabel": "Oblaten des heiligen Franz von Sales in Ausbildung weltweit",
+      "leftColumnGallery": "Galerie der linken Spalte",
+      "manageGallery": "Galerie verwalten",
+      "galleryFeatures": "Galeriefunktionen:",
+      "uploadMultipleImages": "Mehrere Bilder gleichzeitig hochladen",
+      "dragAndDrop": "Ziehen und ablegen, um Bilder neu anzuordnen",
+      "addTitlesCaptions": "Titel/Beschriftungen zu Bildern hinzufügen",
+      "clickToView": "Auf ein Bild klicken, um es in voller Größe anzuzeigen",
+      "responsiveGrid": "Bilder werden in einem responsiven Raster angezeigt",
+      "rightColumnLabel": "Zukünftige Ziele",
+      "rightColumnGallery": "Galerie der rechten Spalte",
+      "addImages": "Bilder hinzufügen",
+      "noImagesInGallery": "Keine Bilder in der Galerie",
+      "clickAddImages": "Klicken Sie auf \"Bilder hinzufügen\", um Bilder hochzuladen und zu organisieren",
+      "saveButton": "Speichern",
+      "footer": "© 2024 OSFS Ausbildungsbüro | Tenui Nec Dimittam"
+    }
   }
 }

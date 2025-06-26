@@ -57,7 +57,7 @@ export default function UserManagementClient({
   };
 
   const handlePageChange = (role: 'formator' | 'formee', newPage: number) => {
-    const currentParams = new URLSearchParams(searchParams.toString());
+    const currentParams = new URLSearchParams(searchParams?.toString() ?? '');
     if (role === 'formator') {
       currentParams.set('formatorPage', String(newPage));
     } else {

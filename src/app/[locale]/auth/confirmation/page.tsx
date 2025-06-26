@@ -11,7 +11,7 @@ export default function ConfirmationPage() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const params = useParams();
-  const locale = params.locale as string || 'en';
+  const locale = (params as { locale?: string })?.locale ?? 'en';
   const { user, loading: authLoading } = useAuth();
 
   useEffect(() => {

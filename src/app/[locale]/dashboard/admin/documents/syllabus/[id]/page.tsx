@@ -184,7 +184,7 @@ export default function SyllabusDocumentViewerPage() {
     console.log('Current pathname:', pathname);
 
     // Extract locale and role from current pathname as fallback
-    const pathSegments = pathname.split('/').filter(Boolean);
+    const pathSegments = (pathname ?? '').split('/').filter(Boolean);
     const currentLocale = pathSegments[0] || 'en';
     const currentRole = pathSegments[2] || 'admin'; // dashboard/[role]
 

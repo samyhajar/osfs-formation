@@ -24,16 +24,15 @@
   },
   "Sidebar": {
     "dashboard": "Dashboard",
-    "documents": "Documenten",
     "folders": "Mappen",
     "commonSyllabus": "Gemeenschappelijk programma",
     "workshops": "Workshops",
-    "formationPersonnel": "Vormingspersoneel",
-    "confreresInFormation": "Medebroeders in vorming",
+    "formationPersonnel": "Opleidingspersoneel",
+    "confreresInFormation": "Confraters in opleiding",
     "users": "Gebruikers",
     "administration": "Administratie",
-    "pendingUsers": "Wachtende goedkeuringen",
-    "pendingApprovals": "In afwachting van goedkeuring",
+    "pendingApprovals": "In afwachting van goedkeuringen",
+    "pendingUsers": "In afwachting van goedkeuringen",
     "email": "E-mail",
     "noSections": "Geen secties beschikbaar voor uw rol.",
     "profileLoadError": "Kon gebruikersprofiel niet laden.",
@@ -364,7 +363,31 @@
     "homepageSettingsDescription": "Pas de publieke homepage aan die bezoekers zien voordat ze inloggen.",
     "systemSettingsTitle": "Systeeminstellingen",
     "systemSettingsDescription": "Extra systeeminstellingen zullen hier in de toekomst beschikbaar zijn.",
-    "systemSettings": "Systeeminstellingen"
+    "systemSettings": "Systeeminstellingen",
+    "userIntroduction": {
+      "title": "Gebruikersintroductie",
+      "homepageSettings": "Homepage-instellingen",
+      "settings": "Instellingen",
+      "userIntroductionMessage": "Introductiebericht gebruiker",
+      "generalInformation": "Algemene informatie",
+      "coordinatorNameLabel": "Br. Daniel Wisniewski, OSFS - Algemeen Formatiecoördinator",
+      "leftColumnLabel": "Oblaten van Sint Franciscus van Sales in opleiding over de hele wereld",
+      "leftColumnGallery": "Galerij linkerkolom",
+      "manageGallery": "Galerij beheren",
+      "galleryFeatures": "Galerijfuncties:",
+      "uploadMultipleImages": "Upload meerdere afbeeldingen tegelijk",
+      "dragAndDrop": "Sleep om afbeeldingen te herschikken",
+      "addTitlesCaptions": "Voeg titels/bijschriften toe aan afbeeldingen",
+      "clickToView": "Klik op een afbeelding om deze op volledige grootte te bekijken",
+      "responsiveGrid": "Afbeeldingen worden weergegeven in een responsief raster",
+      "rightColumnLabel": "Toekomstige doelen",
+      "rightColumnGallery": "Galerij rechterkolom",
+      "addImages": "Afbeeldingen toevoegen",
+      "noImagesInGallery": "Geen afbeeldingen in de galerij",
+      "clickAddImages": "Klik op \"Afbeeldingen toevoegen\" om afbeeldingen te uploaden en te ordenen voor deze kolom",
+      "saveButton": "Opslaan",
+      "footer": "© 2024 OSFS Vormingsbureau | Tenui Nec Dimittam"
+    }
   },
   "Footer": {
     "copyright": "© 2024 OSFS Vormingsbureau | Tenui Nec Dimittam",
@@ -582,6 +605,29 @@
     }
   },
   "Admin": {
-    "userIntroduction": "Gebruikersintroductie"
+    "userIntroduction": {
+      "title": "Gebruikersintroductie",
+      "homepageSettings": "Homepage-instellingen",
+      "settings": "Instellingen",
+      "userIntroductionMessage": "Introductiebericht gebruiker",
+      "generalInformation": "Algemene informatie",
+      "coordinatorNameLabel": "Br. Daniel Wisniewski, OSFS - Algemeen Formatiecoördinator",
+      "leftColumnLabel": "Oblaten van Sint Franciscus van Sales in opleiding over de hele wereld",
+      "leftColumnGallery": "Galerij linkerkolom",
+      "manageGallery": "Galerij beheren",
+      "galleryFeatures": "Galerijfuncties:",
+      "uploadMultipleImages": "Upload meerdere afbeeldingen tegelijk",
+      "dragAndDrop": "Sleep om afbeeldingen te herschikken",
+      "addTitlesCaptions": "Voeg titels/bijschriften toe aan afbeeldingen",
+      "clickToView": "Klik op een afbeelding om deze op volledige grootte te bekijken",
+      "responsiveGrid": "Afbeeldingen worden weergegeven in een responsief raster",
+      "rightColumnLabel": "Toekomstige doelen",
+      "rightColumnGallery": "Galerij rechterkolom",
+      "addImages": "Afbeeldingen toevoegen",
+      "noImagesInGallery": "Geen afbeeldingen in de galerij",
+      "clickAddImages": "Klik op \"Afbeeldingen toevoegen\" om afbeeldingen te uploaden en te ordenen voor deze kolom",
+      "saveButton": "Opslaan",
+      "footer": "© 2024 OSFS Vormingsbureau | Tenui Nec Dimittam"
+    }
   }
 }

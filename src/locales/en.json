@@ -24,7 +24,6 @@
   },
   "Sidebar": {
     "dashboard": "Dashboard",
-    "documents": "Documents",
     "folders": "Folders",
     "commonSyllabus": "Common Syllabus",
     "workshops": "Workshops",
@@ -32,9 +31,9 @@
     "confreresInFormation": "Confreres in Formation",
     "users": "Users",
     "administration": "Administration",
-    "pendingUsers": "Pending Approvals",
     "pendingApprovals": "Pending Approvals",
     "email": "Email",
+    "pendingUsers": "Pending Approvals",
     "noSections": "No sections available for your role.",
     "profileLoadError": "Could not load user profile.",
     "needHelp": "Need help?",
@@ -471,7 +470,30 @@
       "deleteSuccess": "Document deleted successfully.",
       "updateSuccess": "Document updated successfully."
     },
-    "userIntroduction": "User Introduction"
+    "userIntroduction": {
+      "title": "User Introduction",
+      "homepageSettings": "Homepage Settings",
+      "settings": "Settings",
+      "userIntroductionMessage": "User Introduction Message",
+      "generalInformation": "General Information",
+      "coordinatorNameLabel": "Bro. Daniel Wisniewski, OSFS - General Formation Coordinator",
+      "leftColumnLabel": "De Sales Oblates in Formation Around the World",
+      "leftColumnGallery": "Left Column Gallery",
+      "manageGallery": "Manage Gallery",
+      "galleryFeatures": "Gallery Features:",
+      "uploadMultipleImages": "Upload multiple images at once",
+      "dragAndDrop": "Drag and drop to reorder images",
+      "addTitlesCaptions": "Add titles/captions to images",
+      "clickToView": "Click any image to view in full size",
+      "responsiveGrid": "Images display in a responsive grid for users",
+      "rightColumnLabel": "Future Goals",
+      "rightColumnGallery": "Right Column Gallery",
+      "addImages": "Add Images",
+      "noImagesInGallery": "No images in gallery",
+      "clickAddImages": "Click \"Add Images\" to upload and organize images for this column",
+      "saveButton": "Save",
+      "footer": "© 2024 OSFS Formation Office | Tenui Nec Dimittam"
+    }
   },
   "Dashboard": {
     "title": "Dashboard",

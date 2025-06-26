@@ -19,7 +19,8 @@ export default function MemberDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const memberId = Array.isArray(params.id) ? params.id[0] : params.id;
+  const memberIdParam = (params as { id?: string | string[] })?.id;
+  const memberId = Array.isArray(memberIdParam) ? memberIdParam[0] : memberIdParam;
 
   // Check authorization - only allow users with "user" role
   useEffect(() => {
