@@ -12,7 +12,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'wordpress-635146-5283628.cloudwaysapps.com',
+        hostname: 'intern.osfs.world',
         port: '',
         pathname: '/wp-content/uploads/**',
       },

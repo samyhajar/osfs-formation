@@ -100,7 +100,7 @@ const basicAuth = Buffer.from(`${WP_API_USER}:${WP_API_PASSWORD}`).toString(
 async function fetchMetaFieldsDirectly(
   memberId: number,
 ): Promise<{ meta: Record<string, unknown>; image: string | null } | null> {
-  const endpoint = `https://wordpress-635146-5283628.cloudwaysapps.com/wp-json/custom/v1/member-meta/${memberId}`;
+  const endpoint = `https://intern.osfs.world/wp-json/custom/v1/member-meta/${memberId}`;
   try {
     const response = await fetch(endpoint, {
       headers: {

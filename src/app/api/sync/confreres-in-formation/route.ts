@@ -52,7 +52,7 @@ function parseMeta(meta: Record<string, unknown>) {
 }
 
 async function fetchMeta(memberId: number) {
-  const endpoint = `https://wordpress-635146-5283628.cloudwaysapps.com/wp-json/custom/v1/member-meta/${memberId}`;
+  const endpoint = `https://intern.osfs.world/wp-json/custom/v1/member-meta/${memberId}`;
   try {
     const res = await fetch(endpoint, {
       headers: {
