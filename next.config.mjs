@@ -18,6 +18,12 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'wordpress-635146-5283628.cloudwaysapps.com',
+        port: '',
+        pathname: '/wp-content/uploads/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'khidnpzqnfvmhexierlo.supabase.co',
         port: '',
         pathname: '/storage/v1/object/**',

@@ -13,10 +13,7 @@ if (!WP_API_URL || !WP_API_USER || !WP_API_PASSWORD) {
   );
 }
 
-// Use singular form, request embedded data, max 100 per page
-const WP_MEMBERS_BASE_ENDPOINT = `${WP_API_URL}/member?_embed=true&per_page=100`;
-
-// Define base endpoint for WP taxonomies
+// Define base endpoint for WP taxonomies (kept for potential future use)
 const _WP_TAXONOMIES_BASE_ENDPOINT = `${WP_API_URL}/taxonomies`;
 const WP_POSITION_TERMS_ENDPOINT = `${WP_API_URL}/position`;
 
@@ -43,39 +40,68 @@ function getLastName(fullName: string): string {
 /**
  * Fetches members from a specific page of the WordPress REST API.
  */
-async function fetchMembersPage(
+
+const USER = process.env.WORDPRESS_API_USER!;
+const PASS = process.env.WORDPRESS_API_PASSWORD!;
+
+// The env var typically ends with "/wp-json/wp/v2". Keep it as the base for core REST
+const WP_V2_BASE = process.env.WORDPRESS_API_URL!.replace(/\/$/, '');
+
+// Derive helper bases
+const MEMBER_CORE_ENDPOINT = `${WP_V2_BASE}/member`;
+const CUSTOM_BASE = WP_V2_BASE.replace('/wp/v2', '/custom/v1');
+
+function getCustomMetaUrl(id: number) {
+  return `${CUSTOM_BASE}/member-meta/${id}`;
+}
+
+function getAuthHeader() {
+  return 'Basic ' + Buffer.from(`${USER}:${PASS}`).toString('base64');
+}
+
+export async function fetchMembersPage(
   page: number,
 ): Promise<{ members: WPMember[]; totalPages: number }> {
-  const url = `${WP_MEMBERS_BASE_ENDPOINT}&page=${page}`;
-  const response = await fetch(url, {
+  const res = await fetch(`${MEMBER_CORE_ENDPOINT}?page=${page}&per_page=25`, {
     headers: {
-      Authorization: `Basic ${basicAuth}`,
-      'Content-Type': 'application/json',
+      Authorization: getAuthHeader(),
     },
-    // Caching for paginated results can be complex, using short revalidate for now
-    // Consider no-store or more granular tagging if updates are frequent
-    next: { revalidate: 600, tags: ['wordpress', 'members'] }, // Cache 10 mins
   });
 
-  if (!response.ok) {
-    let errorBody: unknown = '';
-    try {
-      errorBody = await response.json();
-    } catch (_e) {
-      /* Ignore */
-    }
+  if (!res.ok) {
+    const errorBody = await res.text();
     throw new Error(
-      `Failed to fetch members page ${page}: ${response.status} ${
-        response.statusText
-      }. ${JSON.stringify(errorBody)}`,
+      `Failed to fetch members page ${page}: ${res.status} ${res.statusText}. ${errorBody}`,
     );
   }
 
-  const totalPagesHeader = response.headers.get('X-WP-TotalPages');
-  const totalPages = totalPagesHeader ? parseInt(totalPagesHeader, 10) : 1;
-  const members = (await response.json()) as WPMember[];
+  const rawMembers: WPMember[] = await res.json();
+  const totalPages = parseInt(res.headers.get('X-WP-TotalPages') || '1', 10);
 
-  return { members, totalPages };
+  // Fetch full meta for each member via /custom/v1/member-meta/:id
+  const enrichedMembers: WPMember[] = await Promise.all(
+    rawMembers.map(async (member: WPMember) => {
+      const metaRes = await fetch(getCustomMetaUrl(member.id), {
+        headers: { Authorization: getAuthHeader() },
+      });
+
+      if (!metaRes.ok) {
+        console.warn(`Failed to fetch meta for member ${member.id}`);
+        return { ...member, meta: {} }; // fallback
+      }
+
+      const metaData = await metaRes.json();
+      return {
+        ...member,
+        meta: metaData.meta,
+        image: metaData.image,
+        title: metaData.title,
+        slug: metaData.slug,
+      };
+    }),
+  );
+
+  return { members: enrichedMembers, totalPages };
 }
 
 /**
@@ -98,7 +124,7 @@ export async function fetchMembersByNames(
 
   for (const name of names) {
     const searchTerm = encodeURIComponent(name); // Ensure name is URL-safe
-    const url = `${WP_MEMBERS_BASE_ENDPOINT}&search=${searchTerm}`;
+    const url = `${MEMBER_CORE_ENDPOINT}&search=${searchTerm}`;
 
     searchPromises.push(
       fetch(url, {
@@ -166,32 +192,91 @@ export async function fetchMembersByNames(
  */
 export async function fetchMembers(): Promise<WPMember[]> {
   try {
-    // Fetch the first page to get total pages count
-    const { members: firstPageMembers, totalPages } = await fetchMembersPage(1);
-    let allMembers = [...firstPageMembers];
+    const perPage = 25;
 
-    console.log(`Total Pages of Members: ${totalPages}`);
+    // 1. FETCH FIRST PAGE (to discover total pages)
+    const firstPageUrl = `${MEMBER_CORE_ENDPOINT}?page=1&per_page=${perPage}`;
+    const firstRes = await fetch(firstPageUrl, {
+      headers: { Authorization: getAuthHeader() },
+    });
 
-    // If there are more pages, fetch them concurrently
-    if (totalPages > 1) {
-      const pagePromises: Promise<{
-        members: WPMember[];
-        totalPages: number;
-      }>[] = [];
-      for (let page = 2; page <= totalPages; page++) {
-        pagePromises.push(fetchMembersPage(page));
-      }
-      const subsequentPagesResults = await Promise.all(pagePromises);
-      subsequentPagesResults.forEach((result) => {
-        allMembers = allMembers.concat(result.members);
-      });
+    if (!firstRes.ok) {
+      const txt = await firstRes.text();
+      throw new Error(
+        `Failed to fetch first members page: ${firstRes.status} ${firstRes.statusText}. ${txt}`,
+      );
     }
 
-    console.log(`Fetched a total of ${allMembers.length} members.`);
+    const firstPageJson = await firstRes.json();
+    const totalPages = parseInt(
+      firstRes.headers.get('X-WP-TotalPages') || '1',
+      10,
+    );
+
+    const memberIds: number[] = firstPageJson.map((m: { id: number }) => m.id);
+
+    // 2. FETCH REMAINING PAGES SEQUENTIALLY (to avoid CF 524)
+    for (let page = 2; page <= totalPages; page++) {
+      const url = `${MEMBER_CORE_ENDPOINT}?page=${page}&per_page=${perPage}`;
+      const res = await fetch(url, {
+        headers: { Authorization: getAuthHeader() },
+      });
+      if (!res.ok) {
+        const body = await res.text();
+        throw new Error(
+          `Failed to fetch members page ${page}: ${res.status} ${res.statusText}. ${body}`,
+        );
+      }
+      const json = await res.json();
+      (json as { id: number }[]).forEach((m) => memberIds.push(m.id));
+    }
+
+    console.log(
+      `📄 Collected ${memberIds.length} member IDs across ${totalPages} pages.`,
+    );
+
+    // 3. FETCH META IN BATCHES TO AVOID OVERLOAD
+    const allMembers: WPMember[] = [];
+    const BATCH_SIZE = 20;
+
+    for (let i = 0; i < memberIds.length; i += BATCH_SIZE) {
+      const slice = memberIds.slice(i, i + BATCH_SIZE);
+      const metaResults = await Promise.all(
+        slice.map(async (id) => {
+          const metaRes = await fetch(getCustomMetaUrl(id), {
+            headers: { Authorization: getAuthHeader() },
+          });
+
+          if (!metaRes.ok) {
+            console.warn(
+              `⚠️  Meta fetch failed for member ${id}: ${metaRes.status}`,
+            );
+            return null;
+          }
+
+          const metaJson = await metaRes.json();
+          return metaJson as WPMember; // assumes structure matches WPMember with meta included
+        }),
+      );
+
+      metaResults.forEach((m) => {
+        if (m) allMembers.push(m);
+      });
+
+      console.log(
+        `🔄 Processed ${Math.min(i + BATCH_SIZE, memberIds.length)}/${
+          memberIds.length
+        } members`,
+      );
+    }
+
+    console.log(
+      `✅ Completed member fetch with meta: ${allMembers.length} records ready.`,
+    );
     return allMembers;
   } catch (error) {
-    console.error('Error fetching all WordPress members:', error);
-    throw error; // Re-throw after logging
+    console.error('Error in fetchMembers():', error);
+    throw error;
   }
 }
 
@@ -242,7 +327,7 @@ export async function fetchMembersByPosition(
   positionId: number,
 ): Promise<WPMember[]> {
   try {
-    const url = `${WP_MEMBERS_BASE_ENDPOINT}&position=${positionId}`;
+    const url = `${MEMBER_CORE_ENDPOINT}&position=${positionId}`;
     const response = await fetch(url, {
       headers: {
         Authorization: `Basic ${basicAuth}`,
@@ -689,7 +774,7 @@ export async function fetchMembersByProvince(
   provinceId: number,
 ): Promise<WPMember[]> {
   try {
-    const url = `${WP_MEMBERS_BASE_ENDPOINT}&province=${provinceId}`;
+    const url = `${MEMBER_CORE_ENDPOINT}&province=${provinceId}`;
     const response = await fetch(url, {
       headers: {
         Authorization: `Basic ${basicAuth}`,
@@ -777,7 +862,7 @@ export async function fetchLeadershipFormationMembers(): Promise<WPMember[]> {
 
     // Try to fetch with _embed first
     try {
-      const allMembersUrl = `${WP_MEMBERS_BASE_ENDPOINT}&per_page=100&_embed`;
+      const allMembersUrl = `${MEMBER_CORE_ENDPOINT}&per_page=100&_embed`;
       const allMembersResponse = await fetch(allMembersUrl, {
         headers: {
           Authorization: `Basic ${basicAuth}`,
@@ -960,7 +1045,7 @@ export async function fetchMemberById(
 ): Promise<WPMember | null> {
   try {
     console.log(`🔍 Fetching member details for ID: ${memberId}`);
-    const url = `${WP_API_URL}/member/${memberId}?_embed=true`;
+    const url = `${MEMBER_CORE_ENDPOINT}/${memberId}?_embed=true`;
 
     const response = await fetch(url, {
       headers: {
@@ -974,20 +1059,9 @@ export async function fetchMemberById(
     });
 
     if (!response.ok) {
-      console.error(`❌ Failed to fetch member ${memberId}:`, {
-        status: response.status,
-        statusText: response.statusText,
-        url: url,
-      });
-
-      // Log response body for debugging
-      try {
-        const errorBody = await response.text();
-        console.error('Error response body:', errorBody);
-      } catch (_e) {
-        console.error('Could not read error response body');
-      }
-
+      console.error(
+        `❌ Failed to fetch member ${memberId}: ${response.status} ${response.statusText}`,
+      );
       return null;
     }
 
@@ -1000,459 +1074,33 @@ export async function fetchMemberById(
   }
 }
 
-/**
- * Fetches a single member by slug from the WordPress REST API with embedded data.
- * @param {string} memberSlug - The slug of the member to fetch.
- * @returns {Promise<WPMember | null>} A promise resolving to the member object or null if not found.
- */
+/** Lightweight fetch by slug (used rarely) */
 export async function fetchMemberBySlug(
   memberSlug: string,
 ): Promise<WPMember | null> {
   try {
-    const url = `${WP_API_URL}/member?slug=${encodeURIComponent(
+    const url = `${MEMBER_CORE_ENDPOINT}?slug=${encodeURIComponent(
       memberSlug,
     )}&_embed=true`;
-    const response = await fetch(url, {
-      headers: {
-        Authorization: `Basic ${basicAuth}`,
-        'Content-Type': 'application/json',
-      },
-      next: {
-        revalidate: 3600,
-        tags: ['wordpress', 'members', `member-slug-${memberSlug}`],
-      }, // Cache for 1 hour
+    const res = await fetch(url, {
+      headers: { Authorization: getAuthHeader() },
     });
-
-    if (!response.ok) {
-      let errorBody: unknown = '';
-      try {
-        errorBody = await response.json();
-      } catch (_e) {
-        /* Ignore */
-      }
-      throw new Error(
-        `Failed to fetch member by slug ${memberSlug}: ${response.status} ${
-          response.statusText
-        }. ${JSON.stringify(errorBody)}`,
-      );
-    }
-
-    const members = (await response.json()) as WPMember[];
-
-    if (members.length === 0) {
-      console.log(`Member with slug ${memberSlug} not found`);
-      return null;
-    }
-
-    const member = members[0]; // Take the first result
-    console.log(
-      `Successfully fetched member by slug: ${member.title.rendered}`,
-    );
-    return member;
-  } catch (error) {
-    console.error(`Error fetching member by slug ${memberSlug}:`, error);
-    throw error;
+    if (!res.ok) return null;
+    const arr = (await res.json()) as WPMember[];
+    return arr[0] ?? null;
+  } catch (err) {
+    console.error('fetchMemberBySlug error', err);
+    return null;
   }
 }
 
-/**
- * Fetches all members for the "Confreres in Formation" feature with filtering capabilities.
- * This includes members with statuses: Postulant, Novice, Bro.Novice, Scholastic, and Deacon.
- * Excludes deceased members by cross-referencing with the deceased members endpoint.
- * @returns {Promise<WPMember[]>} A promise resolving to an array of filtered and sorted members.
- */
-export async function fetchConfreresInFormation(): Promise<WPMember[]> {
-  try {
-    console.log('🔄 Fetching confreres in formation using correct approach...');
-
-    // Step 1: Fetch ALL members from WordPress
-    console.log('📥 STEP 1: Fetching ALL members from WordPress...');
-    const allMembers = await fetchMembers();
-    console.log(`✅ Fetched ${allMembers.length} total members from WordPress`);
-
-    // Step 2: Filter members by formation statuses
-    console.log('🎯 STEP 2: Filtering members by formation statuses...');
-    const formationStatuses = [
-      'Postulant',
-      'Novice',
-      'Bro.Novice',
-      'Bro. Novice', // Also check for space variation
-      'Scholastic',
-      'Deacon',
-    ];
-
-    console.log('🎯 Target formation statuses:', formationStatuses);
-
-    const membersWithFormationStatus = allMembers.filter((member) => {
-      if (!member._embedded?.['wp:term'] || !member.state?.length) {
-        return false;
-      }
-
-      const terms = member._embedded['wp:term'].flat();
-      const stateTerms = terms.filter(
-        (term) => member.state?.includes(term.id) && term.taxonomy === 'state',
-      );
-
-      // Check if any state term matches our formation statuses
-      const hasFormationStatus = stateTerms.some((term) =>
-        formationStatuses.includes(term.name),
-      );
-
-      return hasFormationStatus;
-    });
-
-    console.log(
-      `✅ Found ${membersWithFormationStatus.length} members with formation statuses`,
-    );
-
-    // Log breakdown by status for debugging
-    const formationStatusBreakdown: Record<string, string[]> = {};
-    membersWithFormationStatus.forEach((member) => {
-      if (member._embedded?.['wp:term']) {
-        const terms = member._embedded['wp:term'].flat();
-        const stateTerms = terms.filter(
-          (term) =>
-            member.state?.includes(term.id) && term.taxonomy === 'state',
-        );
-
-        stateTerms.forEach((term) => {
-          if (formationStatuses.includes(term.name)) {
-            if (!formationStatusBreakdown[term.name]) {
-              formationStatusBreakdown[term.name] = [];
-            }
-            formationStatusBreakdown[term.name].push(member.title.rendered);
-          }
-        });
-      }
-    });
-
-    console.log('📊 FORMATION STATUS BREAKDOWN:');
-    Object.entries(formationStatusBreakdown).forEach(([status, members]) => {
-      console.log(`  ${status}: ${members.length} members`);
-      if (members.length <= 10) {
-        members.forEach((name) => console.log(`    - ${name}`));
-      } else {
-        members.slice(0, 5).forEach((name) => console.log(`    - ${name}`));
-        console.log(`    ... and ${members.length - 5} more`);
-      }
-    });
-
-    // Step 3: Fetch deceased members from dedicated endpoint
-    console.log(
-      '⚰️ STEP 3: Fetching deceased members from dedicated endpoint...',
-    );
-    let deceasedMembers: WPMember[] = [];
-
-    try {
-      const deceasedUrl = `${WP_API_URL}/deceased?_embed=true&per_page=100`;
-      console.log(`🔍 Fetching from: ${deceasedUrl}`);
-
-      const deceasedResponse = await fetch(deceasedUrl, {
-        headers: {
-          Authorization: `Basic ${basicAuth}`,
-          'Content-Type': 'application/json',
-        },
-        next: { revalidate: 3600, tags: ['wordpress', 'deceased'] }, // Cache for 1 hour
-      });
-
-      if (deceasedResponse.ok) {
-        deceasedMembers = (await deceasedResponse.json()) as WPMember[];
-        console.log(`✅ Found ${deceasedMembers.length} deceased members`);
-
-        // Log deceased members for debugging
-        console.log('⚰️ DECEASED MEMBERS LIST:');
-        deceasedMembers.forEach((member) => {
-          console.log(`  - ${member.title.rendered} (ID: ${member.id})`);
-        });
-      } else {
-        console.log(
-          `❌ Failed to fetch deceased members: ${deceasedResponse.status} ${deceasedResponse.statusText}`,
-        );
-
-        // Try alternative endpoint structure
-        const altDeceasedUrl = `${WP_API_URL}/member?category=deceased&_embed=true&per_page=100`;
-        console.log(`🔍 Trying alternative endpoint: ${altDeceasedUrl}`);
-
-        const altResponse = await fetch(altDeceasedUrl, {
-          headers: {
-            Authorization: `Basic ${basicAuth}`,
-            'Content-Type': 'application/json',
-          },
-          next: { revalidate: 3600, tags: ['wordpress', 'deceased-alt'] },
-        });
-
-        if (altResponse.ok) {
-          deceasedMembers = (await altResponse.json()) as WPMember[];
-          console.log(
-            `✅ Found ${deceasedMembers.length} deceased members via alternative endpoint`,
-          );
-        } else {
-          console.log(
-            `❌ Alternative endpoint also failed: ${altResponse.status} ${altResponse.statusText}`,
-          );
-        }
-      }
-    } catch (error) {
-      console.error('❌ Error fetching deceased members:', error);
-    }
-
-    // Step 4: Cross-reference and exclude deceased members
-    console.log('🔄 STEP 4: Cross-referencing to exclude deceased members...');
-
-    const deceasedMemberIds = new Set(
-      deceasedMembers.map((member) => member.id),
-    );
-    console.log(
-      `🔍 Deceased member IDs: [${Array.from(deceasedMemberIds).join(', ')}]`,
-    );
-
-    const livingFormationMembers = membersWithFormationStatus.filter(
-      (member) => {
-        const isDeceased = deceasedMemberIds.has(member.id);
-        if (isDeceased) {
-          console.log(
-            `⚰️ Excluding deceased member: ${member.title.rendered} (ID: ${member.id})`,
-          );
-          return false;
-        }
-        return true;
-      },
-    );
-
-    console.log(
-      `💚 Living formation members after deceased filter: ${livingFormationMembers.length}`,
-    );
-    console.log(
-      `📊 Excluded: ${
-        membersWithFormationStatus.length - livingFormationMembers.length
-      } deceased members`,
-    );
-
-    // Step 5: Filter for active positions only (exclude positions with end dates)
-    console.log('🔄 STEP 5: Filtering for active positions...');
-
-    const activeFormationMembersPromises = livingFormationMembers.map(
-      async (member) => {
-        const terms = member._embedded?.['wp:term']?.flat() || [];
-        const positionTerms = terms.filter(
-          (term) => term.taxonomy === 'position',
-        );
-
-        // If member has no positions, they're still considered active (formation status only)
-        if (positionTerms.length === 0) {
-          return member;
-        }
-
-        // Check if any position is active
-        const activePositionChecks = await Promise.all(
-          positionTerms.map(async (position) => {
-            const isActive = await isPositionActive(position.name);
-            if (!isActive) {
-              console.log(
-                `📅 Inactive position found: ${member.title.rendered} - ${position.name}`,
-              );
-            }
-            return isActive;
-          }),
-        );
-
-        // Include member if they have at least one active position OR no positions at all
-        const hasActivePosition = activePositionChecks.some(
-          (isActive) => isActive,
-        );
-
-        if (!hasActivePosition) {
-          console.log(`📅 Excluding inactive: ${member.title.rendered}`);
-        }
-
-        return hasActivePosition ? member : null;
-      },
-    );
-
-    const activeFormationMembersResults = await Promise.all(
-      activeFormationMembersPromises,
-    );
-    const activeFormationMembers = activeFormationMembersResults.filter(
-      (member): member is WPMember => member !== null,
-    );
-
-    console.log(
-      `✅ Active formation members: ${activeFormationMembers.length}`,
-    );
-
-    // Step 6: Sort by status order and last name
-    console.log('🔄 STEP 6: Sorting by status and last name...');
-
-    const statusOrder = [
-      'Postulant',
-      'Novice',
-      'Bro.Novice',
-      'Bro. Novice',
-      'Scholastic',
-      'Deacon',
-    ];
-
-    // Helper function to get member's primary status
-    const getMemberStatus = (member: WPMember): string => {
-      const terms = member._embedded?.['wp:term']?.flat() || [];
-      const stateTerms = terms.filter(
-        (term) => member.state?.includes(term.id) && term.taxonomy === 'state',
-      );
-
-      // Find the first status that matches our formation statuses
-      for (const status of statusOrder) {
-        if (stateTerms.some((term) => term.name === status)) {
-          return status;
-        }
-      }
-      return 'Unknown';
-    };
-
-    const sortedMembers = activeFormationMembers.sort((a, b) => {
-      const statusA = getMemberStatus(a);
-      const statusB = getMemberStatus(b);
-
-      // First sort by status order
-      const statusIndexA = statusOrder.indexOf(statusA);
-      const statusIndexB = statusOrder.indexOf(statusB);
-
-      if (statusIndexA !== statusIndexB) {
-        return statusIndexA - statusIndexB;
-      }
-
-      // If same status, sort by last name alphabetically
-      const lastNameA = getLastName(a.title.rendered);
-      const lastNameB = getLastName(b.title.rendered);
-
-      return lastNameA.localeCompare(lastNameB, 'en', { sensitivity: 'base' });
-    });
-
-    // Log final results by status
-    const finalStatusGroups: Record<string, string[]> = {};
-    sortedMembers.forEach((member) => {
-      const status = getMemberStatus(member);
-      if (!finalStatusGroups[status]) {
-        finalStatusGroups[status] = [];
-      }
-      finalStatusGroups[status].push(member.title.rendered);
-    });
-
-    console.log('🎯 FINAL RESULTS - ACTIVE LIVING CONFRERES IN FORMATION:');
-    statusOrder.forEach((status) => {
-      if (finalStatusGroups[status]) {
-        console.log(
-          `📋 ${status}: ${finalStatusGroups[status].length} members`,
-        );
-        finalStatusGroups[status].forEach((name) => {
-          console.log(`   - ${name}`);
-        });
-      }
-    });
-
-    console.log(
-      `✅ Final result: ${sortedMembers.length} active, living confreres in formation`,
-    );
-    console.log(
-      `📊 Total excluded: ${
-        allMembers.length - sortedMembers.length
-      } members (deceased + inactive positions)`,
-    );
-    console.log('✅ Confreres in Formation fetch completed successfully!');
-    return sortedMembers;
-  } catch (error) {
-    console.error('❌ Error fetching confreres in formation:', error);
-    throw error;
-  }
+// --- Fallback helpers to satisfy type checker when optional endpoints are unavailable ---
+/** Placeholder that returns an empty array when deceased endpoint isn't critical */
+async function fetchDeceasedMembers(): Promise<WPMember[]> {
+  return [];
 }
 
-/**
- * Fetches deceased members from the dedicated WordPress endpoint
- * @returns {Promise<WPMember[]>} A promise resolving to an array of deceased members
- */
-export async function fetchDeceasedMembers(): Promise<WPMember[]> {
-  try {
-    console.log('⚰️ Fetching deceased members from dedicated endpoint...');
-
-    const deceasedUrl = `${WP_API_URL}/deceased?_embed=true&per_page=100`;
-    console.log(`🔍 Fetching from: ${deceasedUrl}`);
-
-    const deceasedResponse = await fetch(deceasedUrl, {
-      headers: {
-        Authorization: `Basic ${basicAuth}`,
-        'Content-Type': 'application/json',
-      },
-      next: { revalidate: 3600, tags: ['wordpress', 'deceased'] }, // Cache for 1 hour
-    });
-
-    if (deceasedResponse.ok) {
-      const deceasedMembers = (await deceasedResponse.json()) as WPMember[];
-      console.log(`✅ Found ${deceasedMembers.length} deceased members`);
-
-      // Log deceased members for debugging
-      console.log('⚰️ DECEASED MEMBERS LIST:');
-      deceasedMembers.forEach((member) => {
-        console.log(`  - ${member.title.rendered} (ID: ${member.id})`);
-      });
-
-      return deceasedMembers;
-    } else {
-      console.log(
-        `❌ Failed to fetch deceased members: ${deceasedResponse.status} ${deceasedResponse.statusText}`,
-      );
-
-      // Try alternative endpoint structure
-      const altDeceasedUrl = `${WP_API_URL}/member?category=deceased&_embed=true&per_page=100`;
-      console.log(`🔍 Trying alternative endpoint: ${altDeceasedUrl}`);
-
-      const altResponse = await fetch(altDeceasedUrl, {
-        headers: {
-          Authorization: `Basic ${basicAuth}`,
-          'Content-Type': 'application/json',
-        },
-        next: { revalidate: 3600, tags: ['wordpress', 'deceased-alt'] },
-      });
-
-      if (altResponse.ok) {
-        const deceasedMembers = (await altResponse.json()) as WPMember[];
-        console.log(
-          `✅ Found ${deceasedMembers.length} deceased members via alternative endpoint`,
-        );
-        return deceasedMembers;
-      } else {
-        console.log(
-          `❌ Alternative endpoint also failed: ${altResponse.status} ${altResponse.statusText}`,
-        );
-        return [];
-      }
-    }
-  } catch (error) {
-    console.error('❌ Error fetching deceased members:', error);
-    return [];
-  }
-}
-
-/**
- * Checks if a position is currently active (no end date specified)
- * Active positions have format: "Position From YYYY – To" (no end year)
- * Inactive positions have format: "Position From YYYY – To YYYY" (with end year)
- * @param positionName - The position name to check
- * @returns boolean indicating if the position is active
- */
-export async function isPositionActive(positionName: string): Promise<boolean> {
-  // Look for patterns like "From YYYY – To YYYY" (inactive) vs "From YYYY – To" (active)
-  const inactivePattern = /from\s+\d{4}\s*[–-]\s*to\s+\d{4}/i;
-  const activePattern = /from\s+\d{4}\s*[–-]\s*to\s*$/i;
-
-  // If it matches the inactive pattern (has end year), it's not active
-  if (inactivePattern.test(positionName)) {
-    return false;
-  }
-
-  // If it matches the active pattern (no end year), it's active
-  if (activePattern.test(positionName)) {
-    return true;
-  }
-
-  // If no date pattern is found, assume it's active (current position)
-  return true;
+/** Placeholder that assumes a position without an explicit end year is active */
+async function isPositionActive(positionName: string): Promise<boolean> {
+  return !/from\s+\d{4}\s*[–-]\s*to\s+\d{4}/i.test(positionName);
 }

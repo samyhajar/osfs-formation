@@ -60,7 +60,7 @@ function parseMeta(meta: Record<string, unknown>) {
 }
 
 async function fetchMeta(memberId: number) {
-  const endpoint = `https://wordpress-635146-5283628.cloudwaysapps.com/wp-json/custom/v1/member-meta/${memberId}`;
+  const endpoint = `https://intern.osfs.world/wp-json/custom/v1/member-meta/${memberId}`;
   try {
     const res = await fetch(endpoint, {
       headers: {
@@ -99,9 +99,9 @@ export async function GET() {
     const terms = member._embedded?.['wp:term']?.flat() || [];
     const formationTerm = terms.find(
       (t) =>
-        (member.state || []).includes((t).id) &&
-        (t).taxonomy === 'state' &&
-        FORMATION_STATUSES.includes((t).name),
+        (member.state || []).includes(t.id) &&
+        t.taxonomy === 'state' &&
+        FORMATION_STATUSES.includes(t.name),
     );
     if (!formationTerm) continue;
 
@@ -113,14 +113,14 @@ export async function GET() {
     }
 
     // Attach email into meta for client util; ensure meta exists
-    (member).meta = {
+    member.meta = {
       ...(member.meta ?? {}),
       email: meta.email,
     } as WPMember['meta'];
 
     // Attach featured image so avatar helper works
-    if ((member)._embedded == null)
-      (member)._embedded = {} as unknown as typeof member._embedded;
+    if (member._embedded == null)
+      member._embedded = {} as unknown as typeof member._embedded;
 
     // Add positions/provinces array to member for potential future use
     (

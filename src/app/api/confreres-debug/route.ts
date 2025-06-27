@@ -43,7 +43,7 @@ function parseMeta(meta: Record<string, unknown>) {
 }
 
 async function fetchMeta(memberId: number) {
-  const url = `https://wordpress-635146-5283628.cloudwaysapps.com/wp-json/custom/v1/member-meta/${memberId}`;
+  const url = `https://intern.osfs.world/wp-json/custom/v1/member-meta/${memberId}`;
   try {
     const res = await fetch(url, {
       headers: {
