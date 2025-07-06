@@ -3,10 +3,6 @@
     {
       "path": "/api/sync/formation-personnel",
       "schedule": "0 0 * * *"
-    },
-    {
-      "path": "/api/sync/confreres-in-formation",
-      "schedule": "5 0 * * *"
     }
   ]
 }
