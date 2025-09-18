@@ -130,7 +130,7 @@ export default function AllUsersTable({ users, onUserDeleted }: AllUsersTablePro
                   <div className="flex items-center justify-end gap-2">
                     {isAdmin && (
                       <button
-                        onClick={() => void handleDeleteUser(user.id, user.full_name || user.email || 'Unknown User')}
+                        onClick={() => void handleDeleteUser(user.id, user.name || user.email || 'Unknown User')}
                         disabled={deletingUserId === user.id}
                         className={`p-2 rounded-md transition-colors ${
                           deletingUserId === user.id
