@@ -5,6 +5,7 @@ import AllUsersTable from './AllUsersTable';
 import { Database } from '@/types/supabase';
 import PaginationControls from '@/components/shared/PaginationControls';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
@@ -22,18 +23,22 @@ export default function UserManagementClient({
   limit,
 }: UserManagementClientProps) {
   const t = useTranslations('AdminUsersPage');
+  const [users, setUsers] = useState(initialUsers);
 
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const users = initialUsers;
   const totalPages = Math.ceil(totalCount / limit);
 
   const handlePageChange = (newPage: number) => {
     const currentParams = new URLSearchParams(searchParams?.toString() ?? '');
     currentParams.set('page', String(newPage));
     router.push(`${pathname}?${currentParams.toString()}`);
+  };
+
+  const handleUserDeleted = (userId: string) => {
+    setUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
   };
 
   return (
@@ -48,7 +53,7 @@ export default function UserManagementClient({
           <h2 className="text-lg font-medium text-gray-900">All Users</h2>
         </div>
         <div className="p-4 sm:p-6 space-y-4">
-          <AllUsersTable users={users} />
+          <AllUsersTable users={users} onUserDeleted={handleUserDeleted} />
           {totalPages > 1 && (
             <PaginationControls
               currentPage={currentPage}
