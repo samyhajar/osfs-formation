@@ -136,7 +136,7 @@ export default function LoginForm() {
         />
       </div>
 
-      <div className="mb-8">
+      <div className="mb-6">
         <label htmlFor="password" className="block text-base font-medium text-slate-700 mb-2">
           {t('passwordLabel')}
         </label>
@@ -150,6 +150,19 @@ export default function LoginForm() {
           required
           autoComplete="current-password"
         />
+      </div>
+
+      <div className="mb-8 text-right">
+        <button
+          type="button"
+          onClick={() => {
+            // TODO: Implement forgot password functionality
+            alert('Forgot password functionality coming soon!');
+          }}
+          className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+        >
+          {t('forgotPasswordLink')}
+        </button>
       </div>
 
       <button

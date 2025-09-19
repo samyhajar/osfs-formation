@@ -111,7 +111,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(false);
       console.log('[AuthContext] refreshSessionAndUser finished. Loading:', false);
     }
-  }, [supabase]);
+  }, [supabase, handleAuthError]);
 
   useEffect(() => {
     console.log('[AuthContext] Subscribing to onAuthStateChange.');

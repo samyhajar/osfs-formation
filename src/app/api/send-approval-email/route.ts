@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server-client';
-import { omnisendClient } from '@/lib/omnisend/client';
+import { emailService } from '@/lib/omnisend/email-service';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Define an interface for the request body
@@ -79,32 +79,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send approval email via Omnisend
-    try {
-      await omnisendClient.sendApprovalEmail(
-        email,
-        userName,
-        linkData.properties.action_link,
-      );
+        // Send approval email via Omnisend
+        try {
+          await emailService.sendApprovalEmail(
+            email,
+            userName,
+            linkData.properties.action_link,
+          );
 
-      // Also create/update contact in Omnisend
-      await omnisendClient.createContact({
-        email,
-        firstName: userName,
-        tags: ['osfs-formation', 'pending-approval'],
-      });
-
-      console.log(`Approval email sent successfully to ${email}`);
-    } catch (omnisendError) {
-      console.error(
-        'Error sending approval email via Omnisend:',
-        omnisendError,
-      );
-      return NextResponse.json(
-        { error: 'Failed to send approval email' },
-        { status: 500 },
-      );
-    }
+          console.log(`Approval email sent successfully to ${email}`);
+        } catch (omnisendError) {
+          console.error(
+            'Error sending approval email via Omnisend:',
+            omnisendError,
+          );
+          return NextResponse.json(
+            { error: 'Failed to send approval email' },
+            { status: 500 },
+          );
+        }
 
     return NextResponse.json({
       success: true,

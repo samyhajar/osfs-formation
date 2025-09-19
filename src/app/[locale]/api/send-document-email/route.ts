@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server-client';
-import { omnisendClient } from '@/lib/omnisend/client';
+import { emailService } from '@/lib/omnisend/email-service';
 import { NextRequest, NextResponse } from 'next/server';
 
 interface DocumentEmailBody {
@@ -103,20 +103,13 @@ export async function POST(request: NextRequest) {
           continue;
         }
 
-        // Send document recommendation email
-        await omnisendClient.sendDocumentEmail(
-          recipient.email,
-          recipient.name || 'User',
-          documents,
-          loginUrl,
-        );
-
-        // Update contact in Omnisend with document recommendation tag
-        await omnisendClient.createContact({
-          email: recipient.email,
-          firstName: recipient.name || 'User',
-          tags: ['osfs-formation', 'document-recommendations'],
-        });
+            // Send document recommendation email
+            await emailService.sendDocumentEmail(
+              recipient.email,
+              recipient.name || 'User',
+              documents,
+              loginUrl,
+            );
 
         emailResults.push({
           id: recipient.id,
