@@ -18,6 +18,11 @@ export async function POST(request: NextRequest) {
     const validatedData = signupSchema.parse(requestData);
     const { email, password, name, role } = validatedData;
 
+    // Extract locale from the request URL
+    const url = new URL(request.url);
+    const pathSegments = url.pathname.split('/').filter(Boolean);
+    const locale = pathSegments[0] || 'en';
+
     // Create a Supabase client (server-side)
     const supabase = await createClient();
 
@@ -26,7 +31,7 @@ export async function POST(request: NextRequest) {
       email,
       password,
       options: {
-        emailRedirectTo: getSiteUrl('/auth/callback'),
+        emailRedirectTo: getSiteUrl(`/${locale}/auth/callback`),
         data: {
           name,
           role, // This will be used by the handle_new_user trigger
