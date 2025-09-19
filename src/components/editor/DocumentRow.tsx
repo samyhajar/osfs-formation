@@ -178,24 +178,22 @@ export function DocumentRow({
                 <PencilIcon className="h-4 w-4" />
                 Edit
               </Link>
-              <Link
-                href={`/dashboard/admin/documents/${doc.id}/delete`}
+              <button
                 className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
                 role="menuitem"
                 onClick={handleDeleteClick}
               >
                 <TrashIcon className="h-4 w-4" />
                 Delete
-              </Link>
-              <Link
-                href={`/dashboard/admin/documents/${doc.id}/download`}
+              </button>
+              <button
                 className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
                 role="menuitem"
                 onClick={handleDownloadClick}
               >
                 <ArrowDownTrayIcon className="h-4 w-4" />
                 Download
-              </Link>
+              </button>
             </div>
           </div>,
           document.body
