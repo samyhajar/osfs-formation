@@ -205,6 +205,11 @@ max_frequency = "5s"
 # enabled = true
 # uri = "pg-functions://<database>/<schema>/<hook_name>"
 
+# Email hook to redirect all auth emails to Omnisend
+[auth.hook.send_email]
+enabled = true
+uri = "http://127.0.0.1:54321/functions/v1/send-email"
+
 # Configure one of the supported SMS providers: `twilio`, `twilio_verify`, `messagebird`, `textlocal`, `vonage`.
 [auth.sms.twilio]
 enabled = false

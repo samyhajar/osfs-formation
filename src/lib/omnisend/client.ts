@@ -109,6 +109,10 @@ export class OmnisendClient {
         lastName: contact.lastName,
         tags: contact.tags || [],
         customFields: contact.customFields || {},
+        status: 'subscribed',
+        statusDate: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       }),
     });
   }
