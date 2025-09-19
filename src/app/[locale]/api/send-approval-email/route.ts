@@ -1,6 +1,6 @@
+import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server-client';
 import { NextRequest, NextResponse } from 'next/server';
-import { sendApprovalEmail } from '@/lib/omnisend/email-service';
 
 interface ApprovalEmailBody {
   user_id: string;
@@ -80,56 +80,28 @@ export async function POST(request: NextRequest) {
     const pathSegments = url.pathname.split('/').filter(Boolean);
     const locale = pathSegments.length > 0 ? pathSegments[0] : 'en';
 
-    // Get user name for the email
-    const { data: userProfile } = await supabase
-      .from('profiles')
-      .select('name')
-      .eq('id', user_id)
-      .single();
-
-    const userName = userProfile?.name || 'User';
-
-    // Send approval email using Omnisend
-    const loginUrl = `${
-      process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin
-    }/${locale}/auth/confirmation`;
-
-    const emailResult = await sendApprovalEmail({
-      recipient: {
-        email,
-        name: userName,
+    // Use admin client to generate confirmation link
+    const supabaseAdmin = createAdminClient();
+    const { error: linkError } = await supabaseAdmin.auth.admin.generateLink({
+      type: 'magiclink',
+      email: email,
+      options: {
+        redirectTo: `${
+          process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin
+        }/${locale}/auth/confirmation`,
       },
-      loginUrl,
-      locale,
     });
 
-    if (!emailResult.success) {
+    if (linkError) {
       return NextResponse.json(
-        {
-          error: `Failed to send approval email: ${emailResult.errors.join(', ')}`,
-          details: {
-            sentCount: emailResult.sentCount,
-            failedCount: emailResult.failedCount,
-            errors: emailResult.errors,
-          },
-        },
+        { error: `Failed to generate link: ${linkError.message}` },
         { status: 500 },
       );
     }
 
     return NextResponse.json({
       success: true,
-      message: `Approval email sent successfully. ${emailResult.sentCount} emails sent, ${emailResult.failedCount} failed.`,
-      details: {
-        sentCount: emailResult.sentCount,
-        failedCount: emailResult.failedCount,
-        messageIds: emailResult.messageIds,
-        recipient: {
-          email,
-          name: userName,
-        },
-        loginUrl,
-      },
+      message: 'Approval email sent successfully',
     });
   } catch (error) {
     console.error('Error in send-approval-email API route:', error);

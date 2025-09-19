@@ -12,6 +12,7 @@ import {
 import { User, Session, SupabaseClient } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/browser-client';
 import { Database } from '@/types/supabase';
+import { useAuthErrorHandler } from '@/hooks/useAuthErrorHandler';
 
 // Update the UserProfile type to make it match the database type
 type ProfileFromDB = Database['public']['Tables']['profiles']['Row'];
@@ -43,6 +44,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const { handleAuthError } = useAuthErrorHandler(supabase);
 
   const fetchProfile = useCallback(async (userId: string): Promise<UserProfile | null> => {
     console.log(`[AuthContext] fetchProfile called for user: ${userId}`);
@@ -80,12 +83,27 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(true);
     try {
       const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError) throw sessionError;
+
+      if (sessionError) {
+        console.error("[AuthContext] Session error:", sessionError);
+
+        // Handle refresh token errors
+        const wasHandled = await handleAuthError(sessionError, setSession, setUser, setProfile);
+        if (wasHandled) return;
+
+        throw sessionError;
+      }
+
       setSession(currentSession);
       setUser(currentSession?.user ?? null);
       console.log('[AuthContext] Session/User refreshed. User:', !!(currentSession?.user));
     } catch (error) {
       console.error("[AuthContext] Error in refreshSessionAndUser:", error);
+
+      // Handle auth errors
+      const wasHandled = await handleAuthError(error, setSession, setUser, setProfile);
+      if (wasHandled) return;
+
       setSession(null);
       setUser(null);
       setProfile(null);
@@ -98,10 +116,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     console.log('[AuthContext] Subscribing to onAuthStateChange.');
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, newSession) => {
+      async (event, newSession) => {
         console.log(`[AuthContext] onAuthStateChange event: ${event}. Session exists:`, !!newSession);
+
+        // Handle token refresh errors
+        if (event === 'TOKEN_REFRESHED' && !newSession) {
+          console.log('[AuthContext] Token refresh failed, clearing session');
+          setSession(null);
+          setUser(null);
+          setProfile(null);
+          setLoading(false);
+          // Redirect to login
+          window.location.href = '/login';
+          return;
+        }
+
         setSession(newSession);
         setUser(newSession?.user ?? null);
+
         if (event === 'SIGNED_OUT') {
           setProfile(null);
           setLoading(false);

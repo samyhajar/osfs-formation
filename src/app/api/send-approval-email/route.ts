@@ -1,10 +1,12 @@
 import { createClient } from '@/lib/supabase/server-client';
+import { omnisendClient } from '@/lib/omnisend/client';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Define an interface for the request body
 interface ApprovalEmailRequest {
   user_id: string;
   email: string;
+  name?: string;
 }
 
 export async function POST(request: NextRequest) {
@@ -35,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     // Get request data with proper typing
     const requestData = (await request.json()) as ApprovalEmailRequest;
-    const { user_id, email } = requestData;
+    const { user_id, email, name } = requestData;
 
     if (!user_id || !email) {
       return NextResponse.json(
@@ -44,14 +46,60 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send the magic link to confirm the account
-    const { error: emailError } = await supabase.auth.admin.generateLink({
-      type: 'magiclink',
-      email: email,
-    });
+    // Get user profile for name if not provided
+    let userName = name;
+    if (!userName) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('name')
+        .eq('id', user_id)
+        .single();
+      userName = profile?.name || 'User';
+    }
 
-    if (emailError) {
-      console.error('Error sending approval email:', emailError);
+    // Generate the magic link for account confirmation
+    const { data: linkData, error: linkError } =
+      await supabase.auth.admin.generateLink({
+        type: 'magiclink',
+        email: email,
+      });
+
+    if (linkError) {
+      console.error('Error generating magic link:', linkError);
+      return NextResponse.json(
+        { error: 'Failed to generate approval link' },
+        { status: 500 },
+      );
+    }
+
+    if (!linkData?.properties?.action_link) {
+      return NextResponse.json(
+        { error: 'Failed to generate approval link' },
+        { status: 500 },
+      );
+    }
+
+    // Send approval email via Omnisend
+    try {
+      await omnisendClient.sendApprovalEmail(
+        email,
+        userName,
+        linkData.properties.action_link,
+      );
+
+      // Also create/update contact in Omnisend
+      await omnisendClient.createContact({
+        email,
+        firstName: userName,
+        tags: ['osfs-formation', 'pending-approval'],
+      });
+
+      console.log(`Approval email sent successfully to ${email}`);
+    } catch (omnisendError) {
+      console.error(
+        'Error sending approval email via Omnisend:',
+        omnisendError,
+      );
       return NextResponse.json(
         { error: 'Failed to send approval email' },
         { status: 500 },
@@ -61,6 +109,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Approval email sent successfully',
+      approvalUrl: linkData.properties.action_link,
     });
   } catch (error) {
     console.error('Error in send-approval-email API route:', error);

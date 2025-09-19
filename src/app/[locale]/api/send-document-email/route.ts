@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server-client';
+import { omnisendClient } from '@/lib/omnisend/client';
 import { NextRequest, NextResponse } from 'next/server';
-import { sendDocumentEmails } from '@/lib/omnisend/email-service';
 
 interface DocumentEmailBody {
   documentIds: string[];
@@ -86,50 +86,72 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send emails using Omnisend
+    // Build login URL
     const loginUrl = `${
       process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin
-    }/${locale}/auth`;
+    }/${locale}/dashboard/user`;
 
-    const emailResult = await sendDocumentEmails({
-      recipients: recipients
-        .filter((r) => r.email) // Filter out recipients without email
-        .map((r) => ({
-          email: r.email!,
-          name: r.name || 'User',
-        })),
-      documentTitles: documents.map((doc) => doc.title),
-      loginUrl,
-      locale,
-    });
+    // Send emails via Omnisend
+    const emailResults = [];
+    const errors = [];
 
-    if (!emailResult.success) {
-      return NextResponse.json(
-        {
-          error: `Failed to send emails: ${emailResult.errors.join(', ')}`,
-          details: {
-            sentCount: emailResult.sentCount,
-            failedCount: emailResult.failedCount,
-            errors: emailResult.errors,
-          },
-        },
-        { status: 500 },
-      );
+    for (const recipient of recipients) {
+      try {
+        // Skip recipients without email
+        if (!recipient.email) {
+          console.warn(`Skipping recipient ${recipient.id} - no email address`);
+          continue;
+        }
+
+        // Send document recommendation email
+        await omnisendClient.sendDocumentEmail(
+          recipient.email,
+          recipient.name || 'User',
+          documents,
+          loginUrl,
+        );
+
+        // Update contact in Omnisend with document recommendation tag
+        await omnisendClient.createContact({
+          email: recipient.email,
+          firstName: recipient.name || 'User',
+          tags: ['osfs-formation', 'document-recommendations'],
+        });
+
+        emailResults.push({
+          id: recipient.id,
+          email: recipient.email,
+          name: recipient.name,
+          status: 'sent',
+        });
+
+        console.log(`Document email sent successfully to ${recipient.email}`);
+      } catch (emailError) {
+        console.error(`Error sending email to ${recipient.email}:`, emailError);
+        errors.push({
+          id: recipient.id,
+          email: recipient.email,
+          name: recipient.name,
+          error:
+            emailError instanceof Error ? emailError.message : 'Unknown error',
+        });
+      }
     }
+
+    // Log summary
+    console.log('Document recommendation emails sent:');
+    console.log('Documents:', documents.map((d) => d.title).join(', '));
+    console.log('Successful sends:', emailResults.length);
+    console.log('Errors:', errors.length);
+    console.log('Login URL:', loginUrl);
 
     return NextResponse.json({
       success: true,
-      message: `Document recommendation emails sent successfully. ${emailResult.sentCount} emails sent, ${emailResult.failedCount} failed.`,
-      details: {
-        sentCount: emailResult.sentCount,
-        failedCount: emailResult.failedCount,
-        messageIds: emailResult.messageIds,
+      message: `Document recommendation emails sent successfully to ${emailResults.length} recipients`,
+      results: {
+        successful: emailResults,
+        errors: errors,
         documents: documents.map((d) => ({ id: d.id, title: d.title })),
-        recipients: recipients.map((r) => ({
-          id: r.id,
-          email: r.email,
-          name: r.name,
-        })),
         loginUrl,
       },
     });

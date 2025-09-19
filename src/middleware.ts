@@ -47,8 +47,25 @@ export async function middleware(request: NextRequest) {
   // You might need a helper like: getPathWithoutLocale(requestedPath, routing.locales)
   const pathWithoutLocale = stripLocaleFromPath(requestedPath, routing.locales);
 
+  // Define public routes that don't require authentication
+  const publicRoutes = [
+    '/',
+    '/login',
+    '/signup',
+    '/impressum',
+    '/auth/callback',
+    '/auth/confirmation',
+    '/auth/confirmed',
+  ];
+
+  // Check if the current path is public
+  const isPublicRoute = publicRoutes.some(
+    (route) =>
+      pathWithoutLocale === route || pathWithoutLocale.startsWith(route + '/'),
+  );
+
   // All pages reaching this point (not excluded by matcher and not redirected by intl) require a session.
-  if (!session) {
+  if (!session && !isPublicRoute) {
     console.log(
       '🛡️ No session, redirecting to login for path:',
       pathWithoutLocale,
@@ -57,15 +74,17 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  console.log(
-    '🛡️ Session found, user:',
-    session.user.email,
-    'checking path:',
-    pathWithoutLocale,
-  );
+  if (session) {
+    console.log(
+      '🛡️ Session found, user:',
+      session.user.email,
+      'checking path:',
+      pathWithoutLocale,
+    );
+  }
 
   // Role-based access for admin dashboard
-  if (pathWithoutLocale.startsWith('/admin')) {
+  if (session && pathWithoutLocale.startsWith('/admin')) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')

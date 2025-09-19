@@ -54,18 +54,29 @@ export async function GET(request: NextRequest) {
           // Use type assertion to handle both old and new role names
           const role = profile.role as UserRole;
 
+          // Extract locale from the original request URL
+          const locale = requestUrl.pathname.split('/')[1] || 'en';
+
           switch (role) {
             case 'admin':
-              return NextResponse.redirect(`${origin}/dashboard/admin`);
+              return NextResponse.redirect(
+                `${origin}/${locale}/dashboard/admin`,
+              );
             case 'editor':
             case 'formator':
-              return NextResponse.redirect(`${origin}/dashboard/editor`);
+              return NextResponse.redirect(
+                `${origin}/${locale}/dashboard/editor`,
+              );
             case 'user':
             case 'formee':
-              return NextResponse.redirect(`${origin}/dashboard/user`);
+              return NextResponse.redirect(
+                `${origin}/${locale}/dashboard/user`,
+              );
             default:
               console.warn('Callback: Unknown user role:', profile.role);
-              return NextResponse.redirect(`${origin}/dashboard/user`);
+              return NextResponse.redirect(
+                `${origin}/${locale}/dashboard/user`,
+              );
           }
         } else {
           console.warn(
