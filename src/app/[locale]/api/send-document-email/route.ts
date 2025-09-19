@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server-client';
 import { NextRequest, NextResponse } from 'next/server';
+import { sendDocumentEmails } from '@/lib/omnisend/email-service';
 
 interface DocumentEmailBody {
   documentIds: string[];
@@ -85,41 +86,51 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // In a production environment, this would send actual emails using a service
-    // like SendGrid, Mailgun, or AWS SES. For this implementation, we'll just
-    // simulate successful email sending.
+    // Send emails using Omnisend
+    const loginUrl = `${
+      process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin
+    }/${locale}/auth`;
 
-    // Build list of documents for email content
-    const documentList = documents.map((doc) => `- ${doc.title}`).join('\n');
+    const emailResult = await sendDocumentEmails({
+      recipients: recipients
+        .filter((r) => r.email) // Filter out recipients without email
+        .map((r) => ({
+          email: r.email!,
+          name: r.name || 'User',
+        })),
+      documentTitles: documents.map((doc) => doc.title),
+      loginUrl,
+      locale,
+    });
 
-    // Log details for demonstration (would be email sending in production)
-    console.log('Sending document recommendation emails:');
-    console.log('Documents:', documentList);
-    console.log('Recipients:', recipients.map((r) => r.email).join(', '));
-    console.log(
-      'Login URL:',
-      `${
-        process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin
-      }/${locale}/auth`,
-    );
-
-    // In a real implementation, we would trigger emails here
-    // For now, we'll simulate successful email sending
+    if (!emailResult.success) {
+      return NextResponse.json(
+        {
+          error: `Failed to send emails: ${emailResult.errors.join(', ')}`,
+          details: {
+            sentCount: emailResult.sentCount,
+            failedCount: emailResult.failedCount,
+            errors: emailResult.errors,
+          },
+        },
+        { status: 500 },
+      );
+    }
 
     return NextResponse.json({
       success: true,
-      message: 'Document recommendation emails sent successfully',
-      // Include details for testing/development
-      debug: {
+      message: `Document recommendation emails sent successfully. ${emailResult.sentCount} emails sent, ${emailResult.failedCount} failed.`,
+      details: {
+        sentCount: emailResult.sentCount,
+        failedCount: emailResult.failedCount,
+        messageIds: emailResult.messageIds,
         documents: documents.map((d) => ({ id: d.id, title: d.title })),
         recipients: recipients.map((r) => ({
           id: r.id,
           email: r.email,
           name: r.name,
         })),
-        loginUrl: `${
-          process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin
-        }/${locale}/auth`,
+        loginUrl,
       },
     });
   } catch (error) {
