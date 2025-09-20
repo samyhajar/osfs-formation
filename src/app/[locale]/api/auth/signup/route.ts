@@ -28,27 +28,39 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient();
 
     // Sign up the user with role in metadata and auto-confirm email
+    console.log('🔍 [SIGNUP DEBUG] Starting signup process for:', email);
+    console.log('🔍 [SIGNUP DEBUG] Email redirect URL:', getSiteUrl(`/${locale}/auth/callback`));
+    
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: getSiteUrl(`/${locale}/auth/callback`),
+        // NO emailRedirectTo - this prevents Supabase from sending emails
         data: {
           name,
           role, // This will be used by the handle_new_user trigger
         },
       },
     });
+    
+    console.log('🔍 [SIGNUP DEBUG] Supabase signup response:', { 
+      hasUser: !!data?.user, 
+      hasError: !!error,
+      errorMessage: error?.message 
+    });
 
     // Auto-confirm the user's email so they can login immediately
     if (data.user && !error) {
+      console.log('🔍 [SIGNUP DEBUG] Auto-confirming user email for:', data.user.id);
       const supabaseAdmin = createAdminClient();
       const { error: confirmError } = await supabaseAdmin.auth.admin.updateUserById(data.user.id, {
         email_confirm: true,
       });
       
       if (confirmError) {
-        console.error('Error auto-confirming user email:', confirmError);
+        console.error('❌ [SIGNUP DEBUG] Error auto-confirming user email:', confirmError);
+      } else {
+        console.log('✅ [SIGNUP DEBUG] User email auto-confirmed successfully');
       }
     }
 
@@ -57,7 +69,8 @@ export async function POST(request: NextRequest) {
     }
 
     // No email sent during signup - emails only sent when admin approves
-    console.log(`User ${email} signed up successfully, awaiting admin approval`);
+    console.log('📧 [SIGNUP DEBUG] NO EMAIL SENT - User must wait for admin approval');
+    console.log(`✅ [SIGNUP DEBUG] User ${email} signed up successfully, awaiting admin approval`);
 
     return NextResponse.json(
       {

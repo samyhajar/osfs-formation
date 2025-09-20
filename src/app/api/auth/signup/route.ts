@@ -73,12 +73,12 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create user in Supabase Auth with email confirmation
+    // Create user in Supabase Auth (NO email confirmation)
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://osfs-formation-1mxnswszr-aaronfaustfield-gmailcoms-projects.vercel.app'}/auth/callback`,
+        // NO emailRedirectTo - this prevents Supabase from sending emails
         data: {
           full_name: name,
           role,

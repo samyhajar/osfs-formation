@@ -145,14 +145,15 @@ export class OmnisendClient {
     });
   }
 
-  /**
-   * Send approval email to new user
-   */
-  async sendApprovalEmail(
-    email: string,
-    name: string,
-    approvalUrl: string,
-  ): Promise<{ success: boolean; messageId?: string }> {
+      /**
+       * Send approval email to new user
+       */
+      async sendApprovalEmail(
+        email: string,
+        name: string,
+        approvalUrl: string,
+      ): Promise<{ success: boolean; messageId?: string }> {
+        console.log('📧 [OMNISEND DEBUG] sendApprovalEmail called with:', { email, name, approvalUrl });
     const subject = omnisendConfig.templates.approval.subject;
     const content = `
       <html>
@@ -187,11 +188,14 @@ export class OmnisendClient {
       </html>
     `;
 
-    return this.sendEmail({
+    console.log('📧 [OMNISEND DEBUG] Calling sendEmail with:', { to: email, subject });
+    const result = await this.sendEmail({
       to: email,
       subject,
       content,
     });
+    console.log('📧 [OMNISEND DEBUG] sendEmail result:', result);
+    return result;
   }
 
   /**
