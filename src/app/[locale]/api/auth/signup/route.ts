@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server-client';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getSiteUrl } from '@/lib/utils/urls';
+import { emailService } from '@/lib/omnisend/email-service';
 
 const signupSchema = z.object({
   email: z.string().email('Invalid email format'),
@@ -26,12 +27,11 @@ export async function POST(request: NextRequest) {
     // Create a Supabase client (server-side)
     const supabase = await createClient();
 
-    // Sign up the user with role in metadata
+    // Sign up the user with role in metadata (without email confirmation)
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: getSiteUrl(`/${locale}/auth/callback`),
         data: {
           name,
           role, // This will be used by the handle_new_user trigger
@@ -41,6 +41,17 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    // Send confirmation email through Omnisend
+    try {
+      const confirmationUrl = getSiteUrl(`/${locale}/auth/callback`);
+      await emailService.sendApprovalEmail(email, name, confirmationUrl);
+      
+      console.log(`Confirmation email sent via Omnisend to ${email}`);
+    } catch (emailError) {
+      console.error('Error sending confirmation email via Omnisend:', emailError);
+      // Don't fail the signup if email fails, but log the error
     }
 
     return NextResponse.json(
