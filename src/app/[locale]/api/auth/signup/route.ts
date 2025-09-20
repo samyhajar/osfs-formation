@@ -3,7 +3,6 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getSiteUrl } from '@/lib/utils/urls';
-import { emailService } from '@/lib/omnisend/email-service';
 
 const signupSchema = z.object({
   email: z.string().email('Invalid email format'),
@@ -57,21 +56,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    // Send confirmation email through Omnisend
-    try {
-      const confirmationUrl = getSiteUrl(`/${locale}/auth/callback`);
-      await emailService.sendApprovalEmail(email, name, confirmationUrl);
-      
-      console.log(`Confirmation email sent via Omnisend to ${email}`);
-    } catch (emailError) {
-      console.error('Error sending confirmation email via Omnisend:', emailError);
-      // Don't fail the signup if email fails, but log the error
-    }
+    // No email sent during signup - emails only sent when admin approves
+    console.log(`User ${email} signed up successfully, awaiting admin approval`);
 
     return NextResponse.json(
       {
         message:
-          'Signup successful. Please check your email to confirm your account.',
+          'Signup successful. Your account is pending admin approval.',
         user: data.user,
       },
       { status: 200 },

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server-client';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { emailService } from '@/lib/omnisend/email-service';
 
 type UserRole = 'user' | 'admin' | 'editor';
 
@@ -132,20 +131,12 @@ export async function POST(request: Request) {
       );
     }
 
-    // Send confirmation email through Omnisend
-    try {
-      const confirmationUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://osfs-formation-1mxnswszr-aaronfaustfield-gmailcoms-projects.vercel.app'}/auth/callback`;
-      await emailService.sendApprovalEmail(email, name, confirmationUrl);
-      
-      console.log(`Confirmation email sent via Omnisend to ${email}`);
-    } catch (emailError) {
-      console.error('Error sending confirmation email via Omnisend:', emailError);
-      // Don't fail the signup if email fails, but log the error
-    }
+        // No email sent during signup - emails only sent when admin approves
+        console.log(`User ${email} signed up successfully, awaiting admin approval`);
 
     return NextResponse.json({
       success: true,
-      message: 'User created successfully. Please check your email to confirm your account.',
+      message: 'User created successfully. Your account is pending admin approval.',
     });
   } catch (error) {
     console.error('Signup API error:', error);
