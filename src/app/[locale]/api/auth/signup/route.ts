@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server-client';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getSiteUrl } from '@/lib/utils/urls';
@@ -27,17 +28,30 @@ export async function POST(request: NextRequest) {
     // Create a Supabase client (server-side)
     const supabase = await createClient();
 
-    // Sign up the user with role in metadata (without email confirmation)
+    // Sign up the user with role in metadata and auto-confirm email
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
+        emailRedirectTo: getSiteUrl(`/${locale}/auth/callback`),
         data: {
           name,
           role, // This will be used by the handle_new_user trigger
         },
       },
     });
+
+    // Auto-confirm the user's email so they can login immediately
+    if (data.user && !error) {
+      const supabaseAdmin = createAdminClient();
+      const { error: confirmError } = await supabaseAdmin.auth.admin.updateUserById(data.user.id, {
+        email_confirm: true,
+      });
+      
+      if (confirmError) {
+        console.error('Error auto-confirming user email:', confirmError);
+      }
+    }
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });

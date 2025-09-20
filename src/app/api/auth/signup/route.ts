@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server-client';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { emailService } from '@/lib/omnisend/email-service';
 
 type UserRole = 'user' | 'admin' | 'editor';
@@ -73,17 +74,30 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create user in Supabase Auth (without email confirmation)
+    // Create user in Supabase Auth with email confirmation
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://osfs-formation-1mxnswszr-aaronfaustfield-gmailcoms-projects.vercel.app'}/auth/callback`,
         data: {
           full_name: name,
           role,
         },
       },
     });
+
+    // Auto-confirm the user's email so they can login immediately
+    if (authData.user && !authError) {
+      const supabaseAdmin = createAdminClient();
+      const { error: confirmError } = await supabaseAdmin.auth.admin.updateUserById(authData.user.id, {
+        email_confirm: true,
+      });
+      
+      if (confirmError) {
+        console.error('Error auto-confirming user email:', confirmError);
+      }
+    }
 
     if (authError) {
       console.error('Auth signup error:', authError);
