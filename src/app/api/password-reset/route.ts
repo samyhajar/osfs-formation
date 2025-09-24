@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server-client';
-import { emailService } from '@/lib/omnisend/email-service';
 import { z } from 'zod';
 
 const passwordResetSchema = z.object({
@@ -26,7 +25,8 @@ export async function POST(request: NextRequest) {
       // Don't reveal if user exists or not for security
       return NextResponse.json({
         success: true,
-        message: 'If an account with this email exists, you will receive a password reset link.',
+        message:
+          'If an account with this email exists, you will receive a password reset link.',
       });
     }
 
@@ -34,14 +34,19 @@ export async function POST(request: NextRequest) {
     if (!profile.is_approved) {
       return NextResponse.json({
         success: true,
-        message: 'If an account with this email exists, you will receive a password reset link.',
+        message:
+          'If an account with this email exists, you will receive a password reset link.',
       });
     }
 
-    // Generate password reset link using Supabase
-    const { data: resetData, error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://osfs-formation-b7y9l6uje-aaronfaustfield-gmailcoms-projects.vercel.app'}/auth/callback`,
-    });
+    // Generate password reset link using Supabase (let Supabase handle email sending)
+    const { data: _resetData, error: resetError } =
+      await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${
+          process.env.NEXT_PUBLIC_SITE_URL ||
+          'https://osfs-formation-b7y9l6uje-aaronfaustfield-gmailcoms-projects.vercel.app'
+        }/auth/callback`,
+      });
 
     if (resetError) {
       console.error('Error generating password reset link:', resetError);
@@ -51,29 +56,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send password reset email via Omnisend
-    try {
-      const resetUrl = (resetData as { data?: { properties?: { action_link?: string } } })?.data?.properties?.action_link;
-      if (resetUrl) {
-        await emailService.sendPasswordResetEmail(
-          email,
-          profile.name || 'User',
-          resetUrl,
-        );
-
-        console.log(`Password reset email sent successfully to ${email}`);
-      }
-    } catch (omnisendError) {
-      console.error('Error sending password reset email via Omnisend:', omnisendError);
-      return NextResponse.json(
-        { error: 'Failed to send password reset email' },
-        { status: 500 },
-      );
-    }
+    console.log(
+      `Password reset email sent successfully to ${email} via Supabase`,
+    );
 
     return NextResponse.json({
       success: true,
-      message: 'If an account with this email exists, you will receive a password reset link.',
+      message:
+        'If an account with this email exists, you will receive a password reset link.',
     });
   } catch (error) {
     if (error instanceof z.ZodError) {

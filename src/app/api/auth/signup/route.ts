@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server-client';
-import { createAdminClient } from '@/lib/supabase/admin';
 
 type UserRole = 'user' | 'admin' | 'editor';
 
@@ -8,18 +7,19 @@ interface SignupRequest {
   email: string;
   password: string;
   name: string;
-  role?: UserRole;
+  role: UserRole;
 }
 
 export async function POST(request: Request) {
   try {
-    const requestData = (await request.json()) as SignupRequest;
-    const email = requestData.email;
-    const password = requestData.password;
-    const name = requestData.name;
-    const role = requestData.role || 'user';
+    const {
+      email,
+      password,
+      name,
+      role = 'user',
+    }: SignupRequest = await request.json();
 
-    // Validate inputs
+    // Validate required fields
     if (!email || !password || !name) {
       return NextResponse.json(
         { error: 'Email, password, and name are required' },
@@ -31,72 +31,53 @@ export async function POST(request: Request) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { error: 'Invalid email format' },
+        { error: 'Please enter a valid email address' },
         { status: 400 },
       );
     }
 
-    // Validate password strength
-    if (typeof password === 'string' && password.length < 8) {
+    // Validate password length
+    if (password.length < 8) {
       return NextResponse.json(
         { error: 'Password must be at least 8 characters long' },
         { status: 400 },
       );
     }
 
-    // Check for at least one uppercase letter, one lowercase letter, and one number
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
-    if (typeof password === 'string' && !passwordRegex.test(password)) {
+    // Validate name length
+    if (name.length < 2) {
       return NextResponse.json(
-        {
-          error:
-            'Password must contain at least one uppercase letter, one lowercase letter, and one number',
-        },
+        { error: 'Name must be at least 2 characters long' },
         { status: 400 },
       );
     }
 
-    // Initialize Supabase client
-    const supabase = await createClient();
-
-    // Check if user already exists
-    const { data: existingUser } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('email', email)
-      .single();
-
-    if (existingUser) {
+    // Validate role
+    if (!['user', 'admin', 'editor'].includes(role)) {
       return NextResponse.json(
-        { error: 'A user with this email already exists' },
-        { status: 409 },
+        { error: 'Invalid role specified' },
+        { status: 400 },
       );
     }
 
-    // Create user in Supabase Auth (NO email confirmation)
+    // Create Supabase client
+    const supabase = await createClient();
+
+    // Sign up the user with role in metadata - let Supabase handle email sending
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        // NO emailRedirectTo - this prevents Supabase from sending emails
+        emailRedirectTo: `${
+          process.env.NEXT_PUBLIC_SITE_URL ||
+          'https://osfs-formation-b7y9l6uje-aaronfaustfield-gmailcoms-projects.vercel.app'
+        }/auth/callback`,
         data: {
-          full_name: name,
+          name,
           role,
         },
       },
     });
-
-    // Auto-confirm the user's email so they can login immediately
-    if (authData.user && !authError) {
-      const supabaseAdmin = createAdminClient();
-      const { error: confirmError } = await supabaseAdmin.auth.admin.updateUserById(authData.user.id, {
-        email_confirm: true,
-      });
-      
-      if (confirmError) {
-        console.error('Error auto-confirming user email:', confirmError);
-      }
-    }
 
     if (authError) {
       console.error('Auth signup error:', authError);
@@ -110,33 +91,15 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create profile in profiles table
-    const { error: profileError } = await supabase.from('profiles').insert({
-      id: authData.user.id,
-      email,
-      full_name: name,
-      role,
-      is_approved: false, // Require admin approval
-    });
-
-    if (profileError) {
-      console.error('Profile creation error:', profileError);
-
-      // Try to clean up the auth user if profile creation fails
-      await supabase.auth.admin.deleteUser(authData.user.id);
-
-      return NextResponse.json(
-        { error: 'Failed to create user profile' },
-        { status: 500 },
-      );
-    }
-
-        // No email sent during signup - emails only sent when admin approves
-        console.log(`User ${email} signed up successfully, awaiting admin approval`);
+    // Profile will be created automatically by the database trigger when user confirms email
+    console.log(
+      `User ${email} signed up successfully, confirmation email sent via Supabase`,
+    );
 
     return NextResponse.json({
       success: true,
-      message: 'User created successfully. Your account is pending admin approval.',
+      message:
+        'User created successfully. Please check your email to confirm your account.',
     });
   } catch (error) {
     console.error('Signup API error:', error);
