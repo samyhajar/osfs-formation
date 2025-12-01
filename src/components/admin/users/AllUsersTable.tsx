@@ -5,6 +5,7 @@ import RoleDropdown from './RoleDropdown';
 import { useState } from 'react';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '@/contexts/AuthContext';
+import PendingUserRejectModal from '../PendingUserRejectModal';
 
 // Define the type for a user profile row more explicitly
 type ProfileRow = Database['public']['Tables']['profiles']['Row'];
@@ -29,15 +30,13 @@ export default function AllUsersTable({ users, onUserDeleted }: AllUsersTablePro
   const { profile } = useAuth();
   const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [confirmDeleteUserId, setConfirmDeleteUserId] = useState<string | null>(null);
+  const [confirmDeleteUserName, setConfirmDeleteUserName] = useState<string | null>(null);
 
   // Only show delete functionality for admin users
   const isAdmin = profile?.role === 'admin';
 
-  const handleDeleteUser = async (userId: string, userName: string) => {
-    if (!window.confirm(`Are you sure you want to delete user "${userName}"? This action cannot be undone.`)) {
-      return;
-    }
-
+  const handleDeleteUser = async (userId: string) => {
     try {
       setDeletingUserId(userId);
       setError(null);
@@ -64,7 +63,14 @@ export default function AllUsersTable({ users, onUserDeleted }: AllUsersTablePro
       setError(err instanceof Error ? err.message : 'Failed to delete user');
     } finally {
       setDeletingUserId(null);
+      setConfirmDeleteUserId(null);
+      setConfirmDeleteUserName(null);
     }
+  };
+
+  const requestDeleteUser = (userId: string, userName: string) => {
+    setConfirmDeleteUserId(userId);
+    setConfirmDeleteUserName(userName);
   };
 
   return (
@@ -130,7 +136,12 @@ export default function AllUsersTable({ users, onUserDeleted }: AllUsersTablePro
                   <div className="flex items-center justify-end gap-2">
                     {isAdmin && (
                       <button
-                        onClick={() => void handleDeleteUser(user.id, user.name || user.email || 'Unknown User')}
+                        onClick={() =>
+                          requestDeleteUser(
+                            user.id,
+                            user.name || user.email || 'Unknown User',
+                          )
+                        }
                         disabled={deletingUserId === user.id}
                         className={`p-2 rounded-md transition-colors ${
                           deletingUserId === user.id
@@ -154,6 +165,20 @@ export default function AllUsersTable({ users, onUserDeleted }: AllUsersTablePro
           )}
         </tbody>
       </table>
+
+      <PendingUserRejectModal
+        isOpen={confirmDeleteUserId !== null}
+        userName={confirmDeleteUserName}
+        onCancel={() => {
+          setConfirmDeleteUserId(null);
+          setConfirmDeleteUserName(null);
+        }}
+        onConfirm={() => {
+          if (confirmDeleteUserId) {
+            void handleDeleteUser(confirmDeleteUserId);
+          }
+        }}
+      />
     </div>
   );
 }
