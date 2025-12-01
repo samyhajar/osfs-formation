@@ -59,7 +59,7 @@ export default function ForgotPasswordSection({
           });
         }
       } catch (error: unknown) {
-         
+
         console.error('Forgot password request failed:', error);
         setResetStatus({
           type: 'error',
@@ -101,5 +101,3 @@ export default function ForgotPasswordSection({
     </div>
   );
 }
-
-

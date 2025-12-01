@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import PendingUsersTable from './PendingUsersTable';
+import PendingUserRejectModal from './PendingUserRejectModal';
 
 interface Profile {
   id: string;
@@ -28,6 +29,8 @@ export default function PendingUsersList() {
   const [error, setError] = useState<string | null>(null);
   const [actionInProgress, setActionInProgress] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [rejectUserId, setRejectUserId] = useState<string | null>(null);
+  const [rejectUserName, setRejectUserName] = useState<string | null>(null);
   const { supabase } = useAuth();
 
   // Update role mapping to match database values
@@ -129,13 +132,9 @@ export default function PendingUsersList() {
     }
   };
 
-  // Delete a user (reject application)
-  const deleteUser = async (userId: string) => {
+  // Delete a user (reject application) without inline browser confirm
+  const executeDeleteUser = async (userId: string) => {
     if (!supabase) return;
-
-    if (!window.confirm('Are you sure you want to reject this user? This action cannot be undone.')) {
-      return;
-    }
 
     try {
       setActionInProgress(userId);
@@ -150,29 +149,42 @@ export default function PendingUsersList() {
       }
 
       // Use absolute URL to bypass next-intl middleware
-      const response = await fetch(`${window.location.origin}/api/delete-pending-user`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${sessionData.session.access_token}`
+      const response = await fetch(
+        `${window.location.origin}/api/delete-pending-user`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionData.session.access_token}`,
+          },
+          body: JSON.stringify({ user_id: userId }),
         },
-        body: JSON.stringify({ user_id: userId }),
-      });
+      );
 
       if (!response.ok) {
-        const result = await response.json() as ApiResponse;
+        const result = (await response.json()) as ApiResponse;
         throw new Error(result.error || 'Failed to delete user');
       }
 
       // Remove the deleted user from the list
-      setUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
+      setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
       setSuccessMessage('User application rejected successfully');
     } catch (err) {
       console.error('Error deleting user:', err);
-      setError(err instanceof Error ? err.message : 'Failed to reject user');
+      setError(
+        err instanceof Error ? err.message : 'Failed to reject user',
+      );
     } finally {
       setActionInProgress(null);
+      setRejectUserId(null);
+      setRejectUserName(null);
     }
+  };
+
+  const handleRejectRequest = (userId: string) => {
+    const user = users.find((u) => u.id === userId);
+    setRejectUserId(userId);
+    setRejectUserName(user?.name || user?.email || 'this user');
   };
 
   useEffect(() => {
@@ -208,12 +220,28 @@ export default function PendingUsersList() {
           <p>No pending user approvals</p>
         </div>
       ) : (
-        <PendingUsersTable
-          users={users}
-          actionInProgress={actionInProgress}
-          onApprove={approveUser}
-          onReject={deleteUser}
-        />
+        <>
+          <PendingUsersTable
+            users={users}
+            actionInProgress={actionInProgress}
+            onApprove={approveUser}
+            onReject={handleRejectRequest}
+          />
+
+          <PendingUserRejectModal
+            isOpen={rejectUserId !== null}
+            userName={rejectUserName}
+            onCancel={() => {
+              setRejectUserId(null);
+              setRejectUserName(null);
+            }}
+            onConfirm={() => {
+              if (rejectUserId) {
+                void executeDeleteUser(rejectUserId);
+              }
+            }}
+          />
+        </>
       )}
     </div>
   );
