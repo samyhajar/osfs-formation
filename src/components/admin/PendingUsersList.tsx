@@ -181,7 +181,7 @@ export default function PendingUsersList() {
     }
   };
 
-  const handleRejectRequest = (userId: string) => {
+  const handleRejectRequest = async (userId: string): Promise<void> => {
     const user = users.find((u) => u.id === userId);
     setRejectUserId(userId);
     setRejectUserName(user?.name || user?.email || 'this user');
