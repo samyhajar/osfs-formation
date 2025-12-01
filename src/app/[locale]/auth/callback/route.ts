@@ -10,7 +10,9 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
+  const type = requestUrl.searchParams.get('type');
   const origin = requestUrl.origin;
+  const locale = requestUrl.pathname.split('/')[1] || 'en';
 
   if (code) {
     const supabaseServer = await createClient();
@@ -28,6 +30,13 @@ export async function GET(request: NextRequest) {
     }
 
     if (session?.user) {
+      // If this is a password recovery flow, redirect to the dedicated
+      // update-password page instead of directly to the dashboard.
+      if (type === 'recovery') {
+        return NextResponse.redirect(
+          `${origin}/${locale}/auth/update-password`,
+        );
+      }
       console.log(
         'Callback: Session exchanged successfully for user:',
         session.user.id,
@@ -53,9 +62,6 @@ export async function GET(request: NextRequest) {
           console.log('Callback: User role found:', profile.role);
           // Use type assertion to handle both old and new role names
           const role = profile.role as UserRole;
-
-          // Extract locale from the original request URL
-          const locale = requestUrl.pathname.split('/')[1] || 'en';
 
           switch (role) {
             case 'admin':

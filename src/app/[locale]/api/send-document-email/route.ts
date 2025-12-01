@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
       process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin
     }/${locale}/dashboard/user`;
 
-    // Send emails via Omnisend
+    // Send emails via Mailgun
     const emailResults = [];
     const errors = [];
 
@@ -103,13 +103,13 @@ export async function POST(request: NextRequest) {
           continue;
         }
 
-            // Send document recommendation email
-            await emailService.sendDocumentEmail(
-              recipient.email,
-              recipient.name || 'User',
-              documents,
-              loginUrl,
-            );
+        // Send document recommendation email
+        await emailService.sendDocumentEmail(
+          recipient.email,
+          recipient.name || 'User',
+          documents,
+          loginUrl,
+        );
 
         emailResults.push({
           id: recipient.id,

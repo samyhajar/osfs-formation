@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthError, User } from '@supabase/supabase-js';
 import { useTranslations } from 'next-intl';
+import ForgotPasswordSection from './ForgotPasswordSection';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -12,6 +13,8 @@ export default function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const params = useParams();
+  const locale = (params as { locale?: string })?.locale ?? 'en';
   const { supabase } = useAuth();
   const t = useTranslations('Auth');
 
@@ -152,18 +155,7 @@ export default function LoginForm() {
         />
       </div>
 
-      <div className="mb-8 text-right">
-        <button
-          type="button"
-          onClick={() => {
-            // TODO: Implement forgot password functionality
-            alert('Forgot password functionality coming soon!');
-          }}
-          className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
-        >
-          {t('forgotPasswordLink')}
-        </button>
-      </div>
+      <ForgotPasswordSection email={email} locale={locale} />
 
       <button
         type="submit"

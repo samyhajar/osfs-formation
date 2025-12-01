@@ -80,9 +80,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Send approval email via Omnisend
-    console.log('📧 [APPROVAL DEBUG] Sending approval email via Omnisend to:', email);
-    console.log('📧 [APPROVAL DEBUG] Approval URL:', linkData.properties.action_link);
-    
+    console.log(
+      '📧 [APPROVAL DEBUG] Sending approval email via Omnisend to:',
+      email,
+    );
+    console.log(
+      '📧 [APPROVAL DEBUG] Approval URL:',
+      linkData.properties.action_link,
+    );
+
     try {
       await emailService.sendApprovalEmail(
         email,
@@ -90,9 +96,15 @@ export async function POST(request: NextRequest) {
         linkData.properties.action_link,
       );
 
-      console.log('✅ [APPROVAL DEBUG] Omnisend approval email sent successfully to', email);
+      console.log(
+        '✅ [APPROVAL DEBUG] Omnisend approval email sent successfully to',
+        email,
+      );
     } catch (omnisendError) {
-      console.error('❌ [APPROVAL DEBUG] Error sending approval email via Omnisend:', omnisendError);
+      console.error(
+        '❌ [APPROVAL DEBUG] Error sending approval email via Omnisend:',
+        omnisendError,
+      );
       return NextResponse.json(
         { error: 'Failed to send approval email' },
         { status: 500 },

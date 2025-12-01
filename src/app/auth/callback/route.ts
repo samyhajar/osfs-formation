@@ -10,6 +10,7 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
+  const type = requestUrl.searchParams.get('type');
   const origin = requestUrl.origin;
 
   if (code) {
@@ -28,6 +29,12 @@ export async function GET(request: NextRequest) {
     }
 
     if (session?.user) {
+      // If this is a password recovery flow, redirect to the dedicated
+      // update-password page instead of directly to the dashboard.
+      if (type === 'recovery') {
+        return NextResponse.redirect(`${origin}/en/auth/update-password`);
+      }
+
       console.log(
         'Root Callback: Session exchanged successfully for user:',
         session.user.id,

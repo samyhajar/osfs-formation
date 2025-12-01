@@ -2,14 +2,26 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server-client';
 import { z } from 'zod';
 
+const supportedLocales = ['en', 'de', 'es', 'fr', 'it', 'nl', 'pt'] as const;
+type SupportedLocale = (typeof supportedLocales)[number];
+
 const passwordResetSchema = z.object({
   email: z.string().email('Invalid email format'),
+  locale: z
+    .string()
+    .optional()
+    .transform((value) => {
+      if (!value) return undefined;
+      return supportedLocales.includes(value as SupportedLocale)
+        ? (value as SupportedLocale)
+        : 'en';
+    }),
 });
 
 export async function POST(request: NextRequest) {
   try {
     const requestData: unknown = await request.json();
-    const { email } = passwordResetSchema.parse(requestData);
+    const { email, locale } = passwordResetSchema.parse(requestData);
 
     // Create Supabase client
     const supabase = await createClient();
@@ -39,13 +51,15 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    const safeLocale = locale ?? 'en';
+
     // Generate password reset link using Supabase (let Supabase handle email sending)
     const { data: _resetData, error: resetError } =
       await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${
           process.env.NEXT_PUBLIC_SITE_URL ||
           'https://osfs-formation-b7y9l6uje-aaronfaustfield-gmailcoms-projects.vercel.app'
-        }/auth/callback`,
+        }/${safeLocale}/auth/callback`,
       });
 
     if (resetError) {

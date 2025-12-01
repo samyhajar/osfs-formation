@@ -77,7 +77,7 @@ export default function SignUpForm() {
         }
 
         // Show success message
-        setSuccess('Your account has been created and is pending approval. You will receive a confirmation email once your account is approved. Click the link in that email to complete the setup process.');
+        setSuccess('Your account has been created successfully! Please check your email to confirm your account. Once confirmed, your account will be pending admin approval.');
 
         // Clear form
         setEmail('');
